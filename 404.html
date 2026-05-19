@@ -190,60 +190,59 @@
             return 'rgba(' + r + ',' + g + ',' + b + ',' + alpha + ')';
           }
 
-          var m = window.location.pathname.match(/^\/(\d+)(\/.*)?$/);
-          var themeId = (m && THEMES[m[1]]) ? m[1] : (sessionStorage.getItem('ctTheme') || '1');
-          sessionStorage.setItem('ctTheme', themeId);
-          var BASE = '/' + themeId;
+          var themeId = '1';
 
-          function strip(path) {
-            if (path === BASE) return '/';
-            if (path.indexOf(BASE + '/') === 0) return path.slice(BASE.length);
-            return path;
+          /* ── Theme routing: /marshalls-customer-app-preview/1/  /2/  /3/ ── */
+          var REPO_BASE = '/marshalls-customer-app-preview';
+          var m = window.location.pathname.match(new RegExp('^' + REPO_BASE + '\\/(\\d+)(\\/.*)?$'));
+          if (m && THEMES[m[1]]) {
+            themeId = m[1];
+            sessionStorage.setItem('ctTheme', themeId);
+
+            var TBASE = REPO_BASE + '/' + themeId;
+
+            function strip(path) {
+              if (path === TBASE) return REPO_BASE + '/';
+              if (path.indexOf(TBASE + '/') === 0) return REPO_BASE + path.slice(TBASE.length);
+              return path;
+            }
+
+            function addBase(path) {
+              if (!path || typeof path !== 'string') return path;
+              if (path.indexOf(TBASE + '/') === 0 || path === TBASE) return path;
+              if (path.indexOf(REPO_BASE + '/') === 0) return REPO_BASE + '/' + themeId + path.slice(REPO_BASE.length);
+              return path;
+            }
+
+            var _push = history.pushState.bind(history);
+            var _replace = history.replaceState.bind(history);
+
+            var initPath = strip(window.location.pathname);
+            _replace(history.state, '', initPath + window.location.search + window.location.hash);
+
+            history.pushState = function (state, title, url) {
+              if (url && typeof url === 'string' && url.charAt(0) === '/' && url.indexOf('http') !== 0) url = addBase(url);
+              return _push(state, title, url);
+            };
+            history.replaceState = function (state, title, url) {
+              if (url && typeof url === 'string' && url.charAt(0) === '/' && url.indexOf('http') !== 0) url = addBase(url);
+              return _replace(state, title, url);
+            };
+
+            window.addEventListener('popstate', function () {
+              var path = window.location.pathname;
+              var stripped = strip(path);
+              if (stripped !== path) {
+                _replace(history.state, '', stripped + window.location.search + window.location.hash);
+                Promise.resolve().then(function () {
+                  var p = window.location.pathname;
+                  if (p.indexOf(TBASE) !== 0) _replace(history.state, '', addBase(p) + window.location.search + window.location.hash);
+                });
+              }
+            }, true);
+          } else {
+            themeId = sessionStorage.getItem('ctTheme') || '1';
           }
-
-          function addBase(path) {
-            if (!path || typeof path !== 'string') return path;
-            if (path.indexOf(BASE + '/') === 0 || path === BASE) return path;
-            if (path.charAt(0) === '/') return BASE + path;
-            return path;
-          }
-
-          var _push = history.pushState.bind(history);
-          var _replace = history.replaceState.bind(history);
-
-          // Strip theme prefix from initial URL so Vue Router sees the real path
-          var initPath = strip(window.location.pathname);
-          _replace(history.state, '', initPath + window.location.search + window.location.hash);
-
-          // Re-add theme prefix on every Vue Router navigation
-          history.pushState = function (state, title, url) {
-            if (url && typeof url === 'string' && url.charAt(0) === '/' && url.indexOf('http') !== 0) {
-              url = addBase(url);
-            }
-            return _push(state, title, url);
-          };
-
-          history.replaceState = function (state, title, url) {
-            if (url && typeof url === 'string' && url.charAt(0) === '/' && url.indexOf('http') !== 0) {
-              url = addBase(url);
-            }
-            return _replace(state, title, url);
-          };
-
-          // Handle browser back/forward: strip prefix before Vue Router reads URL, then re-add
-          window.addEventListener('popstate', function () {
-            var path = window.location.pathname;
-            var stripped = strip(path);
-            if (stripped !== path) {
-              _replace(history.state, '', stripped + window.location.search + window.location.hash);
-              Promise.resolve().then(function () {
-                var p = window.location.pathname;
-                if (p.indexOf(BASE) !== 0) {
-                  _replace(history.state, '', addBase(p) + window.location.search + window.location.hash);
-                }
-              });
-            }
-          }, true);
 
           // Build and inject theme CSS overrides
           var colors = THEMES[themeId] || THEMES['1'];
@@ -288,7 +287,7 @@
         </noscript>
         <div id="loading-bg">
             <div class="loading-logo">
-                <img src="/logo.png" alt="Logo" width="70">
+                <img src="./img/LogoMarshallsCDB-1-2048x538.png" alt="Logo" width="140">
             </div>
             <div class="loading">
                 <div class="effect-1 effects"></div>
