@@ -366,7 +366,7 @@
         return Object.prototype.hasOwnProperty.call(e, a)
     }
     ,
-    u.p = "/",
+    u.p = "./",
     u.oe = function(e) {
         throw console.error(e),
         e
