@@ -2077,7 +2077,7 @@
         c["default"].use(o["a"]);
         var _ = new o["a"]({
             mode: "history",
-            base: "/",
+            base: "/marshalls-customer-app-preview/",
             scrollBehavior: function() {
                 return {
                     x: 0,
