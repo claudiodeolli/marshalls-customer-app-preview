@@ -366,7 +366,7 @@
         return Object.prototype.hasOwnProperty.call(e, a)
     }
     ,
-    u.p = "/",
+    u.p = (location.pathname.indexOf("/marshalls-customer-app-preview/") === 0 ? "/marshalls-customer-app-preview/" : "/"),
     u.oe = function(e) {
         throw console.error(e),
         e

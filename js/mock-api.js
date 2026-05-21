@@ -232,8 +232,9 @@
   console.log('[Mock API] Interceptor ativo para api-marshalls.com (delay: ' + DELAY + 'ms)');
 
   /* â”€â”€ Logo override via MutationObserver â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+  var _repoBase = location.pathname.indexOf('/marshalls-customer-app-preview/') === 0 ? '/marshalls-customer-app-preview' : '';
   var LOGO_SVG = '<a href="/" class="brand-logo" style="display:inline-flex;align-items:center;">'
-    + '<img src="/img/MarshallsMed%20novo2_%20Med%20maior.png" alt="Logo" style="width:149.98px;height:46.55px;object-fit:contain;" />'
+    + '<img src="' + _repoBase + '/img/MarshallsMed%20novo2_%20Med%20maior.png" alt="Logo" style="width:149.98px;height:46.55px;object-fit:contain;" />'
     + '</a>';
 
   function injectLogo() {
@@ -266,7 +267,7 @@
     missingCss.forEach(function (href) {
       var el = document.createElement('link');
       el.rel = 'stylesheet';
-      el.setAttribute('data-href', href);
+      el.setAttribute('data-href', _repoBase + href);
       document.head.appendChild(el);
     });
   })();
