@@ -277,6 +277,37 @@
           document.head.appendChild(style);
         })();
         </script>
+        <style>
+          /* Hamburger e saudação no navbar */
+          .header-navbar .navbar-container > ul.nav.navbar-nav {
+            display: flex !important;
+          }
+          .header-navbar .navbar-container .bookmark-wrapper {
+            display: flex !important;
+            align-items: center;
+            min-height: 38px;
+          }
+          .navbar-greeting {
+            font-size: 1.15rem;
+            color: #5e5873;
+            font-weight: 500;
+            margin-left: 1rem;
+          }
+          /* Plantão 24h - estilo padrão com cor de hover azul */
+          .main-menu .navigation > li.nav-item:first-child:not(.active) > a {
+            background: rgba(0, 144, 255, 0.08) !important;
+            border-radius: 6px;
+          }
+          .main-menu .navigation > li.nav-item:first-child:not(.active) > a,
+          .main-menu .navigation > li.nav-item:first-child:not(.active) > a span,
+          .main-menu .navigation > li.nav-item:first-child:not(.active) > a svg {
+            color: #0090ff !important;
+          }
+          .main-menu .navigation > li.nav-item:first-child > a > * {
+            transform: translateX(0) !important;
+            transition: none !important;
+          }
+        </style>
     </head>
     <body>
         <noscript>
@@ -296,6 +327,19 @@
             </div>
         </div>
         <div id="app"></div>
+        <script>
+        /* Fix broken /img/... paths on GitHub Pages (webpack publicPath lands on "/" after URL strip) */
+        (function () {
+          if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') return;
+          document.addEventListener('error', function (e) {
+            if (e.target.tagName !== 'IMG') return;
+            var src = e.target.getAttribute('src') || '';
+            if (src.charAt(0) === '/' && src.indexOf('/marshalls-customer-app-preview/') !== 0) {
+              e.target.src = '/marshalls-customer-app-preview' + src;
+            }
+          }, true);
+        })();
+        </script>
         <script src="/marshalls-customer-app-preview/js/mock-api.js"></script>
         <script src="/marshalls-customer-app-preview/js/chunk-vendors.3d213c07.js"></script>
         <script src="/marshalls-customer-app-preview/js/app.070c89c4.js"></script>
@@ -711,6 +755,27 @@
               _obs.observe(app, { childList: true, subtree: true });
             }
             init();
+          })();
+        </script>
+        <script>
+          (function() {
+            function injectGreeting() {
+              var wrapper = document.querySelector('.header-navbar .navbar-container .bookmark-wrapper');
+              if (!wrapper) return;
+              var span = wrapper.querySelector('span');
+              if (span && !span.textContent.trim()) {
+                span.textContent = 'Ol\u00e1 Jo\u00e3o, seja bem-vindo!';
+                span.className = 'navbar-greeting';
+              } else if (!span) {
+                var s = document.createElement('span');
+                s.textContent = 'Ol\u00e1 Jo\u00e3o, seja bem-vindo!';
+                s.className = 'navbar-greeting';
+                wrapper.appendChild(s);
+              }
+            }
+            var observer = new MutationObserver(function() { injectGreeting(); });
+            observer.observe(document.body, { childList: true, subtree: true });
+            setTimeout(injectGreeting, 1000);
           })();
         </script>
         <style>
