@@ -366,7 +366,7 @@
         return Object.prototype.hasOwnProperty.call(e, a)
     }
     ,
-    u.p = "/marshalls-customer-app-preview/",
+    u.p = "/",
     u.oe = function(e) {
         throw console.error(e),
         e
@@ -776,7 +776,7 @@
     "602d4": function(e, a, t) {},
     "78a7": function(e, a, t) {},
     "8a84": function(e, a, t) {
-        e.exports = t.p + "img/full-logo.60c5ad0a.svg"
+        e.exports = t.p + "img/MarshallsMed%20novo2_%20Med%20maior.png"
     },
     "8bd0": function(e, a, t) {
         "use strict";
@@ -866,7 +866,7 @@
             icon: "CodeIcon",
             gate: "user"
         }, {
-            header: "Configurações",
+            header: "Seguran\u00e7a",
             gate: ["user"]
         }, {
             title: "Mudar minha senha",
@@ -889,7 +889,7 @@
                 var _ab = [{action:"read",subject:"panel"},{action:"read",subject:"user"},{action:"read",subject:"companies"},{action:"read",subject:"taxes"},{action:"read",subject:"subscriptions"},{action:"read",subject:"digital_certificate"},{action:"read",subject:"companies_list"},{action:"read",subject:"affiliate"},{action:"read",subject:"checkout"},{action:"read",subject:"subscriptions"},{action:"read",subject:"companies_list"}];
                 localStorage.setItem(s["c"].app.appTokenName, "demo-token-bypass");
                 localStorage.setItem("COMPANY_SELECTED", JSON.stringify({id:1,name:"MARSHALLS CORPORATE AND DIGITAL BUSINESS",tax_regime:"simples_nacional",opened_at:"2020-01-01"}));
-                d["a"].commit("SET_USER_INFO", {id:1,name:"Usu\u00e1rio Demo",email:"demo@marshalls.com",role:0,group:null,registerComplete:!0,profileComplete:!0,affiliate:!1,force_login:0,companies:[{id:1,name:"MARSHALLS CORPORATE AND DIGITAL BUSINESS",opened_at:"2020-01-01"}],ability:_ab});
+                d["a"].commit("SET_USER_INFO", {id:1,name:"João",email:"demo@marshalls.com",role:0,group:null,registerComplete:!0,profileComplete:!0,affiliate:!1,force_login:0,companies:[{id:1,name:"MARSHALLS CORPORATE AND DIGITAL BUSINESS",opened_at:"2020-01-01"}],ability:_ab});
                 l["a"].update(_ab);
                 d["a"].commit("SET_COMPANY_SELECTED", {id:1,name:"MARSHALLS CORPORATE AND DIGITAL BUSINESS",tax_regime:"simples_nacional",opened_at:"2020-01-01"});
                 d["a"].commit("SET_MENU_ITEMS", f);
@@ -1141,7 +1141,7 @@
                 },
                 pageTitle: "Perfil",
                 breadcrumb: [{
-                    text: "Detalhes da conta",
+                    text: "Meu Clube",
                     active: !0
                 }]
             },
@@ -1469,7 +1469,7 @@
                     active: !1,
                     to: "/admin/cadastros/empresas"
                 }, {
-                    text: "Detalhes da empresa",
+                    text: "Encaminhamentos",
                     active: !0
                 }]
             },
@@ -1494,7 +1494,7 @@
                     active: !1,
                     to: "/admin/cadastros/empresas"
                 }, {
-                    text: "Detalhes da empresa",
+                    text: "Encaminhamentos",
                     active: !0
                 }, {
                     text: "Detalhes do imposto",
@@ -1522,7 +1522,7 @@
                     active: !1,
                     to: "/admin/cadastros/empresas"
                 }, {
-                    text: "Detalhes da empresa",
+                    text: "Encaminhamentos",
                     active: !0
                 }, {
                     text: "Detalhes da declaracao",
@@ -1643,16 +1643,17 @@
             path: "/painel",
             name: "painel",
             component: function() {
-                return Promise.resolve({render:function(h){return h('div',{staticClass:'card',style:{display:'flex',alignItems:'center',justifyContent:'center',minHeight:'200px'}},[ h('button',{staticClass:'btn btn-primary',style:{padding:'12px 32px',fontSize:'16px',borderRadius:'8px'}},'Iniciar atendimento') ])}})
+                return Promise.resolve({render:function(h){return h('div',{style:{display:'flex',flexDirection:'column',height:'calc(100vh - 16rem)'}},[h('h4',{style:{fontWeight:'600',fontSize:'1.25rem',color:'#5e5873',marginBottom:'1.5rem',lineHeight:'1.5'}},'Inicie seu atendimento médico online de forma segura'),h('div',{staticClass:'card',style:{flex:'1',display:'flex',alignItems:'center',justifyContent:'center'}},[h('button',{staticClass:'btn btn-primary',style:{padding:'13px 40px',fontSize:'16px',borderRadius:'8px',fontWeight:'600',letterSpacing:'0.3px'}},'Iniciar atendimento')])])}})
             },
             meta: {
                 gate: {
                     action: "read",
                     subject: "panel"
                 },
-                pageTitle: "Painel Usuário Plano Individual - Titular",
+                pageTitle: "Plantão 24h",
+                pageIcon: "HomeIcon",
                 breadcrumb: [{
-                    text: "Painel Usuário Plano Individual - Titular",
+                    text: "Atendimento médico",
                     active: !0
                 }]
             },
@@ -1668,9 +1669,10 @@
                     action: "read",
                     subject: "user"
                 },
-                pageTitle: "Perfil",
+                pageTitle: "Meu Clube",
+                pageIcon: "UserIcon",
                 breadcrumb: [{
-                    text: "Detalhes da conta",
+                    text: "Detalhes do Meu Clube",
                     active: !0
                 }]
             },
@@ -1701,9 +1703,10 @@
                     action: "read",
                     subject: "companies"
                 },
-                pageTitle: "Empresa",
+                pageTitle: "Encaminhamentos",
+                pageIcon: "BarChart2Icon",
                 breadcrumb: [{
-                    text: "Detalhes da empresa",
+                    text: "Detalhes dos Encaminhamentos",
                     active: !0
                 }]
             },
@@ -1773,9 +1776,10 @@
                     action: "read",
                     subject: "taxes"
                 },
-                pageTitle: "Impostos",
+                pageTitle: "Histórico",
+                pageIcon: "UsersIcon",
                 breadcrumb: [{
-                    text: "Impostos",
+                    text: "Detalhes do Histórico",
                     active: !0
                 }]
             },
@@ -1835,9 +1839,10 @@
                     action: "read",
                     subject: "taxes"
                 },
-                pageTitle: "Declarações",
+                pageTitle: "Meus dados",
+                pageIcon: "FolderIcon",
                 breadcrumb: [{
-                    text: "Declarações",
+                    text: "Detalhes dos Meus Dados",
                     active: !0
                 }]
             },
@@ -2070,14 +2075,19 @@
                     action: "read",
                     subject: "user"
                 },
-                pageTitle: "Nossos parceiros"
+                pageTitle: "Assinatura",
+                pageIcon: "CodeIcon",
+                breadcrumb: [{
+                    text: "Detalhes da Assinatura",
+                    active: !0
+                }]
             },
             beforeEnter: p
         }];
         c["default"].use(o["a"]);
         var _ = new o["a"]({
             mode: "history",
-            base: "/marshalls-customer-app-preview/",
+            base: "/",
             scrollBehavior: function() {
                 return {
                     x: 0,

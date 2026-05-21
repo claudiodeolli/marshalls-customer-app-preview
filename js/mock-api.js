@@ -233,7 +233,7 @@
 
   /* â”€â”€ Logo override via MutationObserver â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   var LOGO_SVG = '<a href="/" class="brand-logo" style="display:inline-flex;align-items:center;">'
-    + '<img src="/img/LogoMarshallsCDB-1-2048x538.png" alt="Logo" style="width:149.98px;height:46.55px;object-fit:contain;" />'
+    + '<img src="/img/MarshallsMed%20novo2_%20Med%20maior.png" alt="Logo" style="width:149.98px;height:46.55px;object-fit:contain;" />'
     + '</a>';
 
   function injectLogo() {
@@ -561,6 +561,11 @@
             return h('div', [
               h('div', { staticClass: 'row' }, [
                 h('div', { staticClass: 'col-12 col-md-6 offset-md-3' }, [
+                  /* Titular info lines */
+                  h('h4', { staticClass: 'mb-25', style: { fontWeight: '600', fontSize: '1.1rem', color: '#5e5873' } }, 'Plano de Assinatura Individual'),
+                  h('p', { staticClass: 'text-muted mb-2' }, [
+                    'Titular Responsável: José da Silva\u00a0–\u00a0CPF 432.198.765-09'
+                  ]),
                   /* Status stat */
                   statCard(h, 'Ativa', 'Status da assinatura', 'CheckCircleIcon', 'light-success'),
                   /* Plan card */

@@ -108,7 +108,7 @@
             return n("div", {
                 staticClass: "navbar-container d-flex content align-items-center"
             }, [n("ul", {
-                staticClass: "nav navbar-nav d-xl-none"
+                staticClass: "nav navbar-nav"
             }, [n("li", {
                 staticClass: "nav-item"
             }, [n("b-link", {
@@ -122,8 +122,8 @@
                     size: "21"
                 }
             })], 1)], 1)]), n("div", {
-                staticClass: "bookmark-wrapper align-items-center flex-grow-1 d-none d-lg-flex"
-            }, [n("bookmarks")], 1), n("b-navbar-nav", {
+                staticClass: "bookmark-wrapper align-items-center flex-grow-1 d-flex"
+            }, [n("span", {style:{fontSize:"1rem",color:"#5e5873",fontWeight:"500"}}, [t._v("Ol\u00e1 Jo\u00e3o, seja bem-vindo!")])], 1), n("b-navbar-nav", {
                 staticClass: "nav align-items-center ml-auto"
             }, [n("locale"), n("dark-Toggler", {
                 staticClass: "d-none d-lg-block"
@@ -1178,7 +1178,7 @@
             }, [n("feather-icon", {
                 staticClass: "align-text-top",
                 attrs: {
-                    icon: "HomeIcon",
+                    icon: t.$route.meta.pageIcon || "HomeIcon",
                     size: "16"
                 }
             })], 1), t._l(t.$route.meta.breadcrumb, (function(e) {
@@ -6194,8 +6194,8 @@
                     size: "21"
                 }
             })], 1)], 1)]), n("div", {
-                staticClass: "bookmark-wrapper align-items-center flex-grow-1 d-none d-lg-flex"
-            }), n("b-navbar-nav", {
+                staticClass: "bookmark-wrapper align-items-center flex-grow-1 d-flex"
+            }, [n("span", {style:{fontSize:"1rem",color:"#5e5873",fontWeight:"500"}}, "Ol\u00e1 "+(t.user&&t.user.name?t.user.name:"Usu\u00e1rio")+", seja bem-vindo!")]), n("b-navbar-nav", {
                 staticClass: "nav align-items-center ml-auto"
             }, [t.user.name ? n("div", [null !== t.user.group ? n("b-badge", {
                 staticClass: "mt-50 mt-md-0",
@@ -6212,11 +6212,7 @@
                 scopedSlots: t._u([{
                     key: "button-content",
                     fn: function() {
-                        return [n("div", {
-                            staticClass: "d-flex user-nav mr-0"
-                        }, [n("p", {
-                            staticClass: "user-name-responsive user-name font-weight-bolder mb-0"
-                        }, [0 === t.user.role ? n("span", [t._v(" " + t._s(t.companySelected ? t.companySelected.name : t.user.name) + " ")]) : n("span", [t._v(" " + t._s(t.user.name) + " ")])])])]
+                        return [n("div", {style:{width:"38px",height:"38px",borderRadius:"50%",background:"linear-gradient(135deg,#0052ff 0%,#00b7ff 100%)",display:"flex",alignItems:"center",justifyContent:"center",color:"white",fontWeight:"700",fontSize:"16px",cursor:"pointer",userSelect:"none",flexShrink:"0"}}, [t._v(t.user&&t.user.name?t.user.name.charAt(0).toUpperCase():"U")])]
                     },
                     proxy: !0
                 }])
@@ -6248,7 +6244,7 @@
                     size: "16",
                     icon: "LogOutIcon"
                 }
-            }), n("span", [t._v("Logout")])], 1)], 1)], 1)], 1)
+            }), n("span", [t._v("Sair")])], 1)], 1)], 1)], 1)
         }
           , r = []
           , o = n("e98b")
@@ -8577,7 +8573,7 @@
                     size: "16",
                     icon: "LogOutIcon"
                 }
-            }), n("span", [t._v("Logout")])], 1)], 1)
+            }), n("span", [t._v("Sair")])], 1)], 1)
         }
           , r = []
           , o = n("ede5")
