@@ -194,6 +194,10 @@
 
           /* â”€â”€ Theme routing: /1/  /2/  /3/ â”€â”€ */
           var REPO_BASE = '/marshalls-customer-app-preview';
+          /* Bare base URL → redirect to last-used or default theme */
+          if (window.location.pathname === REPO_BASE || window.location.pathname === REPO_BASE + '/') {
+            window.location.replace(REPO_BASE + '/' + (sessionStorage.getItem('ctTheme') || '1') + '/');
+          }
           var m = window.location.pathname.match(new RegExp('^' + REPO_BASE + '\\/(\\d+)(\\/.*)?$'));
           if (m && THEMES[m[1]]) {
             themeId = m[1];
