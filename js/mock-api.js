@@ -117,9 +117,9 @@
     '/user': function () {
       return {
         id: 1,
-        name: 'Usuário Demo',
+        name: 'João Demo',
         email: 'demo@marshalls.com',
-        role: 0,
+        role: 1,
         group: null,
         registerComplete: true,
         profileComplete: true,

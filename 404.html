@@ -392,35 +392,36 @@
             var bcLink = document.querySelector('.breadcrumb .breadcrumb-item:first-child a');
             if (!bcLink) return;
             var activeLi = document.querySelector('.navigation li.active');
-            var titleEl = activeLi && activeLi.querySelector('.menu-title');
-            var activeTitle = titleEl ? titleEl.textContent.trim() : '';
-            var hasCustomIcon = !!(activeTitle && ICON_MAP[activeTitle]);
             var customSvg = bcLink.querySelector('svg._bc-custom');
-            if (hasCustomIcon) {
-              if (customSvg) return;
-              var activeSvg = activeLi.querySelector('a svg');
-              if (!activeSvg) return;
-              var origSvg = bcLink.querySelector('svg:not(._bc-custom)');
-              if (origSvg) origSvg.style.display = 'none';
-              var ns = 'http://www.w3.org/2000/svg';
-              var svg = document.createElementNS(ns, 'svg');
-              svg.classList.add('_bc-custom', 'feather', 'align-text-top');
-              svg.setAttribute('xmlns', ns);
-              svg.setAttribute('viewBox', activeSvg.getAttribute('viewBox') || '0 0 24 24');
-              svg.setAttribute('fill', 'none');
-              svg.setAttribute('stroke', 'currentColor');
-              svg.setAttribute('stroke-width', '2');
-              svg.setAttribute('stroke-linecap', 'round');
-              svg.setAttribute('stroke-linejoin', 'round');
-              svg.setAttribute('width', '16');
-              svg.setAttribute('height', '16');
-              svg.innerHTML = activeSvg.innerHTML;
-              bcLink.appendChild(svg);
-            } else {
+            if (!activeLi) {
               if (customSvg) customSvg.remove();
               var origSvg = bcLink.querySelector('svg:not(._bc-custom)');
               if (origSvg && origSvg.style.display === 'none') origSvg.style.display = '';
+              return;
             }
+            var titleEl = activeLi.querySelector('.menu-title');
+            var activeTitle = titleEl ? titleEl.textContent.trim() : '';
+            if (customSvg && customSvg.getAttribute('data-ci') === activeTitle) return;
+            var activeSvg = activeLi.querySelector('a svg');
+            if (!activeSvg) return;
+            if (customSvg) customSvg.remove();
+            var origSvg = bcLink.querySelector('svg:not(._bc-custom)');
+            if (origSvg) origSvg.style.display = 'none';
+            var ns = 'http://www.w3.org/2000/svg';
+            var svg = document.createElementNS(ns, 'svg');
+            svg.classList.add('_bc-custom', 'feather', 'align-text-top');
+            svg.setAttribute('xmlns', ns);
+            svg.setAttribute('viewBox', activeSvg.getAttribute('viewBox') || '0 0 24 24');
+            svg.setAttribute('fill', activeSvg.getAttribute('fill') || 'none');
+            svg.setAttribute('stroke', activeSvg.getAttribute('stroke') || 'currentColor');
+            svg.setAttribute('stroke-width', activeSvg.getAttribute('stroke-width') || '2');
+            svg.setAttribute('stroke-linecap', 'round');
+            svg.setAttribute('stroke-linejoin', 'round');
+            svg.setAttribute('width', '16');
+            svg.setAttribute('height', '16');
+            svg.setAttribute('data-ci', activeTitle);
+            svg.innerHTML = activeSvg.innerHTML;
+            bcLink.appendChild(svg);
           }
 
           var _observer = new MutationObserver(function () { applyIcons(); syncBreadcrumbIcon(); });
