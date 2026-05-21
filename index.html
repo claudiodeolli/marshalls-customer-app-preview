@@ -206,16 +206,16 @@
             var TBASE = REPO_BASE + '/' + themeId;
 
             function strip(path) {
-              if (path === TBASE) return REPO_BASE + '/';
-              if (path.indexOf(TBASE + '/') === 0) return REPO_BASE + path.slice(TBASE.length);
+              if (path === TBASE || path === TBASE + '/') return '/';
+              if (path.indexOf(TBASE + '/') === 0) return path.slice(TBASE.length);
               return path;
             }
 
             function addBase(path) {
               if (!path || typeof path !== 'string') return path;
-              if (path.indexOf(TBASE + '/') === 0 || path === TBASE) return path;
-              if (path.indexOf(REPO_BASE + '/') === 0) return REPO_BASE + '/' + themeId + path.slice(REPO_BASE.length);
-              return path;
+              if (path.charAt(0) !== '/' || path.indexOf('http') === 0) return path;
+              if (path.indexOf(TBASE) === 0) return path;
+              return TBASE + (path === '/' ? '/' : path);
             }
 
             var _push = history.pushState.bind(history);
