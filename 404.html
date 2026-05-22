@@ -288,7 +288,7 @@
             min-height: 38px;
           }
           .navbar-greeting {
-            font-size: 1.15rem;
+            font-size: 0.95rem;
             color: #5e5873;
             font-weight: 500;
             margin-left: 1rem;
@@ -381,7 +381,7 @@
               fill: 'currentColor',
               stroke: 'none',
               strokeWidth: '0',
-              inner: '<path d="m2 22 14-5-9-9zm12.53-9.47 5.59-5.59c.49-.49 1.28-.49 1.77 0l.59.59 1.06-1.06-.59-.59c-1.07-1.07-2.82-1.07-3.89 0l-5.59 5.59zm-4.47-5.65-.59.59 1.06 1.06.59-.59c1.07-1.07 1.07-2.82 0-3.89l-.59-.59-1.06 1.07.59.59c.48.48.48 1.28 0 1.76m7 5-1.59 1.59 1.06 1.06 1.59-1.59c.49-.49 1.28-.49 1.77 0l1.61 1.61 1.06-1.06-1.61-1.61c-1.08-1.07-2.82-1.07-3.89 0m-2-6-3.59 3.59 1.06 1.06 3.59-3.59c1.07-1.07 1.07-2.82 0-3.89l-1.59-1.59-1.06 1.06 1.59 1.59c.48.49.48 1.29 0 1.77"/>'
+              inner: '<path d="m2 22 14-5-9-9zm10.35-5.82L5.3 18.7l2.52-7.05zm2.18-3.65 5.59-5.59c.49-.49 1.28-.49 1.77 0l.59.59 1.06-1.06-.59-.59c-1.07-1.07-2.82-1.07-3.89 0l-5.59 5.59zm-4.47-5.65-.59.59 1.06 1.06.59-.59c1.07-1.07 1.07-2.82 0-3.89l-.59-.59-1.06 1.07.59.59c.48.48.48 1.28 0 1.76m7 5-1.59 1.59 1.06 1.06 1.59-1.59c.49-.49 1.28-.49 1.77 0l1.61 1.61 1.06-1.06-1.61-1.61c-1.08-1.07-2.82-1.07-3.89 0m-2-6-3.59 3.59 1.06 1.06 3.59-3.59c1.07-1.07 1.07-2.82 0-3.89l-1.59-1.59-1.06 1.06 1.59 1.59c.48.49.48 1.29 0 1.77"/>'
             },
             'Agendamentos': {
               viewBox: '0 0 24 24',
@@ -452,13 +452,50 @@
             bcLink.appendChild(svg);
           }
 
-          var _observer = new MutationObserver(function () { applyIcons(); syncBreadcrumbIcon(); });
+          function injectUserAvatar() {
+            var btns = document.querySelectorAll('.header-navbar .navbar-container ul.navbar-nav button');
+            var btn = null;
+            for (var i = 0; i < btns.length; i++) {
+              if (btns[i].textContent.indexOf('MARSHALLS CORPORATE') !== -1 && !btns[i].dataset.avatarInjected) {
+                btn = btns[i]; break;
+              }
+            }
+            if (!btn) return;
+            btn.dataset.avatarInjected = '1';
+            btn.style.cssText = 'background:none;border:none;padding:0.4rem 0.5rem;position:relative;cursor:pointer;display:flex;align-items:center;';
+            var av = document.createElement('div');
+            av.style.cssText = 'width:38px;height:38px;border-radius:50%;background:rgba(0,82,255,0.12);color:#0052ff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1rem;flex-shrink:0;';
+            av.textContent = 'J';
+            var dd = document.createElement('div');
+            dd.setAttribute('data-user-dd', '1');
+            dd.style.cssText = 'display:none;position:absolute;top:calc(100% + 4px);right:0;background:#fff;border:1px solid #ebe9f1;border-radius:0.358rem;box-shadow:0 5px 25px rgba(34,41,47,0.1);min-width:180px;z-index:9999;';
+            var sairLink = document.createElement('a');
+            sairLink.href = '#';
+            sairLink.style.cssText = 'display:flex;align-items:center;padding:0.75rem 1.28rem;color:#ea5455;font-weight:500;font-size:0.9rem;text-decoration:none;white-space:nowrap;';
+            sairLink.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:0.5rem;flex-shrink:0"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Sair';
+            sairLink.addEventListener('click', function(e) { e.preventDefault(); dd.style.display = 'none'; });
+            dd.appendChild(sairLink);
+            btn.innerHTML = '';
+            btn.appendChild(av);
+            btn.appendChild(dd);
+            btn.addEventListener('click', function(e) { e.stopPropagation(); dd.style.display = dd.style.display === 'none' ? 'block' : 'none'; });
+            if (!window._avatarDdListenerAdded) {
+              window._avatarDdListenerAdded = true;
+              document.addEventListener('click', function() {
+                var openDd = document.querySelector('[data-user-dd="1"]');
+                if (openDd) openDd.style.display = 'none';
+              });
+            }
+          }
+
+          var _observer = new MutationObserver(function () { applyIcons(); syncBreadcrumbIcon(); injectUserAvatar(); });
 
           function init() {
             var app = document.getElementById('app');
             if (app) _observer.observe(app, { childList: true, subtree: true });
             applyIcons();
             syncBreadcrumbIcon();
+            injectUserAvatar();
           }
 
           if (document.readyState === 'loading') {
