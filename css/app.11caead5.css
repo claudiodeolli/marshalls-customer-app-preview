@@ -27111,7 +27111,6 @@ footer.footer span i,footer.footer span svg {
 
 .main-menu .navbar-header {
     height: 100%;
-    width: 260px;
     height: 4.45rem;
     position: relative;
     background: #fff;
@@ -27120,7 +27119,9 @@ footer.footer span i,footer.footer span svg {
 }
 
 [dir=ltr] .main-menu .navbar-header {
-    padding: .35rem 1rem .3rem 1.64rem
+    padding: 0 15px;
+    /* padding: .35rem 1rem .3rem 1.64rem; */
+    height: fit-content !important;
 }
 
 [dir=rtl] .main-menu .navbar-header {
@@ -37837,7 +37838,7 @@ body.dark-layout pre {
 }
 
 [dir] .main-menu ul.navigation-main {
-    padding-top: 1rem
+    /* padding-top: 1rem */
 }
 
 .button-badge {

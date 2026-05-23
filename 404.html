@@ -285,6 +285,8 @@
           .header-navbar .navbar-container .bookmark-wrapper {
             display: flex !important;
             align-items: center;
+            justify-content: flex-end;
+            margin-right: 1rem;
             min-height: 38px;
           }
           .navbar-greeting {
@@ -535,6 +537,158 @@
             var app = document.getElementById('app');
             if (app) _nbObs.observe(app, { childList: true, subtree: true });
             setTimeout(injectNavBg, 300);
+          }
+          if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+          } else {
+            init();
+          }
+        })();
+        </script>
+        <script>
+        /* Inject Plantão 24h shortcut into navbar-header.expanded */
+        (function () {
+          var _stateObs = null;
+
+          function addScrollCap() {
+            var content = document.querySelector('.main-menu .main-menu-content');
+            if (!content || content.querySelector('.ps-rail-top-cap')) return;
+            var rail = content.querySelector('.ps__rail-y');
+            if (!rail) return;
+            var topPx = (rail.offsetTop - 10) + 'px';
+            var bg = document.createElement('div');
+            bg.className = 'ps-rail-top-cap-bg';
+            bg.style.top = topPx;
+            content.appendChild(bg);
+            var cap = document.createElement('div');
+            cap.className = 'ps-rail-top-cap';
+            cap.style.top = topPx;
+            content.appendChild(cap);
+            function show() { cap.classList.add('ps-cap-hover'); }
+            function hide() { cap.classList.remove('ps-cap-hover'); }
+            rail.addEventListener('mouseenter', show);
+            rail.addEventListener('mouseleave', hide);
+            cap.addEventListener('mouseenter', show);
+            cap.addEventListener('mouseleave', hide);
+          }
+
+          function addSvgDot() {
+            var svg = document.querySelector('[data-plantao-shortcut] a svg');
+            if (!svg || svg.querySelector('.plantao-svg-dot')) return;
+            var circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            circle.setAttribute('cx', '250');
+            circle.setAttribute('cy', '250');
+            circle.setAttribute('r', '75');
+            circle.setAttribute('class', 'plantao-svg-dot');
+            svg.appendChild(circle);
+          }
+
+          function addButtonDot() {
+            var btns = document.querySelectorAll('button.btn-primary, button.btn');
+            btns.forEach(function (btn) {
+              if (btn.querySelector('.plantao-pulse-dot')) return;
+              if (btn.textContent.trim().toLowerCase().indexOf('iniciar atendimento') === -1) return;
+              var dot = document.createElement('span');
+              dot.className = 'plantao-pulse-dot';
+              btn.classList.add('btn-plantao-pulse');
+              btn.insertBefore(dot, btn.firstChild);
+            });
+          }
+
+          var _btnObs = null;
+          function bindButtonObserver() {
+            if (_btnObs) return;
+            var app = document.getElementById('app');
+            if (!app) return;
+            _btnObs = new MutationObserver(addButtonDot);
+            _btnObs.observe(app, { childList: true, subtree: true });
+            addButtonDot();
+          }
+
+          function updatePlantoState() {
+            var clone = document.querySelector('[data-plantao-shortcut]');
+            if (!clone) return;
+            var anyActive = document.querySelector('.main-menu .navigation > li.active');
+            if (anyActive) {
+              clone.classList.add('plantao-inactive');
+            } else {
+              clone.classList.remove('plantao-inactive');
+            }
+          }
+
+          function bindStateObserver() {
+            if (_stateObs) return;
+            var nav = document.querySelector('.main-menu .navigation');
+            if (!nav) return;
+            _stateObs = new MutationObserver(updatePlantoState);
+            _stateObs.observe(nav, { attributes: true, attributeFilter: ['class'], subtree: true });
+            updatePlantoState();
+          }
+
+          function syncMenuContentHeight() {
+            var header = document.querySelector('.main-menu .navbar-header');
+            var content = document.querySelector('.main-menu .main-menu-content');
+            if (!header || !content) return;
+            var h = header.getBoundingClientRect().height;
+            content.style.setProperty('height', 'calc(100% - ' + h + 'px)', 'important');
+          }
+
+          function injectPlantoShortcut() {
+            var header = document.querySelector('.main-menu .navbar-header.expanded');
+            if (!header || document.querySelector('[data-plantao-shortcut]')) {
+              bindStateObserver();
+              return;
+            }
+
+            var navItems = document.querySelectorAll('.main-menu .navigation > li');
+            var originalLi = null;
+            navItems.forEach(function (li) {
+              var t = li.querySelector('.menu-title');
+              if (t && t.textContent.trim() === 'Plantão 24h') originalLi = li;
+            });
+            if (!originalLi) return;
+
+            var clone = originalLi.cloneNode(true);
+            clone.setAttribute('data-plantao-shortcut', '1');
+
+            var a = clone.querySelector('a');
+            if (a) {
+              a.removeAttribute('style');
+              a.addEventListener('click', function (e) {
+                e.preventDefault();
+                var appEl = document.getElementById('app');
+                var vue = appEl && (appEl.__vue__ || (appEl._vei && Object.values(appEl._vei)[0]));
+                var router = vue && vue.$router;
+                if (router) {
+                  router.push(a.getAttribute('href') || '/painel').catch(function () {});
+                } else {
+                  window.history.pushState({}, '', a.getAttribute('href') || '/painel');
+                  window.dispatchEvent(new PopStateEvent('popstate'));
+                }
+              });
+            }
+
+            var svg = clone.querySelector('svg');
+            if (svg) { svg.removeAttribute('style'); }
+
+            header.appendChild(clone);
+            originalLi.parentNode.removeChild(originalLi);
+            bindStateObserver();
+            syncMenuContentHeight();
+            if (window.ResizeObserver) {
+              new ResizeObserver(syncMenuContentHeight).observe(header);
+            }
+            addScrollCap();
+            setTimeout(addScrollCap, 600);
+            addSvgDot();
+            bindButtonObserver();
+          }
+
+          var _pObs = new MutationObserver(injectPlantoShortcut);
+          function init() {
+            var app = document.getElementById('app');
+            if (app) _pObs.observe(app, { childList: true, subtree: true });
+            setTimeout(injectPlantoShortcut, 400);
           }
           if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', init);

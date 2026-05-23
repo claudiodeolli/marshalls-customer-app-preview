@@ -645,7 +645,28 @@
                 }
             }
         }, y = T, x = t("2877"), C = Object(x["a"])(y, f, m, !1, null, null, null), P = C.exports, O = (t("b0c0"),
-        t("5530")), I = t("0a35"), j = {
+        t("5530")), I = t("0a35");
+        I["HistoryIcon"] = {
+            functional: !0,
+            render: function(e, a) {
+                var s = (a.props && a.props.size) || 14;
+                return e("svg", {attrs:{xmlns:"http://www.w3.org/2000/svg",width:s,height:s,viewBox:"0 0 24 24",fill:"none",stroke:"currentColor","stroke-width":"2","stroke-linecap":"round","stroke-linejoin":"round"}}, [
+                    e("path", {attrs:{d:"M3 12a9 9 0 1 0 3-6.7"}}),
+                    e("path", {attrs:{d:"M3 4v5h5"}}),
+                    e("path", {attrs:{d:"M12 8v4l2.5 1.5"}})
+                ])
+            }
+        };
+        I["PlantonIcon"] = {
+            functional: !0,
+            render: function(e, a) {
+                var s = (a.props && a.props.size) || 14;
+                return e("svg", {attrs:{xmlns:"http://www.w3.org/2000/svg",width:s,height:s,viewBox:"0 0 500 500",fill:"none",stroke:"currentColor","stroke-width":"2","stroke-linecap":"round","stroke-linejoin":"round"}}, [
+                    e("path", {attrs:{fill:"currentColor","fill-rule":"evenodd",stroke:"currentColor","stroke-width":"30","stroke-linejoin":"round",d:"M 190,55 L 310,55 A 25,25 0 0 1 335,80 L 335,145 A 20,20 0 0 0 355,165 L 420,165 A 25,25 0 0 1 445,190 L 445,310 A 25,25 0 0 1 420,335 L 355,335 A 20,20 0 0 0 335,355 L 335,420 A 25,25 0 0 1 310,445 L 190,445 A 25,25 0 0 1 165,420 L 165,355 A 20,20 0 0 0 145,335 L 80,335 A 25,25 0 0 1 55,310 L 55,190 A 25,25 0 0 1 80,165 L 145,165 A 20,20 0 0 0 165,145 L 165,80 A 25,25 0 0 1 190,55 Z M 208,73 L 292,73 A 25,25 0 0 1 317,98 L 317,163 A 20,20 0 0 0 337,183 L 402,183 A 25,25 0 0 1 427,208 L 427,292 A 25,25 0 0 1 402,317 L 337,317 A 20,20 0 0 0 317,337 L 317,402 A 25,25 0 0 1 292,427 L 208,427 A 25,25 0 0 1 183,402 L 183,337 A 20,20 0 0 0 163,317 L 98,317 A 25,25 0 0 1 73,292 L 73,208 A 25,25 0 0 1 98,183 L 163,183 A 20,20 0 0 0 183,163 L 183,98 A 25,25 0 0 1 208,73 Z"}})
+                ])
+            }
+        };
+        var j = {
             name: "FeatherIcon",
             functional: !0,
             props: {
@@ -824,7 +845,7 @@
           , f = [{
             title: "Plantão 24h",
             route: "painel",
-            icon: "HomeIcon",
+            icon: "PlantonIcon",
             gate: "panel"
         }, {
             header: "Assinante",
@@ -837,12 +858,12 @@
         }, {
             title: "Histórico",
             route: "impostos",
-            icon: "UsersIcon",
+            icon: "HistoryIcon",
             gate: "taxes"
         }, {
             title: "Agendamentos",
             route: "indicadores",
-            icon: "UserIcon",
+            icon: "CalendarIcon",
             gate: "taxes"
         }, {
             title: "Meus dados",
@@ -863,7 +884,7 @@
         }, {
             title: "Assinatura",
             route: "parceiros",
-            icon: "CodeIcon",
+            icon: "CreditCardIcon",
             gate: "user"
         }, {
             header: "Seguran\u00e7a",
@@ -1651,7 +1672,7 @@
                     subject: "panel"
                 },
                 pageTitle: "Plantão 24h",
-                pageIcon: "HomeIcon",
+                pageIcon: "PlantonIcon",
                 breadcrumb: [{
                     text: "Atendimento médico",
                     active: !0
@@ -1777,7 +1798,7 @@
                     subject: "taxes"
                 },
                 pageTitle: "Histórico",
-                pageIcon: "UsersIcon",
+                pageIcon: "HistoryIcon",
                 breadcrumb: [{
                     text: "Detalhes do Histórico",
                     active: !0
@@ -2076,7 +2097,7 @@
                     subject: "user"
                 },
                 pageTitle: "Assinatura",
-                pageIcon: "CodeIcon",
+                pageIcon: "CreditCardIcon",
                 breadcrumb: [{
                     text: "Detalhes da Assinatura",
                     active: !0

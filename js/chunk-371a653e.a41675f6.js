@@ -122,7 +122,7 @@
                     size: "21"
                 }
             })], 1)], 1)]), n("div", {
-                staticClass: "bookmark-wrapper align-items-center flex-grow-1 d-flex"
+                staticClass: "bookmark-wrapper flex-grow-1 d-flex"
             }, [n("span", {style:{fontSize:"1rem",color:"#5e5873",fontWeight:"500"}}, [t._v("Ol\u00e1 Jo\u00e3o, seja bem-vindo!")])], 1), n("b-navbar-nav", {
                 staticClass: "nav align-items-center ml-auto"
             }, [n("locale"), n("dark-Toggler", {
