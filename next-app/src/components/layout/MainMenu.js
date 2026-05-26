@@ -65,7 +65,7 @@ export default function MainMenu({ collapsed, onToggleCollapse, onOverlayClick }
               <Link className="navbar-brand" href="/painel">
                 <span className="brand-logo">
                   <img
-                    src="/img/MarshallsMed%20novo2_%20Med%20maior.png"
+                    src={`${process.env.NEXT_PUBLIC_BASE_PATH}/img/MarshallsMed%20novo2_%20Med%20maior.png`}
                     alt="Logo"
                     className="_logo-full"
                     style={{ width: '149.98px', height: '46.55px', objectFit: 'contain' }}
@@ -75,7 +75,7 @@ export default function MainMenu({ collapsed, onToggleCollapse, onOverlayClick }
               {/* Logo pequeno exibido quando o sidebar está recolhido */}
               <img
                 className="_logo-collapsed"
-                src="/img/MarshallsMed%20novo2_%20Med%20menor.png"
+                src={`${process.env.NEXT_PUBLIC_BASE_PATH}/img/MarshallsMed%20novo2_%20Med%20menor.png`}
                 alt="Logo"
               />
             </li>
