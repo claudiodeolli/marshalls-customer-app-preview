@@ -1,8 +1,10 @@
 /** @type {import('next').NextConfig} */
+const isProd = process.env.NODE_ENV === 'production';
+
 const nextConfig = {
   output: 'export',
-  basePath: '/marshalls-customer-app-preview',
-  assetPrefix: '/marshalls-customer-app-preview',
+  basePath: isProd ? '/marshalls-customer-app-preview' : '',
+  assetPrefix: isProd ? '/marshalls-customer-app-preview' : '',
   trailingSlash: true,
   images: {
     unoptimized: true,
