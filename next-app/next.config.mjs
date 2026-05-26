@@ -5,7 +5,7 @@ const nextConfig = {
   output: 'export',
   basePath: isProd ? '/marshalls-customer-app-preview' : '',
   assetPrefix: isProd ? '/marshalls-customer-app-preview' : '',
-  trailingSlash: true,
+  trailingSlash: isProd,
   images: {
     unoptimized: true,
   },

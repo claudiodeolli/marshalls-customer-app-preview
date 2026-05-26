@@ -10,9 +10,10 @@ import { menuItems, plantaoItem } from '@/data/menuItems';
 
 /* Ícone feather para o breadcrumb */
 function BreadcrumbIcon({ activeHref }) {
+  const href = activeHref === '/' ? '/' : activeHref.replace(/\/$/, '');
   const activeItem =
-    menuItems.find(item => !item.header && (activeHref === item.href || activeHref.startsWith(item.href + '/'))) ||
-    (activeHref === plantaoItem.href ? plantaoItem : null);
+    menuItems.find(item => !item.header && (href === item.href || href.startsWith(item.href + '/'))) ||
+    (href === plantaoItem.href ? plantaoItem : null);
   if (!activeItem) return null;
   const def = activeItem.icon;
   return (

@@ -32,8 +32,9 @@ export default function MainMenu({ collapsed, onToggleCollapse, onOverlayClick }
   const menuRef = useRef(null);
 
   /* Plantão ativo se nenhum item de menu está ativo */
-  const anyActive = menuItems.some(item => !item.header && (pathname === item.href || pathname.startsWith(item.href + '/')));
-  const plantaoActive = pathname === plantaoItem.href && !anyActive;
+  const p = pathname === '/' ? '/' : pathname.replace(/\/$/, '');
+  const anyActive = menuItems.some(item => !item.header && (p === item.href || p.startsWith(item.href + '/')));
+  const plantaoActive = p === plantaoItem.href && !anyActive;
   const plantaoInactive = anyActive;
 
   function handleMouseOver(e) {
@@ -134,7 +135,7 @@ export default function MainMenu({ collapsed, onToggleCollapse, onOverlayClick }
                   </li>
                 );
               }
-              const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
+              const isActive = p === item.href || p.startsWith(item.href + '/');
               return (
                 <li key={item.href} className={`nav-item${isActive ? ' active' : ''}`}>
                   <Link href={item.href} className={isActive ? 'active' : ''} aria-current={isActive ? 'page' : undefined}>

@@ -68,10 +68,12 @@ export const routeConfig = {
 };
 
 export function getRouteConfig(pathname) {
-  if (routeConfig[pathname]) return routeConfig[pathname];
+  const p = pathname === '/' ? '/' : pathname.replace(/\/$/, '');
+
+  if (routeConfig[p]) return routeConfig[p];
 
   /* Rotas dinâmicas */
-  if (pathname.startsWith('/impostos/') && pathname.endsWith('/declaracao')) {
+  if (p.startsWith('/impostos/') && p.endsWith('/declaracao')) {
     return {
       pageTitle: 'Impostos',
       breadcrumb: [
@@ -80,7 +82,7 @@ export function getRouteConfig(pathname) {
       ],
     };
   }
-  if (pathname.startsWith('/impostos/')) {
+  if (p.startsWith('/impostos/')) {
     return {
       pageTitle: 'Impostos',
       breadcrumb: [
@@ -89,7 +91,7 @@ export function getRouteConfig(pathname) {
       ],
     };
   }
-  if (pathname.startsWith('/declaracoes/')) {
+  if (p.startsWith('/declaracoes/')) {
     return {
       pageTitle: 'Declarações',
       breadcrumb: [
