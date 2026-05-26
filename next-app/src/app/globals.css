@@ -246,6 +246,26 @@ img._logo-collapsed { display: none; }
   overflow: hidden !important;
 }
 
+/* ── Quadrados sobre o topo do ps__rail-y ── */
+.main-menu .main-menu-content::before,
+.main-menu .main-menu-content::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 15px;
+  height: 15px;
+  pointer-events: none;
+}
+.main-menu .main-menu-content::before {
+  background: #eee;
+  z-index: 4;
+}
+.main-menu .main-menu-content::after {
+  background: #fff;
+  z-index: 5;
+}
+
 /* ── Transição de página (zoom-fade — igual ao Vue Router original) ── */
 @keyframes zoom-fade-enter {
   from { opacity: 0; transform: scale(.97); }
