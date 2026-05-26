@@ -1,0 +1,101 @@
+/* Itens do menu lateral com categorias - espelha a estrutura do app.js original */
+
+export const menuItems = [
+  { header: 'Assinante' },
+  {
+    title: 'Encaminhamentos',
+    href: '/empresa/detalhes',
+    icon: {
+      viewBox: '0 0 24 24',
+      fill: 'none',
+      stroke: 'currentColor',
+      strokeWidth: '2',
+      inner: '<rect x="3" y="7" width="18" height="13" rx="2" ry="2"/><path d="M10 7V5.5A1.5 1.5 0 0 1 11.5 4h1A1.5 1.5 0 0 1 14 5.5V7"/><path d="M8 11v4"/><path d="M6 13h4"/><path d="M13 12h5"/><path d="M13 16h3"/>',
+    },
+  },
+  {
+    title: 'Histórico',
+    href: '/impostos',
+    icon: {
+      viewBox: '0 0 24 24',
+      fill: 'none',
+      stroke: 'currentColor',
+      strokeWidth: '2',
+      inner: '<path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/><path d="M12 8v4l2.5 1.5"/>',
+    },
+  },
+  {
+    title: 'Agendamentos',
+    href: '/indicadores',
+    icon: {
+      viewBox: '0 0 24 24',
+      fill: 'none',
+      stroke: 'currentColor',
+      strokeWidth: '2',
+      inner: '<rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><rect x="7.35" y="13.35" width="1.3" height="1.3" rx="0.28" ry="0.28" fill="currentColor" stroke="none"/><rect x="11.35" y="13.35" width="1.3" height="1.3" rx="0.28" ry="0.28" fill="currentColor" stroke="none"/><rect x="15.35" y="13.35" width="1.3" height="1.3" rx="0.28" ry="0.28" fill="currentColor" stroke="none"/><rect x="7.35" y="17.1" width="1.3" height="1.3" rx="0.28" ry="0.28" fill="currentColor" stroke="none"/><rect x="11.35" y="17.1" width="1.3" height="1.3" rx="0.28" ry="0.28" fill="currentColor" stroke="none"/><rect x="15.35" y="17.1" width="1.3" height="1.3" rx="0.28" ry="0.28" fill="currentColor" stroke="none"/>',
+    },
+  },
+  {
+    title: 'Meus dados',
+    href: '/declaracoes',
+    icon: {
+      viewBox: '0 0 24 24',
+      fill: 'none',
+      stroke: 'currentColor',
+      strokeWidth: '2',
+      inner: '<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
+    },
+  },
+
+  { header: 'Benefícios' },
+  {
+    title: 'Meu Clube',
+    href: '/perfil',
+    icon: {
+      viewBox: '0 0 24 24',
+      fill: 'currentColor',
+      stroke: 'none',
+      strokeWidth: '0',
+      inner: '<path d="m2 22 14-5-9-9zm10.35-5.82L5.3 18.7l2.52-7.05zm2.18-3.65 5.59-5.59c.49-.49 1.28-.49 1.77 0l.59.59 1.06-1.06-.59-.59c-1.07-1.07-2.82-1.07-3.89 0l-5.59 5.59zm-4.47-5.65-.59.59 1.06 1.06.59-.59c1.07-1.07 1.07-2.82 0-3.89l-.59-.59-1.06 1.07.59.59c.48.48.48 1.28 0 1.76m7 5-1.59 1.59 1.06 1.06 1.59-1.59c.49-.49 1.28-.49 1.77 0l1.61 1.61 1.06-1.06-1.61-1.61c-1.08-1.07-2.82-1.07-3.89 0m-2-6-3.59 3.59 1.06 1.06 3.59-3.59c1.07-1.07 1.07-2.82 0-3.89l-1.59-1.59-1.06 1.06 1.59 1.59c.48.49.48 1.29 0 1.77"/>',
+    },
+  },
+
+  { header: 'Financeiro' },
+  {
+    title: 'Assinatura',
+    href: '/assinaturas',
+    icon: {
+      viewBox: '0 0 24 24',
+      fill: 'none',
+      stroke: 'currentColor',
+      strokeWidth: '2',
+      inner: '<rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/>',
+    },
+  },
+
+  { header: 'Segurança' },
+  {
+    title: 'Mudar minha senha',
+    href: '/mudar-senha',
+    icon: {
+      viewBox: '0 0 24 24',
+      fill: 'none',
+      stroke: 'currentColor',
+      strokeWidth: '2',
+      inner: '<rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>',
+    },
+  },
+];
+
+/* Ícone do Plantão 24h - aparece no header do sidebar, não na lista */
+export const plantaoItem = {
+  title: 'Plantão 24h',
+  href: '/painel',
+  icon: {
+    viewBox: '0 0 500 500',
+    fill: 'currentColor',
+    stroke: 'currentColor',
+    strokeWidth: '30',
+    inner: '<path fill="currentColor" fill-rule="evenodd" stroke="currentColor" stroke-width="30" stroke-linejoin="round" d="M 190,55 L 310,55 A 25,25 0 0 1 335,80 L 335,145 A 20,20 0 0 0 355,165 L 420,165 A 25,25 0 0 1 445,190 L 445,310 A 25,25 0 0 1 420,335 L 355,335 A 20,20 0 0 0 335,355 L 335,420 A 25,25 0 0 1 310,445 L 190,445 A 25,25 0 0 1 165,420 L 165,355 A 20,20 0 0 0 145,335 L 80,335 A 25,25 0 0 1 55,310 L 55,190 A 25,25 0 0 1 80,165 L 145,165 A 20,20 0 0 0 165,145 L 165,80 A 25,25 0 0 1 190,55 Z M 208,73 L 292,73 A 25,25 0 0 1 317,98 L 317,163 A 20,20 0 0 0 337,183 L 402,183 A 25,25 0 0 1 427,208 L 427,292 A 25,25 0 0 1 402,317 L 337,317 A 20,20 0 0 0 317,337 L 317,402 A 25,25 0 0 1 292,427 L 208,427 A 25,25 0 0 1 183,402 L 183,337 A 20,20 0 0 0 163,317 L 98,317 A 25,25 0 0 1 73,292 L 73,208 A 25,25 0 0 1 98,183 L 163,183 A 20,20 0 0 0 183,163 L 183,98 A 25,25 0 0 1 208,73 Z" />',
+  },
+};

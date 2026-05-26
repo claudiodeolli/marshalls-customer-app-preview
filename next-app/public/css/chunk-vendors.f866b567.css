@@ -1,0 +1,480 @@
+.asd__fade-enter-active,.asd__fade-leave-active {
+    transition: all .2s ease
+}
+
+.asd__fade-enter,.asd__fade-leave-active,.asd__list-complete-enter,.asd__list-complete-leave-to {
+    opacity: 0
+}
+
+[dir] .asd__list-complete-enter,[dir] .asd__list-complete-leave-to {
+    transform: translateY(30px)
+}
+
+.asd__list-complete-leave-active {
+    position: absolute;
+    visibility: hidden
+}
+
+.datepicker-trigger {
+    position: relative;
+    overflow: visible
+}
+
+.asd__wrapper {
+    white-space: nowrap;
+    overflow: hidden
+}
+
+[dir] .asd__wrapper {
+    border: 1px solid rgba(0,0,0,.2);
+    text-align: center;
+    background-color: #fff
+}
+
+.asd__wrapper *,.asd__wrapper :after,.asd__wrapper :before {
+    box-sizing: border-box
+}
+
+.asd__wrapper--full-screen {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    z-index: 2
+}
+
+[dir] .asd__wrapper--full-screen {
+    border: none
+}
+
+[dir=ltr] .asd__wrapper--full-screen,[dir=rtl] .asd__wrapper--full-screen {
+    right: 0;
+    left: 0
+}
+
+.asd__inner-wrapper {
+    transition: all .3s ease;
+    position: relative
+}
+
+.asd__datepicker-header,.asd__keyboard-shortcuts-trigger-wrapper {
+    position: relative
+}
+
+.asd__keyboard-shortcuts-trigger {
+    position: absolute;
+    bottom: 0;
+    font: inherit
+}
+
+[dir] .asd__keyboard-shortcuts-trigger {
+    background-color: transparent;
+    cursor: pointer;
+    border-top: 26px solid transparent
+}
+
+[dir=ltr] .asd__keyboard-shortcuts-trigger {
+    right: 0;
+    border-width: 26px 33px 0 0;
+    border-right: 33px solid #00a699
+}
+
+[dir=rtl] .asd__keyboard-shortcuts-trigger {
+    left: 0;
+    border-width: 26px 0 0 33px;
+    border-left: 33px solid #00a699
+}
+
+.asd__keyboard-shortcuts-trigger span {
+    color: #fff;
+    position: absolute;
+    bottom: 0
+}
+
+[dir=ltr] .asd__keyboard-shortcuts-trigger span {
+    right: -28px
+}
+
+[dir=rtl] .asd__keyboard-shortcuts-trigger span {
+    left: -28px
+}
+
+.asd__keyboard-shortcuts-show {
+    display: block!important
+}
+
+.asd__keyboard-shortcuts-close {
+    position: absolute;
+    top: 7px;
+    z-index: 2
+}
+
+[dir] .asd__keyboard-shortcuts-close {
+    background-color: transparent;
+    border: none;
+    padding: 5px;
+    cursor: pointer
+}
+
+[dir=ltr] .asd__keyboard-shortcuts-close {
+    right: 5px
+}
+
+[dir=rtl] .asd__keyboard-shortcuts-close {
+    left: 5px
+}
+
+.asd__keyboard-shortcuts-menu {
+    display: none;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    z-index: 1;
+    overflow: auto;
+    border-image: initial
+}
+
+[dir] .asd__keyboard-shortcuts-menu {
+    background: #fff;
+    border: 1px solid #dbdbdb;
+    border-radius: 2px;
+    padding: 22px;
+    margin: 33px
+}
+
+[dir=ltr] .asd__keyboard-shortcuts-menu {
+    right: 0;
+    text-align: left
+}
+
+[dir=rtl] .asd__keyboard-shortcuts-menu {
+    left: 0;
+    text-align: right
+}
+
+.asd__keyboard-shortcuts-title {
+    font-size: 16px;
+    font-weight: 700
+}
+
+[dir] .asd__keyboard-shortcuts-title {
+    margin: 0
+}
+
+.asd__keyboard-shortcuts-list {
+    list-style: none;
+    white-space: normal
+}
+
+[dir] .asd__keyboard-shortcuts-list {
+    margin: 6px 0;
+    padding: 0
+}
+
+.asd__keyboard-shortcuts-symbol {
+    font-family: monospace;
+    font-size: 12px;
+    text-transform: uppercase
+}
+
+[dir] .asd__keyboard-shortcuts-symbol {
+    background: #f2f2f2;
+    padding: 2px 6px
+}
+
+[dir=ltr] .asd__keyboard-shortcuts-symbol {
+    margin-right: 4px
+}
+
+[dir=rtl] .asd__keyboard-shortcuts-symbol {
+    margin-left: 4px
+}
+
+.asd__change-month-button {
+    position: absolute;
+    top: 12px;
+    z-index: 1
+}
+
+[dir] .asd__change-month-button {
+    background: #fff
+}
+
+[dir=ltr] .asd__change-month-button--previous {
+    left: 0;
+    padding-left: 15px
+}
+
+[dir=ltr] .asd__change-month-button--next,[dir=rtl] .asd__change-month-button--previous {
+    right: 0;
+    padding-right: 15px
+}
+
+[dir=rtl] .asd__change-month-button--next {
+    left: 0;
+    padding-left: 15px
+}
+
+[dir] .asd__change-month-button>button {
+    background-color: #fff;
+    border: 1px solid #e4e7e7;
+    border-radius: 3px;
+    padding: 4px 8px;
+    cursor: pointer
+}
+
+[dir] .asd__change-month-button>button:hover {
+    border: 1px solid #c4c4c4
+}
+
+.asd__change-month-button>button>svg {
+    height: 19px;
+    width: 19px;
+    fill: #82888a
+}
+
+.asd__days-legend {
+    position: absolute;
+    top: 50px
+}
+
+[dir] .asd__days-legend {
+    padding: 0 10px
+}
+
+[dir=ltr] .asd__days-legend {
+    left: 10px
+}
+
+[dir=rtl] .asd__days-legend {
+    right: 10px
+}
+
+.asd__day-title {
+    display: inline-block;
+    width: 14.28571%;
+    color: rgba(0,0,0,.7);
+    font-size: .8em
+}
+
+[dir] .asd__day-title {
+    text-align: center;
+    margin-bottom: 4px
+}
+
+[dir=ltr] .asd__day-title {
+    margin-left: -1px
+}
+
+[dir=rtl] .asd__day-title {
+    margin-right: -1px
+}
+
+.asd__month-table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+    max-width: 100%
+}
+
+[dir] .asd__month-table {
+    background: #fff
+}
+
+.asd__month {
+    transition: all .3s ease;
+    display: inline-block
+}
+
+[dir] .asd__month {
+    padding: 15px
+}
+
+.asd__month--hidden {
+    height: 275px;
+    visibility: hidden
+}
+
+.asd__month-name {
+    font-size: 1.3em;
+    line-height: 1.4em;
+    font-weight: 700
+}
+
+[dir] .asd__month-name {
+    text-align: center;
+    margin: 0 0 30px
+}
+
+.asd__month-year-select {
+    -webkit-appearance: none;
+    color: #00f;
+    font-size: inherit;
+    font-weight: inherit
+}
+
+[dir] .asd__month-year-select {
+    border: none;
+    background-color: inherit;
+    cursor: pointer;
+    padding: 0
+}
+
+.asd__month-year-select::-ms-expand {
+    display: none
+}
+
+.asd__day {
+    line-height: 38px;
+    height: 38px;
+    overflow: hidden
+}
+
+[dir] .asd__day {
+    padding: 0
+}
+
+[dir] .asd__day--enabled {
+    border: 1px solid #e4e7e7
+}
+
+[dir] .asd__day--enabled:hover {
+    background-color: #e4e7e7
+}
+
+.asd__day--enabled:focus {
+    outline: 5px auto Highlight;
+    outline: 5px auto -webkit-focus-ring-color
+}
+
+.asd__day--disabled,.asd__day--empty {
+    opacity: .5
+}
+
+[dir] .asd__day--disabled button,[dir] .asd__day--empty button {
+    cursor: default
+}
+
+[dir] .asd__day--empty {
+    border: none
+}
+
+[dir] .asd__day--disabled:hover {
+    background-color: transparent
+}
+
+.asd__day-button {
+    width: 100%;
+    height: 100%;
+    color: inherit;
+    user-select: none;
+    font-size: 15px;
+    font-weight: inherit
+}
+
+[dir] .asd__day-button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    padding: 0
+}
+
+.asd__action-buttons {
+    min-height: 50px
+}
+
+[dir] .asd__action-buttons {
+    padding-top: 10px;
+    margin-bottom: 12px
+}
+
+.asd__action-buttons button {
+    display: block;
+    position: relative;
+    font-weight: 700;
+    font-size: 15px
+}
+
+[dir] .asd__action-buttons button {
+    background: transparent;
+    border: none;
+    cursor: pointer
+}
+
+.asd__action-buttons button:hover {
+    text-decoration: underline
+}
+
+[dir=ltr] .asd__action-buttons button:first-child {
+    float: left;
+    left: 15px
+}
+
+[dir=ltr] .asd__action-buttons button:nth-child(2),[dir=rtl] .asd__action-buttons button:first-child {
+    float: right;
+    right: 15px
+}
+
+[dir=rtl] .asd__action-buttons button:nth-child(2) {
+    float: left;
+    left: 15px
+}
+
+.asd__mobile-header {
+    position: relative;
+    height: 50px
+}
+
+[dir] .asd__mobile-header {
+    border-bottom: 1px solid rgba(0,0,0,.2);
+    padding: 15px!important;
+    text-align: center
+}
+
+.asd__mobile-header h3 {
+    font-size: 20px
+}
+
+[dir] .asd__mobile-header h3 {
+    margin: 0
+}
+
+.asd__mobile-only {
+    display: none
+}
+
+@media (max-width: 600px) {
+    .asd__mobile-only {
+        display:block
+    }
+}
+
+.asd__mobile-close {
+    position: absolute;
+    top: 7px;
+    z-index: 2
+}
+
+[dir] .asd__mobile-close {
+    border: none;
+    padding: 5px;
+    cursor: pointer
+}
+
+[dir=ltr] .asd__mobile-close {
+    right: 5px
+}
+
+[dir=rtl] .asd__mobile-close {
+    left: 5px
+}
+
+.asd__mobile-close__icon {
+    position: relative;
+    font-size: 1.6em;
+    font-weight: 700
+}
+
+[dir] .asd__mobile-close__icon {
+    padding: 0
+}
