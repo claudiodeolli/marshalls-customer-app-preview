@@ -264,6 +264,7 @@ img._logo-collapsed { display: none; }
 .main-menu .main-menu-content::after {
   background: #fff;
   z-index: 5;
+  border-bottom-right-radius: .5rem;
 }
 
 /* ── Transição de página (zoom-fade — igual ao Vue Router original) ── */
