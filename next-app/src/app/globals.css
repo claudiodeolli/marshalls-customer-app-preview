@@ -224,6 +224,27 @@ img._logo-collapsed { display: none; }
   margin-right: 0 !important;
 }
 
+/* ── Sidebar: altura total e scroll ── */
+/* menu-fixed já tem position:fixed via Vuexy; garantimos height e flex */
+.main-menu.menu-fixed {
+  height: 100vh !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+.main-menu .navbar-header {
+  flex-shrink: 0 !important;
+}
+.main-menu .shadow-bottom {
+  flex-shrink: 0 !important;
+}
+/* Anula o calc(100% - 4.45rem) hardcoded — o flex:1 resolve automaticamente */
+.main-menu .main-menu-content {
+  flex: 1 1 0 !important;
+  height: auto !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+
 /* ── Transição de página (zoom-fade — igual ao Vue Router original) ── */
 @keyframes zoom-fade-enter {
   from { opacity: 0; transform: scale(.97); }

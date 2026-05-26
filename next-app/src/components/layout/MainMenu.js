@@ -54,7 +54,7 @@ export default function MainMenu({ collapsed, onToggleCollapse, onOverlayClick }
   return (
     <>
       <div
-        className={`main-menu menu-light menu-accordion menu-shadow${collapsed ? '' : ''}`}
+        className="main-menu menu-fixed menu-light menu-accordion menu-shadow"
         data-scroll-to-active="true"
         ref={menuRef}
       >

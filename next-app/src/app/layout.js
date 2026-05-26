@@ -1,4 +1,5 @@
 import './globals.css';
+import 'perfect-scrollbar/css/perfect-scrollbar.css';
 import ThemeInjector from '@/components/layout/ThemeInjector';
 import LoadingScreen from '@/components/layout/LoadingScreen';
 
