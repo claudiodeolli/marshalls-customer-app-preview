@@ -119,7 +119,7 @@ export default function MainMenu({ collapsed, onToggleCollapse, onOverlayClick }
 
         {/* ── Lista de itens do menu ── */}
         <PerfectScrollbar
-          className="main-menu-content ps ps--active-y"
+          className="main-menu-content"
           onMouseOver={handleMouseOver}
           onMouseLeave={handleMouseLeave}
         >
