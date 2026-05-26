@@ -237,10 +237,11 @@ img._logo-collapsed { display: none; }
 .main-menu .shadow-bottom {
   flex-shrink: 0 !important;
 }
-/* Anula o calc(100% - 4.45rem) hardcoded — o flex:1 resolve automaticamente */
-.main-menu .main-menu-content {
+/* Seletor .main-menu.menu-fixed .main-menu-content tem especificidade 0,3,0
+   e supera o .main-menu .main-menu-content (0,2,0) do Vuexy CSS que carrega
+   depois via <link>. Flex-basis:0 (do flex:1) ignora o height:calc do Vuexy. */
+.main-menu.menu-fixed .main-menu-content {
   flex: 1 1 0 !important;
-  height: auto !important;
   min-height: 0 !important;
   overflow: hidden !important;
 }
