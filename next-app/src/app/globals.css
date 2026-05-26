@@ -256,6 +256,8 @@ img._logo-collapsed { display: none; }
   width: 15px;
   height: 15px;
   pointer-events: none;
+  opacity: 0;
+  transition: opacity .2s linear;
 }
 .main-menu .main-menu-content::before {
   background: #eee;
@@ -265,6 +267,14 @@ img._logo-collapsed { display: none; }
   background: #fff;
   z-index: 5;
   border-bottom-right-radius: .5rem;
+}
+.main-menu .main-menu-content:hover::before,
+.main-menu .main-menu-content:hover::after,
+.main-menu .main-menu-content.ps--scrolling-y::before,
+.main-menu .main-menu-content.ps--scrolling-y::after,
+.main-menu .main-menu-content.ps--focus::before,
+.main-menu .main-menu-content.ps--focus::after {
+  opacity: 1;
 }
 
 /* ── Transição de página (zoom-fade — igual ao Vue Router original) ── */
