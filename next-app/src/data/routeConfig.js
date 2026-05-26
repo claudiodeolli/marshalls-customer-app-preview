@@ -1,7 +1,7 @@
 /* Configuração de título e breadcrumb por rota - baseado no Vue Router do original */
 
 export const routeConfig = {
-  '/painel': {
+  '/plantao': {
     pageTitle: 'Plantão 24h',
     breadcrumb: [{ text: 'Atendimento médico', active: true }],
   },

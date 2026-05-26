@@ -90,7 +90,7 @@ export const menuItems = [
 /* Ícone do Plantão 24h - aparece no header do sidebar, não na lista */
 export const plantaoItem = {
   title: 'Plantão 24h',
-  href: '/painel',
+  href: '/plantao',
   icon: {
     viewBox: '0 0 500 500',
     fill: 'currentColor',

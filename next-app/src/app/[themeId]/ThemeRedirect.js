@@ -12,7 +12,7 @@ export default function ThemeRedirect({ themeId }) {
     if (VALID.includes(themeId)) {
       localStorage.setItem('ctTheme', themeId);
     }
-    router.replace('/painel');
+    router.replace('/plantao');
   }, [themeId, router]);
 
   return null;
