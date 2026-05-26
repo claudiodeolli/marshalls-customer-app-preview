@@ -17,7 +17,7 @@ export default function LoadingScreen() {
   return (
     <div id="loading-bg" style={{ position: 'fixed', inset: 0, zIndex: 99999, background: '#fff', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
       <div className="loading-logo">
-        <img src={`${process.env.NEXT_PUBLIC_BASE_PATH}/img/MarshallsMed%20novo2_%20Med%20maior.png`} alt="Logo" width="200" />
+        <img src={`${(process.env.NEXT_PUBLIC_BASE_PATH ?? '')}/img/MarshallsMed%20novo2_%20Med%20maior.png`} alt="Logo" width="200" />
       </div>
       <div className="loading">
         <div className="effect-1 effects" />
