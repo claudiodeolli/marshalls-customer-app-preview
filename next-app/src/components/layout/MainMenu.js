@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useState } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { menuItems, plantaoItem } from '@/data/menuItems';
 

@@ -26,8 +26,8 @@ export default function RootLayout({ children }) {
         {/* Tela de carregamento */}
         <LoadingScreen />
 
-        {/* Injeta o CSS do tema ativo (padrão: tema 1) */}
-        <ThemeInjector themeId="1" />
+        {/* Injeta o CSS do tema ativo — lê sessionStorage 'ctTheme' (padrão: 1) */}
+        <ThemeInjector />
 
         {children}
       </body>

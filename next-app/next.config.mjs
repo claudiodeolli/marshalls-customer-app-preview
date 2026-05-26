@@ -1,6 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Permite importar imagens de qualquer domínio se necessário
+  output: 'export',
+  basePath: '/marshalls-customer-app-preview',
+  assetPrefix: '/marshalls-customer-app-preview',
+  trailingSlash: true,
   images: {
     unoptimized: true,
   },

@@ -1,6 +1,12 @@
-import { redirect } from 'next/navigation';
+'use client';
 
-/* Redireciona a raiz para o painel principal */
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+
 export default function RootPage() {
-  redirect('/painel');
+  const router = useRouter();
+  useEffect(() => {
+    router.replace('/painel');
+  }, [router]);
+  return null;
 }

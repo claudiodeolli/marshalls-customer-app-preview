@@ -6,11 +6,13 @@ import Link from 'next/link';
 import MainMenu from './MainMenu';
 import Navbar from './Navbar';
 import { getRouteConfig } from '@/data/routeConfig';
-import { menuItems } from '@/data/menuItems';
+import { menuItems, plantaoItem } from '@/data/menuItems';
 
 /* Ícone feather para o breadcrumb */
 function BreadcrumbIcon({ activeHref }) {
-  const activeItem = menuItems.find(item => !item.header && (activeHref === item.href || activeHref.startsWith(item.href + '/')));
+  const activeItem =
+    menuItems.find(item => !item.header && (activeHref === item.href || activeHref.startsWith(item.href + '/'))) ||
+    (activeHref === plantaoItem.href ? plantaoItem : null);
   if (!activeItem) return null;
   const def = activeItem.icon;
   return (

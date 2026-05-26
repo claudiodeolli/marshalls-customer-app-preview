@@ -2,7 +2,6 @@
 
 import { useEffect } from 'react';
 
-/* 8 temas disponíveis - espelham o objeto THEMES do index.html */
 const THEMES = {
   '1': ['#0052FF', '#00B7FF'],
   '2': ['#003DFF', '#00E5FF'],
@@ -21,20 +20,28 @@ function hexToRgba(hex, alpha) {
   return `rgba(${r},${g},${b},${alpha})`;
 }
 
-export default function ThemeInjector({ themeId = '1' }) {
+export default function ThemeInjector() {
   useEffect(() => {
+    const themeId = localStorage.getItem('ctTheme') || '1';
     const colors = THEMES[themeId] || THEMES['1'];
     const [c1, c2] = colors;
     const shadow = hexToRgba('#0052FF', 0.6);
 
     const css = [
+      /* Botões primários */
       `[dir] .btn-primary { background: linear-gradient(135deg,${c1} 0%,${c2} 100%) !important; border: none !important; }`,
       `[dir] .btn-primary.active,[dir] .btn-primary:active,[dir] .btn-primary:focus { background: linear-gradient(135deg,${c1} 0%,${c2} 100%) !important; border: none !important; }`,
       `[dir] .btn-primary:hover:not(.disabled):not(:disabled) { box-shadow: 0 8px 25px -8px #0052FF !important; }`,
+      /* Item ativo do sidebar (sidebar expandido) */
       `[dir] .main-menu.menu-light .navigation>li.active>a { box-shadow: 0 0 10px 1px ${shadow} !important; }`,
       `[dir=ltr] .main-menu.menu-light .navigation>li.active>a { background: linear-gradient(135deg,${c1} 0%,${c2} 100%) !important; }`,
       `[dir=rtl] .main-menu.menu-light .navigation>li.active>a { background: linear-gradient(-135deg,${c1} 0%,${c2} 100%) !important; }`,
       `[dir=ltr] .main-menu.menu-light .navigation>li ul .active { background: linear-gradient(135deg,${c1} 0%,${c2} 100%) !important; }`,
+      /* Item ativo do sidebar (sidebar recolhido) */
+      `[dir] .vertical-layout.vertical-menu-modern.menu-collapsed .main-menu:not(.expanded) .navigation>li.active>a { background: linear-gradient(118deg,${c1},${c2}) !important; box-shadow: 0 0 10px 1px ${shadow} !important; }`,
+      /* Botão Plantão 24h */
+      `[data-plantao-shortcut]:not(.plantao-inactive) > a { background: linear-gradient(135deg,${c1} 0%,${c2} 100%) !important; box-shadow: 0 0 10px 1px ${shadow} !important; }`,
+      /* Card congratulations */
       `[dir=ltr] .card-congratulations { background: linear-gradient(135deg,${c1} 0%,${c2} 100%) !important; }`,
       `.navbar-header { border-bottom-right-radius: .178rem !important; }`,
     ].join('\n');
@@ -46,7 +53,7 @@ export default function ThemeInjector({ themeId = '1' }) {
       document.head.appendChild(el);
     }
     el.textContent = css;
-  }, [themeId]);
+  }, []);
 
   return null;
 }

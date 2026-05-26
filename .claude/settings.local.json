@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -s --max-time 30 -D - \"http://localhost:3001/1/painel\")",
+      "Bash(cat /tmp/dev3001.log)",
+      "Read(//tmp/**)",
+      "Bash(curl -v --max-time 20 \"http://localhost:3001/1/painel\")",
+      "PowerShell(Stop-Process -Id 23444 -Force -ErrorAction SilentlyContinue)",
+      "Bash(curl --max-time 40 -s \"http://localhost:3001/1/painel\")",
+      "Bash(curl --max-time 180 -s -o /tmp/resp2.html \"http://localhost:3001/1/painel\")",
+      "Bash(echo \"Exit: $? Size: $\\(wc -c < /tmp/resp2.html || echo 0\\) bytes\")",
+      "Bash([ -d \"$SRC/$dir\" ])",
+      "Bash(cp -r d:/Freela/marshalls-customer-app-preview/next-app/src/app/[themeId]/__TRACKED_VAR__ 'd:/Freela/marshalls-customer-app-preview/next-app/src/app/\\(app\\)/')",
+      "Bash(mkdir -p 'd:/Freela/marshalls-customer-app-preview/next-app/src/app/\\(app\\)/impostos/[id]/declaracao')",
+      "Bash(cp d:/Freela/marshalls-customer-app-preview/next-app/src/app/[themeId]/impostos/[id]/page.js 'd:/Freela/marshalls-customer-app-preview/next-app/src/app/\\(app\\)/impostos/[id]/page.js')",
+      "Bash(cp d:/Freela/marshalls-customer-app-preview/next-app/src/app/[themeId]/impostos/[id]/declaracao/page.js 'd:/Freela/marshalls-customer-app-preview/next-app/src/app/\\(app\\)/impostos/[id]/declaracao/page.js')",
+      "Bash(rm -f d:/Freela/marshalls-customer-app-preview/next-app/src/app/[themeId]/layout.js)",
+      "Bash(rm -rf d:/Freela/marshalls-customer-app-preview/next-app/src/app/[themeId]/__TRACKED_VAR__)",
+      "Bash(curl --max-time 60 -s -w \"\\\\nHTTP:%{http_code}\" \"http://localhost:3001/painel\")",
+      "PowerShell(Get-Process -Id 24328 -ErrorAction SilentlyContinue)",
+      "PowerShell(Get-NetTCPConnection -LocalPort 3001 -State Listen -ErrorAction SilentlyContinue)"
+    ]
+  }
+}
