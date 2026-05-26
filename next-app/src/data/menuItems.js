@@ -4,7 +4,7 @@ export const menuItems = [
   { header: 'Assinante' },
   {
     title: 'Encaminhamentos',
-    href: '/empresa/detalhes',
+    href: '/encaminhamentos',
     icon: {
       viewBox: '0 0 24 24',
       fill: 'none',
@@ -15,7 +15,7 @@ export const menuItems = [
   },
   {
     title: 'Histórico',
-    href: '/impostos',
+    href: '/historico',
     icon: {
       viewBox: '0 0 24 24',
       fill: 'none',
@@ -26,7 +26,7 @@ export const menuItems = [
   },
   {
     title: 'Agendamentos',
-    href: '/indicadores',
+    href: '/agendamentos',
     icon: {
       viewBox: '0 0 24 24',
       fill: 'none',
@@ -37,7 +37,7 @@ export const menuItems = [
   },
   {
     title: 'Meus dados',
-    href: '/declaracoes',
+    href: '/meus-dados',
     icon: {
       viewBox: '0 0 24 24',
       fill: 'none',
@@ -50,7 +50,7 @@ export const menuItems = [
   { header: 'Benefícios' },
   {
     title: 'Meu Clube',
-    href: '/perfil',
+    href: '/meu-clube',
     icon: {
       viewBox: '0 0 24 24',
       fill: 'currentColor',
