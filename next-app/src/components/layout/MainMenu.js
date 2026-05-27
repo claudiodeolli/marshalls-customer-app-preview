@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useRef, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { menuItems, plantaoItem } from '@/data/menuItems';
 
@@ -29,7 +29,18 @@ function MenuIcon({ def, hasDot = false }) {
 export default function MainMenu({ collapsed, onToggleCollapse, onOverlayClick }) {
   const pathname = usePathname();
   const [tooltip, setTooltip] = useState({ visible: false, text: '', top: 0, left: 0 });
+  const [capTop, setCapTop] = useState(null);
   const menuRef = useRef(null);
+
+  useLayoutEffect(() => {
+    const update = () => {
+      const content = menuRef.current?.querySelector('.main-menu-content');
+      if (content) setCapTop(content.offsetTop - 15);
+    };
+    update();
+    window.addEventListener('resize', update);
+    return () => window.removeEventListener('resize', update);
+  }, []);
 
   /* Plantão ativo se nenhum item de menu está ativo */
   const p = pathname === '/' ? '/' : pathname.replace(/\/$/, '');
@@ -147,6 +158,12 @@ export default function MainMenu({ collapsed, onToggleCollapse, onOverlayClick }
             })}
           </ul>
         </PerfectScrollbar>
+
+        {/* ── Decorative squares above ps__rail-y ── */}
+        {capTop !== null && <>
+          <div className="_sb-sq _sb-sq--bg" style={{ top: capTop }} />
+          <div className="_sb-sq _sb-sq--fg" style={{ top: capTop }} />
+        </>}
       </div>
 
       {/* ── Floating tooltip para sidebar recolhida ── */}

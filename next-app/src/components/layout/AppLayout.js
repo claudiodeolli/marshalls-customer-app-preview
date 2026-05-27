@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react'; // useRef para cloneTimerRef
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import MainMenu from './MainMenu';
@@ -37,6 +37,71 @@ export default function AppLayout({ children }) {
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  /* ── Transição zoom-fade via clone DOM (out-in, igual ao Vue Router) ──
+     Clona o .content-body no momento do clique — antes de qualquer
+     re-render — e anima o clone como saída. O App Router do Next.js
+     não permite guardar `children` em state para re-renderizar a página
+     anterior, então manipulação direta de DOM é a única abordagem
+     confiável.                                                          */
+  /* ── Transição zoom-fade via clone DOM (out-in, igual ao Vue Router) ── */
+  const cloneTimerRef = useRef(null);
+  const bodyTimerRef  = useRef(null);
+
+  useEffect(() => {
+    const handleNavClick = (e) => {
+      if (e.ctrlKey || e.metaKey || e.shiftKey || e.altKey || e.button !== 0) return;
+      const anchor = e.target.closest('a[href]');
+      if (!anchor) return;
+      const href = anchor.getAttribute('href');
+      if (!href || /^(https?:)?\/\/|^#|^mailto:|^tel:/.test(href)) return;
+
+      const cb = document.querySelector('.content-body');
+      if (!cb) return;
+
+      const rect = cb.getBoundingClientRect();
+      const clone = cb.cloneNode(true);
+
+      Object.assign(clone.style, {
+        position:      'fixed',
+        top:           rect.top  + 'px',
+        left:          rect.left + 'px',
+        width:         rect.width  + 'px',
+        height:        rect.height + 'px',
+        margin:        '0',
+        zIndex:        '9999',
+        pointerEvents: 'none',
+        overflow:      'hidden',
+        /* leave: igual ao .zoom-fade-leave-to do original */
+        animation:     'zoom-fade-out-opacity .28s ease-in-out forwards, zoom-fade-out-scale .35s ease forwards',
+      });
+
+      document.body.appendChild(clone);
+
+      /* Marca o body para que o CSS atrase a animação de entrada (out-in) */
+      document.body.classList.add('_page-leaving');
+
+      /* Remove clone após a animação de saída (350ms) */
+      clearTimeout(cloneTimerRef.current);
+      cloneTimerRef.current = setTimeout(() => {
+        clone.parentNode?.removeChild(clone);
+      }, 360);
+
+      /* Remove a classe após o ciclo completo: saída (350ms) + entrada (350ms) */
+      clearTimeout(bodyTimerRef.current);
+      bodyTimerRef.current = setTimeout(() => {
+        document.body.classList.remove('_page-leaving');
+      }, 720);
+    };
+
+    document.addEventListener('click', handleNavClick, true);
+    return () => {
+      document.removeEventListener('click', handleNavClick, true);
+      clearTimeout(cloneTimerRef.current);
+      clearTimeout(bodyTimerRef.current);
+      document.body.classList.remove('_page-leaving');
+    };
+  }, []);
 
   const routeCfg = getRouteConfig(pathname);
 
