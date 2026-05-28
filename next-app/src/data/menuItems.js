@@ -1,6 +1,5 @@
 /* Itens do menu lateral com categorias - espelha a estrutura do app.js original */
 
-import HistoryOutlinedIcon from '@mui/icons-material/HistoryOutlined';
 
 export const menuItems = [
   { header: 'Assinante' },
@@ -8,23 +7,29 @@ export const menuItems = [
     title: 'Encaminhamentos',
     href: '/encaminhamentos',
     icon: {
-      viewBox: '0 0 22 22',
+      viewBox: '0 0 21 21',
       fill: 'none',
       stroke: 'currentColor',
       strokeWidth: '2',
-      inner: '<rect x="3" y="7" width="18" height="13" rx="2" ry="2"/><path d="M10 7V5.5A1.5 1.5 0 0 1 11.5 4h1A1.5 1.5 0 0 1 14 5.5V7"/><path d="M8 11v4"/><path d="M6 13h4"/><path d="M13 12h5"/><path d="M13 16h3"/>',
+      inner: '<rect x="1" y="7" width="18" height="13" rx="2" ry="2"/><path d="M8 7V5.5A1.5 1.5 0 0 1 9.5 4h1A1.5 1.5 0 0 1 12 5.5V7"/><path d="M6 11v4"/><path d="M4 13h4"/><path d="M11 12h5"/><path d="M11 16h3"/>',
     },
   },
   {
     title: 'Histórico',
     href: '/historico',
-    icon: { component: HistoryOutlinedIcon },
+    icon: {
+      viewBox: '1 1 21 21',
+      fill: 'currentColor',
+      stroke: 'none',
+      strokeWidth: '0',
+      inner: '<path d="M13 3a9 9 0 0 0-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42A8.954 8.954 0 0 0 13 21a9 9 0 0 0 0-18zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/>',
+    },
   },
   {
     title: 'Agendamentos',
     href: '/agendamentos',
     icon: {
-      viewBox: '0 0 24 26',
+      viewBox: '0 0 23 25',
       fill: 'none',
       stroke: 'currentColor',
       strokeWidth: '2',
