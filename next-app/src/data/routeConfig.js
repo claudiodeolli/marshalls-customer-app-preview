@@ -9,6 +9,20 @@ export const routeConfig = {
     pageTitle: 'Encaminhamentos',
     breadcrumb: [{ text: 'Meus encaminhamentos', active: true }],
   },
+  '/schedule/calendar': {
+    pageTitle: 'Agendar Consulta',
+    breadcrumb: [
+      { text: 'Encaminhamentos', href: '/encaminhamentos', active: false },
+      { text: 'Agendar', active: true },
+    ],
+  },
+  '/schedule/appointment': {
+    pageTitle: 'Teleconsulta',
+    breadcrumb: [
+      { text: 'Agendamentos', href: '/agendamentos', active: false },
+      { text: 'Atendimento', active: true },
+    ],
+  },
   '/historico': {
     pageTitle: 'Histórico',
     breadcrumb: [{ text: 'Histórico de atendimentos', active: true }],

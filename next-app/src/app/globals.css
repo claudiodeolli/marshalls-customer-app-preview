@@ -307,6 +307,19 @@ body._page-leaving .content-body {
   display: block;
 }
 
+/* Skeleton shimmer */
+@keyframes skWave {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+.sk {
+  display: block;
+  background: linear-gradient(90deg, #ebebeb 25%, #d6d6d6 37%, #ebebeb 63%);
+  background-size: 400% 100%;
+  animation: skWave 1.4s ease infinite;
+  border-radius: 4px;
+}
+
 /* SVGs dos itens do menu não capturam cliques — passa para o <a> pai */
 .main-menu .navigation li > a svg,
 [data-plantao-shortcut] > a svg {
