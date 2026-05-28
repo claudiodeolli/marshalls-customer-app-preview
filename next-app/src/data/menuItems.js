@@ -1,12 +1,14 @@
 /* Itens do menu lateral com categorias - espelha a estrutura do app.js original */
 
+import HistoryOutlinedIcon from '@mui/icons-material/HistoryOutlined';
+
 export const menuItems = [
   { header: 'Assinante' },
   {
     title: 'Encaminhamentos',
     href: '/encaminhamentos',
     icon: {
-      viewBox: '0 0 24 24',
+      viewBox: '0 0 22 22',
       fill: 'none',
       stroke: 'currentColor',
       strokeWidth: '2',
@@ -16,23 +18,17 @@ export const menuItems = [
   {
     title: 'Histórico',
     href: '/historico',
-    icon: {
-      viewBox: '0 0 24 24',
-      fill: 'none',
-      stroke: 'currentColor',
-      strokeWidth: '2',
-      inner: '<path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/><path d="M12 8v4l2.5 1.5"/>',
-    },
+    icon: { component: HistoryOutlinedIcon },
   },
   {
     title: 'Agendamentos',
     href: '/agendamentos',
     icon: {
-      viewBox: '0 0 24 24',
+      viewBox: '0 0 24 26',
       fill: 'none',
       stroke: 'currentColor',
       strokeWidth: '2',
-      inner: '<rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><rect x="7.35" y="13.35" width="1.3" height="1.3" rx="0.28" ry="0.28" fill="currentColor" stroke="none"/><rect x="11.35" y="13.35" width="1.3" height="1.3" rx="0.28" ry="0.28" fill="currentColor" stroke="none"/><rect x="15.35" y="13.35" width="1.3" height="1.3" rx="0.28" ry="0.28" fill="currentColor" stroke="none"/><rect x="7.35" y="17.1" width="1.3" height="1.3" rx="0.28" ry="0.28" fill="currentColor" stroke="none"/><rect x="11.35" y="17.1" width="1.3" height="1.3" rx="0.28" ry="0.28" fill="currentColor" stroke="none"/><rect x="15.35" y="17.1" width="1.3" height="1.3" rx="0.28" ry="0.28" fill="currentColor" stroke="none"/>',
+      inner: '<rect x="3" y="4" width="18" height="20" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><rect x="7.35" y="14.35" width="1.3" height="1.3" rx="0.28" ry="0.28" fill="currentColor" stroke="none"/><rect x="11.35" y="14.35" width="1.3" height="1.3" rx="0.28" ry="0.28" fill="currentColor" stroke="none"/><rect x="15.35" y="14.35" width="1.3" height="1.3" rx="0.28" ry="0.28" fill="currentColor" stroke="none"/><rect x="7.35" y="18.1" width="1.3" height="1.3" rx="0.28" ry="0.28" fill="currentColor" stroke="none"/><rect x="11.35" y="18.1" width="1.3" height="1.3" rx="0.28" ry="0.28" fill="currentColor" stroke="none"/><rect x="15.35" y="18.1" width="1.3" height="1.3" rx="0.28" ry="0.28" fill="currentColor" stroke="none"/>',
     },
   },
   {

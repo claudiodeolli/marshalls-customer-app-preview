@@ -8,6 +8,10 @@ import { menuItems, plantaoItem } from '@/data/menuItems';
 
 /* SVG inline montado a partir da definição de ícone do menuItems.js */
 function MenuIcon({ def, hasDot = false }) {
+  if (def.component) {
+    const Icon = def.component;
+    return <Icon style={def.style} />;
+  }
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -17,6 +21,7 @@ function MenuIcon({ def, hasDot = false }) {
       strokeWidth={def.strokeWidth ?? '2'}
       strokeLinecap="round"
       strokeLinejoin="round"
+      style={def.style}
       dangerouslySetInnerHTML={{
         __html: hasDot
           ? def.inner + '<circle cx="250" cy="250" r="75" class="plantao-svg-dot" />'
