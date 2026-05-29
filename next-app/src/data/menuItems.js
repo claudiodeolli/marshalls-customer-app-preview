@@ -29,7 +29,7 @@ export const menuItems = [
     title: 'Agendamentos',
     href: '/agendamentos',
     icon: {
-      viewBox: '1 1 23 23',
+      viewBox: '0 0 24 24',
       fill: 'none',
       stroke: 'currentColor',
       strokeWidth: '2',
