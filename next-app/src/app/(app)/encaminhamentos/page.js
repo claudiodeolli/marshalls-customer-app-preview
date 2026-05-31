@@ -153,7 +153,7 @@ export default function EncaminhamentosPage() {
       <div style={{ marginBottom: '1.5rem' }}>
         <p className="text-muted mb-75">Visualize e acompanhe seus encaminhamentos médicos</p>
         <select
-          className="custom-select"
+          className="custom-select _encam-filter"
           style={{ width: '200px' }}
           value={filter}
           onChange={e => setFilter(e.target.value)}

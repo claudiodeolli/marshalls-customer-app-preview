@@ -45,8 +45,11 @@ export default function AppLayout({ children }) {
      anterior, então manipulação direta de DOM é a única abordagem
      confiável.                                                          */
   /* ── Transição zoom-fade via clone DOM (out-in, igual ao Vue Router) ── */
-  const cloneTimerRef = useRef(null);
-  const bodyTimerRef  = useRef(null);
+  const cloneTimerRef  = useRef(null);
+  const bodyTimerRef   = useRef(null);
+  const pathnameRef    = useRef(pathname);
+
+  useEffect(() => { pathnameRef.current = pathname; }, [pathname]);
 
   useEffect(() => {
     const handleNavClick = (e) => {
@@ -55,6 +58,10 @@ export default function AppLayout({ children }) {
       if (!anchor) return;
       const href = anchor.getAttribute('href');
       if (!href || /^(https?:)?\/\/|^#|^mailto:|^tel:/.test(href)) return;
+
+      /* Não anima se já estamos na página clicada */
+      const norm = s => s === '/' ? '/' : s.replace(/\/$/, '');
+      if (norm(href) === norm(pathnameRef.current)) return;
 
       const cb = document.querySelector('.content-body');
       if (!cb) return;
@@ -69,7 +76,7 @@ export default function AppLayout({ children }) {
         width:         rect.width  + 'px',
         height:        rect.height + 'px',
         margin:        '0',
-        zIndex:        '9999',
+        zIndex:        window.innerWidth < 1200 ? '1000' : '9999',
         pointerEvents: 'none',
         overflow:      'hidden',
         /* leave: igual ao .zoom-fade-leave-to do original */
@@ -151,6 +158,8 @@ export default function AppLayout({ children }) {
       setCollapsed(c => !c);
     } else {
       setMobileOpen(o => !o);
+      const menu = document.querySelector('.main-menu');
+      if (menu) menu.style.transform = 'translateX(0)';
     }
   }
 
@@ -186,9 +195,9 @@ export default function AppLayout({ children }) {
                   <div className="breadcrumb-wrapper">
                     <ol className="breadcrumb">
                       <li className="breadcrumb-item">
-                        <Link href="/painel">
+                        <span style={{ cursor: 'default', pointerEvents: 'none' }}>
                           <BreadcrumbIcon activeHref={pathname} />
-                        </Link>
+                        </span>
                       </li>
                       {routeCfg.breadcrumb.map((crumb, i) => (
                         <li key={i} className={`breadcrumb-item${crumb.active ? ' active' : ''}`}>

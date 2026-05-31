@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { getHistory } from '@/data/storage';
 
 /* ── Helpers ──────────────────────────────────────────── */
@@ -153,14 +153,113 @@ function DocumentsAccordion({ documents }) {
 /* ── Status / Type helpers ────────────────────────────── */
 function typeLabel(type) {
   if (type === 'emergency') return 'Fila';
-  if (type === 'scheduled') return 'Agendado';
+  if (type === 'scheduled') return 'Agendamento';
   return type;
 }
-function statusLabel(status) {
-  if (status === 'FINISHED')   return 'Finalizado';
-  if (status === 'UNFINISHED') return 'Não realizado';
-  if (status === 'CANCELLED')  return 'Cancelado';
-  return status;
+
+const STATUS_BADGE = {
+  FINISHED:   { label: 'Finalizado',   cls: 'badge-light-success', color: '#28c76f' },
+  UNFINISHED: { label: 'Em Andamento', cls: 'badge-light-warning',  color: '#ff9f43' },
+  CANCELLED:  { label: 'Cancelado',    cls: 'badge-light-danger',   color: '#ea5455' },
+  CANCELED:   { label: 'Cancelado',    cls: 'badge-light-danger',   color: '#ea5455' },
+  SCHEDULED:  { label: 'Agendado',     cls: 'badge-light-primary',  color: '#00cfe8' },
+};
+
+function StatusBadge({ status }) {
+  const cfg = STATUS_BADGE[status] ?? { label: status, cls: 'badge-light-secondary', color: '#6e6b7b' };
+  return <span className={`badge ${cfg.cls}`} style={{ fontWeight: 700, fontSize: '11px' }}>{cfg.label}</span>;
+}
+
+const STATUS_OPTIONS = [
+  { value: '',          label: 'Todos os status', color: null },
+  { value: 'FINISHED',  label: 'Finalizado',      color: '#28c76f' },
+  { value: 'UNFINISHED',label: 'Em Andamento',    color: '#ff9f43' },
+  { value: 'SCHEDULED', label: 'Agendado',        color: '#00cfe8' },
+  { value: 'CANCELLED', label: 'Cancelado',       color: '#ea5455' },
+];
+
+function StatusChip({ label, color }) {
+  return (
+    <span style={{
+      display: 'inline-block',
+      padding: '3px 10px',
+      border: `1px solid ${color}`,
+      borderRadius: '20px',
+      color,
+      fontSize: '12px',
+      fontWeight: 600,
+      lineHeight: 1.4,
+      background: 'transparent',
+    }}>
+      {label}
+    </span>
+  );
+}
+
+function StatusSelect({ value, onChange }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef(null);
+  const selected = STATUS_OPTIONS.find(o => o.value === value) ?? STATUS_OPTIONS[0];
+
+  useEffect(() => {
+    function onOutside(e) {
+      if (ref.current && !ref.current.contains(e.target)) setOpen(false);
+    }
+    document.addEventListener('mousedown', onOutside);
+    return () => document.removeEventListener('mousedown', onOutside);
+  }, []);
+
+  return (
+    <div ref={ref} style={{ position: 'relative' }}>
+      <button
+        type="button"
+        onClick={() => setOpen(o => !o)}
+        style={{
+          width: '100%', height: '38px',
+          border: '1px solid #d8d6de', borderRadius: '8px',
+          background: '#fff', cursor: 'pointer',
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          padding: '0 12px', fontSize: '14px', color: '#6e6b7b',
+        }}
+      >
+        <span>
+          {selected.color
+            ? <StatusChip label={selected.label} color={selected.color} />
+            : <span style={{ fontSize: '14px' }}>{selected.label}</span>
+          }
+        </span>
+        <svg width="10" height="6" viewBox="0 0 10 6" fill="none" style={{ flexShrink: 0, marginLeft: 6 }}>
+          <path d="M1 1l4 4 4-4" stroke="#6e6b7b" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      </button>
+
+      {open && (
+        <div style={{
+          position: 'absolute', top: 'calc(100% + 4px)', left: 0, right: 0,
+          background: '#fff', border: '1px solid #d8d6de', borderRadius: '8px',
+          boxShadow: '0 4px 24px rgba(34,41,47,0.12)', zIndex: 9999, overflow: 'hidden',
+        }}>
+          {STATUS_OPTIONS.map(opt => (
+            <div
+              key={opt.value}
+              onClick={() => { onChange(opt.value); setOpen(false); }}
+              style={{
+                padding: '8px 14px', cursor: 'pointer',
+                background: value === opt.value ? '#f3f2f7' : '#fff',
+              }}
+              onMouseEnter={e => { e.currentTarget.style.background = '#f3f2f7'; }}
+              onMouseLeave={e => { e.currentTarget.style.background = value === opt.value ? '#f3f2f7' : '#fff'; }}
+            >
+              {opt.color
+                ? <StatusChip label={opt.label} color={opt.color} />
+                : <span style={{ fontSize: '14px', color: '#6e6b7b' }}>{opt.label}</span>
+              }
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
 }
 
 /* ── Skeleton card ────────────────────────────────────── */
@@ -237,7 +336,12 @@ export default function HistoricoPage() {
           if (rd > dfEnd) return false;
         }
         if (typeFilter !== 'all' && r.type !== typeFilter) return false;
-        if (statusFilter && r.status !== statusFilter) return false;
+        if (statusFilter) {
+          const match = r.status === statusFilter ||
+            (statusFilter === 'CANCELLED' && r.status === 'CANCELED') ||
+            (statusFilter === 'CANCELED'  && r.status === 'CANCELLED');
+          if (!match) return false;
+        }
         return true;
       });
       setRecords(filtered);
@@ -330,18 +434,7 @@ export default function HistoricoPage() {
               <label className="form-label" style={{ fontSize: '13px', color: 'var(--primary,#0052ff)', marginBottom: '4px' }}>
                 Status
               </label>
-              <select
-                className="custom-select"
-                style={{ borderRadius: '8px' }}
-                value={statusFilter}
-                onChange={e => setStatus(e.target.value)}
-              >
-                <option value="">Todos os status</option>
-                <option value="FINISHED">Finalizado</option>
-                <option value="UNFINISHED">Em Andamento</option>
-                <option value="SCHEDULED">Agendado</option>
-                <option value="CANCELED">Cancelado</option>
-              </select>
+              <StatusSelect value={statusFilter} onChange={setStatus} />
             </div>
 
             {/* Filter button */}
@@ -349,6 +442,7 @@ export default function HistoricoPage() {
               <button
                 disabled={loading}
                 onClick={applyFilter}
+                className={loading ? '' : '_ct-gradient'}
                 style={{
                   width: '100%',
                   height: '38px',
@@ -360,8 +454,8 @@ export default function HistoricoPage() {
                   color: '#fff',
                   background: loading
                     ? '#e0e0e0'
-                    : 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
-                  boxShadow: loading ? 'none' : '0 3px 5px 2px rgba(33, 203, 243, .3)',
+                    : 'linear-gradient(135deg, #0052ff 0%, #00b7ff 100%)',
+                  boxShadow: loading ? 'none' : '0 3px 5px 2px rgba(0, 82, 255, .3)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -384,7 +478,7 @@ export default function HistoricoPage() {
       </div>
 
       {/* Results */}
-      <div style={{ backgroundColor: 'white', borderRadius: '5px', padding: '0 15px 15px' }}>
+      <div className="_hist-results" style={{ backgroundColor: 'white', borderRadius: '5px', padding: '0 15px 15px' }}>
         {pageLoading ? (
           <div className="row" style={{ marginTop: '1rem' }}>
             {[0, 1, 2].map(i => <SkeletonCard key={i} />)}
@@ -404,14 +498,13 @@ export default function HistoricoPage() {
 
                     {/* Type + Status row (top labels) */}
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                         <div style={{ fontSize: 11, color: '#777' }}>
                           <strong>Tipo: </strong>
                           {typeLabel(r.type)}
                         </div>
-                        <div style={{ fontSize: 11, color: '#777' }}>
-                          <strong>Status: </strong>
-                          {statusLabel(r.status)}
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                          <StatusBadge status={r.status} />
                         </div>
                       </div>
                       <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', textAlign: 'right', gap: '2px' }}>

@@ -4,8 +4,8 @@ export default function AssinaturasPage() {
   return (
     <div>
       {/* Header: plan name left, Titular + ATIVA badge right */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.25rem' }}>
-        <h4 style={{ fontWeight: 600, fontSize: '1.1rem', color: '#5e5873', margin: 0 }}>
+      <div className="_assn-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.25rem' }}>
+        <h4 className="_assn-title" style={{ fontWeight: 600, fontSize: '1.1rem', color: '#5e5873', margin: 0 }}>
           Plano de Assinatura Individual
         </h4>
         <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>

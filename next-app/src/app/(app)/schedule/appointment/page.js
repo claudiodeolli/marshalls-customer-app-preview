@@ -144,7 +144,7 @@ export default function ScheduleAppointmentPage() {
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', alignItems: 'center' }}>
                 <button
-                  className="btn btn-secondary"
+                  className="btn btn-secondary _start-btn"
                   onClick={handleStart}
                   style={{
                     padding: '14px 40px',

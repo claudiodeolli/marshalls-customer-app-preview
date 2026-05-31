@@ -124,6 +124,7 @@ export default function Navbar({ onHamburgerClick }) {
             >
               {/* Avatar circular com inicial */}
               <div
+                className="_ct-gradient _user-avatar"
                 style={{
                   width: '38px',
                   height: '38px',

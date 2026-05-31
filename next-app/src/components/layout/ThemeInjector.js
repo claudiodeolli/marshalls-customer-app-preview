@@ -43,6 +43,8 @@ export default function ThemeInjector() {
       `[data-plantao-shortcut]:not(.plantao-inactive) > a { background: linear-gradient(135deg,${c1} 0%,${c2} 100%) !important; box-shadow: 0 0 10px 1px ${shadow} !important; }`,
       /* Card congratulations */
       `[dir=ltr] .card-congratulations { background: linear-gradient(135deg,${c1} 0%,${c2} 100%) !important; }`,
+      /* Elementos com gradiente primário inline (avatar, botão Filtrar, etc.) */
+      `._ct-gradient { background: linear-gradient(135deg,${c1} 0%,${c2} 100%) !important; }`,
       `.navbar-header { border-bottom-right-radius: .178rem !important; }`,
     ].join('\n');
 

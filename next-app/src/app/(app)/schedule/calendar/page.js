@@ -85,7 +85,7 @@ function CalendarContent() {
     const dateLabel = `${String(selectedDay).padStart(2,'0')}/${String(viewMonth+1).padStart(2,'0')}/${viewYear}`;
     return (
       <div className="card" style={{ maxWidth: '520px', margin: '0 auto', textAlign: 'center' }}>
-        <div className="card-body" style={{ padding: '2.5rem' }}>
+        <div className="card-body _confirm-card" style={{ padding: '2.5rem' }}>
           <div style={{ width: 64, height: 64, borderRadius: '50%', background: '#e6f9ee', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.25rem' }}>
             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#28c76f" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="20 6 9 17 4 12"/>
@@ -158,6 +158,7 @@ function CalendarContent() {
                   return (
                     <div
                       key={idx}
+                      className="_cal-cell"
                       onClick={() => !past && day && (setSelectedDay(day), setSelectedTime(null))}
                       style={{
                         textAlign: 'center',

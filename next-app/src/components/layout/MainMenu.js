@@ -1,10 +1,10 @@
 'use client';
 
+import { menuItems, plantaoItem } from '@/data/menuItems';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useLayoutEffect, useRef, useState } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
-import { menuItems, plantaoItem } from '@/data/menuItems';
 
 /* SVG inline montado a partir da definição de ícone do menuItems.js */
 function MenuIcon({ def, hasDot = false }) {
@@ -42,9 +42,26 @@ export default function MainMenu({ collapsed, onToggleCollapse, onOverlayClick }
       const content = menuRef.current?.querySelector('.main-menu-content');
       if (content) setCapTop(content.offsetTop - 15);
     };
+
     update();
     window.addEventListener('resize', update);
-    return () => window.removeEventListener('resize', update);
+
+    /* ResizeObserver no navbar-header detecta mudanças de altura ao
+       colapsar/expandir sem depender do estado React (evita medir
+       durante a transição CSS). Debounce de 350ms aguarda o fim da
+       transição antes de recalcular.                                */
+    const header = menuRef.current?.querySelector('.navbar-header');
+    let debounce;
+    const ro = header && 'ResizeObserver' in window
+      ? new ResizeObserver(() => { clearTimeout(debounce); debounce = setTimeout(update, 350); })
+      : null;
+    if (ro) ro.observe(header);
+
+    return () => {
+      window.removeEventListener('resize', update);
+      clearTimeout(debounce);
+      ro?.disconnect();
+    };
   }, []);
 
   /* Plantão ativo se nenhum item de menu está ativo */
@@ -95,26 +112,32 @@ export default function MainMenu({ collapsed, onToggleCollapse, onOverlayClick }
                 alt="Logo"
               />
             </li>
-            <li className="nav-item nav-toggle">
-              <a
+            <li className="nav-item nav-toggle d-block d-xl-none">
+              <button
+                type="button"
                 className="nav-link modern-nav-toggle pr-0"
-                onClick={e => { e.preventDefault(); onToggleCollapse(); }}
-                style={{ cursor: 'pointer' }}
+                onClick={() => {
+                  const menu = document.querySelector('.main-menu');
+                  if (menu) menu.style.transform = 'translateX(-260px)';
+                }}
+                style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '0.5rem', display: 'flex', alignItems: 'center', lineHeight: 1 }}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="d-block d-xl-none feather feather-x font-medium-4"
+                  className="feather feather-x font-medium-4"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
                   strokeWidth="2"
                   strokeLinecap="round"
                   strokeLinejoin="round"
+                  width="22"
+                  height="22"
                 >
                   <line x1="18" y1="6" x2="6" y2="18" />
                   <line x1="6" y1="6" x2="18" y2="18" />
                 </svg>
-              </a>
+              </button>
             </li>
           </ul>
 

@@ -231,17 +231,17 @@ export default function AgendamentosPage() {
   return (
     <div>
       {/* Header */}
-      <div className="d-flex justify-content-between align-items-start flex-wrap mb-2" style={{ gap: '16px' }}>
+      <div className="d-flex justify-content-between align-items-start flex-wrap mb-2 _agend-header" style={{ gap: '16px' }}>
         <div>
           <h4 style={{ fontWeight: 600, marginBottom: '4px' }}>Agendamentos</h4>
           <p className="text-muted mb-0" style={{ fontSize: '14px' }}>
             Gerencie seus agendamentos médicos e agende novas consultas
           </p>
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+        <div className="_agend-tz-wrap" style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
           <small className="text-muted" style={{ paddingLeft: '2px' }}>Fuso horário</small>
           <select
-            className="custom-select"
+            className="custom-select _agend-tz-select"
             style={{ minWidth: '220px', fontSize: '13px' }}
             value={timezone}
             onChange={e => setTimezone(e.target.value)}
@@ -255,7 +255,7 @@ export default function AgendamentosPage() {
 
       {/* Filter bar */}
       <div
-        className="d-flex justify-content-between align-items-center flex-wrap pb-75 mb-2"
+        className="d-flex justify-content-between align-items-center flex-wrap pb-75 mb-2 _agend-filters"
         style={{ borderBottom: '1px solid #ddd', gap: '12px' }}
       >
         <div className="d-flex align-items-center flex-wrap" style={{ gap: '10px' }}>
@@ -278,7 +278,7 @@ export default function AgendamentosPage() {
           </button>
         </div>
         <button
-          className="btn btn-secondary"
+          className="btn btn-secondary _agend-new-btn"
           onClick={() => router.push('/schedule/calendar')}
           style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 700, fontSize: '13px', whiteSpace: 'nowrap' }}
         >
@@ -317,10 +317,10 @@ export default function AgendamentosPage() {
                   }}
                 >
                   <div className="card-body">
-                    <div className="d-flex justify-content-between align-items-start">
+                    <div className="d-flex justify-content-between align-items-start _appt-card-row">
 
                       {/* Left: appointment info */}
-                      <div style={{ flex: 1 }}>
+                      <div className="_appt-card-info" style={{ flex: 1 }}>
 
                         {/* Doctor name */}
                         <div className="d-flex align-items-center mb-50" style={{ color: 'var(--primary, #0052ff)' }}>
@@ -371,7 +371,7 @@ export default function AgendamentosPage() {
 
                       {/* Right: action buttons (SCHEDULED only) */}
                       {apt.status === 'SCHEDULED' && (
-                        <div className="d-flex flex-column" style={{ gap: '8px', marginLeft: '16px', flexShrink: 0 }}>
+                        <div className="d-flex flex-column _appt-card-actions" style={{ gap: '8px', marginLeft: '16px', flexShrink: 0 }}>
                           <button
                             className="btn btn-success btn-sm"
                             style={{ whiteSpace: 'nowrap' }}
