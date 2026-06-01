@@ -390,6 +390,20 @@ body._page-leaving .content-body {
     margin: 0 !important;
     border-radius: 0 !important;
   }
+  /* Transição persistente para abertura e fechamento do sidebar */
+  .main-menu {
+    transition: transform 0.25s ease !important;
+  }
+  /* Scroll lock: impede que a página role enquanto o sidebar está aberto */
+  body.menu-open {
+    overflow: hidden !important;
+    touch-action: none;
+  }
+  /* Previne scroll chaining: scroll dentro do sidebar não propaga para a página */
+  .main-menu .main-menu-content {
+    overscroll-behavior: contain;
+    touch-action: pan-y;
+  }
 }
 
 /* ── < 768px: mobile ── */

@@ -151,6 +151,10 @@ export default function AppLayout({ children }) {
   /* Fecha o menu mobile ao mudar de página */
   useEffect(() => {
     setMobileOpen(false);
+    if (window.innerWidth < 1200) {
+      const menu = document.querySelector('.main-menu');
+      if (menu) menu.style.transform = 'translateX(-260px)';
+    }
   }, [pathname]);
 
   function handleHamburger() {
