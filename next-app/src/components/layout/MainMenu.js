@@ -31,7 +31,7 @@ function MenuIcon({ def, hasDot = false }) {
   );
 }
 
-export default function MainMenu({ collapsed, onToggleCollapse, onOverlayClick }) {
+export default function MainMenu({ collapsed, onToggleCollapse, onOverlayClick, mobileOpen }) {
   const pathname = usePathname();
   const [tooltip, setTooltip] = useState({ visible: false, text: '', top: 0, left: 0 });
   const [capTop, setCapTop] = useState(null);
@@ -116,10 +116,7 @@ export default function MainMenu({ collapsed, onToggleCollapse, onOverlayClick }
               <button
                 type="button"
                 className="nav-link modern-nav-toggle pr-0"
-                onClick={() => {
-                  const menu = document.querySelector('.main-menu');
-                  if (menu) menu.style.transform = 'translateX(-260px)';
-                }}
+                onClick={onOverlayClick}
                 style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '0.5rem', display: 'flex', alignItems: 'center', lineHeight: 1 }}
               >
                 <svg
@@ -147,7 +144,7 @@ export default function MainMenu({ collapsed, onToggleCollapse, onOverlayClick }
             data-plantao-shortcut="1"
             style={{ listStyle: 'none', margin: '0', marginTop: '0.5rem', padding: '0', paddingTop: '1rem' }}
           >
-            <Link href={plantaoItem.href}>
+            <Link href={plantaoItem.href} onClick={onOverlayClick}>
               <MenuIcon def={plantaoItem.icon} hasDot />
               <span className="menu-title">{plantaoItem.title}</span>
             </Link>
@@ -177,7 +174,7 @@ export default function MainMenu({ collapsed, onToggleCollapse, onOverlayClick }
               const isActive = p === item.href || p.startsWith(item.href + '/');
               return (
                 <li key={item.href} className={`nav-item${isActive ? ' active' : ''}`}>
-                  <Link href={item.href} className={isActive ? 'active' : ''} aria-current={isActive ? 'page' : undefined}>
+                  <Link href={item.href} className={isActive ? 'active' : ''} aria-current={isActive ? 'page' : undefined} onClick={onOverlayClick}>
                     <MenuIcon def={item.icon} />
                     <span className="menu-title">{item.title}</span>
                   </Link>
@@ -222,7 +219,7 @@ export default function MainMenu({ collapsed, onToggleCollapse, onOverlayClick }
       </div>
 
       {/* ── Overlay para mobile ── */}
-      <div className="sidenav-overlay" onClick={onOverlayClick} />
+      <div className={`sidenav-overlay${mobileOpen ? ' show' : ''}`} onClick={onOverlayClick} />
       <div className="drag-target" />
     </>
   );

@@ -157,13 +157,23 @@ export default function AppLayout({ children }) {
     }
   }, [pathname]);
 
+  function closeMobileMenu() {
+    setMobileOpen(false);
+    const menu = document.querySelector('.main-menu');
+    if (menu) menu.style.transform = 'translateX(-260px)';
+  }
+
   function handleHamburger() {
     if (window.innerWidth >= 1200) {
       setCollapsed(c => !c);
     } else {
-      setMobileOpen(o => !o);
-      const menu = document.querySelector('.main-menu');
-      if (menu) menu.style.transform = 'translateX(0)';
+      if (mobileOpen) {
+        closeMobileMenu();
+      } else {
+        setMobileOpen(true);
+        const menu = document.querySelector('.main-menu');
+        if (menu) menu.style.transform = 'translateX(0)';
+      }
     }
   }
 
@@ -176,7 +186,8 @@ export default function AppLayout({ children }) {
       <MainMenu
         collapsed={collapsed}
         onToggleCollapse={handleHamburger}
-        onOverlayClick={() => setMobileOpen(false)}
+        onOverlayClick={closeMobileMenu}
+        mobileOpen={mobileOpen}
       />
 
       {/* ── Barra de navegação superior ── */}
