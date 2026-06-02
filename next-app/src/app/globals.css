@@ -404,12 +404,6 @@ body._page-leaving .content-body {
     overscroll-behavior: contain;
     touch-action: pan-y;
   }
-  /* Centraliza verticalmente os itens do menu no sidebar mobile */
-  .main-menu.menu-fixed .main-menu-content {
-    display: flex !important;
-    flex-direction: column !important;
-    justify-content: center !important;
-  }
   /* Espaçamento superior na área da logo */
   .main-menu .navbar-header {
     padding-top: 2rem !important;
