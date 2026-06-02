@@ -43,6 +43,10 @@ export const routeConfig = {
     pageTitle: 'Assinatura',
     breadcrumb: [{ text: 'Tipo de Assinatura Individual', active: true }],
   },
+  '/canais-de-contato': {
+    pageTitle: 'Canais de contato',
+    breadcrumb: [{ text: 'Fale conosco', active: true }],
+  },
   '/mudar-senha': {
     pageTitle: 'Mudar minha senha',
     breadcrumb: [{ text: 'Alteração de senha', active: true }],

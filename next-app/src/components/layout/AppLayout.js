@@ -48,8 +48,26 @@ export default function AppLayout({ children }) {
   const cloneTimerRef  = useRef(null);
   const bodyTimerRef   = useRef(null);
   const pathnameRef    = useRef(pathname);
+  const mobileOpenRef  = useRef(false);
 
   useEffect(() => { pathnameRef.current = pathname; }, [pathname]);
+  useEffect(() => { mobileOpenRef.current = mobileOpen; }, [mobileOpen]);
+
+  /* Adapta o sidebar dinamicamente ao redimensionar a janela */
+  useEffect(() => {
+    const handleResize = () => {
+      const menu = document.querySelector('.main-menu');
+      if (!menu) return;
+      if (window.innerWidth >= 1200) {
+        menu.style.transform = '';
+        if (mobileOpenRef.current) setMobileOpen(false);
+      } else {
+        if (!mobileOpenRef.current) menu.style.transform = 'translateX(-260px)';
+      }
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     const handleNavClick = (e) => {
@@ -159,8 +177,10 @@ export default function AppLayout({ children }) {
 
   function closeMobileMenu() {
     setMobileOpen(false);
-    const menu = document.querySelector('.main-menu');
-    if (menu) menu.style.transform = 'translateX(-260px)';
+    if (window.innerWidth < 1200) {
+      const menu = document.querySelector('.main-menu');
+      if (menu) menu.style.transform = 'translateX(-260px)';
+    }
   }
 
   function handleHamburger() {
