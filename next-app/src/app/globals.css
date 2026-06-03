@@ -3,6 +3,19 @@ body {
   margin: 0;
 }
 
+/* Espaço para a faixa fixada no rodapé */
+.app-content {
+  padding-bottom: 2rem !important;
+}
+
+/* ── Faixa inferior: left dinâmico conforme estado do sidebar ── */
+.menu-expanded ._bottom-bar  { left: 260px; }
+.menu-collapsed ._bottom-bar { left: 80px; }
+@media (max-width: 1199.98px) {
+  ._bottom-bar              { left: 0 !important; }
+  .menu-open ._bottom-bar   { left: 260px !important; }
+}
+
 
 #loading-bg {
   width: 100%;
@@ -240,7 +253,7 @@ img._logo-collapsed { display: none; }
 
 /* ── Remove bottom padding do Vuexy que infla o scrollHeight do PS ── */
 #main-menu-navigation {
-  padding-bottom: 0 !important;
+  padding-bottom: 5rem !important;
 }
 
 /* ── Sidebar: altura total e scroll ── */

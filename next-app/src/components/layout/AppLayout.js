@@ -256,7 +256,7 @@ export default function AppLayout({ children }) {
       </div>
 
       {/* ── Faixa inferior ── */}
-      <div style={{ height: '5px', background: 'linear-gradient(90deg,#003DFF 0%,#00E5FF 50%,#003DFF 100%)', width: '100%', display: 'block', borderRadius: '2px' }} />
+      <div className="_bottom-bar" style={{ position: 'fixed', bottom: 0, right: 0, height: '5px', background: 'linear-gradient(135deg,#003DFF 0%,#00E5FF 100%)', zIndex: 9998, borderRadius: '2px' }} />
     </div>
   );
 }
