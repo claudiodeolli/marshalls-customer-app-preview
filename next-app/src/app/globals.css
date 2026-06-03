@@ -246,9 +246,10 @@ img._logo-collapsed { display: none; }
 /* ── Sidebar: altura total e scroll ── */
 /* menu-fixed já tem position:fixed via Vuexy; garantimos height e flex */
 .main-menu.menu-fixed {
-  height: 100vh !important;
+  height: calc(100vh - 4px) !important;
   display: flex !important;
   flex-direction: column !important;
+  border-bottom: 1px solid #d4def1 !important;
 }
 .main-menu .navbar-header {
   flex-shrink: 0 !important;
@@ -410,7 +411,7 @@ body._page-leaving .content-body {
   }
   /* Espaçamento inferior no último item — sobrescreve o padding-bottom:0 global */
   #main-menu-navigation {
-    padding-bottom: 2rem !important;
+    padding-bottom: 5rem !important;
   }
 }
 

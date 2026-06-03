@@ -6,6 +6,6 @@ export function generateStaticParams() {
   return VALID.map(themeId => ({ themeId }));
 }
 
-export default function ThemeSetPage({ params }) {
-  return <ThemeRedirect themeId={params.themeId} />;
+export default function ThemeSetPage() {
+  return <ThemeRedirect />;
 }
