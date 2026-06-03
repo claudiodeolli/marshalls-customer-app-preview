@@ -478,7 +478,7 @@ export default function HistoricoPage() {
       {/* Results */}
       <div className="_hist-results" style={{ backgroundColor: 'white', borderRadius: '5px', padding: '15px' }}>
         {pageLoading ? (
-          <div className="row" style={{ marginTop: '1rem' }}>
+          <div className="row" style={{}}>
             {[0, 1, 2].map(i => <SkeletonCard key={i} />)}
           </div>
         ) : loading ? (
@@ -488,7 +488,7 @@ export default function HistoricoPage() {
         ) : records.length === 0 ? (
           <EmptyState />
         ) : (
-          <div className="row" style={{ marginTop: '1rem' }}>
+          <div className="row" style={{}}>
             {records.map(r => (
               <div key={r.uuid} className="col-12 col-sm-6 col-md-4 mb-2">
                 <div className="card mb-0 h-100" style={{ backgroundColor: '#e9f2fa' }}>
