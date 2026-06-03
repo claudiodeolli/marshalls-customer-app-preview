@@ -259,7 +259,7 @@ img._logo-collapsed { display: none; }
 /* ── Sidebar: altura total e scroll ── */
 /* menu-fixed já tem position:fixed via Vuexy; garantimos height e flex */
 .main-menu.menu-fixed {
-  height: calc(100vh - 4px) !important;
+  height: 100vh !important;
   display: flex !important;
   flex-direction: column !important;
   border-bottom: 1px solid #d4def1 !important;

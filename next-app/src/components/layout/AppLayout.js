@@ -201,7 +201,6 @@ export default function AppLayout({ children }) {
     <div
       className={`vertical-layout vertical-menu-modern${collapsed ? ' menu-collapsed' : ' menu-expanded'}${mobileOpen ? ' menu-open' : ''} menu-light menu-accordion menu-shadow`}
       dir="ltr"
-      style={{ paddingBottom: '4px' }}
     >
       {/* ── Sidebar ── */}
       <MainMenu
@@ -256,7 +255,7 @@ export default function AppLayout({ children }) {
       </div>
 
       {/* ── Faixa inferior ── */}
-      <div className="_bottom-bar" style={{ position: 'fixed', bottom: 0, right: 0, height: '5px', background: 'linear-gradient(135deg,#003DFF 0%,#00E5FF 100%)', zIndex: 9998, borderRadius: '2px' }} />
+      <div className="_bottom-bar" style={{ position: 'fixed', bottom: 0, right: 0, height: '5px', background: 'linear-gradient(135deg,#003DFF 0%,#00E5FF 100%)', zIndex: 1020, borderRadius: '2px' }} />
     </div>
   );
 }

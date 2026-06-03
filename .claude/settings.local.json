@@ -18,7 +18,32 @@
       "Bash(rm -rf d:/Freela/marshalls-customer-app-preview/next-app/src/app/[themeId]/__TRACKED_VAR__)",
       "Bash(curl --max-time 60 -s -w \"\\\\nHTTP:%{http_code}\" \"http://localhost:3001/painel\")",
       "PowerShell(Get-Process -Id 24328 -ErrorAction SilentlyContinue)",
-      "PowerShell(Get-NetTCPConnection -LocalPort 3001 -State Listen -ErrorAction SilentlyContinue)"
+      "PowerShell(Get-NetTCPConnection -LocalPort 3001 -State Listen -ErrorAction SilentlyContinue)",
+      "Bash(npm run *)",
+      "PowerShell(Get-Process -Name node -ErrorAction SilentlyContinue)",
+      "PowerShell(Stop-Process -Force -Confirm:$false)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)",
+      "Bash(git commit -m 'fix: aplicar basePath e assetPrefix somente em produção *)",
+      "Bash(git commit -m 'fix: breadcrumbs e itens ativos quebrados pelo trailingSlash *)",
+      "Bash(git commit -m 'fix: logo images não carregavam em produção por falta do basePath *)",
+      "Bash(git commit -m 'fix: CSS do Vuexy e imagens sem basePath em produção *)",
+      "Bash(git commit -m 'fix: scrollbar do sidebar aparecia sempre, mesmo sem overflow *)",
+      "Bash(Get-ChildItem -Recurse -Path . -Exclude next-app -Include \"*.vue\")",
+      "Bash(Select-Object -ExpandProperty FullName)",
+      "Bash(Head -50)",
+      "Bash(xargs grep -l \"b-skeleton\")",
+      "Bash(git -C \"d:\\\\Freela\\\\marshalls-customer-app-preview\" log --oneline --all -- \"*encaminh*\" \"*agend*\" \"*historico*\")",
+      "Bash(git -C \"d:\\\\Freela\\\\marshalls-customer-app-preview\" log --oneline --all -- \"*.vue\")",
+      "Bash(git -C \"d:\\\\Freela\\\\marshalls-customer-app-preview\" log --all --oneline)",
+      "Bash(git -C \"d:\\\\Freela\\\\marshalls-customer-app-preview\" show 04054bd --name-only)",
+      "Bash(git -C \"d:\\\\Freela\\\\marshalls-customer-app-preview\" log --all --oneline --reverse)",
+      "Bash(git -C \"d:\\\\Freela\\\\marshalls-customer-app-preview\" show 690a531 --name-only)",
+      "Bash(git -C \"d:\\\\Freela\\\\marshalls-customer-app-preview\" show 690a531:src/views/Encaminhamentos.vue)",
+      "Bash(git -C \"d:\\\\Freela\\\\marshalls-customer-app-preview\" show bba250b:src/views/Encaminhamentos.vue)",
+      "Bash(git -C \"d:\\\\Freela\\\\marshalls-customer-app-preview\" show bba250b --name-only)",
+      "Bash(git -C \"d:\\\\Freela\\\\marshalls-customer-app-preview\" ls-tree -r --name-only d6fc6ad)"
     ]
   }
 }

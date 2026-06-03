@@ -1,0 +1,41 @@
+# ── Chunks de contexto gerados para o Claude ──
+*-chunks/
+all-chunks/
+
+# ── Configurações locais do Claude Code ──
+.claude/settings.local.json
+
+# ── Dependências ──
+node_modules/
+
+# ── Build / output ──
+.next/
+out/
+dist/
+
+# ── Variáveis de ambiente ──
+.env
+.env.local
+.env.*.local
+
+# ── Logs ──
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+
+# ── OS ──
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── Editores ──
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# ── TypeScript ──
+*.tsbuildinfo
