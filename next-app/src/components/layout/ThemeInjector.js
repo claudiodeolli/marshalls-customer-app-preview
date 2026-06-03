@@ -14,12 +14,14 @@ function hexToRgba(hex, alpha) {
 
 export default function ThemeInjector() {
   useEffect(() => {
-    const shadow = hexToRgba(C1, 0.6);
+    const shadow = hexToRgba('#0052FF', 0.6);
 
     const css = [
+      `.btn { transition: box-shadow 150ms ease !important; }`,
       `[dir] .btn-primary { background: linear-gradient(135deg,${C1} 0%,${C2} 100%) !important; border: none !important; }`,
       `[dir] .btn-primary.active,[dir] .btn-primary:active,[dir] .btn-primary:focus { background: linear-gradient(135deg,${C1} 0%,${C2} 100%) !important; border: none !important; }`,
-      `[dir] .btn-primary:hover:not(.disabled):not(:disabled) { box-shadow: 0 8px 25px -8px ${C1} !important; }`,
+      `[dir] .btn-primary:hover:not(.disabled):not(:disabled) { box-shadow: 0 0 10px 1px ${shadow} !important; }`,
+      `[dir] .btn-outline-primary:hover:not(.disabled):not(:disabled) { box-shadow: 0 0 10px 1px ${shadow} !important; }`,
       `[dir] .main-menu.menu-light .navigation>li.active>a { box-shadow: 0 0 10px 1px ${shadow} !important; }`,
       `[dir=ltr] .main-menu.menu-light .navigation>li.active>a { background: linear-gradient(135deg,${C1} 0%,${C2} 100%) !important; }`,
       `[dir=rtl] .main-menu.menu-light .navigation>li.active>a { background: linear-gradient(-135deg,${C1} 0%,${C2} 100%) !important; }`,
@@ -27,7 +29,8 @@ export default function ThemeInjector() {
       `[dir] .vertical-layout.vertical-menu-modern.menu-collapsed .main-menu:not(.expanded) .navigation>li.active>a { background: linear-gradient(118deg,${C1},${C2}) !important; box-shadow: 0 0 10px 1px ${shadow} !important; }`,
       `[data-plantao-shortcut]:not(.plantao-inactive) > a { background: linear-gradient(135deg,${C1} 0%,${C2} 100%) !important; box-shadow: 0 0 10px 1px ${shadow} !important; }`,
       `[dir=ltr] .card-congratulations { background: linear-gradient(135deg,${C1} 0%,${C2} 100%) !important; }`,
-      `._ct-gradient { background: linear-gradient(135deg,${C1} 0%,${C2} 100%) !important; }`,
+      `._ct-gradient { background: linear-gradient(135deg,${C1} 0%,${C2} 100%) !important; transition: box-shadow 150ms ease !important; }`,
+      `._ct-gradient:hover:not(:disabled) { box-shadow: 0 0 10px 1px ${shadow} !important; }`,
       `.navbar-header { border-bottom-right-radius: .178rem !important; }`,
     ].join('\n');
 

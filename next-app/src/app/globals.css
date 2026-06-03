@@ -253,7 +253,7 @@ img._logo-collapsed { display: none; }
 
 /* ── Remove bottom padding do Vuexy que infla o scrollHeight do PS ── */
 #main-menu-navigation {
-  padding-bottom: 5rem !important;
+  padding-bottom: 2.5rem !important;
 }
 
 /* ── Sidebar: altura total e scroll ── */
@@ -366,7 +366,7 @@ body._page-leaving .content-body {
 /* ── Hover dos itens do menu ── */
 .main-menu .navigation li.nav-item > a,
 .main-menu .navigation li.nav-item ul li > a {
-  transition: background 150ms ease, color 150ms ease !important;
+  transition: background 150ms ease, color 150ms ease, box-shadow 150ms ease !important;
 }
 .main-menu .navigation li.nav-item:not(.active) > a:hover,
 .main-menu .navigation li.nav-item:not(.active).hover > a {
@@ -548,4 +548,12 @@ body._page-leaving .content-body {
   /* Page headings */
   .content-body h4 { font-size: 1.05rem !important; }
   .content-body h5 { font-size: 1rem !important; }
+}
+
+/* ── _hist-results: row-gap substitui mb-2; last row não tem espaço extra ── */
+._hist-results .row {
+  row-gap: 1.5rem;
+}
+._hist-results .row > [class*="col-"] {
+  margin-bottom: 0 !important;
 }

@@ -455,12 +455,10 @@ export default function HistoricoPage() {
                   background: loading
                     ? '#e0e0e0'
                     : 'linear-gradient(135deg, #0052ff 0%, #00b7ff 100%)',
-                  boxShadow: loading ? 'none' : '0 3px 5px 2px rgba(0, 82, 255, .3)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   gap: '6px',
-                  transition: 'background 0.2s',
                 }}
               >
                 {loading ? (
@@ -478,7 +476,7 @@ export default function HistoricoPage() {
       </div>
 
       {/* Results */}
-      <div className="_hist-results" style={{ backgroundColor: 'white', borderRadius: '5px', padding: '0 15px 15px' }}>
+      <div className="_hist-results" style={{ backgroundColor: 'white', borderRadius: '5px', padding: '0 15px' }}>
         {pageLoading ? (
           <div className="row" style={{ marginTop: '1rem' }}>
             {[0, 1, 2].map(i => <SkeletonCard key={i} />)}
