@@ -251,9 +251,9 @@ img._logo-collapsed { display: none; }
   margin-right: 0 !important;
 }
 
-/* ── Remove bottom padding do Vuexy que infla o scrollHeight do PS ── */
+/* ── Padding bottom do navigation — valor original do Vuexy ── */
 #main-menu-navigation {
-  padding-bottom: 2.5rem !important;
+  padding-bottom: .75rem !important;
 }
 
 /* ── Sidebar: altura total e scroll ── */

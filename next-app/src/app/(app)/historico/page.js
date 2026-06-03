@@ -476,7 +476,7 @@ export default function HistoricoPage() {
       </div>
 
       {/* Results */}
-      <div className="_hist-results" style={{ backgroundColor: 'white', borderRadius: '5px', padding: '0 15px' }}>
+      <div className="_hist-results" style={{ backgroundColor: 'white', borderRadius: '5px', padding: '15px' }}>
         {pageLoading ? (
           <div className="row" style={{ marginTop: '1rem' }}>
             {[0, 1, 2].map(i => <SkeletonCard key={i} />)}
