@@ -22,7 +22,9 @@ function buildCalendar(year, month) {
 function CalendarContent() {
   const router = useRouter();
   const params = useSearchParams();
-  const referralId = params.get('referral');
+  const referralId   = params.get('referral');
+  const specialtyParam = params.get('specialty');
+  const isAvulsa       = params.get('avulsa') === '1';
 
   const [referral, setReferral]             = useState(null);
   const [selectedSpecialty, setSelectedSpecialty] = useState(null);
@@ -31,13 +33,15 @@ function CalendarContent() {
     if (referralId) {
       const found = getReferrals().find(r => r.uuid === referralId) ?? null;
       setReferral(found);
+    } else if (specialtyParam) {
+      setSelectedSpecialty({ name: specialtyParam, avulsa: isAvulsa });
     } else {
       try {
         const raw = localStorage.getItem('SPECIALT_SELECTED');
         if (raw) setSelectedSpecialty(JSON.parse(raw));
       } catch {}
     }
-  }, [referralId]);
+  }, [referralId, specialtyParam, isAvulsa]);
 
   /* Origem determina para onde "Voltar" e "Confirmar" navegam */
   const backRoute = referralId ? '/encaminhamentos' : '/agendamentos';
@@ -228,7 +232,10 @@ function CalendarContent() {
                       beneficiaryMedicalReferral: referral ? { createdAt: referral.createdAt } : null,
                       cancel: true,
                     });
-                    if (referralId) updateReferral(referralId, { status: 'SCHEDULED' });
+                    if (referralId) updateReferral(referralId, {
+                      status: 'SCHEDULED',
+                      urlPath: `https://example.com/docs/encaminhamento-${referralId}.pdf`,
+                    });
                     setConfirmed(true);
                   }}
                 >

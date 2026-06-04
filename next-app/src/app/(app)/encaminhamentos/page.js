@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { getReferrals } from '@/data/storage';
 
@@ -15,12 +15,88 @@ function getStatusConfig(status) {
 }
 
 const FILTER_OPTIONS = [
-  { label: 'Todos',         value: '' },
-  { label: 'Pendente',      value: 'PENDING' },
-  { label: 'Agendada',      value: 'SCHEDULED' },
-  { label: 'Realizada',     value: 'FINISHED' },
-  { label: 'Não Realizada', value: 'UNFINISHED' },
+  { label: 'Todos',         value: '',           color: null },
+  { label: 'Pendente',      value: 'PENDING',    color: '#ff9800' },
+  { label: 'Agendada',      value: 'SCHEDULED',  color: '#4caf50' },
+  { label: 'Realizada',     value: 'FINISHED',   color: '#28c76f' },
+  { label: 'Não Realizada', value: 'UNFINISHED', color: '#ea5455' },
 ];
+
+function FilterChip({ label, color }) {
+  if (!color) return <span style={{ fontSize: '14px', color: '#6e6b7b' }}>{label}</span>;
+  return (
+    <span style={{
+      display: 'inline-block',
+      padding: '3px 10px',
+      border: `1px solid ${color}`,
+      borderRadius: '20px',
+      color,
+      fontSize: '12px',
+      fontWeight: 600,
+      lineHeight: 1.4,
+      background: 'transparent',
+    }}>
+      {label}
+    </span>
+  );
+}
+
+function FilterSelect({ value, onChange }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef(null);
+  const selected = FILTER_OPTIONS.find(o => o.value === value) ?? FILTER_OPTIONS[0];
+
+  useEffect(() => {
+    function onOutside(e) {
+      if (ref.current && !ref.current.contains(e.target)) setOpen(false);
+    }
+    document.addEventListener('mousedown', onOutside);
+    return () => document.removeEventListener('mousedown', onOutside);
+  }, []);
+
+  return (
+    <div ref={ref} style={{ position: 'relative', width: '200px' }}>
+      <button
+        type="button"
+        onClick={() => setOpen(o => !o)}
+        style={{
+          width: '100%', height: '38px',
+          border: '1px solid #d8d6de', borderRadius: '8px',
+          background: '#fff', cursor: 'pointer',
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          padding: '0 12px', fontSize: '14px', color: '#6e6b7b',
+        }}
+      >
+        <FilterChip label={selected.label} color={selected.color} />
+        <svg width="10" height="6" viewBox="0 0 10 6" fill="none" style={{ flexShrink: 0, marginLeft: 6 }}>
+          <path d="M1 1l4 4 4-4" stroke="#6e6b7b" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      </button>
+      {open && (
+        <div style={{
+          position: 'absolute', top: 'calc(100% + 4px)', left: 0, right: 0,
+          background: '#fff', border: '1px solid #d8d6de', borderRadius: '8px',
+          boxShadow: '0 4px 24px rgba(34,41,47,0.12)', zIndex: 9999, overflow: 'hidden',
+        }}>
+          {FILTER_OPTIONS.map(opt => (
+            <div
+              key={opt.value}
+              onClick={() => { onChange(opt.value); setOpen(false); }}
+              style={{
+                padding: '8px 14px', cursor: 'pointer',
+                background: value === opt.value ? '#f3f2f7' : '#fff',
+              }}
+              onMouseEnter={e => { e.currentTarget.style.background = '#f3f2f7'; }}
+              onMouseLeave={e => { e.currentTarget.style.background = value === opt.value ? '#f3f2f7' : '#fff'; }}
+            >
+              <FilterChip label={opt.label} color={opt.color} />
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
 
 function formatDate(str) {
   if (!str) return 'Não informado';
@@ -134,7 +210,7 @@ function SkeletonCard() {
 
 export default function EncaminhamentosPage() {
   const router = useRouter();
-  const [filter, setFilter]         = useState('PENDING');
+  const [filter, setFilter]         = useState('');
   const [referrals, setReferrals]   = useState([]);
   const [pageLoading, setPageLoading] = useState(true);
 
@@ -152,16 +228,7 @@ export default function EncaminhamentosPage() {
     <div>
       <div style={{ marginBottom: '1.5rem' }}>
         <p className="text-muted mb-75">Visualize e acompanhe seus encaminhamentos médicos</p>
-        <select
-          className="custom-select _encam-filter"
-          style={{ width: '200px' }}
-          value={filter}
-          onChange={e => setFilter(e.target.value)}
-        >
-          {FILTER_OPTIONS.map(opt => (
-            <option key={opt.value} value={opt.value}>{opt.label}</option>
-          ))}
-        </select>
+        <FilterSelect value={filter} onChange={setFilter} />
       </div>
 
       {pageLoading ? (
@@ -242,27 +309,31 @@ export default function EncaminhamentosPage() {
                   </div>
 
                   {/* Action buttons */}
-                  <div
-                    className="d-flex justify-content-end"
-                    style={{ gap: '8px', borderTop: '1px solid #f0f0f0', padding: '12px 16px' }}
-                  >
-                    <button
-                      className="btn btn-outline-primary btn-sm"
-                      disabled={!canOpen}
-                      onClick={() => canOpen && window.open(ref.urlPath, '_blank', 'noopener,noreferrer')}
-                      style={{ display: 'flex', alignItems: 'center', gap: '5px' }}
+                  {(canOpen || canSchedule) && (
+                    <div
+                      className="d-flex justify-content-end"
+                      style={{ gap: '8px', borderTop: '1px solid #f0f0f0', padding: '12px 16px' }}
                     >
-                      <IconExternalLink /> Abrir
-                    </button>
-                    <button
-                      className="btn btn-primary btn-sm"
-                      disabled={!canSchedule}
-                      onClick={() => router.push(`/schedule/calendar?referral=${ref.uuid}`)}
-                      style={{ display: 'flex', alignItems: 'center', gap: '5px' }}
-                    >
-                      <IconSchedule /> Agendar
-                    </button>
-                  </div>
+                      {canOpen && (
+                        <button
+                          className="btn btn-outline-primary btn-sm"
+                          onClick={() => window.open(ref.urlPath, '_blank', 'noopener,noreferrer')}
+                          style={{ display: 'flex', alignItems: 'center', gap: '5px' }}
+                        >
+                          <IconExternalLink /> Abrir
+                        </button>
+                      )}
+                      {canSchedule && (
+                        <button
+                          className="btn btn-primary btn-sm"
+                          onClick={() => router.push(`/schedule/calendar?referral=${ref.uuid}`)}
+                          style={{ display: 'flex', alignItems: 'center', gap: '5px' }}
+                        >
+                          <IconSchedule /> Agendar
+                        </button>
+                      )}
+                    </div>
+                  )}
                 </div>
               </div>
             );

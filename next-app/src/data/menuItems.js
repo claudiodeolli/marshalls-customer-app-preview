@@ -77,7 +77,7 @@ export const menuItems = [
   { header: 'Financeiro' },
   {
     title: 'Minha conta',
-    href: '/assinaturas',
+    href: '/minha-conta',
     icon: {
       viewBox: '0 0 24 24',
       fill: 'none',

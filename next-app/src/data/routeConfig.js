@@ -25,7 +25,7 @@ export const routeConfig = {
   },
   '/historico': {
     pageTitle: 'Histórico',
-    breadcrumb: [{ text: 'Histórico de atendimentos', active: true }],
+    breadcrumb: [{ text: 'Meu histórico de atendimentos', active: true }],
   },
   '/agendamentos': {
     pageTitle: 'Agendamentos',
@@ -39,17 +39,17 @@ export const routeConfig = {
     pageTitle: 'Meu Clube',
     breadcrumb: [{ text: 'Benefícios exclusivos', active: true }],
   },
-  '/assinaturas': {
-    pageTitle: 'Assinatura',
-    breadcrumb: [{ text: 'Tipo de Assinatura Individual', active: true }],
+  '/minha-conta': {
+    pageTitle: 'Minha conta',
+    breadcrumb: [{ text: 'Tipo de Assinatura', active: true }],
   },
   '/canais-de-contato': {
     pageTitle: 'Canais de contato',
-    breadcrumb: [{ text: 'Fale conosco', active: true }],
+    breadcrumb: [{ text: 'Falar com o suporte', active: true }],
   },
   '/mudar-senha': {
     pageTitle: 'Mudar minha senha',
-    breadcrumb: [{ text: 'Alteração de senha', active: true }],
+    breadcrumb: [{ text: 'Alterar senha', active: true }],
   },
   '/certificado-digital': {
     pageTitle: 'Certificado digital de pessoa física (e-CPF)',

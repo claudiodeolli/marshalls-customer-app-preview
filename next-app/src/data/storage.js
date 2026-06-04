@@ -3,11 +3,22 @@
   Seed carregado na primeira visita; todas as operações persistem.
 */
 
+const SEED_VERSION = '2';
+const VERSION_KEY  = 'APP_SEED_VERSION';
+
 const KEYS = {
   REFERRALS:    'APP_REFERRALS',
   APPOINTMENTS: 'APP_APPOINTMENTS',
   HISTORY:      'APP_HISTORY',
 };
+
+/* Limpa o localStorage se o seed foi atualizado */
+if (typeof window !== 'undefined') {
+  if (localStorage.getItem(VERSION_KEY) !== SEED_VERSION) {
+    Object.values(KEYS).forEach(k => localStorage.removeItem(k));
+    localStorage.setItem(VERSION_KEY, SEED_VERSION);
+  }
+}
 
 /* ─── Seed data ─── */
 const SEED_REFERRALS = [
@@ -18,7 +29,7 @@ const SEED_REFERRALS = [
     specialty: { name: 'Cardiologia' },
     createdAt: '15/05/2025 09:30:00',
     updatedAt: '15/05/2025 09:30:00',
-    urlPath: null,
+    urlPath: 'https://example.com/docs/encaminhamento-ref-001.pdf',
   },
   {
     uuid: 'ref-002',
@@ -27,7 +38,7 @@ const SEED_REFERRALS = [
     specialty: { name: 'Nutrição' },
     createdAt: '22/05/2025 15:40:00',
     updatedAt: '22/05/2025 15:40:00',
-    urlPath: null,
+    urlPath: 'https://example.com/docs/encaminhamento-ref-002.pdf',
   },
   {
     uuid: 'ref-003',
@@ -209,5 +220,13 @@ export function updateAppointment(uuid, patch) {
   return list;
 }
 
-/* ─── History (somente leitura pela UI) ─── */
+/* ─── History ─── */
 export function getHistory() { return load(KEYS.HISTORY, SEED_HISTORY); }
+function saveHistory(data) { persist(KEYS.HISTORY, data); }
+export function saveEvaluation(uuid, { rating, comment }) {
+  const list = getHistory().map(r =>
+    r.uuid === uuid ? { ...r, evaluation: { rating, comment, createdAt: new Date().toISOString() } } : r
+  );
+  saveHistory(list);
+  return list;
+}

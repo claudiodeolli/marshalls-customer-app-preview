@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { getAppointments, updateAppointment } from '@/data/storage';
+import { getAppointments, updateAppointment, getReferrals } from '@/data/storage';
 
 const STATUS_BADGE = {
   SCHEDULED:  'badge-light-primary',
@@ -168,6 +168,113 @@ function CancelDialog({ open, appointment, loading, onClose, onConfirm }) {
   );
 }
 
+/* ── Especialidades disponíveis para consulta avulsa ── */
+const SPECIALTIES = [
+  { name: 'Cardiologia',               price: 150 },
+  { name: 'Dermatologia',              price: 130 },
+  { name: 'Ginecologia e Obstetrícia', price: 140 },
+  { name: 'Neurologia',                price: 160 },
+  { name: 'Nutrição',                  price: 100 },
+  { name: 'Ortopedia',                 price: 150 },
+  { name: 'Otorrinolaringologia',      price: 130 },
+  { name: 'Pediatria',                 price: 120 },
+  { name: 'Psiquiatria',               price: 180 },
+  { name: 'Urologia',                  price: 140 },
+];
+
+/* ── Modal de encaminhamento por especialidade ── */
+function ReferralModal({ specialty, onClose, onSchedule, onBuyAvulsa }) {
+  const referrals = getReferrals().filter(
+    r => r.status === 'PENDING' && r.specialty?.name === specialty.name
+  );
+
+  return (
+    <div
+      style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.5)', zIndex:10000, display:'flex', alignItems:'center', justifyContent:'center', padding:'16px' }}
+      onClick={onClose}
+    >
+      <div
+        style={{ background:'#fff', borderRadius:'16px', padding:'24px', width:'100%', maxWidth:'420px', boxShadow:'0 8px 32px rgba(0,0,0,0.15)' }}
+        onClick={e => e.stopPropagation()}
+      >
+        <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:'12px' }}>
+          <h5 style={{ fontWeight:700, margin:0 }}>Selecionar Encaminhamento</h5>
+          <button onClick={onClose} style={{ background:'none', border:'none', cursor:'pointer', fontSize:'18px', color:'#aaa', lineHeight:1 }}>✕</button>
+        </div>
+        <p style={{ fontSize:'13px', color:'#6e6b7b', marginBottom:'16px' }}>
+          Selecione um encaminhamento médico. A especialidade do encaminhamento será selecionada automaticamente:
+        </p>
+
+        {referrals.length > 0 ? (
+          <div style={{ display:'flex', flexDirection:'column', gap:'8px' }}>
+            {referrals.map(r => (
+              <button
+                key={r.uuid}
+                className="btn btn-outline-primary"
+                style={{ textAlign:'left', fontSize:'13px' }}
+                onClick={() => onSchedule(r)}
+              >
+                {r.beneficiary?.name} — {r.specialty?.name}
+                <br /><small className="text-muted">Criado em: {r.createdAt}</small>
+              </button>
+            ))}
+          </div>
+        ) : (
+          <div style={{ textAlign:'center', padding:'16px 0' }}>
+            <p style={{ fontWeight:600, color:'#5e5873', marginBottom:'6px' }}>Você não possui encaminhamentos disponíveis.</p>
+            <p style={{ fontSize:'13px', color:'#6e6b7b', marginBottom:'20px' }}>
+              Solicite um encaminhamento médico para agendar esta especialidade, ou:
+            </p>
+            <button className="btn btn-primary btn-sm" onClick={() => onBuyAvulsa(specialty)}>
+              Comprar consulta avulsa
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/* ── Modal de seleção de especialidade ── */
+function SpecialtyModal({ onClose, onSelect }) {
+  return (
+    <div
+      style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.5)', zIndex:9999, display:'flex', alignItems:'center', justifyContent:'center', padding:'16px' }}
+      onClick={onClose}
+    >
+      <div
+        style={{ background:'#fff', borderRadius:'16px', width:'100%', maxWidth:'440px', maxHeight:'80vh', display:'flex', flexDirection:'column', boxShadow:'0 8px 32px rgba(0,0,0,0.15)', overflow:'hidden' }}
+        onClick={e => e.stopPropagation()}
+      >
+        <div style={{ padding:'20px 24px 12px', borderBottom:'1px solid #f0f0f0', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+          <h5 style={{ fontWeight:700, margin:0 }}>Nova Consulta</h5>
+          <button onClick={onClose} style={{ background:'none', border:'none', cursor:'pointer', fontSize:'18px', color:'#aaa', lineHeight:1 }}>✕</button>
+        </div>
+        <p style={{ fontSize:'13px', color:'#6e6b7b', margin:'12px 24px 4px' }}>Selecione a especialidade desejada:</p>
+        <div style={{ overflowY:'auto', padding:'0 16px 16px' }}>
+          {SPECIALTIES.map(sp => (
+            <button
+              key={sp.name}
+              onClick={() => onSelect(sp)}
+              style={{
+                display:'flex', justifyContent:'space-between', alignItems:'center',
+                width:'100%', padding:'12px 8px', background:'none', border:'none',
+                borderBottom:'1px solid #f5f5f5', cursor:'pointer', textAlign:'left',
+                fontSize:'14px', color:'#5e5873',
+              }}
+              onMouseEnter={e => { e.currentTarget.style.background = '#f8f9ff'; }}
+              onMouseLeave={e => { e.currentTarget.style.background = 'none'; }}
+            >
+              <span>{sp.name}</span>
+              <span style={{ fontSize:'13px', color:'#aaa' }}>R$ {sp.price},00</span>
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function Toast({ message, type, visible }) {
   if (!visible) return null;
   const cls = type === 'success' ? 'alert-success' : 'alert-danger';
@@ -185,8 +292,10 @@ function Toast({ message, type, visible }) {
 
 export default function AgendamentosPage() {
   const router = useRouter();
-  const [statusFilter, setStatusFilter]   = useState('SCHEDULED');
-  const [appliedFilter, setAppliedFilter] = useState('SCHEDULED');
+  const [statusFilter, setStatusFilter]       = useState('SCHEDULED');
+  const [appliedFilter, setAppliedFilter]     = useState('SCHEDULED');
+  const [showSpecialty, setShowSpecialty]     = useState(false);
+  const [referralTarget, setReferralTarget]   = useState(null);
   const [timezone, setTimezone]           = useState('');
   const [appointments, setAppointments]   = useState([]);
   const [cancelTarget, setCancelTarget]   = useState(null);
@@ -230,6 +339,15 @@ export default function AgendamentosPage() {
 
   return (
     <div>
+      {/* Banner informativo */}
+      <div className="alert mb-2" style={{ background:'#eef3ff', border:'1px solid #c7d8ff', borderRadius:'10px', fontSize:'13px', color:'#3b5bdb', padding:'12px 16px' }}>
+        <strong>Como funciona o agendamento:</strong>
+        <ul style={{ margin:'6px 0 0', paddingLeft:'18px' }}>
+          <li>Se você foi encaminhado por um médico do <strong>Pronto Atendimento</strong>, pode agendar aqui <strong>sem custos adicionais</strong>.</li>
+          <li>Caso não possua encaminhamento, é possível adquirir uma <strong>consulta avulsa</strong> com a especialidade desejada.</li>
+        </ul>
+      </div>
+
       {/* Header */}
       <div className="d-flex justify-content-between align-items-start flex-wrap mb-2 _agend-header" style={{ gap: '16px' }}>
         <div>
@@ -278,8 +396,8 @@ export default function AgendamentosPage() {
           </button>
         </div>
         <button
-          className="btn btn-secondary _agend-new-btn"
-          onClick={() => router.push('/schedule/calendar')}
+          className="btn btn-primary _agend-new-btn"
+          onClick={() => setShowSpecialty(true)}
           style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 700, fontSize: '13px', whiteSpace: 'nowrap' }}
         >
           <IconAdd /> Novo Agendamento
@@ -406,6 +524,28 @@ export default function AgendamentosPage() {
         onClose={() => setCancelTarget(null)}
         onConfirm={handleCancelConfirm}
       />
+
+      {showSpecialty && (
+        <SpecialtyModal
+          onClose={() => setShowSpecialty(false)}
+          onSelect={sp => { setShowSpecialty(false); setReferralTarget(sp); }}
+        />
+      )}
+
+      {referralTarget && (
+        <ReferralModal
+          specialty={referralTarget}
+          onClose={() => setReferralTarget(null)}
+          onSchedule={ref => {
+            setReferralTarget(null);
+            router.push(`/schedule/calendar?referral=${ref.uuid}`);
+          }}
+          onBuyAvulsa={sp => {
+            setReferralTarget(null);
+            router.push(`/schedule/calendar?specialty=${encodeURIComponent(sp.name)}&avulsa=1`);
+          }}
+        />
+      )}
 
       <Toast {...toast} />
     </div>

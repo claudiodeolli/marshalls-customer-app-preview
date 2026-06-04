@@ -329,7 +329,7 @@ export default function PlantaoPage() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - 16rem)' }}>
       <h4 style={{ fontWeight: '600', fontSize: '1.25rem', color: '#5e5873', marginBottom: '1.5rem', lineHeight: '1.5' }}>
-        Inicie seu atendimento médico online de forma segura
+        Inicie seu atendimento médico online <br className="_br-mobile"/> de forma segura
       </h4>
 
       {/* Aviso de permissão de mídia */}
@@ -341,7 +341,7 @@ export default function PlantaoPage() {
 
       <div
         className="card"
-        style={{ flex: '1', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}
+        style={{ flex: '1', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', padding: '2rem' }}
       >
         {consultaUrl ? (
           /* Sala de teleconsulta (mock) */
@@ -384,14 +384,25 @@ export default function PlantaoPage() {
         ) : loadingState === 'media' ? (
           <div className="spinner-border text-primary" style={{ width: '3.5rem', height: '3.5rem' }} />
         ) : (
-          <button
-            className="btn btn-primary"
-            onClick={handleStartAppointment}
-            style={{ padding: '13px 40px', fontSize: '16px', borderRadius: '8px', fontWeight: '600', letterSpacing: '0.3px' }}
-          >
-            <span className="plantao-pulse-dot" />
-            Iniciar atendimento
-          </button>
+          <>
+            <div className="_plantao-mobile-hint">
+              <p>
+                Toque no botão abaixo para iniciar 
+              </p>
+              <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="7 8 12 13 17 8" />
+                <polyline points="7 13 12 18 17 13" />
+              </svg>
+            </div>
+            <button
+              className="btn btn-primary _start-btn"
+              onClick={handleStartAppointment}
+              style={{ padding: '13px 40px', fontSize: '16px', borderRadius: '8px', fontWeight: '600', letterSpacing: '0.3px', whiteSpace: 'nowrap' }}
+            >
+              <span className="plantao-pulse-dot" />
+              Iniciar atendimento
+            </button>
+          </>
         )}
       </div>
 

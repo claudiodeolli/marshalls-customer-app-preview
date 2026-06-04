@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import MainMenu from './MainMenu';
 import Navbar from './Navbar';
+import MobileBottomNav from './MobileBottomNav';
 import { getRouteConfig } from '@/data/routeConfig';
 import { menuItems, plantaoItem } from '@/data/menuItems';
 
@@ -198,64 +199,69 @@ export default function AppLayout({ children }) {
   }
 
   return (
-    <div
-      className={`vertical-layout vertical-menu-modern${collapsed ? ' menu-collapsed' : ' menu-expanded'}${mobileOpen ? ' menu-open' : ''} menu-light menu-accordion menu-shadow`}
-      dir="ltr"
-    >
-      {/* ── Sidebar ── */}
-      <MainMenu
-        collapsed={collapsed}
-        onToggleCollapse={handleHamburger}
-        onOverlayClick={closeMobileMenu}
-        mobileOpen={mobileOpen}
-      />
+    <>
+      <div
+        className={`vertical-layout vertical-menu-modern${collapsed ? ' menu-collapsed' : ' menu-expanded'}${mobileOpen ? ' menu-open' : ''} menu-light menu-accordion menu-shadow`}
+        dir="ltr"
+      >
+        {/* ── Sidebar ── */}
+        <MainMenu
+          collapsed={collapsed}
+          onToggleCollapse={handleHamburger}
+          onOverlayClick={closeMobileMenu}
+          mobileOpen={mobileOpen}
+        />
 
-      {/* ── Barra de navegação superior ── */}
-      <Navbar onHamburgerClick={handleHamburger} />
+        {/* ── Barra de navegação superior ── */}
+        <Navbar onHamburgerClick={handleHamburger} />
 
-      {/* ── Área de conteúdo principal ── */}
-      <div className="app-content content">
-        <div className="content-overlay" />
-        <div className="header-navbar-shadow" />
-        <div className="content-wrapper">
+        {/* ── Área de conteúdo principal ── */}
+        <div className="app-content content">
+          <div className="content-overlay" />
+          <div className="header-navbar-shadow" />
+          <div className="content-wrapper">
 
-          {/* Cabeçalho da página com título e breadcrumb */}
-          <div className="content-header row">
-            <div className="content-header-left col-md-9 col-12 mb-2">
-              <div className="row breadcrumbs-top">
-                <div className="col-12">
-                  <h2 className="content-header-title float-left pr-1 mb-0">
-                    {routeCfg.pageTitle}
-                  </h2>
-                  <div className="breadcrumb-wrapper">
-                    <ol className="breadcrumb">
-                      <li className="breadcrumb-item">
-                        <span style={{ cursor: 'default', pointerEvents: 'none' }}>
-                          <BreadcrumbIcon activeHref={pathname} />
-                        </span>
-                      </li>
-                      {routeCfg.breadcrumb.map((crumb, i) => (
-                        <li key={i} className={`breadcrumb-item${crumb.active ? ' active' : ''}`}>
-                          {crumb.href ? <Link href={crumb.href}>{crumb.text}</Link> : crumb.text}
+            {/* Cabeçalho da página com título e breadcrumb */}
+            <div className="content-header row">
+              <div className="content-header-left col-md-9 col-12 mb-2">
+                <div className="row breadcrumbs-top">
+                  <div className="col-12">
+                    <h2 className="content-header-title float-left pr-1 mb-0">
+                      {routeCfg.pageTitle}
+                    </h2>
+                    <div className="breadcrumb-wrapper">
+                      <ol className="breadcrumb">
+                        <li className="breadcrumb-item">
+                          <span style={{ cursor: 'default', pointerEvents: 'none' }}>
+                            <BreadcrumbIcon activeHref={pathname} />
+                          </span>
                         </li>
-                      ))}
-                    </ol>
+                        {routeCfg.breadcrumb.map((crumb, i) => (
+                          <li key={i} className={`breadcrumb-item${crumb.active ? ' active' : ''}`}>
+                            {crumb.href ? <Link href={crumb.href}>{crumb.text}</Link> : crumb.text}
+                          </li>
+                        ))}
+                      </ol>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          {/* Conteúdo da página */}
-          <div className="content-body" key={pathname}>
-            {children}
-          </div>
+            {/* Conteúdo da página */}
+            <div className="content-body" key={pathname}>
+              {children}
+            </div>
 
+          </div>
         </div>
       </div>
 
+      {/* ── Bottom nav mobile — fora do wrapper para position:fixed não ser afetado ── */}
+      <MobileBottomNav onNavClick={closeMobileMenu} />
+
       {/* ── Faixa inferior ── */}
       <div className="_bottom-bar" style={{ position: 'fixed', bottom: 0, right: 0, height: '5px', background: 'linear-gradient(135deg,#003DFF 0%,#00E5FF 100%)', zIndex: 1020, borderRadius: '2px' }} />
-    </div>
+    </>
   );
 }

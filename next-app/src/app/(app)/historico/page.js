@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
-import { getHistory } from '@/data/storage';
+import { getHistory, saveEvaluation } from '@/data/storage';
+import { useEffect, useRef, useState } from 'react';
 
 /* ── Helpers ──────────────────────────────────────────── */
 function todayStr() {
@@ -152,8 +152,8 @@ function DocumentsAccordion({ documents }) {
 
 /* ── Status / Type helpers ────────────────────────────── */
 function typeLabel(type) {
-  if (type === 'emergency') return 'Fila';
-  if (type === 'scheduled') return 'Agendamento';
+  if (type === 'emergency') return 'Pronto atendimento';
+  if (type === 'scheduled') return 'Agendamento com especialista';
   return type;
 }
 
@@ -262,6 +262,91 @@ function StatusSelect({ value, onChange }) {
   );
 }
 
+/* ── Evaluation star display ─────────────────────────── */
+function Stars({ value, onChange, size = 20 }) {
+  const [hover, setHover] = useState(0);
+  return (
+    <div style={{ display: 'flex', gap: '4px' }}>
+      {[1,2,3,4,5].map(n => (
+        <svg
+          key={n}
+          xmlns="http://www.w3.org/2000/svg"
+          width={size} height={size}
+          viewBox="0 0 24 24"
+          fill={(hover || value) >= n ? '#f6c90e' : 'none'}
+          stroke={(hover || value) >= n ? '#f6c90e' : '#ccc'}
+          strokeWidth="1.5"
+          style={{ cursor: onChange ? 'pointer' : 'default', flexShrink: 0 }}
+          onClick={() => onChange?.(n)}
+          onMouseEnter={() => onChange && setHover(n)}
+          onMouseLeave={() => onChange && setHover(0)}
+        >
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+        </svg>
+      ))}
+    </div>
+  );
+}
+
+/* ── Evaluation modal ─────────────────────────────────── */
+function EvaluationModal({ record, onClose, onSave }) {
+  const [rating,  setRating]  = useState(0);
+  const [comment, setComment] = useState('');
+  const [saving,  setSaving]  = useState(false);
+
+  function handleSave() {
+    if (!rating) return;
+    setSaving(true);
+    setTimeout(() => {
+      onSave(record.uuid, { rating, comment });
+      setSaving(false);
+      onClose();
+    }, 400);
+  }
+
+  return (
+    <div
+      style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.5)', zIndex:1060, display:'flex', alignItems:'center', justifyContent:'center', padding:'16px' }}
+      onClick={onClose}
+    >
+      <div
+        style={{ background:'#fff', borderRadius:'16px', padding:'28px', width:'100%', maxWidth:'420px', boxShadow:'0 8px 32px rgba(0,0,0,0.15)' }}
+        onClick={e => e.stopPropagation()}
+      >
+        <h5 style={{ fontWeight:700, marginBottom:'4px' }}>Avaliar consulta</h5>
+        <p style={{ fontSize:'13px', color:'#6e6b7b', marginBottom:'20px' }}>
+          Dr(a) {record.professional.name} — {record.professional.specialties[0].name}
+        </p>
+
+        <div style={{ marginBottom:'20px' }}>
+          <label style={{ fontSize:'13px', fontWeight:600, display:'block', marginBottom:'8px' }}>Sua nota</label>
+          <Stars value={rating} onChange={setRating} size={32} />
+          {!rating && <small style={{ color:'#ea5455', display:'block', marginTop:'4px' }}>Selecione uma nota para continuar</small>}
+        </div>
+
+        <div style={{ marginBottom:'24px' }}>
+          <label style={{ fontSize:'13px', fontWeight:600, display:'block', marginBottom:'6px' }}>Comentário <span style={{ color:'#aaa', fontWeight:400 }}>(opcional)</span></label>
+          <textarea
+            className="form-control"
+            rows={3}
+            placeholder="Compartilhe sua experiência..."
+            value={comment}
+            onChange={e => setComment(e.target.value)}
+            style={{ resize:'none', fontSize:'13px' }}
+          />
+        </div>
+
+        <div style={{ display:'flex', gap:'10px', justifyContent:'flex-end' }}>
+          <button className="btn btn-outline-secondary btn-sm" onClick={onClose}>Cancelar</button>
+          <button className="btn btn-primary btn-sm" onClick={handleSave} disabled={!rating || saving}>
+            {saving ? 'Salvando...' : 'Enviar avaliação'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* ── Skeleton card ────────────────────────────────────── */
 function SkeletonCard() {
   return (
@@ -312,6 +397,7 @@ export default function HistoricoPage() {
   const [pageLoading, setPageLoading]   = useState(true);
   const [allRecords, setAllRecords]     = useState([]);
   const [records, setRecords]           = useState([]);
+  const [evalTarget, setEvalTarget]     = useState(null);
 
   useEffect(() => {
     const t = setTimeout(() => {
@@ -353,9 +439,8 @@ export default function HistoricoPage() {
     <div>
       {/* Page header */}
       <div style={{ marginBottom: '1.5rem' }}>
-        <h4 style={{ fontWeight: 600, marginBottom: '4px' }}>Histórico de Consultas</h4>
         <p className="text-muted mb-0" style={{ fontSize: '14px' }}>
-          Visualize e acompanhe seu histórico completo de consultas médicas
+          Acompanhe seu histórico completo<br className="_br-mobile" /> e visualize consultas anteriores  
         </p>
       </div>
 
@@ -424,8 +509,8 @@ export default function HistoricoPage() {
                 onChange={e => setTypeFilter(e.target.value)}
               >
                 <option value="all">Todos</option>
-                <option value="scheduled">Agendamento</option>
-                <option value="emergency">Fila</option>
+                <option value="scheduled">Agendamento com especialista</option>
+                <option value="emergency">Pronto atendimento</option>
               </select>
             </div>
 
@@ -549,6 +634,28 @@ export default function HistoricoPage() {
                     {'documents' in r && r.documents.length > 0 && (
                       <DocumentsAccordion documents={r.documents} />
                     )}
+
+                    {/* Evaluation */}
+                    {r.status === 'FINISHED' && (
+                      <div style={{ marginTop: '10px', paddingTop: '10px', borderTop: '1px solid rgba(0,0,0,0.08)' }}>
+                        {r.evaluation ? (
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <Stars value={r.evaluation.rating} size={16} />
+                            {r.evaluation.comment && (
+                              <span style={{ fontSize: '11px', color: '#6e6b7b', fontStyle: 'italic' }}>"{r.evaluation.comment}"</span>
+                            )}
+                          </div>
+                        ) : (
+                          <button
+                            className="btn btn-outline-primary btn-sm"
+                            style={{ fontSize: '12px', padding: '3px 10px' }}
+                            onClick={() => setEvalTarget(r)}
+                          >
+                            ★ Avaliar consulta
+                          </button>
+                        )}
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -556,6 +663,18 @@ export default function HistoricoPage() {
           </div>
         )}
       </div>
+
+      {evalTarget && (
+        <EvaluationModal
+          record={evalTarget}
+          onClose={() => setEvalTarget(null)}
+          onSave={(uuid, ev) => {
+            const updated = saveEvaluation(uuid, ev);
+            setAllRecords(updated);
+            setRecords(prev => prev.map(r => r.uuid === uuid ? { ...r, evaluation: ev } : r));
+          }}
+        />
+      )}
     </div>
   );
 }

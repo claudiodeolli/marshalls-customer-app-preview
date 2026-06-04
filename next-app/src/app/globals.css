@@ -1,6 +1,7 @@
 /* ── Estilos do loader (copiados do loader.css original) ── */
-body {
+html, body {
   margin: 0;
+  overflow-x: hidden;
 }
 
 /* Espaço para a faixa fixada no rodapé */
@@ -350,6 +351,11 @@ body._page-leaving .content-body {
   border-radius: 4px;
 }
 
+/* Breadcrumb visível em todas as resoluções — Vuexy esconde em ≤648px */
+.content-header .breadcrumb {
+  display: flex !important;
+}
+
 /* Ícone do breadcrumb: não clicável, cor azul fixa (igual ao link original) */
 .breadcrumb-item span svg._bc-custom {
   color: #0052ff;
@@ -548,6 +554,108 @@ body._page-leaving .content-body {
   /* Page headings */
   .content-body h4 { font-size: 1.05rem !important; }
   .content-body h5 { font-size: 1rem !important; }
+}
+
+/* ── Mobile bottom nav ── */
+._mob-nav {
+  display: none;
+  position: fixed;
+  bottom: 5px;
+  left: 0;
+  right: 0;
+  height: 64px;
+  background: #fff;
+  border-radius: 16px 16px 0 0;
+  box-shadow: 0 -2px 16px rgba(0,0,0,0.10);
+  z-index: 1025;
+  border-top: 1px solid #e8eaf0;
+}
+._mob-nav__item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  color: #9aa0b4;
+  text-decoration: none;
+  font-size: 11px;
+  font-weight: 600;
+  transition: color 150ms ease;
+}
+._mob-nav__item svg {
+  width: 24px;
+  height: 24px;
+}
+._mob-nav__item--active {
+  color: #0052ff;
+}
+._mob-nav__item--active svg {
+  filter: drop-shadow(0 0 4px rgba(0,82,255,0.4));
+}
+@media (max-width: 1199.98px) {
+  ._mob-nav { display: flex; }
+  .app-content,
+  .content-wrapper,
+  .content-body { padding-bottom: calc(64px + 0.5rem) !important; }
+}
+
+/* Quebra de linha visível apenas no mobile */
+._br-mobile { display: none; }
+@media (max-width: 1199.98px) {
+  ._br-mobile { display: block; }
+}
+
+/* ── Plantão 24h: hint mobile acima do botão ── */
+._plantao-mobile-hint {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+._plantao-mobile-hint p {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #5e5873;
+  line-height: 1.5;
+}
+._plantao-mobile-hint svg {
+  color: #003DFF;
+}
+@media (max-width: 1199.98px) {
+  ._plantao-mobile-hint { display: flex; }
+}
+
+/* ── Canais de contato: linha de canal ── */
+._contact-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px;
+}
+._contact-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+._contact-btn {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+@media (max-width: 480px) {
+  ._contact-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  ._contact-btn {
+    width: 100%;
+    text-align: center;
+  }
 }
 
 /* ── _hist-results: row-gap substitui mb-2; last row não tem espaço extra ── */
