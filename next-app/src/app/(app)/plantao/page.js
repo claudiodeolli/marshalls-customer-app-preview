@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import { USER } from '@/data/user';
 
 /*
   Chunk: beneficiary.js (módulo 88764)
@@ -291,22 +292,12 @@ function PaymentModal({ open, onClose, onSuccess, alertMessage, price = 0, speci
   );
 }
 
-function buildGreeting() {
-  const dias = ['domingo','segunda-feira','terça-feira','quarta-feira','quinta-feira','sexta-feira','sábado'];
-  const meses = ['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
-  const now = new Date();
-  return `Olá, João!  Hoje é ${dias[now.getDay()]}, ${now.getDate()} de ${meses[now.getMonth()]} de ${now.getFullYear()}`;
-}
-
 /* ─── Page ─── */
 export default function PlantaoPage() {
   const [consultaUrl,   setConsultaUrl]   = useState(null);
   const [loadingState,  setLoadingState]  = useState(null); // null | 'media'
   const [mediaError,    setMediaError]    = useState(false);
   const [paymentOpen,   setPaymentOpen]   = useState(false);
-  const [greeting, setGreeting] = useState('');
-
-  useEffect(() => { setGreeting(buildGreeting()); }, []);
 
   async function handleStartAppointment() {
     if (loadingState === 'media') return;
@@ -338,13 +329,8 @@ export default function PlantaoPage() {
 
   return (
     <div className="_plantao-page" style={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - 16rem)' }}>
-      {greeting && (
-        <p className="d-xl-none" style={{ fontSize: '13px', color: '#b9b9c3', marginBottom: '0.5rem', fontWeight: 500 }}>
-          {greeting}
-        </p>
-      )}
       <h4 style={{ fontWeight: '600', fontSize: '1.25rem', color: '#5e5873', marginBottom: '1.5rem', lineHeight: '1.5' }}>
-        Inicie seu atendimento médico online <br className="_br-mobile"/> de forma segura
+        {USER.firstName}, inicie seu atendimento médico <br className="_br-mobile"/> de forma segura
       </h4>
 
       {/* Aviso de permissão de mídia */}

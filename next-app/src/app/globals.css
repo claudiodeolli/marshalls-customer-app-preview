@@ -356,86 +356,8 @@ body._page-leaving .content-body {
   display: flex !important;
 }
 
-/* ── Breadcrumb no navbar mobile ── */
-._navbar-bc {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  pointer-events: none;
-  max-width: calc(100% - 100px);
-  width: 100%;
-  padding: 0 !important;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  overflow: hidden;
-}
-._navbar-bc .content-header-title {
-  float: none !important;
-  padding-right: 0 !important;
-  margin-bottom: 0 !important;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 100%;
-  display: block;
-}
-._navbar-bc .breadcrumb-wrapper {
-  width: 100%;
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
-}
-._navbar-bc .breadcrumb {
-  margin-bottom: 0 !important;
-  flex-wrap: nowrap;
-  overflow: hidden;
-  max-width: 100%;
-  justify-content: center;
-}
-@media (min-width: 768px) {
-  ._navbar-bc {
-    position: static !important;
-    transform: none !important;
-    left: auto !important;
-    align-items: flex-start !important;
-    text-align: left !important;
-    margin-left: 1rem;
-    flex: 1 1 0;
-    min-width: 0;
-  }
-  ._navbar-bc .breadcrumb-wrapper { justify-content: flex-start; }
-  ._navbar-bc .breadcrumb { justify-content: flex-start; }
-  .navbar-greeting { white-space: nowrap !important; }
-  .header-navbar .navbar-container {
-    flex-wrap: nowrap !important;
-  }
-  .header-navbar .navbar-container > ul.nav.navbar-nav {
-    flex-shrink: 0 !important;
-    flex-wrap: nowrap !important;
-  }
-}
-._navbar-bc .breadcrumb-item {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  min-width: 0;
-  flex-shrink: 1;
-}
-._navbar-bc .breadcrumb-item a,
-._navbar-bc .breadcrumb-item span,
-._navbar-bc .breadcrumb-item.active {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  display: inline-block;
-  max-width: 100%;
-}
-
 /* ── Hamburger e avatar maiores no mobile ── */
 @media (max-width: 1199.98px) {
-  .breadcrumb { padding: 0 !important; }
   .header-navbar .navbar-container .bookmark-wrapper .nav-link {
     padding: 0.6rem 0.9rem !important;
   }
@@ -715,9 +637,9 @@ body._page-leaving .content-body {
 
 /* ── Animação fade_down2 ── */
 @keyframes fade_down2 {
-  0%   { opacity: 0; transform: translateY(-8px); }
-  50%  { opacity: 1; transform: translateY(4px); }
-  100% { opacity: 0; transform: translateY(-8px); }
+  0%   { opacity: 0; transform: translate(0, 0px); }
+  50%  { opacity: 1; transform: translateX(0); }
+  100% { opacity: 0; transform: translate(0, 15px); }
 }
 
 /* ── Plantão 24h: hint mobile acima do botão ── */

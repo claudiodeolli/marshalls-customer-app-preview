@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import { USER } from '@/data/user';
 
 /* Ícone hamburger (menu) */
 function MenuIcon() {
@@ -47,10 +48,10 @@ function buildGreeting() {
   const dias = ['domingo', 'segunda-feira', 'terça-feira', 'quarta-feira', 'quinta-feira', 'sexta-feira', 'sábado'];
   const meses = ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'];
   const now = new Date();
-  return `Olá, João!  Hoje é ${dias[now.getDay()]}, ${now.getDate()} de ${meses[now.getMonth()]} de ${now.getFullYear()}`;
+  return `Olá, ${USER.firstName}!  Hoje é ${dias[now.getDay()]}, ${now.getDate()} de ${meses[now.getMonth()]} de ${now.getFullYear()}`;
 }
 
-export default function Navbar({ onHamburgerClick, routeCfg, breadcrumbContent }) {
+export default function Navbar({ onHamburgerClick }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [greeting, setGreeting] = useState('');
   const dropdownRef = useRef(null);
@@ -75,7 +76,7 @@ export default function Navbar({ onHamburgerClick, routeCfg, breadcrumbContent }
       role="navigation"
       data-nav="brand-center"
     >
-      <div className="navbar-container d-flex content" style={{ height: '60.38px', alignItems: 'center', position: 'relative' }}>
+      <div className="navbar-container d-flex content" style={{ height: '60.38px', alignItems: 'center' }}>
 
         {/* ── Esquerda: hamburger ── */}
         <div className="bookmark-wrapper d-flex align-items-center">
@@ -101,13 +102,6 @@ export default function Navbar({ onHamburgerClick, routeCfg, breadcrumbContent }
             </li>
           </ul>
         </div>
-
-        {/* ── Centro: breadcrumb mobile — visual idêntico ao desktop ── */}
-        {breadcrumbContent && (
-          <div className="_navbar-bc d-xl-none">
-            {breadcrumbContent}
-          </div>
-        )}
 
         {/* ── Direita: saudação + avatar do usuário ── */}
         <ul className="nav navbar-nav align-items-center ml-auto">
@@ -148,7 +142,7 @@ export default function Navbar({ onHamburgerClick, routeCfg, breadcrumbContent }
                   flexShrink: 0,
                 }}
               >
-                J
+                {USER.initials}
               </div>
 
               {/* Dropdown */}
