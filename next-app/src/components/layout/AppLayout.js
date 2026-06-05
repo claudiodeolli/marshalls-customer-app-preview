@@ -213,7 +213,29 @@ export default function AppLayout({ children }) {
         />
 
         {/* ── Barra de navegação superior ── */}
-        <Navbar onHamburgerClick={handleHamburger} />
+        <Navbar
+          onHamburgerClick={handleHamburger}
+          routeCfg={routeCfg}
+          breadcrumbContent={
+            <>
+              <h2 className="content-header-title float-left pr-1 mb-0">{routeCfg.pageTitle}</h2>
+              <div className="breadcrumb-wrapper">
+                <ol className="breadcrumb">
+                  <li className="breadcrumb-item">
+                    <span style={{ cursor: 'default', pointerEvents: 'none' }}>
+                      <BreadcrumbIcon activeHref={pathname} />
+                    </span>
+                  </li>
+                  {routeCfg.breadcrumb.map((crumb, i) => (
+                    <li key={i} className={`breadcrumb-item${crumb.active ? ' active' : ''}`}>
+                      {crumb.href ? <Link href={crumb.href}>{crumb.text}</Link> : crumb.text}
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            </>
+          }
+        />
 
         {/* ── Área de conteúdo principal ── */}
         <div className="app-content content">
@@ -222,7 +244,7 @@ export default function AppLayout({ children }) {
           <div className="content-wrapper">
 
             {/* Cabeçalho da página com título e breadcrumb */}
-            <div className="content-header row">
+            <div className="content-header row d-none d-xl-flex">
               <div className="content-header-left col-md-9 col-12 mb-2">
                 <div className="row breadcrumbs-top">
                   <div className="col-12">

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 /*
   Chunk: beneficiary.js (módulo 88764)
@@ -291,12 +291,22 @@ function PaymentModal({ open, onClose, onSuccess, alertMessage, price = 0, speci
   );
 }
 
+function buildGreeting() {
+  const dias = ['domingo','segunda-feira','terça-feira','quarta-feira','quinta-feira','sexta-feira','sábado'];
+  const meses = ['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+  const now = new Date();
+  return `Olá, João!  Hoje é ${dias[now.getDay()]}, ${now.getDate()} de ${meses[now.getMonth()]} de ${now.getFullYear()}`;
+}
+
 /* ─── Page ─── */
 export default function PlantaoPage() {
   const [consultaUrl,   setConsultaUrl]   = useState(null);
   const [loadingState,  setLoadingState]  = useState(null); // null | 'media'
   const [mediaError,    setMediaError]    = useState(false);
   const [paymentOpen,   setPaymentOpen]   = useState(false);
+  const [greeting, setGreeting] = useState('');
+
+  useEffect(() => { setGreeting(buildGreeting()); }, []);
 
   async function handleStartAppointment() {
     if (loadingState === 'media') return;
@@ -327,7 +337,12 @@ export default function PlantaoPage() {
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - 16rem)' }}>
+    <div className="_plantao-page" style={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - 16rem)' }}>
+      {greeting && (
+        <p className="d-xl-none" style={{ fontSize: '13px', color: '#b9b9c3', marginBottom: '0.5rem', fontWeight: 500 }}>
+          {greeting}
+        </p>
+      )}
       <h4 style={{ fontWeight: '600', fontSize: '1.25rem', color: '#5e5873', marginBottom: '1.5rem', lineHeight: '1.5' }}>
         Inicie seu atendimento médico online <br className="_br-mobile"/> de forma segura
       </h4>
@@ -389,7 +404,7 @@ export default function PlantaoPage() {
               <p>
                 Toque no botão abaixo para iniciar 
               </p>
-              <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ animation: 'fade_down2 2s ease-in-out infinite' }}>
                 <polyline points="7 8 12 13 17 8" />
                 <polyline points="7 13 12 18 17 13" />
               </svg>
@@ -397,7 +412,7 @@ export default function PlantaoPage() {
             <button
               className="btn btn-primary _start-btn"
               onClick={handleStartAppointment}
-              style={{ padding: '13px 40px', fontSize: '16px', borderRadius: '8px', fontWeight: '600', letterSpacing: '0.3px', whiteSpace: 'nowrap' }}
+              style={{ padding: '13px 16px', fontSize: '16px', borderRadius: '8px', fontWeight: '600', letterSpacing: '0.3px', whiteSpace: 'nowrap' }}
             >
               <span className="plantao-pulse-dot" />
               Iniciar atendimento

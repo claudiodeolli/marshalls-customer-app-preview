@@ -50,7 +50,7 @@ function buildGreeting() {
   return `Olá, João!  Hoje é ${dias[now.getDay()]}, ${now.getDate()} de ${meses[now.getMonth()]} de ${now.getFullYear()}`;
 }
 
-export default function Navbar({ onHamburgerClick }) {
+export default function Navbar({ onHamburgerClick, routeCfg, breadcrumbContent }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [greeting, setGreeting] = useState('');
   const dropdownRef = useRef(null);
@@ -75,14 +75,14 @@ export default function Navbar({ onHamburgerClick }) {
       role="navigation"
       data-nav="brand-center"
     >
-      <div className="navbar-container d-flex content" style={{ height: '60.38px', alignItems: 'center' }}>
+      <div className="navbar-container d-flex content" style={{ height: '60.38px', alignItems: 'center', position: 'relative' }}>
 
         {/* ── Esquerda: hamburger ── */}
         <div className="bookmark-wrapper d-flex align-items-center">
           {/* Hamburger mobile */}
           <ul className="nav navbar-nav">
             <li className="nav-item d-xl-none">
-              <a className="nav-link menu-toggle" href="#" onClick={e => { e.preventDefault(); onHamburgerClick(); }}>
+              <a className="nav-link menu-toggle" href="#" onClick={e => { e.preventDefault(); onHamburgerClick(); }} style={{ padding: '0.5rem 0.75rem' }}>
                 <MenuIcon />
               </a>
             </li>
@@ -101,6 +101,13 @@ export default function Navbar({ onHamburgerClick }) {
             </li>
           </ul>
         </div>
+
+        {/* ── Centro: breadcrumb mobile — visual idêntico ao desktop ── */}
+        {breadcrumbContent && (
+          <div className="_navbar-bc d-xl-none">
+            {breadcrumbContent}
+          </div>
+        )}
 
         {/* ── Direita: saudação + avatar do usuário ── */}
         <ul className="nav navbar-nav align-items-center ml-auto">

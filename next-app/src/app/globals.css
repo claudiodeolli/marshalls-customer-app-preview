@@ -124,7 +124,7 @@ html, body {
   background-color: #28c76f;
   animation: plantao-pulse 1.5s ease-in-out infinite;
   vertical-align: middle;
-  margin-right: 8px;
+  margin-right: 12px;
   flex-shrink: 0;
 }
 .plantao-svg-dot {
@@ -354,6 +354,100 @@ body._page-leaving .content-body {
 /* Breadcrumb visível em todas as resoluções — Vuexy esconde em ≤648px */
 .content-header .breadcrumb {
   display: flex !important;
+}
+
+/* ── Breadcrumb no navbar mobile ── */
+._navbar-bc {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+  max-width: calc(100% - 100px);
+  width: 100%;
+  padding: 0 !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  overflow: hidden;
+}
+._navbar-bc .content-header-title {
+  float: none !important;
+  padding-right: 0 !important;
+  margin-bottom: 0 !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  display: block;
+}
+._navbar-bc .breadcrumb-wrapper {
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+}
+._navbar-bc .breadcrumb {
+  margin-bottom: 0 !important;
+  flex-wrap: nowrap;
+  overflow: hidden;
+  max-width: 100%;
+  justify-content: center;
+}
+@media (min-width: 768px) {
+  ._navbar-bc {
+    position: static !important;
+    transform: none !important;
+    left: auto !important;
+    align-items: flex-start !important;
+    text-align: left !important;
+    margin-left: 1rem;
+    flex: 1 1 0;
+    min-width: 0;
+  }
+  ._navbar-bc .breadcrumb-wrapper { justify-content: flex-start; }
+  ._navbar-bc .breadcrumb { justify-content: flex-start; }
+  .navbar-greeting { white-space: nowrap !important; }
+  .header-navbar .navbar-container {
+    flex-wrap: nowrap !important;
+  }
+  .header-navbar .navbar-container > ul.nav.navbar-nav {
+    flex-shrink: 0 !important;
+    flex-wrap: nowrap !important;
+  }
+}
+._navbar-bc .breadcrumb-item {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+  flex-shrink: 1;
+}
+._navbar-bc .breadcrumb-item a,
+._navbar-bc .breadcrumb-item span,
+._navbar-bc .breadcrumb-item.active {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
+  max-width: 100%;
+}
+
+/* ── Hamburger e avatar maiores no mobile ── */
+@media (max-width: 1199.98px) {
+  .breadcrumb { padding: 0 !important; }
+  .header-navbar .navbar-container .bookmark-wrapper .nav-link {
+    padding: 0.6rem 0.9rem !important;
+  }
+  .header-navbar .navbar-container .bookmark-wrapper .nav-link svg {
+    width: 28px !important;
+    height: 28px !important;
+  }
+  ._user-avatar {
+    width: 46px !important;
+    height: 46px !important;
+    font-size: 18px !important;
+  }
 }
 
 /* Ícone do breadcrumb: não clicável, cor azul fixa (igual ao link original) */
@@ -604,6 +698,26 @@ body._page-leaving .content-body {
 ._br-mobile { display: none; }
 @media (max-width: 1199.98px) {
   ._br-mobile { display: block; }
+}
+
+/* ── Plantão 24h: altura responsiva sem scroll no mobile ── */
+@media (max-width: 1199.98px) {
+  ._plantao-page {
+    height: calc(100svh - 12rem - 74px) !important;
+  }
+  .app-content:has(._plantao-page),
+  .content-wrapper:has(._plantao-page),
+  .content-body:has(._plantao-page) {
+    padding-bottom: 0 !important;
+    overflow: hidden !important;
+  }
+}
+
+/* ── Animação fade_down2 ── */
+@keyframes fade_down2 {
+  0%   { opacity: 0; transform: translateY(-8px); }
+  50%  { opacity: 1; transform: translateY(4px); }
+  100% { opacity: 0; transform: translateY(-8px); }
 }
 
 /* ── Plantão 24h: hint mobile acima do botão ── */
