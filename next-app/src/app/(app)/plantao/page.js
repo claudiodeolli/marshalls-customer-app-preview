@@ -401,7 +401,7 @@ export default function PlantaoPage() {
               onClick={handleStartAppointment}
               style={{
                 display: 'flex',
-                padding: '28px 34px 28px 34px',
+                padding: '27px 33px 27px 33px',
                 fontSize: '18px',
                 borderRadius: '100px',
                 fontWeight: '600',
