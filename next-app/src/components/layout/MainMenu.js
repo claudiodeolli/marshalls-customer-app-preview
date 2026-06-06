@@ -95,7 +95,7 @@ export default function MainMenu({ collapsed, onToggleCollapse, onOverlayClick, 
         <div className="navbar-header expanded">
           <ul className="nav navbar-nav flex-row">
             <li className="nav-item mr-auto">
-              <Link className="navbar-brand" href="/painel">
+              <Link className="navbar-brand" href="/plantao">
                 <span className="brand-logo">
                   <img
                     src={`${(process.env.NEXT_PUBLIC_BASE_PATH ?? '')}/img/MarshallsMed%20novo2_%20Med%20maior.png`}

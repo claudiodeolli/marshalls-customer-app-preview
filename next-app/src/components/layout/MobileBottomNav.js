@@ -70,7 +70,7 @@ export default function MobileBottomNav({ onNavClick }) {
               strokeLinejoin="round"
               dangerouslySetInnerHTML={{ __html: item.icon.inner }}
             />
-            <span>{item.label}</span>
+            <span className='_mob-nav__item__label'>{item.label}</span>
           </Link>
         );
       })}

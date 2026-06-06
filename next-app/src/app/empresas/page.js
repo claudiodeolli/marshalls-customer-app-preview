@@ -17,7 +17,7 @@ export default function EmpresasPage() {
   }
 
   function select(company) {
-    router.push('/painel');
+    router.push('/plantao');
   }
 
   return (

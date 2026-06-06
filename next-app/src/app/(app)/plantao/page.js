@@ -399,9 +399,11 @@ export default function PlantaoPage() {
             <button
               className="btn btn-primary _start-btn"
               onClick={handleStartAppointment}
-              style={{ padding: '13px 16px', fontSize: '16px', borderRadius: '8px', fontWeight: '600', letterSpacing: '0.3px', whiteSpace: 'nowrap' }}
+              style={{ display: 'flex', padding: '13px 16px', paddingRight: '36px', paddingLeft: '0', fontSize: '16px', borderRadius: '8px', fontWeight: '600', letterSpacing: '0.3px', whiteSpace: 'nowrap' }}
             >
+            <div className="plantao-pulse-dot-container">
               <span className="plantao-pulse-dot" />
+            </div>
               Iniciar atendimento
             </button>
           </>

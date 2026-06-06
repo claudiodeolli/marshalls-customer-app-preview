@@ -9,9 +9,11 @@ export default function PlantaoPage() {
       <div className="card" style={{ flex: '1', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <button
           className="btn btn-primary"
-          style={{ padding: '13px 40px', fontSize: '16px', borderRadius: '8px', fontWeight: '600', letterSpacing: '0.3px' }}
+          style={{ display: 'flex', padding: '13px 40px', fontSize: '16px', borderRadius: '8px', fontWeight: '600', letterSpacing: '0.3px' }}
         >
-          <span className="plantao-pulse-dot" />
+          <div className="plantao-pulse-dot-container">
+            <span className="plantao-pulse-dot" />
+          </div>
           Iniciar atendimento
         </button>
       </div>
