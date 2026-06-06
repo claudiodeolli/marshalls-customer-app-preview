@@ -26,21 +26,21 @@ const DEFAULT_BUTTONS = [{ label: 'INICIAR ATENDIMENTO' }];
 function maskCPF(v) {
   const d = v.replace(/\D/g, '').slice(0, 11);
   if (d.length <= 3) return d;
-  if (d.length <= 6) return `${d.slice(0,3)}.${d.slice(3)}`;
-  if (d.length <= 9) return `${d.slice(0,3)}.${d.slice(3,6)}.${d.slice(6)}`;
-  return `${d.slice(0,3)}.${d.slice(3,6)}.${d.slice(6,9)}-${d.slice(9)}`;
+  if (d.length <= 6) return `${d.slice(0, 3)}.${d.slice(3)}`;
+  if (d.length <= 9) return `${d.slice(0, 3)}.${d.slice(3, 6)}.${d.slice(6)}`;
+  return `${d.slice(0, 3)}.${d.slice(3, 6)}.${d.slice(6, 9)}-${d.slice(9)}`;
 }
 function maskPhone(v) {
   const d = v.replace(/\D/g, '').slice(0, 11);
   if (!d.length) return '';
   if (d.length <= 2) return `(${d}`;
-  if (d.length <= 7) return `(${d.slice(0,2)}) ${d.slice(2)}`;
-  return `(${d.slice(0,2)}) ${d.slice(2,7)}-${d.slice(7)}`;
+  if (d.length <= 7) return `(${d.slice(0, 2)}) ${d.slice(2)}`;
+  return `(${d.slice(0, 2)}) ${d.slice(2, 7)}-${d.slice(7)}`;
 }
 function maskCEP(v) {
   const d = v.replace(/\D/g, '').slice(0, 8);
   if (d.length <= 5) return d;
-  return `${d.slice(0,5)}-${d.slice(5)}`;
+  return `${d.slice(0, 5)}-${d.slice(5)}`;
 }
 function maskCard(v) {
   return v.replace(/\D/g, '').slice(0, 16).replace(/(.{4})(?=.)/g, '$1 ');
@@ -48,40 +48,40 @@ function maskCard(v) {
 function maskExpiry(v) {
   const d = v.replace(/\D/g, '').slice(0, 4);
   if (d.length <= 2) return d;
-  return `${d.slice(0,2)}/${d.slice(2)}`;
+  return `${d.slice(0, 2)}/${d.slice(2)}`;
 }
 function maskCVV(v) {
   return v.replace(/\D/g, '').slice(0, 3);
 }
 
 const ESTADOS = [
-  ['AC','Acre'],['AL','Alagoas'],['AP','Amapá'],['AM','Amazonas'],
-  ['BA','Bahia'],['CE','Ceará'],['DF','Distrito Federal'],['ES','Espírito Santo'],
-  ['GO','Goiás'],['MA','Maranhão'],['MT','Mato Grosso'],['MS','Mato Grosso do Sul'],
-  ['MG','Minas Gerais'],['PA','Pará'],['PB','Paraíba'],['PR','Paraná'],
-  ['PE','Pernambuco'],['PI','Piauí'],['RJ','Rio de Janeiro'],['RN','Rio Grande do Norte'],
-  ['RS','Rio Grande do Sul'],['RO','Rondônia'],['RR','Roraima'],['SC','Santa Catarina'],
-  ['SP','São Paulo'],['SE','Sergipe'],['TO','Tocantins'],
+  ['AC', 'Acre'], ['AL', 'Alagoas'], ['AP', 'Amapá'], ['AM', 'Amazonas'],
+  ['BA', 'Bahia'], ['CE', 'Ceará'], ['DF', 'Distrito Federal'], ['ES', 'Espírito Santo'],
+  ['GO', 'Goiás'], ['MA', 'Maranhão'], ['MT', 'Mato Grosso'], ['MS', 'Mato Grosso do Sul'],
+  ['MG', 'Minas Gerais'], ['PA', 'Pará'], ['PB', 'Paraíba'], ['PR', 'Paraná'],
+  ['PE', 'Pernambuco'], ['PI', 'Piauí'], ['RJ', 'Rio de Janeiro'], ['RN', 'Rio Grande do Norte'],
+  ['RS', 'Rio Grande do Sul'], ['RO', 'Rondônia'], ['RR', 'Roraima'], ['SC', 'Santa Catarina'],
+  ['SP', 'São Paulo'], ['SE', 'Sergipe'], ['TO', 'Tocantins'],
 ];
 
 /* ─── Módulo 3918: PaymentModal ─── */
 function PaymentModal({ open, onClose, onSuccess, alertMessage, price = 0, specialty }) {
-  const [loading,     setLoading]     = useState(false);
-  const [birthday,    setBirthday]    = useState('');
-  const [cpf,         setCpf]         = useState('');
-  const [nome,        setNome]        = useState('');
-  const [email,       setEmail]       = useState('');
-  const [phone,       setPhone]       = useState('');
-  const [estado,      setEstado]      = useState('');
-  const [cidade,      setCidade]      = useState('');
-  const [endereco,    setEndereco]    = useState('');
-  const [numero,      setNumero]      = useState('');
-  const [bairro,      setBairro]      = useState('');
-  const [cep,         setCep]         = useState('');
-  const [cardNumber,  setCardNumber]  = useState('');
-  const [cardholder,  setCardholder]  = useState('');
-  const [expiry,      setExpiry]      = useState('');
-  const [cvv,         setCvv]         = useState('');
+  const [loading, setLoading] = useState(false);
+  const [birthday, setBirthday] = useState('');
+  const [cpf, setCpf] = useState('');
+  const [nome, setNome] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [estado, setEstado] = useState('');
+  const [cidade, setCidade] = useState('');
+  const [endereco, setEndereco] = useState('');
+  const [numero, setNumero] = useState('');
+  const [bairro, setBairro] = useState('');
+  const [cep, setCep] = useState('');
+  const [cardNumber, setCardNumber] = useState('');
+  const [cardholder, setCardholder] = useState('');
+  const [expiry, setExpiry] = useState('');
+  const [cvv, setCvv] = useState('');
 
   async function handleSubmit() {
     if (loading) return;
@@ -133,7 +133,7 @@ function PaymentModal({ open, onClose, onSuccess, alertMessage, price = 0, speci
           style={{ cursor: 'pointer', position: 'absolute', right: '16px', top: '16px', color: '#94a3b8' }}
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+            <path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
           </svg>
         </div>
 
@@ -294,10 +294,10 @@ function PaymentModal({ open, onClose, onSuccess, alertMessage, price = 0, speci
 
 /* ─── Page ─── */
 export default function PlantaoPage() {
-  const [consultaUrl,   setConsultaUrl]   = useState(null);
-  const [loadingState,  setLoadingState]  = useState(null); // null | 'media'
-  const [mediaError,    setMediaError]    = useState(false);
-  const [paymentOpen,   setPaymentOpen]   = useState(false);
+  const [consultaUrl, setConsultaUrl] = useState(null);
+  const [loadingState, setLoadingState] = useState(null); // null | 'media'
+  const [mediaError, setMediaError] = useState(false);
+  const [paymentOpen, setPaymentOpen] = useState(false);
 
   async function handleStartAppointment() {
     if (loadingState === 'media') return;
@@ -330,7 +330,7 @@ export default function PlantaoPage() {
   return (
     <div className="_plantao-page" style={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - 16rem)' }}>
       <h4 style={{ fontWeight: '600', fontSize: '1.25rem', color: '#5e5873', marginBottom: '1.5rem', lineHeight: '1.5' }}>
-        <span className="_hidden-desktop">{USER.firstName}, inicie seu atendimento médico <br/> online de forma segura</span>
+        <span className="_hidden-desktop">{USER.firstName}, inicie seu atendimento médico <br /> online de forma segura</span>
         <span className="_hidden-mobile">Inicie seu atendimento médico online de forma segura</span>
       </h4>
 
@@ -362,7 +362,7 @@ export default function PlantaoPage() {
           >
             <div style={{ opacity: 0.7 }}>
               <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M23 7 16 12 23 17V7z"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+                <path d="M23 7 16 12 23 17V7z" /><rect x="1" y="5" width="15" height="14" rx="2" ry="2" />
               </svg>
             </div>
             <p style={{ margin: 0, fontSize: '18px', fontWeight: 600 }}>Sala de Teleconsulta</p>
@@ -389,7 +389,7 @@ export default function PlantaoPage() {
           <>
             <div className="_plantao-mobile-hint">
               <p>
-                Toque no botão abaixo para iniciar 
+                Toque no botão abaixo para iniciar
               </p>
               <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ animation: 'fade_down2 2s ease-in-out infinite' }}>
                 <polyline points="7 8 12 13 17 8" />
@@ -399,11 +399,20 @@ export default function PlantaoPage() {
             <button
               className="btn btn-primary _start-btn"
               onClick={handleStartAppointment}
-              style={{ display: 'flex', padding: '13px 16px', paddingRight: '36px', paddingLeft: '0', fontSize: '16px', borderRadius: '8px', fontWeight: '600', letterSpacing: '0.3px', whiteSpace: 'nowrap' }}
+              style={{
+                display: 'flex',
+                padding: '28px 34px 28px 34px',
+                fontSize: '18px',
+                borderRadius: '100px',
+                fontWeight: '600',
+                letterSpacing: '0.3px',
+                whiteSpace: 'nowrap',
+                boxShadow: '0px 0px 4px 0px rgba(0,0,0,0.5)'
+              }}
             >
-            <div className="plantao-pulse-dot-container">
-              <span className="plantao-pulse-dot" />
-            </div>
+              <div className="plantao-pulse-dot-container">
+                <span className="plantao-pulse-dot" />
+              </div>
               Iniciar atendimento
             </button>
           </>

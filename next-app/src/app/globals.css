@@ -1,5 +1,6 @@
 /* ── Estilos do loader (copiados do loader.css original) ── */
-html, body {
+html,
+body {
   margin: 0;
   overflow-x: hidden;
 }
@@ -10,11 +11,22 @@ html, body {
 }
 
 /* ── Faixa inferior: left dinâmico conforme estado do sidebar ── */
-.menu-expanded ._bottom-bar  { left: 260px; }
-.menu-collapsed ._bottom-bar { left: 80px; }
+.menu-expanded ._bottom-bar {
+  left: 260px;
+}
+
+.menu-collapsed ._bottom-bar {
+  left: 80px;
+}
+
 @media (max-width: 1199.98px) {
-  ._bottom-bar              { left: 0 !important; }
-  .menu-open ._bottom-bar   { left: 260px !important; }
+  ._bottom-bar {
+    left: 0 !important;
+  }
+
+  .menu-open ._bottom-bar {
+    left: 260px !important;
+  }
 }
 
 
@@ -25,11 +37,13 @@ html, body {
   display: block;
   position: absolute;
 }
+
 .loading-logo {
   position: absolute;
   left: calc(50% - 45px);
   top: 30%;
 }
+
 .loading {
   position: absolute;
   left: calc(50% - 35px);
@@ -40,6 +54,7 @@ html, body {
   box-sizing: border-box;
   border: 3px solid transparent;
 }
+
 .loading .effect-1,
 .loading .effect-2 {
   position: absolute;
@@ -50,8 +65,15 @@ html, body {
   border-radius: 50%;
   box-sizing: border-box;
 }
-.loading .effect-1 { animation: rotate 1s ease infinite; }
-.loading .effect-2 { animation: rotateOpacity 1s ease infinite 0.1s; }
+
+.loading .effect-1 {
+  animation: rotate 1s ease infinite;
+}
+
+.loading .effect-2 {
+  animation: rotateOpacity 1s ease infinite 0.1s;
+}
+
 .loading .effect-3 {
   position: absolute;
   width: 100%;
@@ -62,15 +84,31 @@ html, body {
   border-radius: 50%;
   box-sizing: border-box;
 }
-.loading .effects { transition: all 0.3s ease; }
+
+.loading .effects {
+  transition: all 0.3s ease;
+}
 
 @keyframes rotate {
-  0%   { transform: rotate(0deg); }
-  100% { transform: rotate(1turn); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(1turn);
+  }
 }
+
 @keyframes rotateOpacity {
-  0%   { transform: rotate(0deg); opacity: 0.1; }
-  100% { transform: rotate(1turn); opacity: 1; }
+  0% {
+    transform: rotate(0deg);
+    opacity: 0.1;
+  }
+
+  100% {
+    transform: rotate(1turn);
+    opacity: 1;
+  }
 }
 
 /* ── Plantão 24h shortcut ── */
@@ -81,7 +119,8 @@ html, body {
   padding: 0;
   padding-top: 1rem;
 }
-[data-plantao-shortcut] > a {
+
+[data-plantao-shortcut]>a {
   display: flex;
   align-items: center;
   color: #fff;
@@ -92,7 +131,8 @@ html, body {
   padding: 10px 15px;
   border-radius: 8px;
 }
-[data-plantao-shortcut] > a svg {
+
+[data-plantao-shortcut]>a svg {
   width: 20px;
   height: 20px;
   flex-shrink: 0;
@@ -100,27 +140,43 @@ html, body {
   position: relative;
   top: 1px;
 }
-[data-plantao-shortcut] > a:hover,
-[data-plantao-shortcut] > a:focus { color: #fff; text-decoration: none; }
+
+[data-plantao-shortcut]>a:hover,
+[data-plantao-shortcut]>a:focus {
+  color: #fff;
+  text-decoration: none;
+}
 
 /* Estado inativo: outro item do sidebar está selecionado */
-[data-plantao-shortcut].plantao-inactive > a {
-  background: linear-gradient(-135deg, rgba(0,82,255,0.1) 0%, rgba(0,183,255,0.1) 100%) !important;
+[data-plantao-shortcut].plantao-inactive>a {
+  background: linear-gradient(-135deg, rgba(0, 82, 255, 0.1) 0%, rgba(0, 183, 255, 0.1) 100%) !important;
   color: #0090ff !important;
   box-shadow: none;
 }
-[data-plantao-shortcut].plantao-inactive > a:hover { color: #0090ff; }
+
+[data-plantao-shortcut].plantao-inactive>a:hover {
+  color: #0090ff;
+}
 
 /* ── Pulsating dot (Plantão 24h) ── */
 @keyframes plantao-pulse {
-  0%   { box-shadow: 0 0 0 0    rgba(34,197,94,0.7); }
-  80%  { box-shadow: 0 0 0 8px  rgba(34,197,94,0);   }
-  100% { box-shadow: 0 0 0 0    rgba(34,197,94,0);   }
+  0% {
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+  }
+
+  80% {
+    box-shadow: 0 0 0 8px rgba(34, 197, 94, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+  }
 }
+
 .plantao-pulse-dot {
   display: inline-block;
-  width: 7px;
-  height: 7px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   background: #22c55e;
   box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.8);
@@ -129,6 +185,7 @@ html, body {
   margin: 0 auto;
   flex-shrink: 0;
 }
+
 .plantao-svg-dot {
   fill: #28c76f;
   transform-box: fill-box;
@@ -137,7 +194,7 @@ html, body {
 }
 
 .plantao-pulse-dot-container {
-  width: 100%;
+  padding-right: 36px;
 }
 
 .nav-item-user-btn {
@@ -167,7 +224,10 @@ html, body {
 }
 
 /* ── Saudação no navbar ── */
-.header-navbar .navbar-container > ul.nav.navbar-nav { display: flex !important; }
+.header-navbar .navbar-container>ul.nav.navbar-nav {
+  display: flex !important;
+}
+
 .header-navbar .navbar-container .bookmark-wrapper {
   display: flex !important;
   align-items: center;
@@ -175,6 +235,7 @@ html, body {
   margin-right: 1rem;
   min-height: 38px;
 }
+
 .navbar-greeting {
   font-size: 16px !important;
   color: #5e5873;
@@ -188,21 +249,25 @@ html, body {
 /* ── Sidebar recolhida ── */
 /* Nav items: SVG (20px) é menor que o texto (1.1rem × line-height 1.45 ≈ 25.5px).
    Compensa com padding-top/bottom de 13px para igualar a altura de ~46px do expandido. */
-.vertical-layout.vertical-menu-modern.menu-collapsed .main-menu:not(.expanded) .navigation > li.nav-item > a {
+.vertical-layout.vertical-menu-modern.menu-collapsed .main-menu:not(.expanded) .navigation>li.nav-item>a {
   padding-top: 13px !important;
   padding-bottom: 13px !important;
 }
-.vertical-layout.vertical-menu-modern.menu-collapsed .main-menu:not(.expanded) .navigation > li > a {
+
+.vertical-layout.vertical-menu-modern.menu-collapsed .main-menu:not(.expanded) .navigation>li>a {
   justify-content: center !important;
 }
-[dir=ltr] .vertical-layout.vertical-menu-modern.menu-collapsed .main-menu:not(.expanded) .navigation > li > a svg,
-[dir=ltr] .vertical-layout.vertical-menu-modern.menu-collapsed .main-menu:not(.expanded) .navigation > li > a i {
+
+[dir=ltr] .vertical-layout.vertical-menu-modern.menu-collapsed .main-menu:not(.expanded) .navigation>li>a svg,
+[dir=ltr] .vertical-layout.vertical-menu-modern.menu-collapsed .main-menu:not(.expanded) .navigation>li>a i {
   margin-right: 0 !important;
 }
-.vertical-layout.vertical-menu-modern.menu-collapsed .main-menu:not(.expanded) .navigation > li > a .menu-title {
+
+.vertical-layout.vertical-menu-modern.menu-collapsed .main-menu:not(.expanded) .navigation>li>a .menu-title {
   display: none !important;
 }
-[dir] .vertical-layout.vertical-menu-modern.menu-collapsed .main-menu:not(.expanded) .navigation > li.active > a {
+
+[dir] .vertical-layout.vertical-menu-modern.menu-collapsed .main-menu:not(.expanded) .navigation>li.active>a {
   border-radius: 8px !important;
   color: #fff !important;
   margin: 0 10px !important;
@@ -211,17 +276,20 @@ html, body {
   justify-content: center !important;
   align-items: center !important;
 }
-.vertical-layout.vertical-menu-modern.menu-collapsed .main-menu:not(.expanded) .navigation > li.active > a svg {
-  fill: rgba(255,255,255,.2) !important;
+
+.vertical-layout.vertical-menu-modern.menu-collapsed .main-menu:not(.expanded) .navigation>li.active>a svg {
+  fill: rgba(255, 255, 255, .2) !important;
   stroke: #fff !important;
 }
+
 /* Ícones fill-based (ex: Histórico) no item ativo collapsed: fill branco */
-.vertical-layout.vertical-menu-modern.menu-collapsed .main-menu:not(.expanded) .navigation > li.active > a svg[fill="currentColor"],
-.vertical-layout.vertical-menu-modern.menu-collapsed .main-menu:not(.expanded) .navigation > li.active > a svg path[fill="currentColor"] {
+.vertical-layout.vertical-menu-modern.menu-collapsed .main-menu:not(.expanded) .navigation>li.active>a svg[fill="currentColor"],
+.vertical-layout.vertical-menu-modern.menu-collapsed .main-menu:not(.expanded) .navigation>li.active>a svg path[fill="currentColor"] {
   fill: #fff !important;
 }
-[dir] .vertical-layout.vertical-menu-modern.menu-collapsed .main-menu:not(.expanded) .navigation > li:not(.active) > a:hover {
-  background: linear-gradient(-135deg, rgba(0,82,255,0.1) 0%, rgba(0,183,255,0.1) 100%) !important;
+
+[dir] .vertical-layout.vertical-menu-modern.menu-collapsed .main-menu:not(.expanded) .navigation>li:not(.active)>a:hover {
+  background: linear-gradient(-135deg, rgba(0, 82, 255, 0.1) 0%, rgba(0, 183, 255, 0.1) 100%) !important;
   border-radius: 8px !important;
   margin: 0 10px !important;
   width: calc(100% - 20px) !important;
@@ -230,15 +298,18 @@ html, body {
 
 /* Hamburger roda 90° quando sidebar recolhida */
 .header-navbar .navbar-container .navbar-nav .nav-item:first-child .nav-link svg {
-  transition: transform .35s cubic-bezier(.4,0,.2,1);
+  transition: transform .35s cubic-bezier(.4, 0, .2, 1);
 }
-.vertical-layout.vertical-menu-modern.menu-collapsed
-  .header-navbar .navbar-container .navbar-nav .nav-item:first-child .nav-link svg {
+
+.vertical-layout.vertical-menu-modern.menu-collapsed .header-navbar .navbar-container .navbar-nav .nav-item:first-child .nav-link svg {
   transform: rotate(90deg);
 }
 
 /* Logo recolhida */
-img._logo-collapsed { display: none; }
+img._logo-collapsed {
+  display: none;
+}
+
 .vertical-layout.vertical-menu-modern.menu-collapsed .main-menu:not(.expanded) .navbar-header {
   width: 100% !important;
   display: flex !important;
@@ -247,13 +318,16 @@ img._logo-collapsed { display: none; }
   padding-left: 10px !important;
   padding-right: 10px !important;
 }
+
 .vertical-layout.vertical-menu-modern.menu-collapsed .main-menu:not(.expanded) .navbar-header .navbar-nav {
   width: 100% !important;
   justify-content: center !important;
 }
+
 .vertical-layout.vertical-menu-modern.menu-collapsed .main-menu:not(.expanded) .navbar-header .brand-logo {
   display: none !important;
 }
+
 .vertical-layout.vertical-menu-modern.menu-collapsed .main-menu:not(.expanded) .navbar-header img._logo-collapsed {
   display: block !important;
   width: 45px;
@@ -268,14 +342,17 @@ img._logo-collapsed { display: none; }
   padding-top: 1rem !important;
   margin-top: 0.5rem !important;
 }
-.vertical-layout.vertical-menu-modern.menu-collapsed .main-menu:not(.expanded) [data-plantao-shortcut] > a {
+
+.vertical-layout.vertical-menu-modern.menu-collapsed .main-menu:not(.expanded) [data-plantao-shortcut]>a {
   justify-content: center !important;
   padding: 10px 8px !important;
 }
-.vertical-layout.vertical-menu-modern.menu-collapsed .main-menu:not(.expanded) [data-plantao-shortcut] > a .menu-title {
+
+.vertical-layout.vertical-menu-modern.menu-collapsed .main-menu:not(.expanded) [data-plantao-shortcut]>a .menu-title {
   display: none !important;
 }
-.vertical-layout.vertical-menu-modern.menu-collapsed .main-menu:not(.expanded) [data-plantao-shortcut] > a svg {
+
+.vertical-layout.vertical-menu-modern.menu-collapsed .main-menu:not(.expanded) [data-plantao-shortcut]>a svg {
   margin-right: 0 !important;
 }
 
@@ -292,12 +369,15 @@ img._logo-collapsed { display: none; }
   flex-direction: column !important;
   border-bottom: 1px solid #d4def1 !important;
 }
+
 .main-menu .navbar-header {
   flex-shrink: 0 !important;
 }
+
 .main-menu .shadow-bottom {
   flex-shrink: 0 !important;
 }
+
 /* Seletor .main-menu.menu-fixed .main-menu-content tem especificidade 0,3,0
    e supera o .main-menu .main-menu-content (0,2,0) do Vuexy CSS que carrega
    depois via <link>. Flex-basis:0 (do flex:1) ignora o height:calc do Vuexy. */
@@ -317,30 +397,79 @@ img._logo-collapsed { display: none; }
   pointer-events: none;
   opacity: 0;
 }
-._sb-sq--bg { background: #eee; z-index: 4; }
-._sb-sq--fg { background: #fff; z-index: 5; border-bottom-right-radius: .5rem; }
-.main-menu-content:hover ~ ._sb-sq,
-.main-menu-content.ps--scrolling-y ~ ._sb-sq,
-.main-menu-content.ps--focus ~ ._sb-sq { opacity: 1; }
+
+._sb-sq--bg {
+  background: #eee;
+  z-index: 4;
+}
+
+._sb-sq--fg {
+  background: #fff;
+  z-index: 5;
+  border-bottom-right-radius: .5rem;
+}
+
+.main-menu-content:hover~._sb-sq,
+.main-menu-content.ps--scrolling-y~._sb-sq,
+.main-menu-content.ps--focus~._sb-sq {
+  opacity: 1;
+}
 
 /* ── Transição de página (zoom-fade out-in — igual ao Vue Router original) ── */
 /* Original: transition: transform .35s, opacity .28s ease-in-out             */
 /* Enter: opacity 0→1 scale(.97→1) ; Leave: opacity 1→0 scale(1→1.03)        */
-@keyframes zoom-fade-in-opacity  { from { opacity: 0; } to { opacity: 1; } }
-@keyframes zoom-fade-in-scale    { from { transform: scale(.97); } to { transform: scale(1); } }
-@keyframes zoom-fade-out-opacity { from { opacity: 1; } to { opacity: 0; } }
-@keyframes zoom-fade-out-scale   { from { transform: scale(1); } to { transform: scale(1.03); } }
+@keyframes zoom-fade-in-opacity {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes zoom-fade-in-scale {
+  from {
+    transform: scale(.97);
+  }
+
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes zoom-fade-out-opacity {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes zoom-fade-out-scale {
+  from {
+    transform: scale(1);
+  }
+
+  to {
+    transform: scale(1.03);
+  }
+}
 
 .content-body {
   animation: zoom-fade-in-opacity .28s ease-in-out, zoom-fade-in-scale .35s ease;
 }
+
 /* out-in: durante a saída da página anterior, a entrada fica em espera.
    `backwards` mantém o elemento em opacity:0 durante o delay. */
 body._page-leaving .content-body {
   animation:
     zoom-fade-in-opacity .28s ease-in-out 350ms backwards,
-    zoom-fade-in-scale   .35s ease        350ms backwards;
+    zoom-fade-in-scale .35s ease 350ms backwards;
 }
+
 /* .zoom-fade-leaving não é mais usado como classe React — a animação de
    saída é aplicada inline no clone DOM pelo click handler do AppLayout */
 
@@ -350,26 +479,36 @@ body._page-leaving .content-body {
   align-items: center;
   justify-content: space-between;
 }
-.main-menu .navigation li.navigation-header > svg {
+
+.main-menu .navigation li.navigation-header>svg {
   display: none;
 }
+
 .vertical-layout.vertical-menu-modern.menu-collapsed .main-menu:not(.expanded) .navigation li.navigation-header {
   justify-content: center;
   margin-left: 0 !important;
   min-height: 17px;
 }
-.vertical-layout.vertical-menu-modern.menu-collapsed .main-menu:not(.expanded) .navigation li.navigation-header > span {
+
+.vertical-layout.vertical-menu-modern.menu-collapsed .main-menu:not(.expanded) .navigation li.navigation-header>span {
   display: none;
 }
-.vertical-layout.vertical-menu-modern.menu-collapsed .main-menu:not(.expanded) .navigation li.navigation-header > svg {
+
+.vertical-layout.vertical-menu-modern.menu-collapsed .main-menu:not(.expanded) .navigation li.navigation-header>svg {
   display: block;
 }
 
 /* Skeleton shimmer */
 @keyframes skWave {
-  0%   { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
 }
+
 .sk {
   display: block;
   background: linear-gradient(90deg, #ebebeb 25%, #d6d6d6 37%, #ebebeb 63%);
@@ -388,10 +527,12 @@ body._page-leaving .content-body {
   .header-navbar .navbar-container .bookmark-wrapper .nav-link {
     padding: 0.6rem 0.9rem !important;
   }
+
   .header-navbar .navbar-container .bookmark-wrapper .nav-link svg {
     width: 32px !important;
     height: 32px !important;
   }
+
   ._user-avatar {
     width: 46px !important;
     height: 46px !important;
@@ -407,19 +548,20 @@ body._page-leaving .content-body {
 }
 
 /* SVGs dos itens do menu não capturam cliques — passa para o <a> pai */
-.main-menu .navigation li > a svg,
-[data-plantao-shortcut] > a svg {
+.main-menu .navigation li>a svg,
+[data-plantao-shortcut]>a svg {
   pointer-events: none;
 }
 
 /* ── Hover dos itens do menu ── */
-.main-menu .navigation li.nav-item > a,
-.main-menu .navigation li.nav-item ul li > a {
+.main-menu .navigation li.nav-item>a,
+.main-menu .navigation li.nav-item ul li>a {
   transition: background 150ms ease, color 150ms ease, box-shadow 150ms ease !important;
 }
-.main-menu .navigation li.nav-item:not(.active) > a:hover,
-.main-menu .navigation li.nav-item:not(.active).hover > a {
-  background: linear-gradient(-135deg, rgba(0,82,255,0.1) 0%, rgba(0,183,255,0.1) 100%) !important;
+
+.main-menu .navigation li.nav-item:not(.active)>a:hover,
+.main-menu .navigation li.nav-item:not(.active).hover>a {
+  background: linear-gradient(-135deg, rgba(0, 82, 255, 0.1) 0%, rgba(0, 183, 255, 0.1) 100%) !important;
   color: #0090ff !important;
   border-radius: 8px;
 }
@@ -445,32 +587,38 @@ body._page-leaving .content-body {
   [dir=ltr] .vertical-layout .app-content {
     margin-left: 0 !important;
   }
+
   /* Navbar floating: remove margens e bordas no tablet/mobile — gruda no topo */
   [dir=ltr] .horizontal-layout .header-navbar.floating-nav,
-  [dir=ltr] .vertical-layout   .header-navbar.floating-nav {
+  [dir=ltr] .vertical-layout .header-navbar.floating-nav {
     left: 0 !important;
     width: 100% !important;
     margin: 0 !important;
     border-radius: 0 !important;
   }
+
   /* Transição persistente para abertura e fechamento do sidebar */
   .main-menu {
     transition: transform 0.25s ease !important;
   }
+
   /* Scroll lock: impede que a página role enquanto o sidebar está aberto */
   body.menu-open {
     overflow: hidden !important;
     touch-action: none;
   }
+
   /* Previne scroll chaining: scroll dentro do sidebar não propaga para a página */
   .main-menu .main-menu-content {
     overscroll-behavior: contain;
     touch-action: pan-y;
   }
+
   /* Espaçamento superior na área da logo */
   .main-menu .navbar-header {
     padding-top: 2rem !important;
   }
+
   /* Espaçamento inferior no último item — sobrescreve o padding-bottom:0 global */
   #main-menu-navigation {
     padding-bottom: 5rem !important;
@@ -479,30 +627,55 @@ body._page-leaving .content-body {
 
 /* ── < 768px: mobile ── */
 @media (max-width: 767.98px) {
+
   /* Oculta saudação — texto longo demais para telas pequenas */
-  .navbar-greeting { display: none !important; }
+  .navbar-greeting {
+    display: none !important;
+  }
 
   /* Título do breadcrumb menor */
-  .content-header-title { font-size: 1.05rem !important; }
+  .content-header-title {
+    font-size: 1.05rem !important;
+  }
 
   /* Breadcrumb header: menos margem inferior */
-  .content-header-left { margin-bottom: 0.5rem !important; }
+  .content-header-left {
+    margin-bottom: 0.5rem !important;
+  }
 
   /* Cards: padding menor */
-  .card .card-body   { padding: 1rem !important; }
-  .card .card-header { padding: 0.75rem 1rem !important; }
-  .card .card-footer { padding: 0.75rem 1rem !important; }
+  .card .card-body {
+    padding: 1rem !important;
+  }
+
+  .card .card-header {
+    padding: 0.75rem 1rem !important;
+  }
+
+  .card .card-footer {
+    padding: 0.75rem 1rem !important;
+  }
 
   /* Tabelas: scroll horizontal garantido */
-  .table-responsive { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
 
   /* ── Agendamentos: header empilha verticalmente ── */
   ._agend-header {
     flex-direction: column !important;
     align-items: stretch !important;
   }
-  ._agend-tz-wrap { width: 100% !important; }
-  ._agend-tz-select { min-width: unset !important; width: 100% !important; }
+
+  ._agend-tz-wrap {
+    width: 100% !important;
+  }
+
+  ._agend-tz-select {
+    min-width: unset !important;
+    width: 100% !important;
+  }
 
   /* Agendamentos ── barra de filtros: empilha os grupos verticalmente */
   ._agend-filters {
@@ -510,14 +683,27 @@ body._page-leaving .content-body {
     align-items: stretch !important;
     gap: 8px !important;
   }
-  ._agend-filters .custom-select { max-width: 100% !important; }
+
+  ._agend-filters .custom-select {
+    max-width: 100% !important;
+  }
 
   /* Agendamentos ── botão "Novo Agendamento" ocupa linha inteira */
-  ._agend-new-btn { width: 100% !important; justify-content: center !important; }
+  ._agend-new-btn {
+    width: 100% !important;
+    justify-content: center !important;
+  }
 
   /* Agendamentos ── botões do card ficam abaixo das infos */
-  ._appt-card-row { flex-wrap: wrap !important; }
-  ._appt-card-info { min-width: 0; flex: 1 1 0; }
+  ._appt-card-row {
+    flex-wrap: wrap !important;
+  }
+
+  ._appt-card-info {
+    min-width: 0;
+    flex: 1 1 0;
+  }
+
   ._appt-card-actions {
     margin-left: 0 !important;
     margin-top: 0.75rem !important;
@@ -526,7 +712,11 @@ body._page-leaving .content-body {
     width: 100% !important;
     gap: 6px !important;
   }
-  ._appt-card-actions .btn { flex: 1 1 auto; min-width: 120px; }
+
+  ._appt-card-actions .btn {
+    flex: 1 1 auto;
+    min-width: 120px;
+  }
 
   /* ── Assinaturas: header empilha verticalmente ── */
   ._assn-header {
@@ -536,27 +726,49 @@ body._page-leaving .content-body {
   }
 
   /* ── Encaminhamentos: filtro select full-width ── */
-  ._encam-filter { width: 100% !important; max-width: 100% !important; }
+  ._encam-filter {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
 
   /* ── Histórico: remove padding lateral extra do wrapper de resultados ── */
-  ._hist-results { padding-left: 0 !important; padding-right: 0 !important; }
+  ._hist-results {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
 
   /* Remove padding interno em algumas páginas */
-  ._page-padded { padding: 0 !important; }
+  ._page-padded {
+    padding: 0 !important;
+  }
 
   /* Formulários com colunas sem breakpoint: empilhar em mobile */
-  .col-5, .col-7 { flex: 0 0 100% !important; max-width: 100% !important; }
-  .col-8, .col-4 { flex: 0 0 100% !important; max-width: 100% !important; }
+  .col-5,
+  .col-7 {
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+  }
+
+  .col-8,
+  .col-4 {
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+  }
 
   /* Alerts: texto um pouco menor */
-  .alert { font-size: 13px; }
+  .alert {
+    font-size: 13px;
+  }
 
   /* Selects: garantir que não estourem a tela */
-  .custom-select { max-width: 100%; }
+  .custom-select {
+    max-width: 100%;
+  }
 }
 
 /* ── < 576px: mobile pequeno ── */
 @media (max-width: 575.98px) {
+
   /* Conteúdo: padding mais apertado */
   [dir=ltr] .vertical-layout .app-content .content-wrapper {
     padding-left: 0.75rem !important;
@@ -564,39 +776,85 @@ body._page-leaving .content-body {
   }
 
   /* Cards ainda menores */
-  .card .card-body   { padding: 0.75rem !important; }
-  .card .card-header { padding: 0.6rem 0.75rem !important; }
-  .card .card-footer { padding: 0.6rem 0.75rem !important; }
+  .card .card-body {
+    padding: 0.75rem !important;
+  }
+
+  .card .card-header {
+    padding: 0.6rem 0.75rem !important;
+  }
+
+  .card .card-footer {
+    padding: 0.6rem 0.75rem !important;
+  }
 
   /* Título breadcrumb */
-  .content-header-title { font-size: 24px !important; }
+  .content-header-title {
+    font-size: 24px !important;
+  }
 
   /* Agendamentos ── botões em coluna no mobile pequeno */
-  ._appt-card-row { flex-direction: column !important; }
+  ._appt-card-row {
+    flex-direction: column !important;
+  }
+
   ._appt-card-actions {
     flex-direction: column !important;
     gap: 6px !important;
   }
-  ._appt-card-actions .btn { width: 100% !important; min-width: unset !important; }
+
+  ._appt-card-actions .btn {
+    width: 100% !important;
+    min-width: unset !important;
+  }
 
   /* Navbar: avatar menor */
-  ._user-avatar { width: 38px !important; height: 38px !important; font-size: 13px !important; }
+  ._user-avatar {
+    width: 38px !important;
+    height: 38px !important;
+    font-size: 13px !important;
+  }
 
   /* Assinaturas: título compacto */
-  ._assn-title { font-size: 0.9rem !important; line-height: 1.3 !important; }
+  ._assn-title {
+    font-size: 0.9rem !important;
+    line-height: 1.3 !important;
+  }
 
   /* Calendário: padding das células reduzido */
-  ._cal-cell { padding: 5px 2px !important; font-size: 11px !important; }
+  ._cal-cell {
+    padding: 5px 2px !important;
+    font-size: 11px !important;
+  }
 
   /* Botão de início de consulta: full-width em mobile */
-  ._start-btn { min-width: unset !important; width: 100% !important; max-width: 340px !important; }
+  ._start-btn {
+    display: flex !important;
+    justify-content: center !important;
+    min-width: unset !important;
+    width: 100% !important;
+    max-width: 340px !important;
+    padding: 16px 20px !important;
+    font-size: 17px !important;
+  }
+
+  .plantao-pulse-dot-container {
+    padding-right: 20px;
+  }
 
   /* Confirmação de agendamento: padding menor */
-  ._confirm-card { padding: 1.5rem !important; }
+  ._confirm-card {
+    padding: 1.5rem !important;
+  }
 
   /* Page headings */
-  .content-body h4 { font-size: 1.05rem !important; }
-  .content-body h5 { font-size: 1rem !important; }
+  .content-body h4 {
+    font-size: 1.05rem !important;
+  }
+
+  .content-body h5 {
+    font-size: 1rem !important;
+  }
 }
 
 /* ── Mobile bottom nav ── */
@@ -609,10 +867,11 @@ body._page-leaving .content-body {
   height: 73.5px;
   background: #fff;
   border-radius: 16px 16px 0 0;
-  box-shadow: 0 -2px 16px rgba(0,0,0,0.10);
+  box-shadow: 0 -2px 16px rgba(0, 0, 0, 0.10);
   z-index: 1025;
   border-top: 1px solid #e8eaf0;
 }
+
 ._mob-nav__item {
   flex: 1;
   display: flex;
@@ -622,42 +881,67 @@ body._page-leaving .content-body {
   gap: 4px;
   color: #9aa0b4;
   text-decoration: none;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   transition: color 150ms ease;
 }
+
 ._mob-nav__item__label {
   width: 100%;
   text-align: center;
 }
+
 ._mob-nav__item svg {
-  width: 26px;
-  height: 26px;
+  width: 25px;
+  height: 25px;
 }
+
 ._mob-nav__item--active {
   color: #0052ff;
 }
+
 ._mob-nav__item--active svg {
-  filter: drop-shadow(0 0 4px rgba(0,82,255,0.4));
+  filter: drop-shadow(0 0 4px rgba(0, 82, 255, 0.4));
 }
+
 @media (max-width: 1199.98px) {
   ._mob-nav {
     display: flex;
     padding: 0 1rem;
   }
+
   .app-content,
   .content-wrapper,
-  .content-body { padding-bottom: calc(64px + 0.5rem) !important; }
+  .content-body {
+    padding-bottom: calc(64px + 0.5rem) !important;
+  }
 }
 
 /* Quebra de linha visível apenas no mobile */
-._br-mobile { display: none; }
-._hidden-mobile {display: block; }
-._hidden-desktop {display: none; }
+._br-mobile {
+  display: none;
+}
+
+._hidden-mobile {
+  display: block;
+}
+
+._hidden-desktop {
+  display: none;
+}
+
 @media (max-width: 767.98px) {
-  ._br-mobile { display: block; }
-  ._hidden-mobile {display: none; }
-  ._hidden-desktop {display: block; }
+  ._br-mobile {
+    display: block;
+  }
+
+  ._hidden-mobile {
+    display: none;
+  }
+
+  ._hidden-desktop {
+    display: block;
+  }
 }
 
 /* ── Plantão 24h: altura responsiva sem scroll no mobile ── */
@@ -665,6 +949,7 @@ body._page-leaving .content-body {
   ._plantao-page {
     height: calc(100svh - 12rem - 74px) !important;
   }
+
   .app-content:has(._plantao-page),
   .content-wrapper:has(._plantao-page),
   .content-body:has(._plantao-page) {
@@ -675,9 +960,20 @@ body._page-leaving .content-body {
 
 /* ── Animação fade_down2 ── */
 @keyframes fade_down2 {
-  0%   { opacity: 0; transform: translate(0, 0px); }
-  50%  { opacity: 1; transform: translateX(0); }
-  100% { opacity: 0; transform: translate(0, 15px); }
+  0% {
+    opacity: 0;
+    transform: translate(0, 0px);
+  }
+
+  50% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(0, 15px);
+  }
 }
 
 /* ── Plantão 24h: hint mobile acima do botão ── */
@@ -689,6 +985,7 @@ body._page-leaving .content-body {
   margin-bottom: 1.5rem;
   text-align: center;
 }
+
 ._plantao-mobile-hint p {
   margin: 0;
   font-size: 1rem;
@@ -696,11 +993,15 @@ body._page-leaving .content-body {
   color: #5e5873;
   line-height: 1.5;
 }
+
 ._plantao-mobile-hint svg {
   color: #003DFF;
 }
+
 @media (max-width: 1199.98px) {
-  ._plantao-mobile-hint { display: flex; }
+  ._plantao-mobile-hint {
+    display: flex;
+  }
 }
 
 /* ── Canais de contato: linha de canal ── */
@@ -711,21 +1012,25 @@ body._page-leaving .content-body {
   gap: 12px;
   padding: 12px;
 }
+
 ._contact-info {
   display: flex;
   align-items: center;
   gap: 12px;
   min-width: 0;
 }
+
 ._contact-btn {
   flex-shrink: 0;
   white-space: nowrap;
 }
+
 @media (max-width: 480px) {
   ._contact-row {
     flex-direction: column;
     align-items: flex-start;
   }
+
   ._contact-btn {
     width: 100%;
     text-align: center;
@@ -736,6 +1041,7 @@ body._page-leaving .content-body {
 ._hist-results .row {
   row-gap: 1.5rem;
 }
-._hist-results .row > [class*="col-"] {
+
+._hist-results .row>[class*="col-"] {
   margin-bottom: 0 !important;
 }

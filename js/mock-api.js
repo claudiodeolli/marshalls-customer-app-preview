@@ -1047,7 +1047,7 @@
       '.main-menu .navigation li.nav-item:not(.active).hover > a {',
       '  background: rgba(0, 144, 255, 0.08) !important;',
       '  color: #0090ff !important;',
-      '  border-radius: 4px;',
+      '  border-radius: 8px;',
       '}',
       '.main-menu .navigation li.nav-item ul li:not(.active) > a:hover,',
       '.main-menu .navigation li.nav-item ul li:not(.active).hover > a {',

@@ -26727,7 +26727,7 @@ footer.footer span i,footer.footer span svg {
 
 [dir] .main-menu.menu-light .navigation>li.active>a {
     box-shadow: 0 0 10px 1px rgba(0,82,255,.6);
-    border-radius: 4px
+    border-radius: 8px
 }
 
 [dir=ltr] .main-menu.menu-light .navigation>li.active>a {
