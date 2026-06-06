@@ -618,8 +618,12 @@ body._page-leaving .content-body {
 
 /* Quebra de linha visível apenas no mobile */
 ._br-mobile { display: none; }
-@media (max-width: 1199.98px) {
+._hidden-mobile {display: block; }
+._hidden-desktop {display: none; }
+@media (max-width: 767.98px) {
   ._br-mobile { display: block; }
+  ._hidden-mobile {display: none; }
+  ._hidden-desktop {display: block; }
 }
 
 /* ── Plantão 24h: altura responsiva sem scroll no mobile ── */

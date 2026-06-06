@@ -3,7 +3,7 @@
 export const routeConfig = {
   '/plantao': {
     pageTitle: 'Plantão 24h',
-    breadcrumb: [{ text: 'Atendimento médico', active: true }],
+    breadcrumb: [{ text: 'Pronto atendimento médico', active: true }],
   },
   '/encaminhamentos': {
     pageTitle: 'Encaminhamentos',
