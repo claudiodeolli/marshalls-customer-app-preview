@@ -1674,7 +1674,7 @@
                 pageTitle: "Plantão 24h",
                 pageIcon: "PlantonIcon",
                 breadcrumb: [{
-                    text: "Atendimento médico",
+                    text: "Pronto atendimento médico",
                     active: !0
                 }]
             },
