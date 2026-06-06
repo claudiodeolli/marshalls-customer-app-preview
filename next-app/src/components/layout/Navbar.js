@@ -76,7 +76,7 @@ export default function Navbar({ onHamburgerClick }) {
       role="navigation"
       data-nav="brand-center"
     >
-      <div className="navbar-container d-flex content" style={{ height: '65.38px', alignItems: 'center' }}>
+      <div className="navbar-container d-flex content" style={{ height: '70.38px', alignItems: 'center' }}>
 
         {/* ── Esquerda: hamburger ── */}
         <div className="bookmark-wrapper d-flex align-items-center">
@@ -112,15 +112,7 @@ export default function Navbar({ onHamburgerClick }) {
           )}
           <li className="nav-item dropdown dropdown-user" ref={dropdownRef} style={{ position: 'relative' }}>
             <button
-              style={{
-                background: 'none',
-                border: 'none',
-                padding: '0.4rem 0.5rem',
-                position: 'relative',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-              }}
+              className='nav-item-user-btn'
               onClick={e => { e.stopPropagation(); setDropdownOpen(o => !o); }}
             >
               {/* Avatar circular com inicial */}

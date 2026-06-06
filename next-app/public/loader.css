@@ -164,8 +164,9 @@ body {
 
 /* ── Pulsing green dot (Plantão 24h) ── */
 @keyframes plantao-pulse {
-  0%, 100% { transform: scale(0.5); opacity: 0; }
-  50%       { transform: scale(1);   opacity: 1; }
+  0%   { box-shadow: 0 0 0 0    rgba(34,197,94,0.7); }
+  80%  { box-shadow: 0 0 0 8px  rgba(34,197,94,0);   }
+  100% { box-shadow: 0 0 0 0    rgba(34,197,94,0);   }
 }
 
 .plantao-pulse-dot {
@@ -174,7 +175,7 @@ body {
   height: 8px;
   border-radius: 50%;
   background-color: #28c76f;
-  animation: plantao-pulse 1.5s ease-in-out infinite;
+  animation: plantao-pulse 1.8s ease-out infinite;
   vertical-align: middle;
   margin-right: 12px;
   flex-shrink: 0;
@@ -185,7 +186,7 @@ body {
   fill: #28c76f;
   transform-box: fill-box;
   transform-origin: center;
-  animation: plantao-pulse 1.5s ease-in-out infinite;
+  animation: plantao-pulse 1.8s ease-out infinite;
 }
 
 /* When Plantão 24h is the active page, freeze the sidebar dot */
