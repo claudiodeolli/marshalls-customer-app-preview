@@ -542,7 +542,7 @@ body._page-leaving .content-body {
   .card .card-footer { padding: 0.6rem 0.75rem !important; }
 
   /* Título breadcrumb */
-  .content-header-title { font-size: 0.95rem !important; }
+  .content-header-title { font-size: 18px !important; }
 
   /* Agendamentos ── botões em coluna no mobile pequeno */
   ._appt-card-row { flex-direction: column !important; }

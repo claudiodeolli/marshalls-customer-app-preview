@@ -76,7 +76,7 @@ export default function Navbar({ onHamburgerClick }) {
       role="navigation"
       data-nav="brand-center"
     >
-      <div className="navbar-container d-flex content" style={{ height: '60.38px', alignItems: 'center' }}>
+      <div className="navbar-container d-flex content" style={{ height: '65.38px', alignItems: 'center' }}>
 
         {/* ── Esquerda: hamburger ── */}
         <div className="bookmark-wrapper d-flex align-items-center">
