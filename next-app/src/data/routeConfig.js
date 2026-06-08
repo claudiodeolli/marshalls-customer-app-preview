@@ -35,6 +35,13 @@ export const routeConfig = {
     pageTitle: 'Meus dados',
     breadcrumb: [{ text: 'Informações pessoais', active: true }],
   },
+  '/encerrar-conta': {
+    pageTitle: 'Encerrar Conta',
+    breadcrumb: [
+      { text: 'Meus dados', href: '/meus-dados' },
+      { text: 'Encerrar Conta', active: true },
+    ],
+  },
   '/meu-clube': {
     pageTitle: 'Meu Clube',
     breadcrumb: [{ text: 'Benefícios exclusivos', active: true }],

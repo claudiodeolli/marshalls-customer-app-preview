@@ -210,7 +210,7 @@ function SkeletonCard() {
 
 export default function EncaminhamentosPage() {
   const router = useRouter();
-  const [filter, setFilter]         = useState('');
+  const [filter, setFilter]         = useState('PENDING');
   const [referrals, setReferrals]   = useState([]);
   const [pageLoading, setPageLoading] = useState(true);
 
@@ -226,7 +226,7 @@ export default function EncaminhamentosPage() {
 
   return (
     <div>
-      <div style={{ marginBottom: '1.5rem' }}>
+      <div style={{ marginTop: '1rem', marginBottom: '1.5rem' }}>
         <p className="text-muted mb-75">Visualize e acompanhe seus encaminhamentos médicos</p>
         <FilterSelect value={filter} onChange={setFilter} />
       </div>

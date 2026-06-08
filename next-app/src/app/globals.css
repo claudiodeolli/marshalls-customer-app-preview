@@ -946,6 +946,9 @@ body._page-leaving .content-body {
 
 /* ── Plantão 24h: altura responsiva sem scroll no mobile ── */
 @media (max-width: 1199.98px) {
+  ._plantao-name {
+    font-size: calc(1em + 2px);
+  }
   ._plantao-page {
     height: calc(100svh - 12rem - 74px) !important;
   }

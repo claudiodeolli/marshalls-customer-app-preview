@@ -226,7 +226,7 @@ function ReferralModal({ specialty, onClose, onSchedule, onBuyAvulsa }) {
               Solicite um encaminhamento médico para agendar esta especialidade, ou:
             </p>
             <button className="btn btn-primary btn-sm" onClick={() => onBuyAvulsa(specialty)}>
-              Comprar consulta avulsa
+              Adquirir Consulta Avulsa
             </button>
           </div>
         )}
@@ -237,6 +237,11 @@ function ReferralModal({ specialty, onClose, onSchedule, onBuyAvulsa }) {
 
 /* ── Modal de seleção de especialidade ── */
 function SpecialtyModal({ onClose, onSelect }) {
+  const [search, setSearch] = useState('');
+  const filtered = SPECIALTIES.filter(sp =>
+    sp.name.toLowerCase().includes(search.toLowerCase())
+  );
+
   return (
     <div
       style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.5)', zIndex:9999, display:'flex', alignItems:'center', justifyContent:'center', padding:'16px' }}
@@ -247,12 +252,24 @@ function SpecialtyModal({ onClose, onSelect }) {
         onClick={e => e.stopPropagation()}
       >
         <div style={{ padding:'20px 24px 12px', borderBottom:'1px solid #f0f0f0', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
-          <h5 style={{ fontWeight:700, margin:0 }}>Nova Consulta</h5>
+          <h5 style={{ fontWeight:700, margin:0 }}>Nossas Especialidades</h5>
           <button onClick={onClose} style={{ background:'none', border:'none', cursor:'pointer', fontSize:'18px', color:'#aaa', lineHeight:1 }}>✕</button>
         </div>
-        <p style={{ fontSize:'13px', color:'#6e6b7b', margin:'12px 24px 4px' }}>Selecione a especialidade desejada:</p>
+        <div style={{ padding:'12px 16px 8px' }}>
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Digite a especialidade..."
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            style={{ borderRadius:'8px', fontSize:'13px' }}
+            autoFocus
+          />
+        </div>
         <div style={{ overflowY:'auto', padding:'0 16px 16px' }}>
-          {SPECIALTIES.map(sp => (
+          {filtered.length === 0 ? (
+            <p style={{ textAlign:'center', color:'#aaa', fontSize:'13px', padding:'24px 0' }}>Nenhuma especialidade encontrada.</p>
+          ) : filtered.map(sp => (
             <button
               key={sp.name}
               onClick={() => onSelect(sp)}
@@ -295,6 +312,7 @@ export default function AgendamentosPage() {
   const [statusFilter, setStatusFilter]       = useState('SCHEDULED');
   const [appliedFilter, setAppliedFilter]     = useState('SCHEDULED');
   const [showSpecialty, setShowSpecialty]     = useState(false);
+  const [loadingSpecialty, setLoadingSpecialty] = useState(false);
   const [referralTarget, setReferralTarget]   = useState(null);
   const [timezone, setTimezone]           = useState('');
   const [appointments, setAppointments]   = useState([]);
@@ -342,16 +360,13 @@ export default function AgendamentosPage() {
       {/* Banner informativo */}
       <div className="alert mb-2" style={{ background:'#eef3ff', border:'1px solid #c7d8ff', borderRadius:'10px', fontSize:'13px', color:'#3b5bdb', padding:'12px 16px' }}>
         <strong>Como funciona o agendamento:</strong>
-        <ul style={{ margin:'6px 0 0', paddingLeft:'18px' }}>
-          <li>Se você foi encaminhado por um médico do <strong>Pronto Atendimento</strong>, pode agendar aqui <strong>sem custos adicionais</strong>.</li>
-          <li>Caso não possua encaminhamento, é possível adquirir uma <strong>consulta avulsa</strong> com a especialidade desejada.</li>
-        </ul>
+        <p style={{ margin:'8px 0 0' }}>- Se você foi encaminhado(a) a um especialista por um médico do <strong>Pronto Atendimento</strong>, pode agendar aqui <strong>sem custos adicionais</strong>.</p>
+        <p style={{ margin:'10px 0 0' }}>- Caso não possua encaminhamento, você também pode adquirir uma <strong>consulta avulsa</strong> com a especialidade desejada.</p>
       </div>
 
       {/* Header */}
       <div className="d-flex justify-content-between align-items-start flex-wrap mb-2 _agend-header" style={{ gap: '16px' }}>
         <div>
-          <h4 style={{ fontWeight: 600, marginBottom: '4px' }}>Agendamentos</h4>
           <p className="text-muted mb-0" style={{ fontSize: '14px' }}>
             Gerencie seus agendamentos médicos e agende novas consultas
           </p>
@@ -397,10 +412,17 @@ export default function AgendamentosPage() {
         </div>
         <button
           className="btn btn-primary _agend-new-btn"
-          onClick={() => setShowSpecialty(true)}
+          disabled={loadingSpecialty}
+          onClick={() => {
+            setLoadingSpecialty(true);
+            setTimeout(() => { setLoadingSpecialty(false); setShowSpecialty(true); }, 800);
+          }}
           style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 700, fontSize: '13px', whiteSpace: 'nowrap' }}
         >
-          <IconAdd /> Novo Agendamento
+          {loadingSpecialty
+            ? <><span className="spinner-border spinner-border-sm" style={{ width:'14px', height:'14px', borderWidth:'2px' }} /> Carregando especialidades...</>
+            : <><IconAdd /> Novo Agendamento</>
+          }
         </button>
       </div>
 

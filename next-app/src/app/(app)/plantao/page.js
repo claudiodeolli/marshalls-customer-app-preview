@@ -330,7 +330,7 @@ export default function PlantaoPage() {
   return (
     <div className="_plantao-page" style={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - 16rem)' }}>
       <h4 style={{ fontWeight: '600', fontSize: '1.25rem', color: '#5e5873', marginBottom: '1.5rem', lineHeight: '1.5' }}>
-        <span className="_hidden-desktop">{USER.firstName}, inicie seu atendimento médico <br /> online de forma segura</span>
+        <span className="_hidden-desktop"><span className="_plantao-name">{USER.firstName}</span>, inicie seu atendimento médico <br /> online de forma segura</span>
         <span className="_hidden-mobile">Inicie seu atendimento médico online de forma segura</span>
       </h4>
 

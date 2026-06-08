@@ -384,11 +384,55 @@ function EmptyState() {
   );
 }
 
+/* ── Filter logic ─────────────────────────────────────── */
+function filterRecords(records, { dateInitial, dateFinal, typeFilter, statusFilter }) {
+  const di = inputToDate(dateInitial);
+  const df = inputToDate(dateFinal);
+  return records.filter(r => {
+    const rd = parseRecordDate(r.appointmentBegin);
+    if (rd && di && rd < di) return false;
+    if (rd && df) {
+      const dfEnd = new Date(df); dfEnd.setHours(23, 59, 59);
+      if (rd > dfEnd) return false;
+    }
+    if (typeFilter !== 'all' && r.type !== typeFilter) return false;
+    if (statusFilter) {
+      const match = r.status === statusFilter ||
+        (statusFilter === 'CANCELLED' && r.status === 'CANCELED') ||
+        (statusFilter === 'CANCELED'  && r.status === 'CANCELLED');
+      if (!match) return false;
+    }
+    return true;
+  });
+}
+
+function getLastRecord(records) {
+  if (!records.length) return null;
+  return records.reduce((latest, r) => {
+    const d  = parseRecordDate(r.appointmentBegin);
+    const ld = parseRecordDate(latest.appointmentBegin);
+    return d && ld && d > ld ? r : latest;
+  });
+}
+
+function saveFilter(params) {
+  try { localStorage.setItem('historico_filter', JSON.stringify(params)); } catch {}
+}
+
+function loadFilter(defaults) {
+  try {
+    const saved = localStorage.getItem('historico_filter');
+    if (saved) return { ...defaults, ...JSON.parse(saved) };
+  } catch {}
+  return defaults;
+}
+
 /* ── Main page ────────────────────────────────────────── */
 export default function HistoricoPage() {
   const today = todayStr();
   const sevenAgo = daysAgoStr(7);
 
+  const [filterOpen, setFilterOpen]   = useState(false);
   const [dateInitial, setDateInitial] = useState(sevenAgo);
   const [dateFinal, setDateFinal]     = useState(today);
   const [typeFilter, setTypeFilter]   = useState('all');
@@ -400,37 +444,27 @@ export default function HistoricoPage() {
   const [evalTarget, setEvalTarget]     = useState(null);
 
   useEffect(() => {
+    const saved = loadFilter({ dateInitial: sevenAgo, dateFinal: today, typeFilter: 'all', statusFilter: '' });
+    setDateInitial(saved.dateInitial);
+    setDateFinal(saved.dateFinal);
+    setTypeFilter(saved.typeFilter);
+    setStatus(saved.statusFilter);
+
     const t = setTimeout(() => {
       const data = getHistory();
       setAllRecords(data);
-      setRecords(data);
+      setRecords(filterRecords(data, saved));
       setPageLoading(false);
     }, 1500);
     return () => clearTimeout(t);
   }, []);
 
   function applyFilter() {
+    const params = { dateInitial, dateFinal, typeFilter, statusFilter };
+    saveFilter(params);
     setLoading(true);
     setTimeout(() => {
-      const di = inputToDate(dateInitial);
-      const df = inputToDate(dateFinal);
-      const filtered = allRecords.filter(r => {
-        const rd = parseRecordDate(r.appointmentBegin);
-        if (rd && di && rd < di) return false;
-        if (rd && df) {
-          const dfEnd = new Date(df); dfEnd.setHours(23, 59, 59);
-          if (rd > dfEnd) return false;
-        }
-        if (typeFilter !== 'all' && r.type !== typeFilter) return false;
-        if (statusFilter) {
-          const match = r.status === statusFilter ||
-            (statusFilter === 'CANCELLED' && r.status === 'CANCELED') ||
-            (statusFilter === 'CANCELED'  && r.status === 'CANCELLED');
-          if (!match) return false;
-        }
-        return true;
-      });
-      setRecords(filtered);
+      setRecords(filterRecords(allRecords, params));
       setLoading(false);
     }, 400);
   }
@@ -454,21 +488,28 @@ export default function HistoricoPage() {
         }}
       >
         <div className="card-body">
-          {/* Filter panel header */}
-          <h6
+          {/* Toggle header */}
+          <div
             style={{
-              fontWeight: 600,
-              marginBottom: '1.25rem',
-              color: 'var(--primary, #0052ff)',
               display: 'flex',
+              justifyContent: 'space-between',
               alignItems: 'center',
-              gap: '6px',
+              cursor: 'pointer',
+              userSelect: 'none',
+              marginBottom: filterOpen ? '1.25rem' : 0,
             }}
+            onClick={() => setFilterOpen(o => !o)}
           >
-            <IconEvent /> Filtros de Pesquisa
-          </h6>
+            <h6 style={{ margin: 0, fontWeight: 600, color: 'var(--primary, #0052ff)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <IconEvent /> {filterOpen ? 'Filtros de Pesquisa' : 'Procurar consultas'}
+            </h6>
+            {filterOpen
+              ? <IconChevronDown open={true} />
+              : <span style={{ fontSize: '13px', color: '#aaa' }}>Toque para abrir</span>
+            }
+          </div>
 
-          <div className="row" style={{ rowGap: '12px', alignItems: 'flex-end' }}>
+          {filterOpen && <div className="row" style={{ rowGap: '12px', alignItems: 'flex-end' }}>
             {/* Date initial */}
             <div className="col-12 col-sm-6 col-md-3">
               <label className="form-label" style={{ fontSize: '13px', color: 'var(--primary,#0052ff)', marginBottom: '4px' }}>
@@ -556,7 +597,7 @@ export default function HistoricoPage() {
                 )}
               </button>
             </div>
-          </div>
+          </div>}
         </div>
       </div>
 
@@ -570,11 +611,14 @@ export default function HistoricoPage() {
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '200px' }}>
             <div className="spinner-border text-primary" />
           </div>
-        ) : records.length === 0 ? (
-          <EmptyState />
-        ) : (
+        ) : (() => {
+          const displayRecords = filterOpen
+            ? records
+            : (allRecords.length > 0 ? [getLastRecord(allRecords)] : []);
+          if (displayRecords.length === 0) return <EmptyState />;
+          return (
           <div className="row" style={{}}>
-            {records.map(r => (
+            {displayRecords.map(r => (
               <div key={r.uuid} className="col-12 col-sm-6 col-md-4 mb-2">
                 <div className="card mb-0 h-100" style={{ backgroundColor: '#e9f2fa' }}>
                   <div className="card-body" style={{ padding: '14px' }}>
@@ -661,7 +705,8 @@ export default function HistoricoPage() {
               </div>
             ))}
           </div>
-        )}
+          );
+        })()}
       </div>
 
       {evalTarget && (
