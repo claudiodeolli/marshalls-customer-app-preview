@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { getReferrals } from '@/data/storage';
+import api from '@/lib/api';
+import { useAuth } from '@/lib/AuthContext';
 
 const STATUS_CONFIG = {
   PENDING:   { label: 'Pendente', badge: 'badge-light-warning',   gradient: 'linear-gradient(90deg, #ff9800, #ffb74d)' },
@@ -22,19 +23,31 @@ const FILTER_OPTIONS = [
   { label: 'Não Realizada', value: 'UNFINISHED', color: '#ea5455' },
 ];
 
+function formatDate(str) {
+  if (!str) return 'Não informado';
+  const parts = str.split(' ');
+  if (parts.length === 2) {
+    const [d, m, y] = parts[0].split('/').map(Number);
+    const [h, min] = parts[1].split(':').map(Number);
+    const date = new Date(y, m - 1, d, h, min);
+    if (!isNaN(date.getTime())) {
+      return date.toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    }
+  }
+  const date = new Date(str);
+  if (!isNaN(date.getTime())) {
+    return date.toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  }
+  return str;
+}
+
 function FilterChip({ label, color }) {
   if (!color) return <span style={{ fontSize: '14px', color: '#6e6b7b' }}>{label}</span>;
   return (
     <span style={{
-      display: 'inline-block',
-      padding: '3px 10px',
-      border: `1px solid ${color}`,
-      borderRadius: '20px',
-      color,
-      fontSize: '12px',
-      fontWeight: 600,
-      lineHeight: 1.4,
-      background: 'transparent',
+      display: 'inline-block', padding: '3px 10px',
+      border: `1px solid ${color}`, borderRadius: '20px',
+      color, fontSize: '12px', fontWeight: 600, lineHeight: 1.4, background: 'transparent',
     }}>
       {label}
     </span>
@@ -60,8 +73,7 @@ function FilterSelect({ value, onChange }) {
         type="button"
         onClick={() => setOpen(o => !o)}
         style={{
-          width: '100%', height: '38px',
-          border: '1px solid #d8d6de', borderRadius: '8px',
+          width: '100%', height: '38px', border: '1px solid #d8d6de', borderRadius: '8px',
           background: '#fff', cursor: 'pointer',
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           padding: '0 12px', fontSize: '14px', color: '#6e6b7b',
@@ -82,10 +94,7 @@ function FilterSelect({ value, onChange }) {
             <div
               key={opt.value}
               onClick={() => { onChange(opt.value); setOpen(false); }}
-              style={{
-                padding: '8px 14px', cursor: 'pointer',
-                background: value === opt.value ? '#f3f2f7' : '#fff',
-              }}
+              style={{ padding: '8px 14px', cursor: 'pointer', background: value === opt.value ? '#f3f2f7' : '#fff' }}
               onMouseEnter={e => { e.currentTarget.style.background = '#f3f2f7'; }}
               onMouseLeave={e => { e.currentTarget.style.background = value === opt.value ? '#f3f2f7' : '#fff'; }}
             >
@@ -96,24 +105,6 @@ function FilterSelect({ value, onChange }) {
       )}
     </div>
   );
-}
-
-function formatDate(str) {
-  if (!str) return 'Não informado';
-  const parts = str.split(' ');
-  if (parts.length === 2) {
-    const [d, m, y] = parts[0].split('/').map(Number);
-    const [h, min] = parts[1].split(':').map(Number);
-    const date = new Date(y, m - 1, d, h, min);
-    if (!isNaN(date.getTime())) {
-      return date.toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' });
-    }
-  }
-  const date = new Date(str);
-  if (!isNaN(date.getTime())) {
-    return date.toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' });
-  }
-  return str;
 }
 
 function IconPerson() {
@@ -210,17 +201,30 @@ function SkeletonCard() {
 
 export default function EncaminhamentosPage() {
   const router = useRouter();
+  const { user } = useAuth();
+
   const [filter, setFilter]         = useState('PENDING');
   const [referrals, setReferrals]   = useState([]);
   const [pageLoading, setPageLoading] = useState(true);
+  const [fetchError, setFetchError] = useState(null);
 
+  /* Busca encaminhamentos — idêntico ao chunk referrals.js */
   useEffect(() => {
-    const t = setTimeout(() => {
-      setReferrals(getReferrals());
-      setPageLoading(false);
-    }, 1500);
-    return () => clearTimeout(t);
-  }, []);
+    if (!user) return;
+    (async () => {
+      setPageLoading(true);
+      setFetchError(null);
+      try {
+        const { data } = await api.get('/api/referrals');
+        setReferrals(Array.isArray(data) ? data : []);
+      } catch (err) {
+        console.error(err);
+        setFetchError('Ocorreu um erro ao acessar os seus encaminhamentos.');
+      } finally {
+        setPageLoading(false);
+      }
+    })();
+  }, [user]);
 
   const visible = filter ? referrals.filter(r => r.status === filter) : referrals;
 
@@ -230,6 +234,10 @@ export default function EncaminhamentosPage() {
         <p className="text-muted mb-75">Visualize e acompanhe seus encaminhamentos médicos</p>
         <FilterSelect value={filter} onChange={setFilter} />
       </div>
+
+      {fetchError && (
+        <div className="alert alert-danger" style={{ borderRadius: '8px' }}>{fetchError}</div>
+      )}
 
       {pageLoading ? (
         <div className="row">
@@ -270,7 +278,6 @@ export default function EncaminhamentosPage() {
                     e.currentTarget.style.boxShadow = '0 8px 32px rgba(0,0,0,0.08)';
                   }}
                 >
-                  {/* Status color strip */}
                   <div style={{ height: '4px', background: cfg.gradient, flexShrink: 0 }} />
 
                   <div className="card-body" style={{ flexGrow: 1 }}>
@@ -302,13 +309,11 @@ export default function EncaminhamentosPage() {
                       <small>Atualizado em: {formatDate(ref.updatedAt)}</small>
                     </div>
 
-                    {/* Status badge */}
                     <span className={`badge ${cfg.badge}`} style={{ fontWeight: 700, fontSize: '11px' }}>
                       {cfg.label}
                     </span>
                   </div>
 
-                  {/* Action buttons */}
                   {(canOpen || canSchedule) && (
                     <div
                       className="d-flex justify-content-end"

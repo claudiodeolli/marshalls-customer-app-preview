@@ -2,6 +2,7 @@ import './globals.css';
 import 'perfect-scrollbar/css/perfect-scrollbar.css';
 import ThemeInjector from '@/components/layout/ThemeInjector';
 import LoadingScreen from '@/components/layout/LoadingScreen';
+import { AuthProvider } from '@/lib/AuthContext';
 
 export const metadata = {
   title: 'MARSHALLS',
@@ -26,9 +27,11 @@ export default function RootLayout({ children }) {
         <link rel="stylesheet" href={`${base}/css/chunk-d0a9a6f8.4dbea570.css`} />
       </head>
       <body>
-        <LoadingScreen />
-        <ThemeInjector />
-        {children}
+        <AuthProvider>
+          <LoadingScreen />
+          <ThemeInjector />
+          {children}
+        </AuthProvider>
       </body>
     </html>
   );

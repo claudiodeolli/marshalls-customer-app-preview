@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { getAppointments, updateAppointment, getReferrals } from '@/data/storage';
+import api from '@/lib/api';
+import { useAuth } from '@/lib/AuthContext';
 
 const STATUS_BADGE = {
   SCHEDULED:  'badge-light-primary',
@@ -168,130 +169,6 @@ function CancelDialog({ open, appointment, loading, onClose, onConfirm }) {
   );
 }
 
-/* ── Especialidades disponíveis para consulta avulsa ── */
-const SPECIALTIES = [
-  { name: 'Cardiologia',               price: 150 },
-  { name: 'Dermatologia',              price: 130 },
-  { name: 'Ginecologia e Obstetrícia', price: 140 },
-  { name: 'Neurologia',                price: 160 },
-  { name: 'Nutrição',                  price: 100 },
-  { name: 'Ortopedia',                 price: 150 },
-  { name: 'Otorrinolaringologia',      price: 130 },
-  { name: 'Pediatria',                 price: 120 },
-  { name: 'Psiquiatria',               price: 180 },
-  { name: 'Urologia',                  price: 140 },
-];
-
-/* ── Modal de encaminhamento por especialidade ── */
-function ReferralModal({ specialty, onClose, onSchedule, onBuyAvulsa }) {
-  const referrals = getReferrals().filter(
-    r => r.status === 'PENDING' && r.specialty?.name === specialty.name
-  );
-
-  return (
-    <div
-      style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.5)', zIndex:10000, display:'flex', alignItems:'center', justifyContent:'center', padding:'16px' }}
-      onClick={onClose}
-    >
-      <div
-        style={{ background:'#fff', borderRadius:'16px', padding:'24px', width:'100%', maxWidth:'420px', boxShadow:'0 8px 32px rgba(0,0,0,0.15)' }}
-        onClick={e => e.stopPropagation()}
-      >
-        <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:'12px' }}>
-          <h5 style={{ fontWeight:700, margin:0 }}>Selecionar Encaminhamento</h5>
-          <button onClick={onClose} style={{ background:'none', border:'none', cursor:'pointer', fontSize:'18px', color:'#aaa', lineHeight:1 }}>✕</button>
-        </div>
-        <p style={{ fontSize:'13px', color:'#6e6b7b', marginBottom:'16px' }}>
-          Selecione um encaminhamento médico. A especialidade do encaminhamento será selecionada automaticamente:
-        </p>
-
-        {referrals.length > 0 ? (
-          <div style={{ display:'flex', flexDirection:'column', gap:'8px' }}>
-            {referrals.map(r => (
-              <button
-                key={r.uuid}
-                className="btn btn-outline-primary"
-                style={{ textAlign:'left', fontSize:'13px' }}
-                onClick={() => onSchedule(r)}
-              >
-                {r.beneficiary?.name} — {r.specialty?.name}
-                <br /><small className="text-muted">Criado em: {r.createdAt}</small>
-              </button>
-            ))}
-          </div>
-        ) : (
-          <div style={{ textAlign:'center', padding:'16px 0' }}>
-            <p style={{ fontWeight:600, color:'#5e5873', marginBottom:'6px' }}>Você não possui encaminhamentos disponíveis.</p>
-            <p style={{ fontSize:'13px', color:'#6e6b7b', marginBottom:'20px' }}>
-              Solicite um encaminhamento médico para agendar esta especialidade, ou:
-            </p>
-            <button className="btn btn-primary btn-sm" onClick={() => onBuyAvulsa(specialty)}>
-              Adquirir Consulta Avulsa
-            </button>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
-
-/* ── Modal de seleção de especialidade ── */
-function SpecialtyModal({ onClose, onSelect }) {
-  const [search, setSearch] = useState('');
-  const filtered = SPECIALTIES.filter(sp =>
-    sp.name.toLowerCase().includes(search.toLowerCase())
-  );
-
-  return (
-    <div
-      style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.5)', zIndex:9999, display:'flex', alignItems:'center', justifyContent:'center', padding:'16px' }}
-      onClick={onClose}
-    >
-      <div
-        style={{ background:'#fff', borderRadius:'16px', width:'100%', maxWidth:'440px', maxHeight:'80vh', display:'flex', flexDirection:'column', boxShadow:'0 8px 32px rgba(0,0,0,0.15)', overflow:'hidden' }}
-        onClick={e => e.stopPropagation()}
-      >
-        <div style={{ padding:'20px 24px 12px', borderBottom:'1px solid #f0f0f0', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
-          <h5 style={{ fontWeight:700, margin:0 }}>Nossas Especialidades</h5>
-          <button onClick={onClose} style={{ background:'none', border:'none', cursor:'pointer', fontSize:'18px', color:'#aaa', lineHeight:1 }}>✕</button>
-        </div>
-        <div style={{ padding:'12px 16px 8px' }}>
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Digite a especialidade..."
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-            style={{ borderRadius:'8px', fontSize:'13px' }}
-            autoFocus
-          />
-        </div>
-        <div style={{ overflowY:'auto', padding:'0 16px 16px' }}>
-          {filtered.length === 0 ? (
-            <p style={{ textAlign:'center', color:'#aaa', fontSize:'13px', padding:'24px 0' }}>Nenhuma especialidade encontrada.</p>
-          ) : filtered.map(sp => (
-            <button
-              key={sp.name}
-              onClick={() => onSelect(sp)}
-              style={{
-                display:'flex', justifyContent:'space-between', alignItems:'center',
-                width:'100%', padding:'12px 8px', background:'none', border:'none',
-                borderBottom:'1px solid #f5f5f5', cursor:'pointer', textAlign:'left',
-                fontSize:'14px', color:'#5e5873',
-              }}
-              onMouseEnter={e => { e.currentTarget.style.background = '#f8f9ff'; }}
-              onMouseLeave={e => { e.currentTarget.style.background = 'none'; }}
-            >
-              <span>{sp.name}</span>
-              <span style={{ fontSize:'13px', color:'#aaa' }}>R$ {sp.price},00</span>
-            </button>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
 function Toast({ message, type, visible }) {
   if (!visible) return null;
   const cls = type === 'success' ? 'alert-success' : 'alert-danger';
@@ -309,26 +186,45 @@ function Toast({ message, type, visible }) {
 
 export default function AgendamentosPage() {
   const router = useRouter();
-  const [statusFilter, setStatusFilter]       = useState('SCHEDULED');
-  const [appliedFilter, setAppliedFilter]     = useState('SCHEDULED');
-  const [showSpecialty, setShowSpecialty]     = useState(false);
-  const [loadingSpecialty, setLoadingSpecialty] = useState(false);
-  const [referralTarget, setReferralTarget]   = useState(null);
-  const [timezone, setTimezone]           = useState('');
+  const { user } = useAuth();
+
+  const [statusFilter, setStatusFilter]   = useState('SCHEDULED');
   const [appointments, setAppointments]   = useState([]);
   const [cancelTarget, setCancelTarget]   = useState(null);
   const [canceling, setCanceling]         = useState(false);
-  const [toast, setToast]                 = useState({ visible: false, message: '', type: 'success' });
+  const [loading, setLoading]             = useState(false);
   const [pageLoading, setPageLoading]     = useState(true);
+  const [timezone, setTimezone]           = useState('');
+  const [toast, setToast]                 = useState({ visible: false, message: '', type: 'success' });
 
   useEffect(() => {
     const tz = getBrowserTz();
     if (TIMEZONE_OPTIONS.find(o => o.value === tz)) setTimezone(tz);
-    const t = setTimeout(() => {
-      setAppointments(getAppointments());
+  }, []);
+
+  /* Busca agendamentos na API — idêntico ao chunk original */
+  async function fetchAppointments() {
+    try {
+      setLoading(true);
+      const beneficiaryUuid = typeof window !== 'undefined' ? localStorage.getItem('BENEFICIARY_UUID') : '';
+      const res = await api.get(`/api/schedule/appointments?status=${statusFilter}`, {
+        headers: { beneficiaryUuid },
+      });
+      /* A API retorna o array diretamente; se vier { success } ignora */
+      if (!('success' in (res.data ?? {}))) {
+        setAppointments(Array.isArray(res.data) ? res.data : []);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
       setPageLoading(false);
-    }, 1500);
-    return () => clearTimeout(t);
+    }
+  }
+
+  useEffect(() => {
+    fetchAppointments();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function showToast(message, type = 'success') {
@@ -336,24 +232,32 @@ export default function AgendamentosPage() {
     setTimeout(() => setToast(prev => ({ ...prev, visible: false })), 4000);
   }
 
-  function handleCancelConfirm() {
+  /* Cancela agendamento via DELETE — idêntico ao chunk original */
+  async function handleCancelConfirm() {
     if (!cancelTarget) return;
     setCanceling(true);
-    setTimeout(() => {
-      const updated = updateAppointment(cancelTarget.uuid, { status: 'CANCELED', cancel: false });
-      setAppointments(updated);
+    try {
+      const beneficiaryUuid = typeof window !== 'undefined' ? localStorage.getItem('BENEFICIARY_UUID') : '';
+      const res = await api.delete(`/api/schedule/appointments/${cancelTarget.uuid}`, {
+        headers: { beneficiaryUuid },
+      });
+      if (res.data === true) {
+        setCancelTarget(null);
+        fetchAppointments();
+        showToast('Agendamento deletado com sucesso.');
+      }
+    } catch (err) {
+      const msg = err?.response?.data?.message || err?.toString() || 'Erro ao cancelar.';
+      showToast(msg, 'error');
+    } finally {
       setCanceling(false);
-      setCancelTarget(null);
-      showToast('Agendamento deletado com sucesso.');
-    }, 800);
+    }
   }
 
   function handleEnterAppointment(apt) {
     if (typeof window !== 'undefined') localStorage.setItem('APPOINTMENT', JSON.stringify(apt));
     router.push('/schedule/appointment');
   }
-
-  const visible = appointments.filter(a => a.status === appliedFilter);
 
   return (
     <div>
@@ -404,25 +308,19 @@ export default function AgendamentosPage() {
           </select>
           <button
             className="btn btn-outline-secondary"
-            onClick={() => setAppliedFilter(statusFilter)}
+            onClick={fetchAppointments}
+            disabled={loading}
             style={{ height: '38px', whiteSpace: 'nowrap' }}
           >
-            Buscar
+            {loading ? <span className="spinner-border spinner-border-sm" style={{ width:'14px', height:'14px', borderWidth:'2px' }} /> : 'Buscar'}
           </button>
         </div>
         <button
           className="btn btn-primary _agend-new-btn"
-          disabled={loadingSpecialty}
-          onClick={() => {
-            setLoadingSpecialty(true);
-            setTimeout(() => { setLoadingSpecialty(false); setShowSpecialty(true); }, 800);
-          }}
+          onClick={() => router.push('/schedule/calendar')}
           style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 700, fontSize: '13px', whiteSpace: 'nowrap' }}
         >
-          {loadingSpecialty
-            ? <><span className="spinner-border spinner-border-sm" style={{ width:'14px', height:'14px', borderWidth:'2px' }} /> Carregando especialidades...</>
-            : <><IconAdd /> Novo Agendamento</>
-          }
+          <IconAdd /> Novo Agendamento
         </button>
       </div>
 
@@ -432,15 +330,15 @@ export default function AgendamentosPage() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             {[0, 1, 2].map(i => <SkeletonRow key={i} />)}
           </div>
-        ) : visible.length === 0 ? (
+        ) : appointments.length === 0 ? (
           <EmptyState />
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            {visible.map(apt => {
+            {appointments.map(apt => {
               const badge = STATUS_BADGE[apt.status] || 'badge-light-secondary';
               const tz = timezone || getBrowserTz();
-              const converted = !isSameAsBrazil(tz) ? convertDateTime(apt.detail.date, apt.detail.from, tz) : null;
-              const dateChanged = converted && converted.date !== apt.detail.date;
+              const converted = !isSameAsBrazil(tz) ? convertDateTime(apt.detail?.date, apt.detail?.from, tz) : null;
+              const dateChanged = converted && converted.date !== apt.detail?.date;
 
               return (
                 <div
@@ -459,20 +357,18 @@ export default function AgendamentosPage() {
                   <div className="card-body">
                     <div className="d-flex justify-content-between align-items-start _appt-card-row">
 
-                      {/* Left: appointment info */}
                       <div className="_appt-card-info" style={{ flex: 1 }}>
-
                         {/* Doctor name */}
                         <div className="d-flex align-items-center mb-50" style={{ color: 'var(--primary, #0052ff)' }}>
                           <span style={{ marginRight: '8px', flexShrink: 0 }}><IconDoctor /></span>
-                          <span style={{ fontWeight: 600, fontSize: '16px' }}>Dr(a). {apt.professional.name}</span>
+                          <span style={{ fontWeight: 600, fontSize: '16px' }}>Dr(a). {apt.professional?.name}</span>
                         </div>
 
                         {/* Specialty */}
                         <div className="d-flex align-items-center mb-50" style={{ color: '#5e5873' }}>
                           <span style={{ marginRight: '8px', flexShrink: 0, color: '#6e6b7b' }}><IconHospital /></span>
                           <span style={{ fontSize: '14px' }}>
-                            <strong>Especialidade:</strong> {apt.specialty.name}
+                            <strong>Especialidade:</strong> {apt.specialty?.name}
                           </span>
                         </div>
 
@@ -481,7 +377,7 @@ export default function AgendamentosPage() {
                           <span style={{ marginRight: '8px', flexShrink: 0, marginTop: '2px' }}><IconClock /></span>
                           <div>
                             <div style={{ fontSize: '14px', display: 'flex', alignItems: 'center', gap: '4px', flexWrap: 'wrap', color: '#5e5873' }}>
-                              {apt.detail.date} às <strong>{apt.detail.from}</strong>
+                              {apt.detail?.date} às <strong>{apt.detail?.from}</strong>
                               <span title="Horário de Brasília">🇧🇷</span>
                               <span style={{ color: '#9a9a9a', fontSize: '13px' }}>Sao Paulo (GMT-3)</span>
                             </div>
@@ -503,13 +399,12 @@ export default function AgendamentosPage() {
                           </div>
                         )}
 
-                        {/* Status badge */}
                         <span className={`badge ${badge}`} style={{ fontWeight: 700, fontSize: '11px' }}>
                           {translateStatus(apt.status)}
                         </span>
                       </div>
 
-                      {/* Right: action buttons (SCHEDULED only) */}
+                      {/* Action buttons (SCHEDULED only) */}
                       {apt.status === 'SCHEDULED' && (
                         <div className="d-flex flex-column _appt-card-actions" style={{ gap: '8px', marginLeft: '16px', flexShrink: 0 }}>
                           <button
@@ -546,28 +441,6 @@ export default function AgendamentosPage() {
         onClose={() => setCancelTarget(null)}
         onConfirm={handleCancelConfirm}
       />
-
-      {showSpecialty && (
-        <SpecialtyModal
-          onClose={() => setShowSpecialty(false)}
-          onSelect={sp => { setShowSpecialty(false); setReferralTarget(sp); }}
-        />
-      )}
-
-      {referralTarget && (
-        <ReferralModal
-          specialty={referralTarget}
-          onClose={() => setReferralTarget(null)}
-          onSchedule={ref => {
-            setReferralTarget(null);
-            router.push(`/schedule/calendar?referral=${ref.uuid}`);
-          }}
-          onBuyAvulsa={sp => {
-            setReferralTarget(null);
-            router.push(`/schedule/calendar?specialty=${encodeURIComponent(sp.name)}&avulsa=1`);
-          }}
-        />
-      )}
 
       <Toast {...toast} />
     </div>

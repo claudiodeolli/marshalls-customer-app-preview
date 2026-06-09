@@ -1,7 +1,8 @@
 'use client';
 
-import { getHistory, saveEvaluation } from '@/data/storage';
 import { useEffect, useRef, useState } from 'react';
+import api from '@/lib/api';
+import { useAuth } from '@/lib/AuthContext';
 
 /* ── Helpers ──────────────────────────────────────────── */
 function todayStr() {
@@ -427,10 +428,18 @@ function loadFilter(defaults) {
   return defaults;
 }
 
+/* Converte YYYY-MM-DD → DD/MM/YYYY (formato esperado pela API) */
+function isoToBR(str) {
+  if (!str) return '';
+  const [y, m, d] = str.split('-');
+  return `${d}/${m}/${y}`;
+}
+
 /* ── Main page ────────────────────────────────────────── */
 export default function HistoricoPage() {
   const today = todayStr();
   const sevenAgo = daysAgoStr(7);
+  const { user } = useAuth();
 
   const [filterOpen, setFilterOpen]   = useState(false);
   const [dateInitial, setDateInitial] = useState(sevenAgo);
@@ -442,6 +451,29 @@ export default function HistoricoPage() {
   const [allRecords, setAllRecords]     = useState([]);
   const [records, setRecords]           = useState([]);
   const [evalTarget, setEvalTarget]     = useState(null);
+  const [fetchError, setFetchError]     = useState(null);
+
+  /* Busca histórico na API — mesma lógica do chunk appointments.js */
+  async function fetchHistory(params) {
+    const { dateInitial: di, dateFinal: df, typeFilter: type, statusFilter: status } = params;
+    const beneficiaryUuid = typeof window !== 'undefined' ? (localStorage.getItem('BENEFICIARY_UUID') ?? '') : '';
+
+    const qs = new URLSearchParams();
+    const diStr = isoToBR(di);
+    const dfStr = isoToBR(df);
+    if (diStr === dfStr) {
+      qs.append('date', diStr);
+    } else {
+      qs.append('dateInitial', diStr);
+      qs.append('dateFinal', dfStr);
+    }
+    if (type && type !== 'all') qs.append('type', type);
+    if (status) qs.append('status', status);
+    qs.append('beneficiaryUuid', beneficiaryUuid);
+
+    const res = await api.get(`/api/history?${qs.toString()}`);
+    return Array.isArray(res.data) ? res.data : [];
+  }
 
   useEffect(() => {
     const saved = loadFilter({ dateInitial: sevenAgo, dateFinal: today, typeFilter: 'all', statusFilter: '' });
@@ -450,23 +482,36 @@ export default function HistoricoPage() {
     setTypeFilter(saved.typeFilter);
     setStatus(saved.statusFilter);
 
-    const t = setTimeout(() => {
-      const data = getHistory();
-      setAllRecords(data);
-      setRecords(filterRecords(data, saved));
-      setPageLoading(false);
-    }, 1500);
-    return () => clearTimeout(t);
+    (async () => {
+      try {
+        const data = await fetchHistory(saved);
+        setAllRecords(data);
+        setRecords(data);
+      } catch (err) {
+        console.error(err);
+        setFetchError('Erro ao carregar histórico.');
+      } finally {
+        setPageLoading(false);
+      }
+    })();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  function applyFilter() {
+  async function applyFilter() {
     const params = { dateInitial, dateFinal, typeFilter, statusFilter };
     saveFilter(params);
     setLoading(true);
-    setTimeout(() => {
-      setRecords(filterRecords(allRecords, params));
+    setFetchError(null);
+    try {
+      const data = await fetchHistory(params);
+      setAllRecords(data);
+      setRecords(data);
+    } catch (err) {
+      console.error(err);
+      setFetchError('Erro ao buscar registros.');
+    } finally {
       setLoading(false);
-    }, 400);
+    }
   }
 
   return (
@@ -603,6 +648,9 @@ export default function HistoricoPage() {
 
       {/* Results */}
       <div className="_hist-results" style={{ backgroundColor: 'white', borderRadius: '5px', padding: '15px' }}>
+        {fetchError && (
+          <div className="alert alert-danger mb-2" style={{ borderRadius: '8px', fontSize: '14px' }}>{fetchError}</div>
+        )}
         {pageLoading ? (
           <div className="row" style={{}}>
             {[0, 1, 2].map(i => <SkeletonCard key={i} />)}
@@ -714,8 +762,7 @@ export default function HistoricoPage() {
           record={evalTarget}
           onClose={() => setEvalTarget(null)}
           onSave={(uuid, ev) => {
-            const updated = saveEvaluation(uuid, ev);
-            setAllRecords(updated);
+            setAllRecords(prev => prev.map(r => r.uuid === uuid ? { ...r, evaluation: ev } : r));
             setRecords(prev => prev.map(r => r.uuid === uuid ? { ...r, evaluation: ev } : r));
           }}
         />
