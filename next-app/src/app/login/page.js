@@ -5,6 +5,9 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/AuthContext';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? '';
+// Domínio usado no /api/webapp: sempre o da API de produção para obter o clientId correto.
+// Evita que o servidor retorne config vazio quando o preview está em outro domínio (Vercel, etc).
+const WEBAPP_DOMAIN = process.env.NEXT_PUBLIC_WEBAPP_DOMAIN || 'prontoatendimento.marshallsmed.com.br';
 
 function hexToRgba(hex, alpha) {
   const h = (hex || '#1976d2').replace('#', '');
@@ -30,7 +33,7 @@ export default function LoginPage() {
     if (typeof window === 'undefined') return;
     const controller = new AbortController();
     sessionStorage.removeItem('config');
-    fetch(`${API_BASE}/api/webapp?domain=${window.location.hostname}`, { signal: controller.signal })
+    fetch(`${API_BASE}/api/webapp?domain=${WEBAPP_DOMAIN}`, { signal: controller.signal })
       .then(r => r.json())
       .then(data => {
         console.debug('[login] webapp config:', data);

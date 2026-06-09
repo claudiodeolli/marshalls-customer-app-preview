@@ -1,23 +1,26 @@
 /** @type {import('next').NextConfig} */
-const isProd = process.env.NODE_ENV === 'production';
-const BASE = isProd ? '/marshalls-customer-app-preview' : '';
+
+// GITHUB_PAGES=1 → build estático para GitHub Pages
+// Sem essa var → build normal para Vercel (servidor + proxy)
+const isGitHubPages = process.env.GITHUB_PAGES === '1';
+const BASE = isGitHubPages ? '/marshalls-customer-app-preview' : '';
 const PROD_API = 'https://prontoatendimento.marshallsmed.com.br';
 
 const nextConfig = {
-  output: 'export',
+  // Static export só para GitHub Pages; Vercel usa o servidor Next.js
+  ...(isGitHubPages ? { output: 'export' } : {}),
   basePath: BASE,
   assetPrefix: BASE,
-  trailingSlash: isProd,
+  trailingSlash: isGitHubPages,
   env: {
     NEXT_PUBLIC_BASE_PATH: BASE,
   },
   images: {
     unoptimized: true,
   },
-  // Em dev, proxia /api/* para a produção evitando CORS.
-  // A propriedade só existe quando !isProd porque `output: export` +
-  // rewrites causa erro no next build.
-  ...(!isProd && {
+  // Proxy /api/* → produção. Ativo em dev e em Vercel (quando não é GitHub Pages).
+  // Não pode coexistir com output:'export' no build, por isso é excluído no GitHub Pages.
+  ...(!isGitHubPages && {
     async rewrites() {
       return [
         {
