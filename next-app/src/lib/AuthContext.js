@@ -7,6 +7,17 @@ const AuthContext = createContext(null);
 
 const LS_KEYS = ['USER_TOKEN', 'USER_UUID', 'BENEFICIARY_UUID', 'CLIENT_ID', 'APP_USER'];
 
+const IS_MOCK = process.env.NEXT_PUBLIC_MOCK_MODE === '1';
+
+const MOCK_USER = {
+  name: 'João Demo',
+  firstName: 'João',
+  uuid: 'mock-uuid-001',
+  beneficiaryUuid: 'mock-beneficiary-001',
+  userToken: 'mock-token-demo',
+  clientId: 'mock-client-id',
+};
+
 function readFromStorage() {
   if (typeof window === 'undefined') return null;
   const token = localStorage.getItem('USER_TOKEN');
@@ -26,6 +37,11 @@ export function AuthProvider({ children }) {
   const router = useRouter();
 
   useEffect(() => {
+    if (IS_MOCK) {
+      setUser(MOCK_USER);
+      setStatus('authenticated');
+      return;
+    }
     const stored = readFromStorage();
     if (stored) {
       setUser(stored);
@@ -36,7 +52,7 @@ export function AuthProvider({ children }) {
   }, []);
 
   const login = useCallback((userData) => {
-    // session.user from next-auth may use `token` instead of `userToken`, `id` instead of `uuid`
+    if (IS_MOCK) return;
     const token = userData.userToken ?? userData.token ?? userData.accessToken ?? '';
     const uuid = userData.uuid ?? userData.id ?? userData.sub ?? '';
     const beneficiaryUuid = userData.beneficiaryUuid ?? '';
@@ -51,6 +67,10 @@ export function AuthProvider({ children }) {
   }, []);
 
   const logout = useCallback(async () => {
+    if (IS_MOCK) {
+      router.push('/plantao');
+      return;
+    }
     LS_KEYS.forEach((k) => localStorage.removeItem(k));
     setUser(null);
     setStatus('unauthenticated');

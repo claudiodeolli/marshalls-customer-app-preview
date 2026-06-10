@@ -14,6 +14,7 @@ const nextConfig = {
   trailingSlash: isGitHubPages,
   env: {
     NEXT_PUBLIC_BASE_PATH: BASE,
+    NEXT_PUBLIC_MOCK_MODE: isGitHubPages ? '1' : '',
   },
   images: {
     unoptimized: true,

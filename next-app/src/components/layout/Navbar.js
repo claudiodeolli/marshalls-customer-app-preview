@@ -1,8 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import Link from 'next/link';
-import { USER } from '@/data/user';
+import { useAuth } from '@/lib/AuthContext';
 
 /* Ícone hamburger (menu) */
 function MenuIcon() {
@@ -44,21 +43,26 @@ function LogoutIcon() {
   );
 }
 
-function buildGreeting() {
+function buildGreeting(firstName) {
   const dias = ['domingo', 'segunda-feira', 'terça-feira', 'quarta-feira', 'quinta-feira', 'sexta-feira', 'sábado'];
   const meses = ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'];
   const now = new Date();
-  return `Olá, ${USER.firstName}!  Hoje é ${dias[now.getDay()]}, ${now.getDate()} de ${meses[now.getMonth()]} de ${now.getFullYear()}`;
+  const name = firstName ? `${firstName}! ` : '';
+  return `Olá, ${name} Hoje é ${dias[now.getDay()]}, ${now.getDate()} de ${meses[now.getMonth()]} de ${now.getFullYear()}`;
 }
 
 export default function Navbar({ onHamburgerClick }) {
+  const { user, logout } = useAuth();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [greeting, setGreeting] = useState('');
   const dropdownRef = useRef(null);
 
+  const firstName = user?.name?.split(' ')[0] ?? user?.firstName ?? '';
+  const initials = firstName ? firstName[0].toUpperCase() : '?';
+
   useEffect(() => {
-    setGreeting(buildGreeting());
-  }, []);
+    setGreeting(buildGreeting(firstName));
+  }, [firstName]);
 
   useEffect(() => {
     function handleClickOutside(e) {
@@ -134,7 +138,7 @@ export default function Navbar({ onHamburgerClick }) {
                   flexShrink: 0,
                 }}
               >
-                {USER.initials}
+                {initials}
               </div>
 
               {/* Dropdown */}
@@ -166,7 +170,7 @@ export default function Navbar({ onHamburgerClick }) {
                       textDecoration: 'none',
                       whiteSpace: 'nowrap',
                     }}
-                    onClick={e => { e.preventDefault(); setDropdownOpen(false); }}
+                    onClick={e => { e.preventDefault(); setDropdownOpen(false); logout(); }}
                   >
                     <LogoutIcon />
                     Sair

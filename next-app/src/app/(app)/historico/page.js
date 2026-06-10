@@ -3,6 +3,9 @@
 import { useEffect, useRef, useState } from 'react';
 import api from '@/lib/api';
 import { useAuth } from '@/lib/AuthContext';
+import { mockHistory } from '@/data/mockData';
+
+const IS_MOCK = process.env.NEXT_PUBLIC_MOCK_MODE === '1';
 
 /* ── Helpers ──────────────────────────────────────────── */
 function todayStr() {
@@ -453,8 +456,22 @@ export default function HistoricoPage() {
   const [evalTarget, setEvalTarget]     = useState(null);
   const [fetchError, setFetchError]     = useState(null);
 
-  /* Busca histórico na API — mesma lógica do chunk appointments.js */
+  /* Busca histórico — usa mock em GitHub Pages, API real no Vercel */
   async function fetchHistory(params) {
+    if (IS_MOCK) {
+      const { typeFilter: type, statusFilter: status } = params;
+      return mockHistory.filter(r => {
+        if (type && type !== 'all' && r.type !== type) return false;
+        if (status) {
+          const match = r.status === status ||
+            (status === 'CANCELLED' && r.status === 'CANCELED') ||
+            (status === 'CANCELED'  && r.status === 'CANCELLED');
+          if (!match) return false;
+        }
+        return true;
+      });
+    }
+
     const { dateInitial: di, dateFinal: df, typeFilter: type, statusFilter: status } = params;
     const beneficiaryUuid = typeof window !== 'undefined' ? (localStorage.getItem('BENEFICIARY_UUID') ?? '') : '';
 

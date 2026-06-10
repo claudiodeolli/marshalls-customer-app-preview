@@ -22,6 +22,7 @@ export default function LoginPage() {
   const { isAuthenticated, isLoading, login } = useAuth();
 
   const [config, setConfig] = useState(null);
+  const [configLoading, setConfigLoading] = useState(true);
   const [registration, setRegistration] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -40,9 +41,13 @@ export default function LoginPage() {
         if (data.success && data.data) {
           sessionStorage.setItem('config', JSON.stringify(data.data));
           setConfig(data.data);
+          console.debug('[login] clientId carregado:', data.data.clientId);
+        } else {
+          console.warn('[login] config sem dados válidos:', data);
         }
       })
-      .catch(err => { if (err.name !== 'AbortError') console.warn('[login] webapp config fetch failed:', err); });
+      .catch(err => { if (err.name !== 'AbortError') console.warn('[login] webapp config fetch failed:', err); })
+      .finally(() => setConfigLoading(false));
     return () => controller.abort();
   }, []);
 
@@ -78,17 +83,20 @@ export default function LoginPage() {
       const { csrfToken } = await csrfRes.json();
 
       // 2. POST /api/auth/callback/credentials
-      // clientId vem da config se disponível (chunk: "credentialsLogin" flow)
+      if (!config?.clientId) {
+        setError('Configuração não carregada. Recarregue a página e tente novamente.');
+        return;
+      }
       const params = {
         csrfToken,
         registration,
         password,
         loginType: 'credentialsLogin',
+        clientId: config.clientId,
         redirect: 'false',
-        callbackUrl: `${API_BASE}/`,
+        callbackUrl: 'https://prontoatendimento.marshallsmed.com.br/',
         json: 'true',
       };
-      if (config?.clientId) params.clientId = config.clientId;
 
       const signInRes = await fetch(`${API_BASE}/api/auth/callback/credentials`, {
         method: 'POST',
@@ -100,7 +108,9 @@ export default function LoginPage() {
       const signInData = await signInRes.json();
       console.debug('[login] signIn response:', signInData);
 
-      if (!signInData.ok || signInData.error) {
+      // Sucesso: { url: 'https://...' } sem campo error
+      // Erro:    { url: 'https://...?error=CredentialsSignin', error: 'CredentialsSignin' }
+      if (signInData.error || signInData.url?.includes('error=')) {
         setError('Credenciais inválidas. Por favor, verifique seu registro e senha.');
         return;
       }
@@ -227,7 +237,7 @@ export default function LoginPage() {
             <button
               type="submit"
               className="btn btn-block"
-              disabled={submitting}
+              disabled={submitting || configLoading}
               style={{
                 marginTop: '0.5rem',
                 padding: '0.9rem 0',
@@ -239,9 +249,12 @@ export default function LoginPage() {
                 borderRadius: 12,
                 boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
                 transition: 'all 0.2s ease-in-out',
+                opacity: configLoading ? 0.7 : 1,
               }}
             >
-              {submitting ? (
+              {configLoading ? (
+                <span style={{ fontSize: '0.9rem', opacity: 0.9 }}>Carregando...</span>
+              ) : submitting ? (
                 <span className="spinner-border spinner-border-sm" role="status" style={{ width: 22, height: 22, borderWidth: 2 }} />
               ) : 'Entrar'}
             </button>

@@ -4,6 +4,9 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import api from '@/lib/api';
 import { useAuth } from '@/lib/AuthContext';
+import { mockAppointments } from '@/data/mockData';
+
+const IS_MOCK = process.env.NEXT_PUBLIC_MOCK_MODE === '1';
 
 const STATUS_BADGE = {
   SCHEDULED:  'badge-light-primary',
@@ -202,15 +205,21 @@ export default function AgendamentosPage() {
     if (TIMEZONE_OPTIONS.find(o => o.value === tz)) setTimezone(tz);
   }, []);
 
-  /* Busca agendamentos na API — idêntico ao chunk original */
+  /* Busca agendamentos — usa mock em GitHub Pages, API real no Vercel */
   async function fetchAppointments() {
+    setLoading(true);
     try {
-      setLoading(true);
+      if (IS_MOCK) {
+        const filtered = statusFilter
+          ? mockAppointments.filter(a => a.status === statusFilter)
+          : mockAppointments;
+        setAppointments(filtered);
+        return;
+      }
       const beneficiaryUuid = typeof window !== 'undefined' ? localStorage.getItem('BENEFICIARY_UUID') : '';
       const res = await api.get(`/api/schedule/appointments?status=${statusFilter}`, {
         headers: { beneficiaryUuid },
       });
-      /* A API retorna o array diretamente; se vier { success } ignora */
       if (!('success' in (res.data ?? {}))) {
         setAppointments(Array.isArray(res.data) ? res.data : []);
       }
@@ -232,11 +241,17 @@ export default function AgendamentosPage() {
     setTimeout(() => setToast(prev => ({ ...prev, visible: false })), 4000);
   }
 
-  /* Cancela agendamento via DELETE — idêntico ao chunk original */
+  /* Cancela agendamento — remove do estado local no mock, API real no Vercel */
   async function handleCancelConfirm() {
     if (!cancelTarget) return;
     setCanceling(true);
     try {
+      if (IS_MOCK) {
+        setAppointments(prev => prev.filter(a => a.uuid !== cancelTarget.uuid));
+        setCancelTarget(null);
+        showToast('Agendamento deletado com sucesso.');
+        return;
+      }
       const beneficiaryUuid = typeof window !== 'undefined' ? localStorage.getItem('BENEFICIARY_UUID') : '';
       const res = await api.delete(`/api/schedule/appointments/${cancelTarget.uuid}`, {
         headers: { beneficiaryUuid },

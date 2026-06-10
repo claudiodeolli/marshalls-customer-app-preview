@@ -4,6 +4,9 @@ import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import api from '@/lib/api';
 import { useAuth } from '@/lib/AuthContext';
+import { mockReferrals } from '@/data/mockData';
+
+const IS_MOCK = process.env.NEXT_PUBLIC_MOCK_MODE === '1';
 
 const STATUS_CONFIG = {
   PENDING:   { label: 'Pendente', badge: 'badge-light-warning',   gradient: 'linear-gradient(90deg, #ff9800, #ffb74d)' },
@@ -208,13 +211,17 @@ export default function EncaminhamentosPage() {
   const [pageLoading, setPageLoading] = useState(true);
   const [fetchError, setFetchError] = useState(null);
 
-  /* Busca encaminhamentos — idêntico ao chunk referrals.js */
+  /* Busca encaminhamentos — usa mock em GitHub Pages, API real no Vercel */
   useEffect(() => {
     if (!user) return;
     (async () => {
       setPageLoading(true);
       setFetchError(null);
       try {
+        if (IS_MOCK) {
+          setReferrals(mockReferrals);
+          return;
+        }
         const { data } = await api.get('/api/referrals');
         setReferrals(Array.isArray(data) ? data : []);
       } catch (err) {
