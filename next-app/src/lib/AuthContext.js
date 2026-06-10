@@ -10,7 +10,7 @@ const LS_KEYS = ['USER_TOKEN', 'USER_UUID', 'BENEFICIARY_UUID', 'CLIENT_ID', 'AP
 const IS_MOCK = process.env.NEXT_PUBLIC_MOCK_MODE === '1';
 
 const MOCK_USER = {
-  name: 'João Demo',
+  name: 'João da Silva',
   firstName: 'João',
   uuid: 'mock-uuid-001',
   beneficiaryUuid: 'mock-beneficiary-001',
@@ -38,6 +38,10 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     if (IS_MOCK) {
+      // Limpa dados reais que possam ter ficado de sessões anteriores
+      if (typeof window !== 'undefined') {
+        LS_KEYS.forEach(k => localStorage.removeItem(k));
+      }
       setUser(MOCK_USER);
       setStatus('authenticated');
       return;

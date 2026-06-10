@@ -123,161 +123,213 @@ export const partners = [
 ];
 
 export const mockReferrals = [
+  // PENDING — aguardando agendamento pelo paciente
   {
     uuid: 'ref-001',
     status: 'PENDING',
     beneficiary: { name: 'João da Silva' },
     specialty: { name: 'Cardiologia' },
-    createdAt: '15/05/2025 09:30:00',
-    updatedAt: '15/05/2025 09:30:00',
+    createdAt: '01/06/2026 10:00:00',
+    updatedAt: '01/06/2026 10:00:00',
     urlPath: null,
   },
   {
     uuid: 'ref-002',
     status: 'PENDING',
-    beneficiary: { name: 'Carlos Ferreira' },
+    beneficiary: { name: 'João da Silva' },
     specialty: { name: 'Nutrição' },
-    createdAt: '22/05/2025 15:40:00',
-    updatedAt: '22/05/2025 15:40:00',
+    createdAt: '03/06/2026 14:30:00',
+    updatedAt: '03/06/2026 14:30:00',
     urlPath: null,
   },
+  // SCHEDULED — agendamento realizado (→ apt-001 em agendamentos)
   {
     uuid: 'ref-003',
     status: 'SCHEDULED',
-    beneficiary: { name: 'Maria Oliveira' },
+    beneficiary: { name: 'João da Silva' },
     specialty: { name: 'Ortopedia' },
-    createdAt: '10/05/2025 14:20:00',
-    updatedAt: '20/05/2025 11:45:00',
+    createdAt: '20/05/2026 09:00:00',
+    updatedAt: '25/05/2026 11:00:00',
     urlPath: 'https://example.com/docs/encaminhamento-003.pdf',
   },
+  // FINISHED — consulta realizada (→ apt-003 em agendamentos + hist-002 em histórico)
   {
     uuid: 'ref-004',
     status: 'FINISHED',
-    beneficiary: { name: 'Pedro Costa' },
+    beneficiary: { name: 'João da Silva' },
     specialty: { name: 'Neurologia' },
-    createdAt: '01/04/2025 10:00:00',
-    updatedAt: '20/04/2025 16:30:00',
+    createdAt: '05/05/2026 08:00:00',
+    updatedAt: '20/05/2026 10:45:00',
     urlPath: 'https://example.com/docs/encaminhamento-004.pdf',
   },
+  // UNFINISHED — consulta não concluída (→ apt-004 em agendamentos + hist-003 em histórico)
   {
     uuid: 'ref-005',
     status: 'UNFINISHED',
-    beneficiary: { name: 'Ana Santos' },
+    beneficiary: { name: 'João da Silva' },
     specialty: { name: 'Dermatologia' },
-    createdAt: '25/03/2025 08:15:00',
-    updatedAt: '01/04/2025 12:00:00',
+    createdAt: '10/05/2026 13:00:00',
+    updatedAt: '15/05/2026 09:30:00',
     urlPath: null,
   },
 ];
 
 export const mockHistory = [
+  // Pronto atendimento mais recente — sem encaminhamento, com documentos
   {
     uuid: 'hist-001',
-    type: 'scheduled',
-    status: 'FINISHED',
-    appointmentBegin: '15/05/2026 09:00',
-    appointmentEnd: '15/05/2026 09:32',
-    professional: { name: 'Carlos Mendes', specialties: [{ name: 'Cardiologia' }] },
-    beneficiaryMedicalReferral: { urlPath: 'https://example.com/docs/referral-001.pdf' },
-    documents: [
-      { type: 'report', url: 'https://example.com/docs/report-001.pdf' },
-      { type: 'exam',   url: 'https://example.com/docs/exam-001.pdf' },
-    ],
-  },
-  {
-    uuid: 'hist-002',
     type: 'emergency',
     status: 'FINISHED',
-    appointmentBegin: '10/05/2026 14:10',
-    appointmentEnd: '10/05/2026 14:28',
-    professional: { name: 'Ana Beatriz Lima', specialties: [{ name: 'Clínica Geral' }] },
+    appointmentBegin: '08/06/2026 19:15',
+    appointmentEnd: '08/06/2026 19:42',
+    professional: { name: 'Mariana Costa', specialties: [{ name: 'Clínica Geral' }] },
     beneficiaryMedicalReferral: null,
     documents: [
-      { type: 'notes',    url: 'https://example.com/docs/atestado-002.pdf' },
-      { type: 'medicines', url: 'https://example.com/docs/receita-002.pdf' },
+      { type: 'notes',    url: 'https://example.com/docs/atestado-hist001.pdf' },
+      { type: 'medicines', url: 'https://example.com/docs/receita-hist001.pdf' },
     ],
   },
+  // Agendamento com especialista — de ref-004 (Neurologia FINISHED) = apt-003
+  {
+    uuid: 'hist-002',
+    type: 'scheduled',
+    status: 'FINISHED',
+    appointmentBegin: '20/05/2026 10:00',
+    appointmentEnd: '20/05/2026 10:48',
+    professional: { name: 'Paulo Salave', specialties: [{ name: 'Neurologia' }] },
+    beneficiaryMedicalReferral: { urlPath: 'https://example.com/docs/encaminhamento-004.pdf' },
+    documents: [
+      { type: 'report', url: 'https://example.com/docs/laudo-hist002.pdf' },
+      { type: 'exam',   url: 'https://example.com/docs/exame-hist002.pdf' },
+    ],
+    evaluation: null,
+  },
+  // Agendamento com especialista — de ref-005 (Dermatologia UNFINISHED) = apt-004
   {
     uuid: 'hist-003',
     type: 'scheduled',
     status: 'UNFINISHED',
-    appointmentBegin: '05/05/2026 10:00',
-    appointmentEnd: null,
-    professional: { name: 'Roberto Silva', specialties: [{ name: 'Ortopedia' }] },
-    beneficiaryMedicalReferral: null,
-    documents: [],
-  },
-  {
-    uuid: 'hist-004',
-    type: 'emergency',
-    status: 'CANCELLED',
-    appointmentBegin: '01/05/2026 16:00',
+    appointmentBegin: '15/05/2026 09:00',
     appointmentEnd: null,
     professional: { name: 'Fernanda Rocha', specialties: [{ name: 'Dermatologia' }] },
     beneficiaryMedicalReferral: null,
     documents: [],
   },
+  // Consulta avulsa cancelada — sem encaminhamento = apt-005
+  {
+    uuid: 'hist-004',
+    type: 'scheduled',
+    status: 'CANCELED',
+    appointmentBegin: '12/05/2026 11:00',
+    appointmentEnd: null,
+    professional: { name: 'Carlos Mendes', specialties: [{ name: 'Cardiologia' }] },
+    beneficiaryMedicalReferral: null,
+    documents: [],
+  },
+  // Pronto atendimento mais antigo — com avaliação preenchida
   {
     uuid: 'hist-005',
-    type: 'scheduled',
+    type: 'emergency',
     status: 'FINISHED',
-    appointmentBegin: '20/04/2026 11:00',
-    appointmentEnd: '20/04/2026 11:45',
-    professional: { name: 'Paulo Salave', specialties: [{ name: 'Neurologia' }] },
-    beneficiaryMedicalReferral: { urlPath: 'https://example.com/docs/referral-005.pdf' },
+    appointmentBegin: '30/04/2026 21:30',
+    appointmentEnd: '30/04/2026 21:55',
+    professional: { name: 'André Faria', specialties: [{ name: 'Clínica Geral' }] },
+    beneficiaryMedicalReferral: null,
     documents: [
-      { type: 'referral', url: 'https://example.com/docs/ref-doc-005.pdf' },
+      { type: 'medicines', url: 'https://example.com/docs/receita-hist005.pdf' },
     ],
+    evaluation: { rating: 5, comment: 'Atendimento excelente!' },
   },
 ];
 
 export const mockAppointments = [
+  // SCHEDULED (futuro) — originado de ref-003 (Ortopedia SCHEDULED)
   {
     uuid: 'apt-001',
     status: 'SCHEDULED',
-    professional: { name: 'Carlos Mendes', specialties: [{ name: 'Cardiologia' }] },
-    specialty: { name: 'Cardiologia' },
-    detail: { date: '28/05/2026', from: '10:00' },
-    beneficiaryMedicalReferral: { createdAt: '15/05/2026' },
+    professional: { name: 'Roberto Silva', specialties: [{ name: 'Ortopedia' }] },
+    specialty: { name: 'Ortopedia' },
+    detail: { date: '28/06/2026', from: '10:00' },
+    beneficiaryMedicalReferral: { createdAt: '20/05/2026' },
     cancel: true,
   },
+  // SCHEDULED (futuro) — consulta avulsa, sem encaminhamento
   {
     uuid: 'apt-002',
     status: 'SCHEDULED',
-    professional: { name: 'Ana Beatriz Lima', specialties: [{ name: 'Nutrição' }] },
-    specialty: { name: 'Nutrição' },
-    detail: { date: '02/06/2026', from: '14:00' },
+    professional: { name: 'Carla Borges', specialties: [{ name: 'Psicologia' }] },
+    specialty: { name: 'Psicologia' },
+    detail: { date: '05/07/2026', from: '15:00' },
     beneficiaryMedicalReferral: null,
     cancel: false,
   },
+  // FINISHED — originado de ref-004 (Neurologia FINISHED) → também em hist-002
   {
     uuid: 'apt-003',
     status: 'FINISHED',
-    professional: { name: 'Roberto Silva', specialties: [{ name: 'Ortopedia' }] },
-    specialty: { name: 'Ortopedia' },
-    detail: { date: '10/05/2026', from: '09:00' },
-    beneficiaryMedicalReferral: { createdAt: '01/05/2026' },
+    professional: { name: 'Paulo Salave', specialties: [{ name: 'Neurologia' }] },
+    specialty: { name: 'Neurologia' },
+    detail: { date: '20/05/2026', from: '10:00' },
+    beneficiaryMedicalReferral: { createdAt: '05/05/2026' },
     cancel: false,
   },
+  // UNFINISHED — originado de ref-005 (Dermatologia UNFINISHED) → também em hist-003
   {
     uuid: 'apt-004',
-    status: 'CANCELED',
+    status: 'UNFINISHED',
     professional: { name: 'Fernanda Rocha', specialties: [{ name: 'Dermatologia' }] },
     specialty: { name: 'Dermatologia' },
-    detail: { date: '05/05/2026', from: '11:00' },
+    detail: { date: '15/05/2026', from: '09:00' },
+    beneficiaryMedicalReferral: { createdAt: '10/05/2026' },
+    cancel: false,
+  },
+  // CANCELED — consulta avulsa cancelada, sem encaminhamento → também em hist-004
+  {
+    uuid: 'apt-005',
+    status: 'CANCELED',
+    professional: { name: 'Carlos Mendes', specialties: [{ name: 'Cardiologia' }] },
+    specialty: { name: 'Cardiologia' },
+    detail: { date: '12/05/2026', from: '11:00' },
     beneficiaryMedicalReferral: null,
     cancel: false,
   },
-  {
-    uuid: 'apt-005',
-    status: 'UNFINISHED',
-    professional: { name: 'Paulo Salave', specialties: [{ name: 'Neurologia' }] },
-    specialty: { name: 'Neurologia' },
-    detail: { date: '01/05/2026', from: '15:00' },
-    beneficiaryMedicalReferral: { createdAt: '20/04/2026' },
-    cancel: false,
-  },
 ];
+
+export const mockSpecialties = [
+  { uuid: 'spec-001', name: 'Cardiologia',   price: 95, referral: false },
+  { uuid: 'spec-002', name: 'Nutrição',      price: 70, referral: false },
+  { uuid: 'spec-003', name: 'Ortopedia',     price: 95, referral: false },
+  { uuid: 'spec-004', name: 'Neurologia',    price: 95, referral: false },
+  { uuid: 'spec-005', name: 'Dermatologia',  price: 95, referral: false },
+  { uuid: 'spec-006', name: 'Psicologia',    price: 70, referral: false },
+  { uuid: 'spec-007', name: 'Clínica Geral', price: 95, referral: false },
+];
+
+export function getMockAvailability(specialtyUuid) {
+  const times = ['08:00', '09:00', '10:00', '11:00', '14:00', '15:00', '16:00', '17:00'];
+  const slots = [];
+  const base = new Date();
+  base.setHours(0, 0, 0, 0);
+  for (let i = 1; i <= 30; i++) {
+    const d = new Date(base);
+    d.setDate(d.getDate() + i);
+    const dow = d.getDay();
+    if (dow === 0 || dow === 6) continue;
+    const day = String(d.getDate()).padStart(2, '0');
+    const mon = String(d.getMonth() + 1).padStart(2, '0');
+    const yr = d.getFullYear();
+    const dateStr = `${day}/${mon}/${yr}`;
+    const key = `${day}${mon}${yr}`;
+    times.forEach(from => {
+      slots.push({
+        uuid: `avail-${specialtyUuid}-${key}-${from.replace(':', '')}`,
+        date: dateStr,
+        from,
+      });
+    });
+  }
+  return slots;
+}
 
 export const requerimentos = [
   { title: 'Requerimento de Abertura', protocol: '#2025-001', date: '12/05/2026', status: 'Em andamento', variant: 'warning', icon: 'FileText'    },
