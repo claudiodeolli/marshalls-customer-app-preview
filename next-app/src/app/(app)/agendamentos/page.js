@@ -275,7 +275,7 @@ export default function AgendamentosPage() {
   }
 
   return (
-    <div>
+    <div style={{ paddingBottom: '1.5rem' }}>
       {/* Banner informativo */}
       <div className="alert mb-2" style={{ background:'#eef3ff', border:'1px solid #c7d8ff', borderRadius:'10px', fontSize:'13px', color:'#3b5bdb', padding:'12px 16px' }}>
         <strong>Como funciona o agendamento:</strong>

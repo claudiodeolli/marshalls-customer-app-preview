@@ -116,7 +116,7 @@ export default function Navbar({ onHamburgerClick }) {
           )}
           <li className="nav-item dropdown dropdown-user" ref={dropdownRef} style={{ position: 'relative' }}>
             <button
-              className='nav-item-user-btn'
+              className={`nav-item-user-btn${dropdownOpen ? ' nav-item-user-btn--open' : ''}`}
               onClick={e => { e.stopPropagation(); setDropdownOpen(o => !o); }}
             >
               {/* Avatar circular com inicial */}

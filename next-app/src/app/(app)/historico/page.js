@@ -532,7 +532,7 @@ export default function HistoricoPage() {
   }
 
   return (
-    <div>
+    <div style={{ paddingBottom: '1.5rem' }}>
       {/* Page header */}
       <div style={{ marginBottom: '1.5rem' }}>
         <p className="text-muted mb-0" style={{ fontSize: '14px' }}>
@@ -562,13 +562,21 @@ export default function HistoricoPage() {
             }}
             onClick={() => setFilterOpen(o => !o)}
           >
-            <h6 style={{ margin: 0, fontWeight: 600, color: 'var(--primary, #0052ff)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <IconEvent /> {filterOpen ? 'Filtros de Pesquisa' : 'Procurar consultas'}
+            <h6 style={{ margin: 0, fontWeight: 600, color: 'var(--primary, #0052ff)', display: 'flex', alignItems: 'center', gap: '6px', flex: 1, minWidth: 0 }}>
+              <IconEvent />
+              {filterOpen ? 'Filtros de Pesquisa' : (
+                <span style={{ display: 'flex', alignItems: 'center', gap: '4px', flexWrap: 'wrap' }}>
+                  Procurar consultas
+                  <span style={{ fontSize: '12px', color: '#aaa', fontWeight: 400, display: 'flex', alignItems: 'center', gap: '3px' }}>
+                    · Toque para abrir
+                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#aaa" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="9 18 15 12 9 6"/>
+                    </svg>
+                  </span>
+                </span>
+              )}
             </h6>
-            {filterOpen
-              ? <IconChevronDown open={true} />
-              : <span style={{ fontSize: '13px', color: '#aaa' }}>Toque para abrir</span>
-            }
+            <IconChevronDown open={filterOpen} />
           </div>
 
           {filterOpen && <div className="row" style={{ rowGap: '12px', alignItems: 'flex-end' }}>

@@ -145,7 +145,10 @@ export default function MainMenu({ collapsed, onToggleCollapse, onOverlayClick, 
             style={{ listStyle: 'none', margin: '0', marginTop: '0.5rem', padding: '0', paddingTop: '1rem' }}
           >
             <Link href={plantaoItem.href} onClick={onOverlayClick}>
-              <MenuIcon def={plantaoItem.icon} hasDot />
+              <span style={{ position: 'relative', display: 'inline-flex', flexShrink: 0 }}>
+                <MenuIcon def={plantaoItem.icon} />
+                <span className="plantao-pulse-dot _sb-plantao-dot" />
+              </span>
               <span className="menu-title">{plantaoItem.title}</span>
             </Link>
           </ul>

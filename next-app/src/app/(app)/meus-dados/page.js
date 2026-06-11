@@ -354,7 +354,7 @@ export default function MeusDadosPage() {
       </div>
 
       {/* Botão salvar */}
-      <div className="row mt-1">
+      <div className="row mt-1 mb-3">
         <div className="col-12" style={{ display: 'flex', justifyContent: 'flex-end' }}>
           <button className="btn btn-primary" style={{ padding: '10px 28px' }}>Atualizar Informações</button>
         </div>
