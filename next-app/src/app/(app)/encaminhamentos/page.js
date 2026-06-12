@@ -237,7 +237,7 @@ export default function EncaminhamentosPage() {
 
   return (
     <div>
-      <div style={{ marginTop: '1rem', marginBottom: '1.5rem' }}>
+      <div style={{ marginBottom: '1.5rem' }}>
         <p className="text-muted mb-75">Visualize e acompanhe seus encaminhamentos médicos</p>
         <FilterSelect value={filter} onChange={setFilter} />
       </div>

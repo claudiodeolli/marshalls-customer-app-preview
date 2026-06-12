@@ -28,8 +28,8 @@ function LogoutIcon() {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="16"
-      height="16"
+      width="20"
+      height="20"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
@@ -123,8 +123,8 @@ export default function Navbar({ onHamburgerClick }) {
               <div
                 className="_ct-gradient _user-avatar"
                 style={{
-                  width: '38px',
-                  height: '38px',
+                  width: '40px',
+                  height: '40px',
                   borderRadius: '50%',
                   background: 'linear-gradient(135deg,#0052ff 0%,#00b7ff 100%)',
                   color: 'white',
@@ -166,7 +166,7 @@ export default function Navbar({ onHamburgerClick }) {
                       padding: '0.75rem 1.28rem',
                       color: '#ea5455',
                       fontWeight: 500,
-                      fontSize: '0.9rem',
+                      fontSize: '1.2rem',
                       textDecoration: 'none',
                       whiteSpace: 'nowrap',
                     }}

@@ -5,9 +5,56 @@ body {
   overflow-x: hidden;
 }
 
+
 /* Espaço para a faixa fixada no rodapé */
 .app-content {
   padding-bottom: 2rem !important;
+}
+
+/* Remove o gradiente que o Vuexy renderiza atrás do navbar flutuante —
+   ele cobre a largura total do viewport (incluindo o scrollbar), criando
+   um fade visível no topo da barra de rolagem. O navbar já tem sombra
+   própria e não precisa desse elemento para parecer flutuante. */
+.header-navbar-shadow {
+  display: none !important;
+}
+
+/* Scrollbar da página: fino e sem track visível, igual ao projeto de referência.
+   ::-webkit-scrollbar com width definido força o comportamento "classic" no Chrome,
+   garantindo que --sw seja sempre mensurável via JS. */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: #c1c1c1 transparent;
+}
+
+html::-webkit-scrollbar {
+  width: 6px;
+}
+
+html::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+html::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+html::-webkit-scrollbar-thumb:hover {
+  background: #aaa;
+}
+
+/* Alinha o navbar flutuante (position:fixed) com o padding dos cards.
+   Ajusta TANTO o width quanto o margin-right pelo valor real do scrollbar
+   (--sw medido por JS), pois fixed usa 100vw enquanto o conteúdo usa clientWidth. */
+@media (min-width: 1200px) {
+  .header-navbar.floating-nav {
+    width: calc(100% - 4rem - 260px - var(--sw, 0px)) !important;
+  }
+
+  [dir=ltr] .header-navbar.floating-nav {
+    margin-right: calc(2rem + var(--sw, 0px)) !important;
+  }
 }
 
 /* ── Faixa inferior: left dinâmico conforme estado do sidebar ── */
@@ -25,7 +72,7 @@ body {
   }
 
   .menu-open ._bottom-bar {
-    left: 260px !important;
+    left: 268px !important;
   }
 }
 
@@ -175,8 +222,8 @@ body {
 
 .plantao-pulse-dot {
   display: inline-block;
-  width: 10px;
-  height: 10px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   background: #22c55e;
   box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.8);
@@ -217,8 +264,8 @@ body {
 ._sb-plantao-dot {
   position: absolute;
   inset: 0;
-  width: 10px;
-  height: 10px;
+  width: 6px;
+  height: 6px;
   margin: auto;
 }
 
@@ -246,6 +293,12 @@ body {
 .nav-item-user-btn--open:hover {
   background-color: transparent !important;
   border-color: transparent !important;
+}
+
+.nav-item-user-btn:focus,
+.nav-item-user-btn:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 [data-plantao-shortcut]:not(.plantao-inactive) ._sb-plantao-dot {
@@ -546,6 +599,11 @@ body._page-leaving .content-body {
   border-radius: 4px;
 }
 
+/* Border-radius uniforme em todos os cards */
+[dir] .card {
+  border-radius: 12px !important;
+}
+
 /* Breadcrumb visível em todas as resoluções — Vuexy esconde em ≤648px */
 .content-header .breadcrumb {
   display: flex !important;
@@ -629,6 +687,9 @@ body._page-leaving .content-body {
   /* Transição persistente para abertura e fechamento do sidebar */
   .main-menu {
     transition: transform 0.25s ease !important;
+    width: 280px !important;
+    border-radius: 0 16px 16px 0 !important;
+    overflow: hidden !important;
   }
 
   /* Scroll lock: impede que a página role enquanto o sidebar está aberto */
@@ -837,10 +898,10 @@ body._page-leaving .content-body {
     min-width: unset !important;
   }
 
-  /* Navbar: avatar menor */
+  /* Navbar: avatar menor (mantém 40px — já é o tamanho-base) */
   ._user-avatar {
-    width: 38px !important;
-    height: 38px !important;
+    width: 40px !important;
+    height: 40px !important;
     font-size: 13px !important;
   }
 
@@ -935,7 +996,7 @@ body._page-leaving .content-body {
 @media (max-width: 1199.98px) {
   ._mob-nav {
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-around;
     padding: 0;
   }
 

@@ -95,7 +95,7 @@ export default function MainMenu({ collapsed, onToggleCollapse, onOverlayClick, 
         <div className="navbar-header expanded">
           <ul className="nav navbar-nav flex-row">
             <li className="nav-item mr-auto">
-              <Link className="navbar-brand" href="/plantao">
+              <Link className="navbar-brand" href="/plantao" onClick={(e) => { if (p === plantaoItem.href) e.preventDefault(); onOverlayClick(); }}>
                 <span className="brand-logo">
                   <img
                     src={`${(process.env.NEXT_PUBLIC_BASE_PATH ?? '')}/img/MarshallsMed%20novo2_%20Med%20maior.png`}
@@ -115,9 +115,9 @@ export default function MainMenu({ collapsed, onToggleCollapse, onOverlayClick, 
             <li className="nav-item nav-toggle d-block d-xl-none">
               <button
                 type="button"
-                className="nav-link modern-nav-toggle pr-0"
+                className="nav-link modern-nav-toggle"
                 onClick={onOverlayClick}
-                style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '0.5rem', display: 'flex', alignItems: 'center', lineHeight: 1 }}
+                style={{ background: '#eef1f6', border: '1.5px solid #dbdce3', borderRadius: '12px', cursor: 'pointer', padding: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', lineHeight: 1 }}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -125,11 +125,11 @@ export default function MainMenu({ collapsed, onToggleCollapse, onOverlayClick, 
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
-                  strokeWidth="2"
+                  strokeWidth="5"
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  width="22"
-                  height="22"
+                  width="10"
+                  height="10"
                 >
                   <line x1="18" y1="6" x2="6" y2="18" />
                   <line x1="6" y1="6" x2="18" y2="18" />
@@ -144,7 +144,7 @@ export default function MainMenu({ collapsed, onToggleCollapse, onOverlayClick, 
             data-plantao-shortcut="1"
             style={{ listStyle: 'none', margin: '0', marginTop: '0.5rem', padding: '0', paddingTop: '1rem' }}
           >
-            <Link href={plantaoItem.href} onClick={onOverlayClick}>
+            <Link href={plantaoItem.href} onClick={(e) => { if (p === plantaoItem.href) e.preventDefault(); onOverlayClick(); }}>
               <span className="_sb-plantao-icon-wrap">
                 <MenuIcon def={plantaoItem.icon} />
                 <span className="plantao-pulse-dot _sb-plantao-dot" />
@@ -177,7 +177,7 @@ export default function MainMenu({ collapsed, onToggleCollapse, onOverlayClick, 
               const isActive = p === item.href || p.startsWith(item.href + '/');
               return (
                 <li key={item.href} className={`nav-item${isActive ? ' active' : ''}`}>
-                  <Link href={item.href} className={isActive ? 'active' : ''} aria-current={isActive ? 'page' : undefined} onClick={onOverlayClick}>
+                  <Link href={item.href} className={isActive ? 'active' : ''} aria-current={isActive ? 'page' : undefined} onClick={(e) => { if (isActive) e.preventDefault(); onOverlayClick(); }}>
                     <MenuIcon def={item.icon} />
                     <span className="menu-title">{item.title}</span>
                   </Link>

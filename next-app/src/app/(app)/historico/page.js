@@ -528,6 +528,7 @@ export default function HistoricoPage() {
       setFetchError('Erro ao buscar registros.');
     } finally {
       setLoading(false);
+      if (typeof window !== 'undefined' && window.innerWidth < 1200) setFilterOpen(false);
     }
   }
 
