@@ -160,13 +160,13 @@ export default function Navbar({ onHamburgerClick }) {
                 >
                   <a
                     href="#"
+                    className="_sair-link"
                     style={{
                       display: 'flex',
                       alignItems: 'center',
                       padding: '0.75rem 1.28rem',
                       color: '#ea5455',
                       fontWeight: 500,
-                      fontSize: '1.2rem',
                       textDecoration: 'none',
                       whiteSpace: 'nowrap',
                     }}

@@ -72,10 +72,9 @@ html::-webkit-scrollbar-thumb:hover {
   }
 
   .menu-open ._bottom-bar {
-    left: 268px !important;
+    left: 254px !important;
   }
 }
-
 
 #loading-bg {
   width: 100%;
@@ -276,7 +275,10 @@ html::-webkit-scrollbar-thumb:hover {
   cursor: pointer !important;
   display: flex;
   align-items: center;
-  padding: 4px;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  padding: 6px;
   border-radius: 50% !important;
   border-width: 2px;
   border-style: solid;
@@ -456,10 +458,6 @@ img._logo-collapsed {
   flex-shrink: 0 !important;
 }
 
-.main-menu .shadow-bottom {
-  flex-shrink: 0 !important;
-}
-
 /* Seletor .main-menu.menu-fixed .main-menu-content tem especificidade 0,3,0
    e supera o .main-menu .main-menu-content (0,2,0) do Vuexy CSS que carrega
    depois via <link>. Flex-basis:0 (do flex:1) ignora o height:calc do Vuexy. */
@@ -604,6 +602,21 @@ body._page-leaving .content-body {
   border-radius: 12px !important;
 }
 
+/* Botão Sair do dropdown de usuário */
+._sair-link {
+  font-size: 1.1rem;
+}
+
+._sair-link:hover {
+  background-color: #fee7ed;
+}
+
+@media (max-width: 1199.98px) {
+  ._sair-link {
+    font-size: 1.2rem !important;
+  }
+}
+
 /* Breadcrumb visível em todas as resoluções — Vuexy esconde em ≤648px */
 .content-header .breadcrumb {
   display: flex !important;
@@ -621,9 +634,9 @@ body._page-leaving .content-body {
   }
 
   ._user-avatar {
-    width: 46px !important;
-    height: 46px !important;
-    font-size: 18px !important;
+    width: 40px !important;
+    height: 40px !important;
+    font-size: 16px !important;
   }
 }
 
@@ -688,8 +701,9 @@ body._page-leaving .content-body {
   .main-menu {
     transition: transform 0.25s ease !important;
     width: 280px !important;
-    border-radius: 0 16px 16px 0 !important;
+    border-radius: 0 28px 28px 0 !important;
     overflow: hidden !important;
+    border: 1px solid #D4DEF1 !important;
   }
 
   /* Scroll lock: impede que a página role enquanto o sidebar está aberto */
@@ -996,7 +1010,7 @@ body._page-leaving .content-body {
 @media (max-width: 1199.98px) {
   ._mob-nav {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-evenly;
     padding: 0;
   }
 

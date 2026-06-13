@@ -159,6 +159,7 @@ export default function MainMenu({ collapsed, onToggleCollapse, onOverlayClick, 
         {/* ── Lista de itens do menu ── */}
         <PerfectScrollbar
           className="main-menu-content"
+          options={{ suppressScrollX: true }}
           onMouseOver={handleMouseOver}
           onMouseLeave={handleMouseLeave}
         >

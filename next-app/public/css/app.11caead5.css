@@ -27091,7 +27091,7 @@ footer.footer span i,footer.footer span svg {
 }
 
 .main-menu .shadow-bottom {
-    display: none;
+    display: block;
     position: absolute;
     z-index: 2;
     height: 15px !important;
@@ -38029,10 +38029,6 @@ footer.footer .footer-wrapper { padding: 0 !important; }
 
 /* Footer sem altura minima e sem fixed */
 footer.footer { min-height: 0 !important; position: static !important; }
-
-/* Shadow-bottom menor */
-.main-menu .shadow-bottom { height: 15px !important; filter: blur(1px) !important; }
-
 
 /* Footer sempre colado no fundo - layout flex */
 .vertical-layout { display: flex !important; flex-direction: column !important; min-height: 100vh !important; }
