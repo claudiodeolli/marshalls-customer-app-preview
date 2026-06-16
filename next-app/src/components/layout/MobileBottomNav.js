@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useEffect, useRef } from 'react';
 import { plantaoItem } from '@/data/menuItems';
 
 const ITEMS = [
@@ -48,9 +49,79 @@ const ITEMS = [
 export default function MobileBottomNav({ onNavClick }) {
   const pathname = usePathname();
   const p = pathname === '/' ? '/' : pathname.replace(/\/$/, '');
+  const navRef = useRef(null);
+
+  useEffect(() => {
+    const nav = navRef.current;
+    if (!nav) return;
+
+    const equalize = () => {
+      const items = nav.querySelectorAll('a._mob-nav__item');
+      const first = items[0];
+      const last = items[items.length - 1];
+      if (!first || !last) return;
+
+      first.style.paddingLeft = '';
+
+      // double-rAF garante que o browser terminou o reflow após o reset
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        const navRect = nav.getBoundingClientRect();
+        if (navRect.width === 0) return; // nav oculto, nada a medir
+
+        const getContentBounds = (item) => {
+          let left = Infinity, right = -Infinity;
+
+          const svg = item.querySelector('svg');
+          if (svg) {
+            const r = svg.getBoundingClientRect();
+            left = Math.min(left, r.left);
+            right = Math.max(right, r.right);
+          }
+
+          // Range mede o texto real, ignorando width:100% do <span>
+          const label = item.querySelector('span');
+          if (label) {
+            const range = document.createRange();
+            range.selectNodeContents(label);
+            const r = range.getBoundingClientRect();
+            if (r.width > 0) {
+              left = Math.min(left, r.left);
+              right = Math.max(right, r.right);
+            }
+          }
+
+          return { left, right };
+        };
+
+        const firstBounds = getContentBounds(first);
+        const lastBounds = getContentBounds(last);
+
+        const leftGap = firstBounds.left - navRect.left;
+        const rightGap = navRect.right - lastBounds.right;
+        const diff = rightGap - leftGap;
+
+        if (diff > 0) first.style.paddingLeft = `${diff}px`;
+      }));
+    };
+
+    equalize();
+
+    // ResizeObserver cobre redimensionamento de janela
+    const observer = new ResizeObserver(equalize);
+    observer.observe(nav);
+
+    // matchMedia cobre a transição display:none → display:flex da media query
+    const mq = window.matchMedia('(max-width: 1199.98px)');
+    mq.addEventListener('change', equalize);
+
+    return () => {
+      observer.disconnect();
+      mq.removeEventListener('change', equalize);
+    };
+  }, []);
 
   return (
-    <nav className="_mob-nav">
+    <nav className="_mob-nav" ref={navRef}>
       {ITEMS.map(item => {
         const active = p === item.href || p.startsWith(item.href + '/');
         return (

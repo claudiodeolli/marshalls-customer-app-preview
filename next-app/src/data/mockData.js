@@ -128,7 +128,7 @@ export const mockReferrals = [
     uuid: 'ref-001',
     status: 'PENDING',
     beneficiary: { name: 'João da Silva' },
-    specialty: { name: 'Cardiologia' },
+    specialty: { uuid: 'spec-001', name: 'Cardiologia' },
     createdAt: '01/06/2026 10:00:00',
     updatedAt: '01/06/2026 10:00:00',
     urlPath: null,
@@ -137,7 +137,7 @@ export const mockReferrals = [
     uuid: 'ref-002',
     status: 'PENDING',
     beneficiary: { name: 'João da Silva' },
-    specialty: { name: 'Nutrição' },
+    specialty: { uuid: 'spec-004', name: 'Neurologia' },
     createdAt: '03/06/2026 14:30:00',
     updatedAt: '03/06/2026 14:30:00',
     urlPath: null,
@@ -147,7 +147,7 @@ export const mockReferrals = [
     uuid: 'ref-003',
     status: 'SCHEDULED',
     beneficiary: { name: 'João da Silva' },
-    specialty: { name: 'Ortopedia' },
+    specialty: { uuid: 'spec-003', name: 'Ortopedia' },
     createdAt: '20/05/2026 09:00:00',
     updatedAt: '25/05/2026 11:00:00',
     urlPath: 'https://example.com/docs/encaminhamento-003.pdf',
@@ -157,7 +157,7 @@ export const mockReferrals = [
     uuid: 'ref-004',
     status: 'FINISHED',
     beneficiary: { name: 'João da Silva' },
-    specialty: { name: 'Neurologia' },
+    specialty: { uuid: 'spec-004', name: 'Neurologia' },
     createdAt: '05/05/2026 08:00:00',
     updatedAt: '20/05/2026 10:45:00',
     urlPath: 'https://example.com/docs/encaminhamento-004.pdf',
@@ -167,7 +167,7 @@ export const mockReferrals = [
     uuid: 'ref-005',
     status: 'UNFINISHED',
     beneficiary: { name: 'João da Silva' },
-    specialty: { name: 'Dermatologia' },
+    specialty: { uuid: 'spec-005', name: 'Dermatologia' },
     createdAt: '10/05/2026 13:00:00',
     updatedAt: '15/05/2026 09:30:00',
     urlPath: null,
@@ -296,13 +296,13 @@ export const mockAppointments = [
 ];
 
 export const mockSpecialties = [
-  { uuid: 'spec-001', name: 'Cardiologia',   price: 95, referral: false },
+  { uuid: 'spec-001', name: 'Cardiologia',   price: 95, referral: true  },
   { uuid: 'spec-002', name: 'Nutrição',      price: 70, referral: false },
-  { uuid: 'spec-003', name: 'Ortopedia',     price: 95, referral: false },
-  { uuid: 'spec-004', name: 'Neurologia',    price: 95, referral: false },
-  { uuid: 'spec-005', name: 'Dermatologia',  price: 95, referral: false },
+  { uuid: 'spec-003', name: 'Ortopedia',     price: 95, referral: true  },
+  { uuid: 'spec-004', name: 'Neurologia',    price: 95, referral: true  },
+  { uuid: 'spec-005', name: 'Dermatologia',  price: 95, referral: true  },
   { uuid: 'spec-006', name: 'Psicologia',    price: 70, referral: false },
-  { uuid: 'spec-007', name: 'Clínica Geral', price: 95, referral: false },
+  { uuid: 'spec-007', name: 'Clínica Geral', price: 95, referral: true  },
 ];
 
 export function getMockAvailability(specialtyUuid) {

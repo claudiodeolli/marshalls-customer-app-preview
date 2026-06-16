@@ -27101,7 +27101,6 @@ footer.footer span i,footer.footer span svg {
 }
 
 [dir] .main-menu .shadow-bottom {
-    margin-top: -.25rem;
     background: linear-gradient(#fff 41%,hsla(0,0%,100%,.11) 95%,hsla(0,0%,100%,0))
 }
 

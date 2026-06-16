@@ -154,7 +154,7 @@ export default function MainMenu({ collapsed, onToggleCollapse, onOverlayClick, 
           </ul>
         </div>
 
-        <div className="shadow-bottom" />
+        <div className="shadow-bottom" style={capTop !== null ? { top: capTop + 10 } : undefined} />
 
         {/* ── Lista de itens do menu ── */}
         <PerfectScrollbar

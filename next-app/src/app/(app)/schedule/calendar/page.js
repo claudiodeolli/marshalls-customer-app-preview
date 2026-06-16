@@ -32,6 +32,10 @@ function ScheduleContent() {
   const [specialties, setSpecialties] = useState([]);
   const [specSearch, setSpecSearch] = useState('');
 
+  // Specialty locked from referral (eI / eN in original)
+  const [specialtyLocked, setSpecialtyLocked] = useState(false);
+  const [lockedSpecialtyUuid, setLockedSpecialtyUuid] = useState(null);
+
   // Phase 2: availability / calendar
   const [selectedSpecialty, setSelectedSpecialty] = useState(null);
   const [loadingAvailability, setLoadingAvailability] = useState(false);
@@ -58,7 +62,6 @@ function ScheduleContent() {
   const [referralModal, setReferralModal] = useState(false);
   const [referrals, setReferrals] = useState([]);
   const [loadingReferrals, setLoadingReferrals] = useState(false);
-  const [pendingSpecialty, setPendingSpecialty] = useState(null);
 
   const calendarRef = useRef(null);
   const slotsRef = useRef(null);
@@ -97,7 +100,11 @@ function ScheduleContent() {
         const match = specialties.find(
           s => (s.uuid && s.uuid === ref.specialty.uuid) || s.name === ref.specialty.name
         );
-        if (match) doSelectSpecialty(match);
+        if (match) {
+          setSpecialtyLocked(true);
+          setLockedSpecialtyUuid(match.uuid);
+          doSelectSpecialty(match);
+        }
       } catch { }
     })();
   }, [urlReferral, loadingSpecialties, specialties]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -144,10 +151,9 @@ function ScheduleContent() {
   }
 
   function handleSpecialtyClick(spec) {
-    if (loadingAvailability) return;
+    if (loadingAvailability || specialtyLocked) return;
     // If specialty requires referral and none selected, show referral picker modal
     if (spec.referral && !referralId) {
-      setPendingSpecialty(spec);
       setReferralModal(true);
       fetchReferrals();
       return;
@@ -159,10 +165,10 @@ function ScheduleContent() {
     setLoadingReferrals(true);
     try {
       if (IS_MOCK) {
-        setReferrals(mockReferrals.filter(r => r.status === 'PENDING'));
+        setReferrals(mockReferrals);
       } else {
         const { data } = await api.get('/api/referrals');
-        setReferrals(Array.isArray(data) ? data.filter(r => r.status === 'PENDING') : []);
+        setReferrals(Array.isArray(data) ? data : []);
       }
     } catch {
       setReferrals([]);
@@ -171,18 +177,30 @@ function ScheduleContent() {
     }
   }
 
-  function handleReferralSelect(ref) {
+  // Just highlights the referral in the modal (same state used for booking submission)
+  function handleReferralItemClick(ref) {
     setReferralId(ref.uuid);
-    setReferralModal(false);
-    if (pendingSpecialty) {
-      doSelectSpecialty(pendingSpecialty);
-      setPendingSpecialty(null);
-    }
   }
 
+  // Cancel modal: close and clear referral selection
   function handleReferralModalClose() {
     setReferralModal(false);
-    setPendingSpecialty(null);
+    setReferralId('');
+  }
+
+  // Confirm modal: find referral's specialty, lock list, auto-select
+  function handleReferralConfirm() {
+    if (!referralId) return;
+    const ref = referrals.find(r => r.uuid === referralId);
+    if (!ref?.specialty) return;
+    const spec =
+      specialties.find(s => s.uuid && s.uuid === ref.specialty.uuid) ||
+      specialties.find(s => s.name === ref.specialty.name);
+    if (!spec) return;
+    setSpecialtyLocked(true);
+    setLockedSpecialtyUuid(spec.uuid);
+    setReferralModal(false);
+    doSelectSpecialty(spec);
   }
 
   function handleDayClick(day) {
@@ -271,13 +289,21 @@ function ScheduleContent() {
     return !!(day && selectedDate === dateStrFromParts(viewYear, viewMonth, day));
   }
 
-  const filteredSpecialties = specSearch
-    ? specialties.filter(s => s.name.toLowerCase().includes(specSearch.toLowerCase()))
-    : specialties;
+  // When locked, show only the locked specialty; otherwise filter by search
+  const filteredSpecialties = (() => {
+    if (specialtyLocked && lockedSpecialtyUuid) {
+      return specialties.filter(s => s.uuid === lockedSpecialtyUuid);
+    }
+    return specSearch
+      ? specialties.filter(s => s.name.toLowerCase().includes(specSearch.toLowerCase()))
+      : specialties;
+  })();
 
   const filteredSlots = slotSearch
     ? slots.filter(s => s.from.includes(slotSearch))
     : slots;
+
+  const pendingReferrals = referrals.filter(r => r.status === 'PENDING');
 
   const cells = buildCalendar(viewYear, viewMonth);
 
@@ -325,30 +351,32 @@ function ScheduleContent() {
   // ── Main page ─────────────────────────────────────────────────────────────
   return (
     <div>
-      {/* Search field */}
-      <div style={{ marginBottom: 20 }}>
-        <div className="input-group">
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Digite a especialidade"
-            value={specSearch}
-            onChange={e => setSpecSearch(e.target.value)}
-          />
-          <div className="input-group-append">
-            <span className="input-group-text" style={{ background: '#f8f8f8' }}>
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                stroke="#6e6b7b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
-              </svg>
-            </span>
+      {/* Search field — hidden when specialty is locked from referral */}
+      {!specialtyLocked && (
+        <div style={{ marginBottom: 20 }}>
+          <div className="input-group">
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Digite a especialidade"
+              value={specSearch}
+              onChange={e => setSpecSearch(e.target.value)}
+            />
+            <div className="input-group-append">
+              <span className="input-group-text" style={{ background: '#f8f8f8' }}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                  stroke="#6e6b7b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
+              </span>
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Specialty list */}
       <h6 style={{ fontSize: 17, fontWeight: 700, marginBottom: 12, color: '#5e5873' }}>
-        Nossas especialidades
+        {specialtyLocked ? 'Especialidade do Encaminhamento' : 'Nossas especialidades'}
       </h6>
 
       <div className="card mb-3">
@@ -361,6 +389,7 @@ function ScheduleContent() {
             filteredSpecialties.map((s, idx) => {
               const active = selectedSpecialty?.uuid === s.uuid || selectedSpecialty?.name === s.name;
               const isLast = idx === filteredSpecialties.length - 1;
+              const clickable = !loadingAvailability && !specialtyLocked;
               return (
                 <div
                   key={s.uuid || s.name}
@@ -371,12 +400,12 @@ function ScheduleContent() {
                     alignItems: 'center',
                     padding: '14px 16px',
                     borderBottom: isLast ? 'none' : '1px solid #ebe9f1',
-                    cursor: loadingAvailability ? 'default' : 'pointer',
+                    cursor: clickable ? 'pointer' : 'default',
                     background: active ? '#f2f8fc' : 'transparent',
                     borderLeft: active ? '3px solid #4daab6' : '3px solid transparent',
                     transition: 'background 0.15s',
                   }}
-                  onMouseEnter={e => { if (!active && !loadingAvailability) e.currentTarget.style.background = '#f8f8f8'; }}
+                  onMouseEnter={e => { if (!active && clickable) e.currentTarget.style.background = '#f8f8f8'; }}
                   onMouseLeave={e => { if (!active) e.currentTarget.style.background = 'transparent'; }}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -443,7 +472,6 @@ function ScheduleContent() {
                   return (
                     <div
                       key={idx}
-                      className="_cal-cell"
                       onClick={() => handleDayClick(day)}
                       style={{
                         textAlign: 'center',
@@ -464,7 +492,6 @@ function ScheduleContent() {
                       onMouseLeave={e => { if (!sel) e.currentTarget.style.background = tod ? '#e8f0ff' : 'transparent'; }}
                     >
                       {day || ''}
-                      {/* Blue dot marks available dates */}
                       {avail ? (
                         <div style={{
                           width: 5, height: 5, borderRadius: '50%',
@@ -531,40 +558,50 @@ function ScheduleContent() {
                         ))}
                       </div>
                     )}
-
-                    {bookingError && (
-                      <div className="alert alert-danger mt-2 mb-0" style={{ fontSize: 13 }}>
-                        {bookingError}
-                      </div>
-                    )}
-
-                    <button
-                      onClick={handleBook}
-                      disabled={!selectedSlot || booking}
-                      style={{
-                        width: '100%',
-                        marginTop: 20,
-                        padding: '12px',
-                        borderRadius: 24,
-                        background: selectedSlot && !booking
-                          ? 'linear-gradient(90deg, #4daab6 0%, #461bef 100%)'
-                          : '#ccc',
-                        color: '#fff',
-                        fontWeight: 700,
-                        fontSize: 15,
-                        letterSpacing: 1,
-                        border: 'none',
-                        cursor: selectedSlot && !booking ? 'pointer' : 'default',
-                        transition: 'opacity 0.2s',
-                      }}
-                    >
-                      {booking ? 'AGENDANDO...' : 'AGENDAR'}
-                    </button>
                   </>
                 )}
               </div>
             </div>
           )}
+
+          {/* AGENDAR button — always visible once specialty is selected, disabled until slot is picked */}
+          {bookingError && (
+            <div className="alert alert-danger mb-1" style={{ fontSize: 13 }}>
+              {bookingError}
+            </div>
+          )}
+          <button
+            onClick={handleBook}
+            disabled={!selectedSlot || booking}
+            style={{
+              width: '100%',
+              marginTop: 8,
+              padding: '12px',
+              borderRadius: 24,
+              background: selectedSlot && !booking
+                ? 'linear-gradient(90deg, #4daab6 0%, #461bef 100%)'
+                : '#ccc',
+              color: '#fff',
+              fontWeight: 700,
+              fontSize: 15,
+              letterSpacing: 1,
+              border: 'none',
+              cursor: selectedSlot && !booking ? 'pointer' : 'default',
+              transition: 'opacity 0.2s',
+              opacity: selectedSlot && !booking ? 1 : 0.7,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 8,
+            }}
+          >
+            {booking ? (
+              <>
+                <div className="spinner-border spinner-border-sm" style={{ width: 18, height: 18, borderWidth: 2, color: '#fff' }} />
+                AGENDANDO...
+              </>
+            ) : 'AGENDAR'}
+          </button>
         </div>
       )}
 
@@ -575,7 +612,7 @@ function ScheduleContent() {
         ← Voltar
       </button>
 
-      {/* Referral selection modal */}
+      {/* ── Referral selection modal ────────────────────────────────────────── */}
       {referralModal && (
         <div
           style={{
@@ -586,49 +623,124 @@ function ScheduleContent() {
           onClick={handleReferralModalClose}
         >
           <div
-            className="card"
-            style={{ width: '100%', maxWidth: 480, maxHeight: '80vh', display: 'flex', flexDirection: 'column' }}
+            style={{
+              background: '#fff',
+              borderRadius: 8,
+              width: '100%',
+              maxWidth: 500,
+              maxHeight: '80vh',
+              display: 'flex',
+              flexDirection: 'column',
+              boxShadow: '0 8px 32px rgba(0,0,0,0.18)',
+              overflow: 'hidden',
+            }}
             onClick={e => e.stopPropagation()}
           >
-            <div className="card-header d-flex align-items-center justify-content-between">
-              <h6 className="mb-0" style={{ fontWeight: 700 }}>Selecionar encaminhamento</h6>
-              <button className="btn btn-flat-secondary btn-sm p-50" onClick={handleReferralModalClose}>
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+            {/* Modal header */}
+            <div style={{
+              display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+              padding: '16px 20px', borderBottom: '1px solid #eee',
+            }}>
+              <h6 style={{ margin: 0, fontWeight: 700, fontSize: 16, color: '#333' }}>
+                Selecionar Encaminhamento
+              </h6>
+              <button
+                onClick={handleReferralModalClose}
+                style={{
+                  background: 'none', border: 'none', cursor: 'pointer',
+                  padding: '4px', lineHeight: 1, color: '#5e5873',
+                }}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                   stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
                 </svg>
               </button>
             </div>
-            <div className="card-body" style={{ overflowY: 'auto' }}>
+
+            {/* Modal body */}
+            <div style={{ padding: '16px 20px', overflowY: 'auto', flex: 1 }}>
+              <p style={{ fontSize: 14, color: '#666', marginBottom: 16 }}>
+                Selecione um encaminhamento médico. A especialidade do encaminhamento será selecionada automaticamente:
+              </p>
+
               {loadingReferrals ? (
-                <div style={{ display: 'flex', justifyContent: 'center', padding: '1.5rem' }}>
-                  <div className="spinner-border" style={{ color: '#4daab6' }} />
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '2rem', gap: 12 }}>
+                  <p style={{ margin: 0, color: '#666', fontSize: 14 }}>Carregando encaminhamentos...</p>
+                  <div className="spinner-border" style={{ color: '#4daab6', width: '2.5rem', height: '2.5rem' }} />
                 </div>
-              ) : referrals.length === 0 ? (
-                <p className="text-muted small mb-0">Nenhum encaminhamento pendente encontrado.</p>
+              ) : pendingReferrals.length === 0 ? (
+                <div style={{ textAlign: 'center', padding: '2rem 0' }}>
+                  <p style={{ color: '#666', marginBottom: 8, fontSize: 14 }}>
+                    Você não possui encaminhamentos disponíveis.
+                  </p>
+                  <p style={{ color: '#666', fontSize: 13, margin: 0 }}>
+                    Solicite um encaminhamento médico para agendar esta especialidade.
+                  </p>
+                </div>
               ) : (
-                referrals.map((ref, idx) => (
-                  <div
-                    key={ref.uuid}
-                    onClick={() => handleReferralSelect(ref)}
-                    style={{
-                      padding: '12px 0',
-                      borderBottom: idx < referrals.length - 1 ? '1px solid #ebe9f1' : 'none',
-                      cursor: 'pointer',
-                    }}
-                    onMouseEnter={e => { e.currentTarget.style.background = '#f8f8f8'; }}
-                    onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; }}
-                  >
-                    <p className="mb-0" style={{ fontWeight: 600, fontSize: 14 }}>
-                      {ref.specialty?.name}
-                    </p>
-                    <p className="text-muted mb-0" style={{ fontSize: 12 }}>
-                      {ref.createdAt}
-                    </p>
-                  </div>
-                ))
+                <div style={{ maxHeight: 300, overflowY: 'auto', marginBottom: 16 }}>
+                  {pendingReferrals.map(ref => {
+                    const isSelected = referralId === ref.uuid;
+                    return (
+                      <div
+                        key={ref.uuid}
+                        onClick={() => handleReferralItemClick(ref)}
+                        style={{
+                          padding: '12px 14px',
+                          border: `1px solid ${isSelected ? '#4daab6' : '#e0e0e0'}`,
+                          borderRadius: 8,
+                          marginBottom: 8,
+                          cursor: 'pointer',
+                          background: isSelected ? '#f0f9ff' : 'transparent',
+                          transition: 'all 0.15s',
+                        }}
+                        onMouseEnter={e => { if (!isSelected) e.currentTarget.style.background = '#f8f9fa'; }}
+                        onMouseLeave={e => { if (!isSelected) e.currentTarget.style.background = 'transparent'; }}
+                      >
+                        <p style={{ margin: '0 0 4px', fontWeight: 700, fontSize: 15, color: '#333' }}>
+                          {ref.specialty?.name || 'Especialidade não informada'}
+                        </p>
+                        <p style={{ margin: 0, color: '#666', fontSize: 13 }}>
+                          Criado em: {ref.createdAt}
+                        </p>
+                      </div>
+                    );
+                  })}
+                </div>
               )}
             </div>
+
+            {/* Modal footer — only show buttons when there are referrals */}
+            {!loadingReferrals && pendingReferrals.length > 0 && (
+              <div style={{
+                display: 'flex', justifyContent: 'flex-end', gap: 12,
+                padding: '12px 20px', borderTop: '1px solid #eee',
+              }}>
+                <button
+                  onClick={handleReferralModalClose}
+                  style={{
+                    borderRadius: 24, padding: '8px 24px', fontWeight: 600,
+                    background: 'transparent', border: '1px solid #ccc', color: '#666',
+                    cursor: 'pointer', fontSize: 14,
+                  }}
+                >
+                  Cancelar
+                </button>
+                <button
+                  onClick={handleReferralConfirm}
+                  disabled={!referralId}
+                  style={{
+                    borderRadius: 24, padding: '8px 24px', fontWeight: 600,
+                    background: referralId ? '#4daab6' : '#ccc',
+                    border: 'none', color: '#fff',
+                    cursor: referralId ? 'pointer' : 'default', fontSize: 14,
+                  }}
+                >
+                  Confirmar
+                </button>
+              </div>
+            )}
           </div>
         </div>
       )}
