@@ -59,10 +59,19 @@ export default function Navbar({ onHamburgerClick }) {
 
   const firstName = user?.name?.split(' ')[0] ?? user?.firstName ?? '';
   const initials = firstName ? firstName[0].toUpperCase() : '?';
+  const [profilePhoto, setProfilePhoto] = useState('');
 
   useEffect(() => {
     setGreeting(buildGreeting(firstName));
   }, [firstName]);
+
+  useEffect(() => {
+    const saved = localStorage.getItem('profile_photo');
+    if (saved) setProfilePhoto(saved);
+    function onUpdate(e) { setProfilePhoto(e.detail.url); }
+    window.addEventListener('profilePhotoUpdated', onUpdate);
+    return () => window.removeEventListener('profilePhotoUpdated', onUpdate);
+  }, []);
 
   useEffect(() => {
     function handleClickOutside(e) {
@@ -119,14 +128,14 @@ export default function Navbar({ onHamburgerClick }) {
               className={`nav-item-user-btn${dropdownOpen ? ' nav-item-user-btn--open' : ''}`}
               onClick={e => { e.stopPropagation(); setDropdownOpen(o => !o); }}
             >
-              {/* Avatar circular com inicial */}
+              {/* Avatar circular com foto ou inicial */}
               <div
                 className="_ct-gradient _user-avatar"
                 style={{
                   width: '40px',
                   height: '40px',
                   borderRadius: '50%',
-                  background: 'linear-gradient(135deg,#0052ff 0%,#00b7ff 100%)',
+                  background: profilePhoto ? 'transparent' : 'linear-gradient(135deg,#0052ff 0%,#00b7ff 100%)',
                   color: 'white',
                   display: 'flex',
                   alignItems: 'center',
@@ -136,9 +145,12 @@ export default function Navbar({ onHamburgerClick }) {
                   cursor: 'pointer',
                   userSelect: 'none',
                   flexShrink: 0,
+                  overflow: 'hidden',
                 }}
               >
-                {initials}
+                {profilePhoto
+                  ? <img src={profilePhoto} alt="Foto de perfil" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  : initials}
               </div>
 
               {/* Dropdown */}
