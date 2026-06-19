@@ -794,6 +794,15 @@ select.form-control,
   #main-menu-navigation {
     padding-bottom: 5rem !important;
   }
+
+  /* Remove transições e animações dos itens do menu no mobile
+     para garantir navegação com toque único no iOS */
+  .main-menu .navigation li,
+  .main-menu .navigation li > a,
+  .main-menu .navigation li > a * {
+    transition: none !important;
+    animation: none !important;
+  }
 }
 
 /* ── < 768px: mobile ── */
