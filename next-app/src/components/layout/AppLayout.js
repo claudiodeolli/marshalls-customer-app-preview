@@ -75,7 +75,7 @@ export default function AppLayout({ children }) {
         menu.style.transform = '';
         if (mobileOpenRef.current) setMobileOpen(false);
       } else {
-        if (!mobileOpenRef.current) menu.style.transform = 'translateX(-280px)';
+        if (!mobileOpenRef.current) menu.style.transform = 'translateX(-294px)';
       }
     };
     window.addEventListener('resize', handleResize);
@@ -184,7 +184,7 @@ export default function AppLayout({ children }) {
     setMobileOpen(false);
     if (window.innerWidth < 1200) {
       const menu = document.querySelector('.main-menu');
-      if (menu) menu.style.transform = 'translateX(-280px)';
+      if (menu) menu.style.transform = 'translateX(-294px)';
     }
   }, [pathname]);
 
@@ -192,7 +192,7 @@ export default function AppLayout({ children }) {
     setMobileOpen(false);
     if (window.innerWidth < 1200) {
       const menu = document.querySelector('.main-menu');
-      if (menu) menu.style.transform = 'translateX(-280px)';
+      if (menu) menu.style.transform = 'translateX(-294px)';
     }
   }
 

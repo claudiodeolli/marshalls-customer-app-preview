@@ -220,7 +220,7 @@ function StatusSelect({ value, onChange }) {
         onClick={() => setOpen(o => !o)}
         style={{
           width: '100%', height: '38px',
-          border: '1px solid #d8d6de', borderRadius: '8px',
+          border: '1px solid #d8d6de', borderRadius: '12px',
           background: '#fff', cursor: 'pointer',
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           padding: '0 12px', fontSize: '14px', color: '#6e6b7b',
@@ -240,7 +240,7 @@ function StatusSelect({ value, onChange }) {
       {open && (
         <div style={{
           position: 'absolute', top: 'calc(100% + 4px)', left: 0, right: 0,
-          background: '#fff', border: '1px solid #d8d6de', borderRadius: '8px',
+          background: '#fff', border: '1px solid #d8d6de', borderRadius: '12px',
           boxShadow: '0 4px 24px rgba(34,41,47,0.12)', zIndex: 9999, overflow: 'hidden',
         }}>
           {STATUS_OPTIONS.map(opt => (

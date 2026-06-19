@@ -391,10 +391,12 @@ export default function PlantaoPage() {
               <p>
                 Toque no botão abaixo para iniciar
               </p>
-              <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ animation: 'fade_down2 2s ease-in-out infinite' }}>
-                <polyline points="7 8 12 13 17 8" />
-                <polyline points="7 13 12 18 17 13" />
-              </svg>
+              <div style={{ animation: 'fade_down2 2s ease-in-out infinite', display: 'inline-flex' }}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="7 8 12 13 17 8" />
+                  <polyline points="7 13 12 18 17 13" />
+                </svg>
+              </div>
             </div>
             <button
               className="btn btn-primary _start-btn"

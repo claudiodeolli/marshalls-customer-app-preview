@@ -208,7 +208,7 @@ export default function MinhaContaPage() {
         &nbsp;·&nbsp; CPF: {SUBSCRIPTION.cpf}
       </p>
       <div style={{
-        display: 'inline-block', border: '1px solid #d8d6de', borderRadius: '8px',
+        display: 'inline-block', border: '1px solid #d8d6de', borderRadius: '12px',
         padding: '8px 16px', marginBottom: '1.5rem', background: '#fff',
       }}>
         <small style={{ display: 'block', fontSize: '11px', color: '#aaa', marginBottom: '2px' }}>Número do contrato</small>
@@ -364,7 +364,7 @@ export default function MinhaContaPage() {
 
                 {dependents.map((dep, i) => (
                   <div key={i} style={{
-                    border: '1px solid #e8e8e8', borderRadius: '8px', padding: '14px 16px',
+                    border: '1px solid #e8e8e8', borderRadius: '12px', padding: '14px 16px',
                     marginBottom: '10px', background: '#fafafa',
                     display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '12px',
                   }}>
@@ -396,7 +396,7 @@ export default function MinhaContaPage() {
 
                 {addingDep && (
                   <div style={{
-                    border: '1px dashed #7367f0', borderRadius: '8px',
+                    border: '1px dashed #7367f0', borderRadius: '12px',
                     padding: '16px', marginBottom: '12px', background: '#f9f8ff',
                   }}>
                     <h6 style={{ fontWeight: 600, color: '#5e5873', marginBottom: '14px' }}>Novo dependente</h6>
@@ -587,7 +587,7 @@ export default function MinhaContaPage() {
           }
         >
           <div style={{
-            border: '1px solid #e0d9ff', borderRadius: '8px', padding: '14px 16px',
+            border: '1px solid #e0d9ff', borderRadius: '12px', padding: '14px 16px',
             background: '#f9f8ff', marginBottom: '16px',
           }}>
             <p style={{ fontWeight: 700, color: '#5e5873', margin: '0 0 4px', fontSize: '15px' }}>{targetPlan?.name}</p>
@@ -597,7 +597,7 @@ export default function MinhaContaPage() {
           <div style={{
             display: 'flex', alignItems: 'center', gap: '10px',
             background: '#f8f8f8', border: '1px solid #ebe9f1',
-            borderRadius: '8px', padding: '12px 14px',
+            borderRadius: '12px', padding: '12px 14px',
             fontSize: '13px', color: '#5e5873',
           }}>
             <MastercardIcon />

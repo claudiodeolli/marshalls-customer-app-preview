@@ -313,6 +313,15 @@ html::-webkit-scrollbar-thumb:hover {
   animation: none;
 }
 
+/* ── Gradiente de fundo do navbar (cor de marca MarshallsMed) ── */
+:root {
+  --e-global-color-b1b0d89: #94F1FF;
+}
+
+.header-navbar.floating-nav {
+  background-image: linear-gradient(180deg, var(--e-global-color-b1b0d89) 0%, #FFFFFF 70%) !important;
+}
+
 /* ── Saudação no navbar ── */
 .header-navbar .navbar-container>ul.nav.navbar-nav {
   display: flex !important;
@@ -608,6 +617,16 @@ body._page-leaving .content-body {
   border-radius: 12px !important;
 }
 
+/* ── Campos de formulário ── */
+input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]):not([type="range"]):not([type="file"]):not([type="color"]),
+.form-control:not(textarea):not(select),
+select.form-control,
+.custom-select {
+  height: 42px !important;
+  border-radius: 11px !important;
+  padding: 6px 12px !important;
+}
+
 /* Botão Sair do dropdown de usuário */
 ._sair-link {
   font-size: 1.1rem;
@@ -626,6 +645,14 @@ body._page-leaving .content-body {
 /* Breadcrumb visível em todas as resoluções — Vuexy esconde em ≤648px */
 .content-header .breadcrumb {
   display: flex !important;
+}
+
+/* Mobile: texto da sidemenu no mesmo tamanho do Sair (1.2rem no mobile) */
+@media (max-width: 1199.98px) {
+  .main-menu .navigation li a .menu-title,
+  [data-plantao-shortcut]>a {
+    font-size: 1.2rem;
+  }
 }
 
 /* ── Hamburger e avatar maiores no mobile ── */
@@ -663,6 +690,13 @@ body._page-leaving .content-body {
 .main-menu .navigation li.nav-item>a,
 .main-menu .navigation li.nav-item ul li>a {
   transition: background 150ms ease, color 150ms ease, box-shadow 150ms ease !important;
+  touch-action: manipulation;
+}
+
+/* cursor: pointer no <li> faz o iOS reconhecer o elemento como interativo
+   no primeiro toque, evitando o comportamento de duplo-clique no Safari */
+.main-menu .navigation li.nav-item {
+  cursor: pointer;
 }
 
 .main-menu .navigation li.nav-item:not(.active)>a:hover,
@@ -706,7 +740,8 @@ body._page-leaving .content-body {
   /* Transição persistente para abertura e fechamento do sidebar */
   .main-menu {
     transition: transform 0.25s ease !important;
-    width: 280px !important;
+    width: 294px !important;
+    height: calc(100svh - 79px) !important;
     border-radius: 0 28px 28px 0 !important;
     overflow: hidden !important;
     border: 1px solid #D4DEF1 !important;
@@ -718,10 +753,14 @@ body._page-leaving .content-body {
     touch-action: none;
   }
 
-  /* Previne scroll chaining: scroll dentro do sidebar não propaga para a página */
+  /* Previne scroll chaining: scroll dentro do sidebar não propaga para a página.
+     overflow-y: auto + -webkit-overflow-scrolling garante scroll nativo no iOS,
+     onde o PerfectScrollbar pode não funcionar corretamente. */
   .main-menu .main-menu-content {
     overscroll-behavior: contain;
     touch-action: pan-y;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
   }
 
   /* Espaçamento superior na área da logo */

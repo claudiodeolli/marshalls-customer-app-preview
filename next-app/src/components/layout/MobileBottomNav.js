@@ -15,7 +15,7 @@ const ITEMS = [
     label: 'Clube',
     href: '/meu-clube',
     icon: {
-      viewBox: '0 0 24 24',
+      viewBox: '1 1 22 22',
       fill: 'currentColor',
       stroke: 'none',
       strokeWidth: '0',
@@ -128,7 +128,7 @@ export default function MobileBottomNav({ onNavClick }) {
           <Link
             key={item.href}
             href={item.href}
-            className={`_mob-nav__item${active ? ' _mob-nav__item--active' : ''}`}
+            className={`_mob-nav__item${active ? ' _mob-nav__item--active' : ''}${item.href === '/meu-clube' ? ' _mob-nav__item--club' : ''}`}
             onClick={onNavClick}
           >
             <svg

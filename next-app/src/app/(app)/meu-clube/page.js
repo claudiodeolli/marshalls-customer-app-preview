@@ -3,10 +3,14 @@
 export default function MeuClubePage() {
   return (
     <div>
-      <p className="text-muted mb-75">Acesse seu clube e aproveite vantagens exclusivas.</p>
+      <div style={{ marginBottom: '1.5rem' }}>
+        <p className="text-muted mb-0" style={{ fontSize: '14px' }}>
+          Acesse seu Clube e aproveite<br className="_br-mobile" /> vantagens exclusivas
+        </p>
+      </div>
       <div
         className="card"
-        style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '260px', gap: '16px' }}
+        style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '260px' }}
       >
         <a
           className="btn btn-primary btn-lg"
