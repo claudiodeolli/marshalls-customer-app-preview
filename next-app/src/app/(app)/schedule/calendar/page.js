@@ -152,8 +152,12 @@ function ScheduleContent() {
 
   function handleSpecialtyClick(spec) {
     if (loadingAvailability || specialtyLocked) return;
-    // If specialty requires referral and none selected, show referral picker modal
-    if (spec.referral && !referralId) {
+    // Especialidades que não exigem encaminhamento com assinatura "S"
+    const EXEMPT = ['Nutrição', 'Psicologia'];
+    const hasSubscription = Array.isArray(user?.plans) && user.plans.some(p => p.paymentType === 'S');
+    const hasAvulsa = Array.isArray(user?.plans) && user.plans.some(p => p.paymentType === 'A');
+    const requiresReferral = hasSubscription && !EXEMPT.includes(spec.name) && !hasAvulsa;
+    if (requiresReferral && !referralId) {
       setReferralModal(true);
       fetchReferrals();
       return;
