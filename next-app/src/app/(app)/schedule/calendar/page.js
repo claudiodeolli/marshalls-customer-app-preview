@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import api from '@/lib/api';
+import { useAuth } from '@/lib/AuthContext';
 import { mockSpecialties, getMockAvailability, mockReferrals } from '@/data/mockData';
 
 const IS_MOCK = process.env.NEXT_PUBLIC_MOCK_MODE === '1';
@@ -22,6 +23,7 @@ function buildCalendar(year, month) {
 
 function ScheduleContent() {
   const router = useRouter();
+  const { user } = useAuth();
   const params = useSearchParams();
   const urlReferral = params.get('referral') || '';
 
@@ -62,6 +64,7 @@ function ScheduleContent() {
   const [referralModal, setReferralModal] = useState(false);
   const [referrals, setReferrals] = useState([]);
   const [loadingReferrals, setLoadingReferrals] = useState(false);
+  const [pendingSpecialty, setPendingSpecialty] = useState(null);
 
   const calendarRef = useRef(null);
   const slotsRef = useRef(null);
@@ -158,6 +161,7 @@ function ScheduleContent() {
     const hasAvulsa = Array.isArray(user?.plans) && user.plans.some(p => p.paymentType === 'A');
     const requiresReferral = hasSubscription && !EXEMPT.includes(spec.name) && !hasAvulsa;
     if (requiresReferral && !referralId) {
+      setPendingSpecialty(spec);
       setReferralModal(true);
       fetchReferrals();
       return;
@@ -190,6 +194,15 @@ function ScheduleContent() {
   function handleReferralModalClose() {
     setReferralModal(false);
     setReferralId('');
+    setPendingSpecialty(null);
+  }
+
+  function handleAvulsa() {
+    const spec = pendingSpecialty;
+    setReferralModal(false);
+    setReferralId('');
+    setPendingSpecialty(null);
+    if (spec) doSelectSpecialty(spec);
   }
 
   // Confirm modal: find referral's specialty, lock list, auto-select
@@ -678,9 +691,19 @@ function ScheduleContent() {
                   <p style={{ color: '#666', marginBottom: 8, fontSize: 14 }}>
                     Você não possui encaminhamentos disponíveis.
                   </p>
-                  <p style={{ color: '#666', fontSize: 13, margin: 0 }}>
+                  <p style={{ color: '#666', fontSize: 13, marginBottom: '1.5rem' }}>
                     Solicite um encaminhamento médico para agendar esta especialidade.
                   </p>
+                  <button
+                    onClick={handleAvulsa}
+                    style={{
+                      borderRadius: 24, padding: '10px 28px', fontWeight: 600,
+                      background: 'linear-gradient(90deg, #4daab6 0%, #461bef 100%)',
+                      border: 'none', color: '#fff', cursor: 'pointer', fontSize: 14,
+                    }}
+                  >
+                    Agendar Consulta Avulsa
+                  </button>
                 </div>
               ) : (
                 <div style={{ maxHeight: 300, overflowY: 'auto', marginBottom: 16 }}>
