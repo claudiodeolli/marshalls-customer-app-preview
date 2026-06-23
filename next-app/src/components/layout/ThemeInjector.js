@@ -31,8 +31,6 @@ export default function ThemeInjector() {
       `[dir=ltr] .card-congratulations { background: linear-gradient(135deg,${C1} 0%,${C2} 100%) !important; }`,
       `._ct-gradient { background: linear-gradient(135deg,${C1} 0%,${C2} 100%) !important; transition: box-shadow 150ms ease !important; }`,
       `._ct-gradient:hover:not(:disabled) { box-shadow: 0 0 10px 1px ${shadow} !important; }`,
-      `.nav-item-user-btn--open ._ct-gradient:hover:not(:disabled) { box-shadow: none !important; }`,
-      `.nav-item-user-btn--open:has(._sair-link:hover) ._ct-gradient { box-shadow: 0 0 10px 1px ${shadow} !important; }`,
       `.navbar-header { border-bottom-right-radius: .178rem !important; }`,
     ].join('\n');
 

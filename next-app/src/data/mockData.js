@@ -301,7 +301,7 @@ export const mockSpecialties = [
   { uuid: 'spec-003', name: 'Ortopedia',     price: 95, referral: true  },
   { uuid: 'spec-004', name: 'Neurologia',    price: 95, referral: true  },
   { uuid: 'spec-005', name: 'Dermatologia',  price: 95, referral: true  },
-  { uuid: 'spec-006', name: 'Psicologia',    price: 70, referral: false },
+  { uuid: 'spec-006', name: 'Psicologia',    price: 70, referral: true  },
   { uuid: 'spec-007', name: 'Clínica Geral', price: 95, referral: true  },
 ];
 

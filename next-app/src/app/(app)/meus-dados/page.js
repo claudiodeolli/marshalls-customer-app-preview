@@ -470,7 +470,7 @@ export default function MeusDadosPage() {
                 <span style={{ fontWeight: 600, color: '#5e5873' }}>01/01/2024</span>
               </div>
               <div style={{ background: '#f8f8f8', border: '1px solid #e8e8e8', borderRadius: '8px', padding: '12px 16px', minWidth: '160px' }}>
-                <small style={{ fontSize: '11px', color: '#aaa', display: 'block', marginBottom: '2px' }}>Número do contrato</small>
+                <small style={{ fontSize: '11px', color: '#aaa', display: 'block', marginBottom: '2px' }}>Número da assinatura</small>
                 <span style={{ fontWeight: 600, color: '#5e5873' }}>0001234</span>
               </div>
             </div>

@@ -66,6 +66,9 @@ function ScheduleContent() {
   const [loadingReferrals, setLoadingReferrals] = useState(false);
   const [pendingSpecialty, setPendingSpecialty] = useState(null);
 
+  // Show avulsa prices on specialty list
+  const [showPrices, setShowPrices] = useState(false);
+
   const calendarRef = useRef(null);
   const slotsRef = useRef(null);
 
@@ -155,11 +158,20 @@ function ScheduleContent() {
 
   function handleSpecialtyClick(spec) {
     if (loadingAvailability || specialtyLocked) return;
-    // Especialidades que não exigem encaminhamento com assinatura "S"
-    const EXEMPT = ['Nutrição', 'Psicologia'];
-    const hasSubscription = Array.isArray(user?.plans) && user.plans.some(p => p.paymentType === 'S');
-    const hasAvulsa = Array.isArray(user?.plans) && user.plans.some(p => p.paymentType === 'A');
-    const requiresReferral = hasSubscription && !EXEMPT.includes(spec.name) && !hasAvulsa;
+    if (showPrices) {
+      doSelectSpecialty(spec);
+      return;
+    }
+    let requiresReferral;
+    if (IS_MOCK) {
+      requiresReferral = spec.referral === true;
+    } else {
+      // Especialidades que não exigem encaminhamento com assinatura "S"
+      const EXEMPT = ['Nutrição', 'Psicologia'];
+      const hasSubscription = Array.isArray(user?.plans) && user.plans.some(p => p.paymentType === 'S');
+      const hasAvulsa = Array.isArray(user?.plans) && user.plans.some(p => p.paymentType === 'A');
+      requiresReferral = hasSubscription && !EXEMPT.includes(spec.name) && !hasAvulsa;
+    }
     if (requiresReferral && !referralId) {
       setPendingSpecialty(spec);
       setReferralModal(true);
@@ -198,11 +210,16 @@ function ScheduleContent() {
   }
 
   function handleAvulsa() {
-    const spec = pendingSpecialty;
     setReferralModal(false);
     setReferralId('');
     setPendingSpecialty(null);
-    if (spec) doSelectSpecialty(spec);
+    setSelectedSpecialty(null);
+    setSelectedDate(null);
+    setSlots([]);
+    setSelectedSlot(null);
+    setAvailabilities([]);
+    setAvailableDates(new Set());
+    setShowPrices(true);
   }
 
   // Confirm modal: find referral's specialty, lock list, auto-select
@@ -320,7 +337,9 @@ function ScheduleContent() {
     ? slots.filter(s => s.from.includes(slotSearch))
     : slots;
 
-  const pendingReferrals = referrals.filter(r => r.status === 'PENDING');
+  const pendingReferrals = IS_MOCK && pendingSpecialty
+    ? referrals.filter(r => r.status === 'PENDING' && r.specialty?.name === pendingSpecialty.name)
+    : referrals.filter(r => r.status === 'PENDING');
 
   const cells = buildCalendar(viewYear, viewMonth);
 
@@ -392,9 +411,20 @@ function ScheduleContent() {
       )}
 
       {/* Specialty list */}
-      <h6 style={{ fontSize: 17, fontWeight: 700, marginBottom: 12, color: '#5e5873' }}>
-        {specialtyLocked ? 'Especialidade do Encaminhamento' : 'Nossas especialidades'}
-      </h6>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+        <h6 style={{ fontSize: 17, fontWeight: 700, margin: 0, color: '#5e5873' }}>
+          {specialtyLocked ? 'Especialidade do Encaminhamento' : 'Nossas especialidades'}
+        </h6>
+        {showPrices && (
+          <span style={{
+            fontSize: 12, color: '#4daab6', fontWeight: 600,
+            background: '#f0f9ff', border: '1px solid #b3e0ea',
+            borderRadius: 12, padding: '2px 10px',
+          }}>
+            Consulta avulsa
+          </span>
+        )}
+      </div>
 
       <div className="card mb-3">
         <div className="card-body p-0">
@@ -436,6 +466,15 @@ function ScheduleContent() {
                       />
                     )}
                   </div>
+                  {showPrices && s.price != null && (
+                    <span style={{
+                      fontSize: 13, fontWeight: 600, color: '#28c76f',
+                      background: '#e6f9ee', borderRadius: 10, padding: '2px 10px',
+                      flexShrink: 0,
+                    }}>
+                      R$ {s.price.toFixed(2).replace('.', ',')}
+                    </span>
+                  )}
                 </div>
               );
             })
@@ -622,12 +661,30 @@ function ScheduleContent() {
         </div>
       )}
 
-      <button
-        className="btn btn-flat-secondary btn-sm mt-1"
-        onClick={() => router.back()}
-      >
-        ← Voltar
-      </button>
+      {showPrices ? (
+        <button
+          onClick={() => router.back()}
+          style={{
+            background: 'none', border: 'none', cursor: 'pointer',
+            color: '#ea5455', fontWeight: 600, fontSize: 14,
+            display: 'flex', alignItems: 'center', gap: 6,
+            padding: '4px 0', marginTop: 4,
+          }}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+          Cancelar
+        </button>
+      ) : (
+        <button
+          className="btn btn-flat-secondary btn-sm mt-1"
+          onClick={() => router.back()}
+        >
+          ← Voltar
+        </button>
+      )}
 
       {/* ── Referral selection modal ────────────────────────────────────────── */}
       {referralModal && (
@@ -692,18 +749,20 @@ function ScheduleContent() {
                     Você não possui encaminhamentos disponíveis.
                   </p>
                   <p style={{ color: '#666', fontSize: 13, marginBottom: '1.5rem' }}>
-                    Solicite um encaminhamento médico para agendar esta especialidade.
+                    Solicite um encaminhamento médico para agendar esta especialidade, ou:
                   </p>
-                  <button
-                    onClick={handleAvulsa}
-                    style={{
-                      borderRadius: 24, padding: '10px 28px', fontWeight: 600,
-                      background: 'linear-gradient(90deg, #4daab6 0%, #461bef 100%)',
-                      border: 'none', color: '#fff', cursor: 'pointer', fontSize: 14,
-                    }}
-                  >
-                    Agendar Consulta Avulsa
-                  </button>
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
+                    <button
+                      onClick={handleAvulsa}
+                      style={{
+                        borderRadius: 24, padding: '10px 28px', fontWeight: 600,
+                        background: 'linear-gradient(90deg, #4daab6 0%, #461bef 100%)',
+                        border: 'none', color: '#fff', cursor: 'pointer', fontSize: 14,
+                      }}
+                    >
+                      Adquirir consulta avulsa
+                    </button>
+                  </div>
                 </div>
               ) : (
                 <div style={{ maxHeight: 300, overflowY: 'auto', marginBottom: 16 }}>
