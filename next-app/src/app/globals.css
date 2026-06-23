@@ -94,6 +94,12 @@ html[dir] .content.app-content {
   .main-menu {
     z-index: 1040 !important;
   }
+
+  /* 100vh inclui a barra de URL do browser; 100dvh usa apenas a área visível,
+     evitando que o conteúdo do sidebar fique oculto atrás da UI do browser. */
+  .main-menu.menu-fixed {
+    height: 100dvh !important;
+  }
 }
 
 /* ── Faixa inferior: left dinâmico conforme estado do sidebar ── */
@@ -506,7 +512,7 @@ img._logo-collapsed {
 /* ── Sidebar: altura total e scroll ── */
 /* menu-fixed já tem position:fixed via Vuexy; garantimos height e flex */
 .main-menu.menu-fixed {
-  height: 100vh !important;
+  height: 100dvh !important;
   display: flex !important;
   flex-direction: column !important;
   border-bottom: 1px solid #d4def1 !important;
