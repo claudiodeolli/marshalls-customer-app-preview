@@ -68,6 +68,34 @@ html[dir] .content.app-content {
   padding-top: 1.3rem !important;
 }
 
+/* Mobile: remove o gap acima do navbar — com sticky ele fica no fluxo e o padding
+   criaria espaço visível antes do header. No desktop o gap é intencional (efeito floating). */
+@media (max-width: 1199.98px) {
+  html[dir] .content.app-content {
+    padding-top: 0 !important;
+  }
+
+  /* Navbar full-bleed: margens negativas compensam o padding de 2rem do pai em cada lado.
+     Prefixo html[dir] eleva especificidade (0,3,1) acima da regra Vuexy ≤575px
+     (0,2,0) que re-aplica width: calc(100% - 2.4rem)!important via cascata posterior. */
+  html[dir] .header-navbar.floating-nav {
+    margin-left: -2rem !important;
+    margin-right: -2rem !important;
+    width: calc(100% + 4rem) !important;
+    border-radius: 0 !important;
+  }
+
+  /* Overlay deve cobrir navbar (1030) e bottom nav (1025).
+     Main-menu fica acima do overlay para permanecer visível. */
+  .sidenav-overlay {
+    z-index: 1033 !important;
+  }
+
+  .main-menu {
+    z-index: 1040 !important;
+  }
+}
+
 /* ── Faixa inferior: left dinâmico conforme estado do sidebar ── */
 .menu-expanded ._bottom-bar {
   left: 260px;
