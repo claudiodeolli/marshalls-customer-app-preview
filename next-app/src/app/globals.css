@@ -819,6 +819,14 @@ select.form-control,
     -webkit-overflow-scrolling: touch !important;
   }
 
+  /* touch-action: manipulation nos links sobrescreve o pan-y do container pai,
+     eliminando a ambiguidade de gesto no iOS Safari que exigia dois toques. */
+  .main-menu .navigation li > a,
+  [data-plantao-shortcut] > a,
+  .main-menu .navbar-header .navbar-brand {
+    touch-action: manipulation;
+  }
+
   /* Espaçamento superior na área da logo */
   .main-menu .navbar-header {
     padding-top: 2rem !important;
