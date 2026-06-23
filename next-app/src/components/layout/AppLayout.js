@@ -54,17 +54,6 @@ export default function AppLayout({ children }) {
   useEffect(() => { pathnameRef.current = pathname; }, [pathname]);
   useEffect(() => { mobileOpenRef.current = mobileOpen; }, [mobileOpen]);
 
-  /* Mede a largura real do scrollbar e expõe como --sw para o CSS
-     corrigir a largura do navbar flutuante (position:fixed usa 100vw). */
-  useEffect(() => {
-    const measure = () => {
-      const sw = window.innerWidth - document.documentElement.clientWidth;
-      document.documentElement.style.setProperty('--sw', `${sw}px`);
-    };
-    measure();
-    window.addEventListener('resize', measure);
-    return () => window.removeEventListener('resize', measure);
-  }, []);
 
   /* Adapta o sidebar dinamicamente ao redimensionar a janela */
   useEffect(() => {
@@ -75,7 +64,7 @@ export default function AppLayout({ children }) {
         menu.style.transform = '';
         if (mobileOpenRef.current) setMobileOpen(false);
       } else {
-        if (!mobileOpenRef.current) menu.style.transform = 'translateX(-294px)';
+        if (!mobileOpenRef.current) menu.style.transform = 'translateX(-300px)';
       }
     };
     window.addEventListener('resize', handleResize);
@@ -184,7 +173,7 @@ export default function AppLayout({ children }) {
     setMobileOpen(false);
     if (window.innerWidth < 1200) {
       const menu = document.querySelector('.main-menu');
-      if (menu) menu.style.transform = 'translateX(-294px)';
+      if (menu) menu.style.transform = 'translateX(-300px)';
     }
   }, [pathname]);
 
@@ -192,7 +181,7 @@ export default function AppLayout({ children }) {
     setMobileOpen(false);
     if (window.innerWidth < 1200) {
       const menu = document.querySelector('.main-menu');
-      if (menu) menu.style.transform = 'translateX(-294px)';
+      if (menu) menu.style.transform = 'translateX(-300px)';
     }
   }
 
@@ -224,13 +213,12 @@ export default function AppLayout({ children }) {
           mobileOpen={mobileOpen}
         />
 
-        {/* ── Barra de navegação superior ── */}
-        <Navbar onHamburgerClick={handleHamburger} />
-
         {/* ── Área de conteúdo principal ── */}
         <div className="app-content content">
           <div className="content-overlay" />
           <div className="header-navbar-shadow" />
+          {/* ── Barra de navegação superior — sticky dentro do app-content ── */}
+          <Navbar onHamburgerClick={handleHamburger} />
           <div className="content-wrapper">
 
             {/* Cabeçalho da página com título e breadcrumb */}

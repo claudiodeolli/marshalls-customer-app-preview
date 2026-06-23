@@ -1,0 +1,910 @@
+(self.webpackChunk_N_E = self.webpackChunk_N_E || []).push([[681], {
+    71644: function(e, t, a) {
+        Promise.resolve().then(a.bind(a, 2757))
+    },
+    2757: function(e, t, a) {
+        "use strict";
+        a.r(t),
+        a.d(t, {
+            default: function() {
+                return U
+            }
+        });
+        var n = a(57437)
+          , r = a(2265)
+          , s = a(53815)
+          , i = a(31691)
+          , l = a(98489)
+          , o = a(16449)
+          , c = a(5002)
+          , d = a(35389)
+          , u = a(65298)
+          , x = a(42187)
+          , m = a(89414)
+          , p = a(41327)
+          , h = a(10020)
+          , f = a(94013)
+          , g = a(67208)
+          , j = a(67571)
+          , y = a(76501)
+          , b = a(29886)
+          , Z = a(72549)
+          , D = a(56756)
+          , v = a(51195)
+          , C = a(38857)
+          , S = a(81649)
+          , E = a(83464)
+          , w = a(99376)
+          , I = a(35791)
+          , A = a(9026)
+          , F = a(77468)
+          , N = a(12258)
+          , T = a(79507)
+          , k = a(58414);
+        let L = r.forwardRef(function(e, t) {
+            return (0,
+            n.jsx)(k.Z, {
+                direction: "up",
+                ref: t,
+                ...e
+            })
+        });
+        function P(e) {
+            let {title: t, message: a, open: s, noLabel: l, yesLabel: o, handleClose: c, handleConfirm: d} = e
+              , u = (0,
+            i.Z)()
+              , [x,m] = r.useState(!1);
+            return (r.useEffect( () => (m(!0),
+            () => m(!1)), []),
+            x) ? (0,
+            n.jsx)(r.Fragment, {
+                children: (0,
+                n.jsxs)(I.Z, {
+                    open: s,
+                    TransitionComponent: L,
+                    onClose: c,
+                    "aria-describedby": "alert-dialog-slide-description",
+                    disablePortal: !1,
+                    hideBackdrop: !1,
+                    children: [(0,
+                    n.jsx)(T.Z, {
+                        children: t
+                    }), (0,
+                    n.jsx)(F.Z, {
+                        children: (0,
+                        n.jsx)(N.Z, {
+                            id: "alert-dialog-slide-description",
+                            sx: {
+                                color: "#333333"
+                            },
+                            children: a
+                        })
+                    }), (0,
+                    n.jsxs)(A.Z, {
+                        children: [(0,
+                        n.jsx)(f.Z, {
+                            onClick: c,
+                            children: l
+                        }), (0,
+                        n.jsx)(f.Z, {
+                            onClick: d,
+                            sx: {
+                                backgroundColor: u.palette.primary.main,
+                                color: "white",
+                                "&:hover": {
+                                    backgroundColor: u.palette.primary.dark
+                                }
+                            },
+                            children: o
+                        })]
+                    })]
+                })
+            }) : null
+        }
+        var B = a(94242)
+          , z = a(53324);
+        let O = [{
+            label: "\uD83C\uDF10 Autom\xe1tico (navegador)",
+            value: ""
+        }, {
+            label: "\uD83C\uDDE7\uD83C\uDDF7 Brasil — GMT-3",
+            value: "America/Sao_Paulo"
+        }, {
+            label: "\uD83C\uDDE6\uD83C\uDDF4 Angola — GMT+1",
+            value: "Africa/Luanda"
+        }, {
+            label: "\uD83C\uDDF5\uD83C\uDDF9 Portugal — GMT+0/+1",
+            value: "Europe/Lisbon"
+        }, {
+            label: "\uD83C\uDDF2\uD83C\uDDFF Mo\xe7ambique — GMT+2",
+            value: "Africa/Maputo"
+        }, {
+            label: "\uD83C\uDDFA\uD83C\uDDF8 Nova York — GMT-5/-4",
+            value: "America/New_York"
+        }];
+        function R() {
+            return Intl.DateTimeFormat().resolvedOptions().timeZone
+        }
+        let H = {
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: 400,
+            bgcolor: "background.paper",
+            borderRadius: 1,
+            boxShadow: 24,
+            pt: 2,
+            px: 4,
+            pb: 3
+        };
+        var U = (0,
+        z.E)(function() {
+            let e = (0,
+            i.Z)()
+              , t = (0,
+            w.useRouter)()
+              , [a,I] = (0,
+            r.useState)(!1)
+              , [A,F] = (0,
+            r.useState)([])
+              , [N,T] = (0,
+            r.useState)([])
+              , [k,L] = (0,
+            r.useState)(!1)
+              , [z,U] = (0,
+            r.useState)(!1)
+              , [_,M] = (0,
+            r.useState)(!1)
+              , [W,G] = (0,
+            r.useState)()
+              , [Y,J] = (0,
+            r.useState)("SCHEDULED")
+              , [q,V] = (0,
+            r.useState)(!0)
+              , [K,Q] = (0,
+            r.useState)("");
+            (0,
+            r.useEffect)( () => {
+                let e = R();
+                Q(O.find(t => t.value === e) ? e : "")
+            }
+            , []);
+            let X = async () => {
+                try {
+                    L(!0);
+                    let e = await E.Z.get("/api/schedule/appointments?status=".concat(Y), {
+                        headers: {
+                            beneficiaryUuid: localStorage.getItem("BENEFICIARY_UUID")
+                        }
+                    });
+                    L(!1),
+                    V(!1),
+                    "success"in e.data || (T([]),
+                    T(e.data))
+                } catch (e) {
+                    L(!1),
+                    V(!1)
+                }
+            }
+            ;
+            (0,
+            r.useEffect)( () => {
+                X()
+            }
+            , [t]);
+            let $ = e => {
+                var a = !1;
+                if (N.forEach(t => {
+                    "SCHEDULED" === t.status && t.specialty.uuid === e.uuid && (a = !0)
+                }
+                ),
+                a) {
+                    B.Am.error("Benefici\xe1rio j\xe1 possui agendamento para ".concat(e.name));
+                    return
+                }
+                localStorage.setItem("SPECIALT_SELECTED", JSON.stringify(e)),
+                t.push("/schedule/calendar")
+            }
+              , ee = e => {
+                localStorage.setItem("APPOINTMENT", JSON.stringify(e)),
+                t.push("/schedule/appointment")
+            }
+              , et = async () => {
+                try {
+                    U(!0);
+                    let e = await E.Z.delete("/api/schedule/appointments/".concat(W.uuid), {
+                        headers: {
+                            beneficiaryUuid: localStorage.getItem("BENEFICIARY_UUID")
+                        }
+                    });
+                    U(!1),
+                    !0 === e.data && (M(!1),
+                    X(),
+                    B.Am.success("Agendamento deletado com sucesso."))
+                } catch (e) {
+                    U(!1),
+                    "response"in e ? B.Am.error(e.response.data.message) : B.Am.error(e.toString())
+                }
+            }
+              , ea = e => {
+                G(e),
+                M(!0)
+            }
+            ;
+            return q ? (0,
+            n.jsxs)(l.Z, {
+                maxWidth: "xl",
+                sx: {
+                    py: 0,
+                    bgcolor: "#fff",
+                    borderRadius: 2,
+                    padding: 2
+                },
+                children: [(0,
+                n.jsx)(B.Ix, {
+                    position: "bottom-right",
+                    autoClose: 5e3,
+                    hideProgressBar: !1,
+                    newestOnTop: !1,
+                    closeOnClick: !1,
+                    rtl: !1,
+                    pauseOnFocusLoss: !0,
+                    draggable: !0,
+                    pauseOnHover: !0
+                }), (0,
+                n.jsxs)(o.Z, {
+                    sx: {
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        minHeight: "60vh",
+                        p: 3,
+                        position: "relative"
+                    },
+                    children: [(0,
+                    n.jsx)(c.Z, {
+                        variant: "h6",
+                        sx: {
+                            mb: 3
+                        },
+                        children: "Carregando agendamentos..."
+                    }), (0,
+                    n.jsx)(d.Z, {
+                        size: 60,
+                        sx: {
+                            color: "primary.main",
+                            mt: 2
+                        }
+                    })]
+                })]
+            }) : (0,
+            n.jsxs)(l.Z, {
+                maxWidth: "xl",
+                sx: {
+                    py: 0,
+                    bgcolor: "#fff",
+                    borderRadius: 2,
+                    padding: 2
+                },
+                children: [(0,
+                n.jsx)(B.Ix, {
+                    position: "bottom-right",
+                    autoClose: 5e3,
+                    hideProgressBar: !1,
+                    newestOnTop: !1,
+                    closeOnClick: !1,
+                    rtl: !1,
+                    pauseOnFocusLoss: !0,
+                    draggable: !0,
+                    pauseOnHover: !0
+                }), (0,
+                n.jsxs)(o.Z, {
+                    sx: {
+                        mb: 4,
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "flex-start",
+                        flexWrap: "wrap",
+                        gap: 2
+                    },
+                    children: [(0,
+                    n.jsxs)(o.Z, {
+                        children: [(0,
+                        n.jsx)(c.Z, {
+                            variant: "h4",
+                            component: "h1",
+                            sx: {
+                                mb: 1,
+                                fontWeight: 600
+                            },
+                            children: "Agendamentos"
+                        }), (0,
+                        n.jsx)(c.Z, {
+                            variant: "body1",
+                            color: "text.primary",
+                            children: "Gerencie seus agendamentos m\xe9dicos e agende novas consultas"
+                        })]
+                    }), (0,
+                    n.jsxs)(o.Z, {
+                        sx: {
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: .5
+                        },
+                        children: [(0,
+                        n.jsx)(c.Z, {
+                            variant: "caption",
+                            color: "text.secondary",
+                            sx: {
+                                pl: .5
+                            },
+                            children: "Fuso hor\xe1rio"
+                        }), (0,
+                        n.jsx)(u.Z, {
+                            value: K,
+                            onChange: e => Q(e.target.value),
+                            size: "small",
+                            sx: {
+                                fontSize: 13,
+                                minWidth: 220
+                            },
+                            children: O.map(e => (0,
+                            n.jsx)(x.Z, {
+                                value: e.value,
+                                sx: {
+                                    fontSize: 13
+                                },
+                                children: e.label
+                            }, e.value))
+                        })]
+                    })]
+                }), (0,
+                n.jsxs)(m.ZP, {
+                    container: !0,
+                    style: {
+                        width: "100%",
+                        borderBottom: "1px solid #ddd",
+                        paddingBottom: 12
+                    },
+                    spacing: 2,
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    children: [(0,
+                    n.jsxs)(m.ZP, {
+                        item: !0,
+                        xs: 12,
+                        md: 8,
+                        style: {
+                            display: "flex",
+                            flexWrap: "wrap",
+                            gap: "10px",
+                            alignItems: "center"
+                        },
+                        children: [(0,
+                        n.jsxs)(p.Z, {
+                            fullWidth: !0,
+                            variant: "outlined",
+                            style: {
+                                maxWidth: 200
+                            },
+                            children: [(0,
+                            n.jsx)(h.Z, {
+                                id: "demo-simple-select-label",
+                                sx: {
+                                    color: "text.primary"
+                                },
+                                children: "Status"
+                            }), (0,
+                            n.jsxs)(u.Z, {
+                                labelId: "demo-simple-select-label",
+                                id: "demo-simple-select",
+                                value: Y,
+                                onChange: e => {
+                                    J(e.target.value)
+                                }
+                                ,
+                                label: "Status",
+                                children: [(0,
+                                n.jsx)(x.Z, {
+                                    value: "SCHEDULED",
+                                    children: "Agendado"
+                                }), (0,
+                                n.jsx)(x.Z, {
+                                    value: "CANCELED",
+                                    children: "Cancelado"
+                                }), (0,
+                                n.jsx)(x.Z, {
+                                    value: "FINISHED",
+                                    children: "Finalizado"
+                                }), (0,
+                                n.jsx)(x.Z, {
+                                    value: "UNFINISHED",
+                                    children: "N\xe3o realizado"
+                                })]
+                            })]
+                        }), (0,
+                        n.jsx)(f.Z, {
+                            variant: "outlined",
+                            onClick: X,
+                            disabled: k,
+                            style: {
+                                height: 56,
+                                borderRadius: 5,
+                                whiteSpace: "nowrap"
+                            },
+                            children: "Buscar"
+                        })]
+                    }), (0,
+                    n.jsx)(m.ZP, {
+                        item: !0,
+                        xs: 12,
+                        md: 4,
+                        style: {
+                            display: "flex",
+                            justifyContent: "flex-end"
+                        },
+                        children: (0,
+                        n.jsx)(f.Z, {
+                            variant: "contained",
+                            onClick: () => t.push("/schedule/calendar"),
+                            style: {
+                                whiteSpace: "nowrap",
+                                fontSize: 13,
+                                padding: "10px 20px",
+                                backgroundColor: e.palette.secondary.main,
+                                color: "white",
+                                fontWeight: "bold",
+                                boxShadow: "0 2px 4px rgba(0,0,0,0.2)"
+                            },
+                            startIcon: (0,
+                            n.jsx)(b.Z, {}),
+                            children: "Novo Agendamento"
+                        })
+                    })]
+                }), (0,
+                n.jsx)(o.Z, {
+                    sx: {
+                        mt: 3
+                    },
+                    children: k ? (0,
+                    n.jsxs)(o.Z, {
+                        sx: {
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            minHeight: "40vh",
+                            p: 3
+                        },
+                        children: [(0,
+                        n.jsx)(c.Z, {
+                            variant: "h6",
+                            sx: {
+                                mb: 3
+                            },
+                            children: "Buscando agendamentos..."
+                        }), (0,
+                        n.jsx)(d.Z, {
+                            size: 50,
+                            sx: {
+                                color: "primary.main",
+                                mt: 2
+                            }
+                        })]
+                    }) : 0 === N.length ? (0,
+                    n.jsx)(g.Z, {
+                        sx: {
+                            p: 4,
+                            textAlign: "center",
+                            bgcolor: "grey.50",
+                            color: "text.primary"
+                        },
+                        children: (0,
+                        n.jsx)(c.Z, {
+                            variant: "body1",
+                            color: "text.primary",
+                            children: "N\xe3o h\xe1 agendamentos no momento."
+                        })
+                    }) : (0,
+                    n.jsx)(m.ZP, {
+                        container: !0,
+                        spacing: 2,
+                        children: N.map( (e, t) => (0,
+                        n.jsx)(m.ZP, {
+                            item: !0,
+                            xs: 12,
+                            children: (0,
+                            n.jsx)(g.Z, {
+                                sx: {
+                                    p: 3,
+                                    "&:hover": {
+                                        boxShadow: 4,
+                                        transform: "translateY(-2px)",
+                                        transition: "all 0.2s ease-in-out"
+                                    }
+                                },
+                                children: (0,
+                                n.jsxs)(o.Z, {
+                                    sx: {
+                                        display: "flex",
+                                        justifyContent: "space-between",
+                                        alignItems: "flex-start"
+                                    },
+                                    children: [(0,
+                                    n.jsxs)(o.Z, {
+                                        sx: {
+                                            flex: 1
+                                        },
+                                        children: [(0,
+                                        n.jsxs)(o.Z, {
+                                            sx: {
+                                                display: "flex",
+                                                alignItems: "center",
+                                                mb: 1
+                                            },
+                                            children: [(0,
+                                            n.jsx)(Z.Z, {
+                                                sx: {
+                                                    mr: 1,
+                                                    color: "primary.main"
+                                                }
+                                            }), (0,
+                                            n.jsxs)(c.Z, {
+                                                variant: "h6",
+                                                sx: {
+                                                    fontWeight: 600
+                                                },
+                                                children: ["Dr(a). ", e.professional.name]
+                                            })]
+                                        }), (0,
+                                        n.jsxs)(o.Z, {
+                                            sx: {
+                                                display: "flex",
+                                                alignItems: "center",
+                                                mb: 1
+                                            },
+                                            children: [(0,
+                                            n.jsx)(D.Z, {
+                                                sx: {
+                                                    mr: 1,
+                                                    color: "text.primary",
+                                                    fontSize: 20
+                                                }
+                                            }), (0,
+                                            n.jsxs)(c.Z, {
+                                                variant: "body2",
+                                                color: "text.primary",
+                                                children: [(0,
+                                                n.jsx)("strong", {
+                                                    children: "Especialidade:"
+                                                }), " ", e.specialty.name]
+                                            })]
+                                        }), (0,
+                                        n.jsxs)(o.Z, {
+                                            sx: {
+                                                display: "flex",
+                                                alignItems: "flex-start",
+                                                mb: 1
+                                            },
+                                            children: [(0,
+                                            n.jsx)(v.Z, {
+                                                sx: {
+                                                    mr: 1,
+                                                    color: "text.secondary",
+                                                    fontSize: 20,
+                                                    mt: "2px"
+                                                }
+                                            }), (0,
+                                            n.jsxs)(o.Z, {
+                                                children: [(0,
+                                                n.jsxs)(c.Z, {
+                                                    variant: "body2",
+                                                    color: "text.primary",
+                                                    sx: {
+                                                        display: "flex",
+                                                        alignItems: "center",
+                                                        gap: .5,
+                                                        flexWrap: "wrap"
+                                                    },
+                                                    children: [e.detail.date, " \xe0s ", (0,
+                                                    n.jsx)("strong", {
+                                                        children: e.detail.from
+                                                    }), (0,
+                                                    n.jsx)("span", {
+                                                        title: "Hor\xe1rio de Bras\xedlia",
+                                                        children: "\uD83C\uDDE7\uD83C\uDDF7"
+                                                    }), (0,
+                                                    n.jsx)(c.Z, {
+                                                        component: "span",
+                                                        variant: "body2",
+                                                        color: "text.secondary",
+                                                        children: "Sao Paulo (GMT-3)"
+                                                    })]
+                                                }), ( () => {
+                                                    let t = K || R();
+                                                    if (function(e) {
+                                                        let t = e || R();
+                                                        try {
+                                                            var a, n, r, s;
+                                                            let e = new Date("2024-07-01T12:00:00Z")
+                                                              , i = new Intl.DateTimeFormat("en",{
+                                                                timeZone: "America/Sao_Paulo",
+                                                                hour: "numeric",
+                                                                hour12: !1
+                                                            }).formatToParts(e)
+                                                              , l = new Intl.DateTimeFormat("en",{
+                                                                timeZone: t,
+                                                                hour: "numeric",
+                                                                hour12: !1
+                                                            }).formatToParts(e)
+                                                              , o = parseInt(null !== (r = null === (a = i.find(e => "hour" === e.type)) || void 0 === a ? void 0 : a.value) && void 0 !== r ? r : "0")
+                                                              , c = parseInt(null !== (s = null === (n = l.find(e => "hour" === e.type)) || void 0 === n ? void 0 : n.value) && void 0 !== s ? s : "0");
+                                                            return o === c
+                                                        } catch (e) {
+                                                            return !1
+                                                        }
+                                                    }(t))
+                                                        return null;
+                                                    let a = function(e, t, a) {
+                                                        try {
+                                                            let n = e.split("/");
+                                                            if (3 !== n.length)
+                                                                return null;
+                                                            let[r,s,i] = n
+                                                              , [l,o] = t.split(":")
+                                                              , c = new Date("".concat(i, "-").concat(s, "-").concat(r, "T").concat(l, ":").concat(o, ":00-03:00"));
+                                                            if (isNaN(c.getTime()))
+                                                                return null;
+                                                            let d = a || R()
+                                                              , u = c.toLocaleDateString("pt-BR", {
+                                                                timeZone: d,
+                                                                day: "2-digit",
+                                                                month: "2-digit",
+                                                                year: "numeric"
+                                                            })
+                                                              , x = c.toLocaleTimeString("pt-BR", {
+                                                                timeZone: d,
+                                                                hour: "2-digit",
+                                                                minute: "2-digit",
+                                                                hour12: !1
+                                                            });
+                                                            return {
+                                                                date: u,
+                                                                time: x
+                                                            }
+                                                        } catch (e) {
+                                                            return null
+                                                        }
+                                                    }(e.detail.date, e.detail.from, t);
+                                                    if (!a)
+                                                        return null;
+                                                    let r = a.date !== e.detail.date;
+                                                    return (0,
+                                                    n.jsxs)(c.Z, {
+                                                        variant: "body2",
+                                                        color: "text.primary",
+                                                        sx: {
+                                                            mt: .25
+                                                        },
+                                                        children: ["no seu hor\xe1rio:", r ? " ".concat(a.date, " \xe0s") : "", " ", (0,
+                                                        n.jsx)("strong", {
+                                                            children: a.time
+                                                        })]
+                                                    })
+                                                }
+                                                )()]
+                                            })]
+                                        }), e.beneficiaryMedicalReferral && (0,
+                                        n.jsxs)(o.Z, {
+                                            sx: {
+                                                display: "flex",
+                                                alignItems: "center",
+                                                mb: 2
+                                            },
+                                            children: [(0,
+                                            n.jsx)(C.Z, {
+                                                sx: {
+                                                    mr: 1,
+                                                    color: "text.primary",
+                                                    fontSize: 20
+                                                }
+                                            }), (0,
+                                            n.jsxs)(c.Z, {
+                                                variant: "body2",
+                                                color: "text.primary",
+                                                children: [(0,
+                                                n.jsx)("strong", {
+                                                    children: "Encaminhamento criando em:"
+                                                }), " ", e.beneficiaryMedicalReferral.createdAt]
+                                            })]
+                                        }), (0,
+                                        n.jsx)(j.Z, {
+                                            label: (0,
+                                            s.xw)(e.status),
+                                            color: "SCHEDULED" === e.status ? "primary" : "FINISHED" === e.status ? "success" : "CANCELED" === e.status ? "error" : "default",
+                                            size: "small"
+                                        })]
+                                    }), (0,
+                                    n.jsx)(o.Z, {
+                                        sx: {
+                                            display: "flex",
+                                            flexDirection: "column",
+                                            gap: 1,
+                                            ml: 2
+                                        },
+                                        children: "SCHEDULED" === e.status && (0,
+                                        n.jsxs)(n.Fragment, {
+                                            children: [(0,
+                                            n.jsx)(f.Z, {
+                                                variant: "contained",
+                                                color: "success",
+                                                onClick: () => ee(e),
+                                                size: "small",
+                                                sx: {
+                                                    whiteSpace: "nowrap"
+                                                },
+                                                children: "Entrar no atendimento"
+                                            }), e.cancel && (0,
+                                            n.jsx)(f.Z, {
+                                                variant: "outlined",
+                                                color: "error",
+                                                onClick: () => ea(e),
+                                                size: "small",
+                                                sx: {
+                                                    whiteSpace: "nowrap"
+                                                },
+                                                children: "Cancelar"
+                                            })]
+                                        })
+                                    })]
+                                })
+                            })
+                        }, t))
+                    })
+                }), (0,
+                n.jsx)(y.Z, {
+                    open: a,
+                    onClose: () => {
+                        I(!1)
+                    }
+                    ,
+                    "aria-labelledby": "parent-modal-title",
+                    "aria-describedby": "parent-modal-description",
+                    children: (0,
+                    n.jsxs)(o.Z, {
+                        sx: {
+                            ...H,
+                            width: 400
+                        },
+                        children: [(0,
+                        n.jsx)("h2", {
+                            id: "parent-modal-title",
+                            children: "Especialidades"
+                        }), (0,
+                        n.jsxs)("div", {
+                            children: [0 === A.length && (0,
+                            n.jsx)("span", {
+                                style: {
+                                    fontSize: 15,
+                                    color: "#888"
+                                },
+                                children: z ? "Buscando dados.." : "N\xe3o h\xe1 dados no momento.."
+                            }), A.map(e => (0,
+                            n.jsxs)("div", {
+                                style: {
+                                    padding: "10px 0",
+                                    borderBottom: "1px solid #ddd",
+                                    display: "flex",
+                                    flexDirection: "row",
+                                    justifyContent: "space-between",
+                                    cursor: "pointer"
+                                },
+                                onClick: () => $(e),
+                                children: [e.name, (0,
+                                n.jsx)(S.Z, {
+                                    sx: {
+                                        color: "#bbb"
+                                    }
+                                })]
+                            }, e.uuid))]
+                        })]
+                    })
+                }), (0,
+                n.jsx)(P, {
+                    title: "Aten\xe7\xe3o",
+                    message: "Voc\xea est\xe1 prestes a cancelar o agendamento de ".concat(W ? W.professional.specialties[0].name : "", " com o(a) Dr(a). ").concat(W ? W.professional.name : "", ". Deseja continuar?"),
+                    open: _,
+                    handleClose: () => M(!1),
+                    handleConfirm: () => et(),
+                    noLabel: "N\xe3o",
+                    yesLabel: z ? "Aguarde.." : "Sim"
+                })]
+            })
+        })
+    },
+    53324: function(e, t, a) {
+        "use strict";
+        a.d(t, {
+            E: function() {
+                return o
+            }
+        });
+        var n = a(57437)
+          , r = a(13634)
+          , s = a(84603)
+          , i = a(99376)
+          , l = a(2265);
+        function o(e) {
+            var t;
+            return t = function(t) {
+                return (0,
+                n.jsx)(r.Z, {
+                    children: (0,
+                    n.jsx)(e, {
+                        ...t
+                    })
+                })
+            }
+            ,
+            function(e) {
+                let {isAuthenticated: a, isLoading: r} = (0,
+                s.a)()
+                  , o = (0,
+                i.useRouter)();
+                return ((0,
+                l.useEffect)( () => {
+                    r || a || o.push("/login")
+                }
+                , [r, a, o]),
+                r) ? (0,
+                n.jsx)("div", {
+                    children: "Carregando..."
+                }) : a ? (0,
+                n.jsx)(t, {
+                    ...e
+                }) : null
+            }
+        }
+    },
+    84603: function(e, t, a) {
+        "use strict";
+        a.d(t, {
+            a: function() {
+                return s
+            }
+        });
+        var n = a(80605)
+          , r = a(99376);
+        function s() {
+            let {data: e, status: t} = (0,
+            n.useSession)()
+              , a = (0,
+            r.useRouter)()
+              , s = async () => {
+                await (0,
+                n.signOut)({
+                    redirect: !1
+                }),
+                a.push("/login"),
+                a.refresh()
+            }
+            ;
+            return {
+                user: null == e ? void 0 : e.user,
+                isAuthenticated: "authenticated" === t,
+                isLoading: "loading" === t,
+                logout: s,
+                session: e,
+                status: t
+            }
+        }
+    }
+}, function(e) {
+    e.O(0, [8218, 7293, 1021, 6307, 7152, 8489, 8645, 6946, 717, 7818, 4242, 7571, 9414, 4560, 4347, 9798, 3634, 2971, 2117, 1744], function() {
+        return e(e.s = 71644)
+    }),
+    _N_E = e.O()
+}
+]);

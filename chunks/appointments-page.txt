@@ -1,0 +1,896 @@
+(self.webpackChunk_N_E = self.webpackChunk_N_E || []).push([[9064], {
+    92067: function(e, n, t) {
+        Promise.resolve().then(t.bind(t, 17822))
+    },
+    17822: function(e, n, t) {
+        "use strict";
+        t.r(n);
+        var r = t(57437)
+          , i = t(2265)
+          , s = t(98489)
+          , a = t(16449)
+          , l = t(5002)
+          , o = t(96207)
+          , d = t(89414)
+          , c = t(41327)
+          , x = t(10020)
+          , u = t(65298)
+          , h = t(42187)
+          , m = t(67571)
+          , p = t(94013)
+          , j = t(59253)
+          , g = t(67208)
+          , f = t(36137)
+          , Z = t(63582)
+          , y = t(8350)
+          , b = t(27485)
+          , v = t(96369)
+          , I = t(44164)
+          , S = t(59832)
+          , E = t(99376)
+          , D = t(83464)
+          , C = t(59064)
+          , w = t(51195)
+          , F = t(56756)
+          , R = t(51767)
+          , N = t(30406)
+          , T = t(65462)
+          , k = t(32797)
+          , A = t(38857)
+          , U = t(28489)
+          , Y = t(7027)
+          , _ = t(88818)
+          , z = t(84603)
+          , M = t(69250)
+          , P = t(45717)
+          , B = t(3989)
+          , L = t(71096)
+          , O = t.n(L);
+        t(95904);
+        var H = t(94242)
+          , W = t(53324);
+        n.default = (0,
+        W.E)(function() {
+            let[e,n] = (0,
+            i.useState)()
+              , t = (0,
+            E.useParams)()
+              , [L,W] = (0,
+            i.useState)(null)
+              , [V,K] = (0,
+            i.useState)(null)
+              , [q,G] = (0,
+            i.useState)(O()().subtract(7, "days"))
+              , [J,Q] = (0,
+            i.useState)(O()())
+              , [X,$] = (0,
+            i.useState)("all")
+              , [ee,en] = (0,
+            i.useState)("")
+              , {isAuthenticated: et} = (0,
+            z.a)()
+              , [er,ei] = (0,
+            i.useState)("")
+              , [es,ea] = (0,
+            i.useState)("")
+              , [el,eo] = (0,
+            i.useState)("")
+              , [ed,ec] = (0,
+            i.useState)("")
+              , ex = async () => {
+                if (er && es)
+                    eu();
+                else {
+                    W("auth");
+                    try {
+                        let {data: e} = await D.Z.post("/api/auth", {
+                            ...t
+                        });
+                        localStorage.setItem("BENEFICIARY_UUID", t.beneficiaryUuid),
+                        localStorage.setItem("USER_UUID", e.uuid),
+                        localStorage.setItem("USER_TOKEN", e.userToken),
+                        localStorage.setItem("CLIENT_ID", t.clientId),
+                        W(null),
+                        eu()
+                    } catch (e) {
+                        console.error(e),
+                        K("other"),
+                        W(null)
+                    }
+                }
+            }
+              , eu = async () => {
+                try {
+                    n([]),
+                    W("appointments");
+                    let e = (null == q ? void 0 : q.format("DD/MM/YYYY").toString()) || ""
+                      , t = (null == J ? void 0 : J.format("DD/MM/YYYY").toString()) || ""
+                      , r = new URLSearchParams;
+                    e === t ? r.append("date", e) : (r.append("dateInitial", e),
+                    r.append("dateFinal", t)),
+                    "all" !== X && r.append("type", X),
+                    ee && r.append("status", ee),
+                    r.append("beneficiaryUuid", er);
+                    let i = await fetch("/api/history?".concat(r.toString()), {
+                        method: "GET"
+                    })
+                      , s = await i.json();
+                    i.ok && (null == s ? void 0 : s.length) ? n(s) : "token inv\xe1lido para este cliente." === s.message ? (H.Am.error(s.message),
+                    ex()) : (H.Am.error(s.message),
+                    K("appointments"))
+                } catch (e) {
+                    console.error(e),
+                    H.Am.error(e.toString()),
+                    K("appointments")
+                } finally {
+                    W(null)
+                }
+            }
+            ;
+            return i.useEffect( () => {
+                var e, n, t;
+                ei(null !== (e = localStorage.getItem("BENEFICIARY_UUID")) && void 0 !== e ? e : ""),
+                ea(null !== (n = localStorage.getItem("USER_TOKEN")) && void 0 !== n ? n : ""),
+                eo(null !== (t = localStorage.getItem("CLIENT_ID")) && void 0 !== t ? t : ""),
+                ec(localStorage.getItem("USER_UUID") || "")
+            }
+            , []),
+            (0,
+            r.jsx)(s.Z, {
+                children: (0,
+                r.jsxs)(r.Fragment, {
+                    children: [(0,
+                    r.jsx)(H.Ix, {}), (0,
+                    r.jsxs)(a.Z, {
+                        sx: {
+                            mb: 4
+                        },
+                        children: [(0,
+                        r.jsx)(l.Z, {
+                            variant: "h4",
+                            component: "h1",
+                            sx: {
+                                mb: 1,
+                                fontWeight: 600
+                            },
+                            children: "Hist\xf3rico de Consultas"
+                        }), (0,
+                        r.jsx)(l.Z, {
+                            variant: "body1",
+                            color: "text.primary",
+                            children: "Visualize e acompanhe seu hist\xf3rico completo de consultas m\xe9dicas"
+                        })]
+                    }), (0,
+                    r.jsxs)(o.Z, {
+                        elevation: 2,
+                        sx: {
+                            width: "100%",
+                            marginTop: 2,
+                            marginBottom: 3,
+                            padding: 3,
+                            borderRadius: 2,
+                            background: "linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%)",
+                            border: "1px solid #e3f2fd"
+                        },
+                        children: [(0,
+                        r.jsxs)(l.Z, {
+                            variant: "h6",
+                            sx: {
+                                mb: 3,
+                                color: "primary.main",
+                                fontWeight: 600,
+                                display: "flex",
+                                alignItems: "center",
+                                gap: 1
+                            },
+                            children: [(0,
+                            r.jsx)(C.Z, {}), "Filtros de Pesquisa"]
+                        }), (0,
+                        r.jsxs)(d.ZP, {
+                            container: !0,
+                            spacing: 3,
+                            alignItems: "center",
+                            children: [(0,
+                            r.jsx)(d.ZP, {
+                                item: !0,
+                                xs: 12,
+                                sm: 6,
+                                md: 2.5,
+                                children: (0,
+                                r.jsx)(M._, {
+                                    dateAdapter: B.y,
+                                    adapterLocale: "pt-BR",
+                                    children: (0,
+                                    r.jsx)(P.M, {
+                                        label: "Data inicial",
+                                        defaultValue: O()(),
+                                        format: "DD/MM/YYYY",
+                                        value: q,
+                                        onChange: e => G(e),
+                                        sx: {
+                                            width: "100%",
+                                            "& .MuiOutlinedInput-root": {
+                                                borderRadius: 2
+                                            }
+                                        }
+                                    })
+                                })
+                            }), (0,
+                            r.jsx)(d.ZP, {
+                                item: !0,
+                                xs: 12,
+                                sm: 6,
+                                md: 2.5,
+                                children: (0,
+                                r.jsx)(M._, {
+                                    dateAdapter: B.y,
+                                    adapterLocale: "pt-BR",
+                                    children: (0,
+                                    r.jsx)(P.M, {
+                                        label: "Data final",
+                                        defaultValue: O()(),
+                                        format: "DD/MM/YYYY",
+                                        value: J,
+                                        onChange: e => Q(e),
+                                        sx: {
+                                            width: "100%",
+                                            "& .MuiOutlinedInput-root": {
+                                                borderRadius: 2
+                                            }
+                                        }
+                                    })
+                                })
+                            }), (0,
+                            r.jsx)(d.ZP, {
+                                item: !0,
+                                xs: 12,
+                                sm: 6,
+                                md: 2.5,
+                                children: (0,
+                                r.jsxs)(c.Z, {
+                                    fullWidth: !0,
+                                    sx: {
+                                        "& .MuiOutlinedInput-root": {
+                                            borderRadius: 2
+                                        }
+                                    },
+                                    children: [(0,
+                                    r.jsx)(x.Z, {
+                                        id: "type-filter-label",
+                                        sx: {
+                                            backgroundColor: "white",
+                                            padding: "0 6px",
+                                            color: "primary.main"
+                                        },
+                                        children: "Tipo"
+                                    }), (0,
+                                    r.jsxs)(u.Z, {
+                                        labelId: "type-filter-label",
+                                        id: "type-filter",
+                                        value: X,
+                                        onChange: e => {
+                                            $(e.target.value)
+                                        }
+                                        ,
+                                        label: "Tipo",
+                                        children: [(0,
+                                        r.jsx)(h.Z, {
+                                            value: "all",
+                                            children: (0,
+                                            r.jsxs)(a.Z, {
+                                                sx: {
+                                                    display: "flex",
+                                                    alignItems: "center",
+                                                    gap: 1
+                                                },
+                                                children: [(0,
+                                                r.jsx)(C.Z, {
+                                                    fontSize: "small"
+                                                }), "Todos"]
+                                            })
+                                        }), (0,
+                                        r.jsx)(h.Z, {
+                                            value: "scheduled",
+                                            children: (0,
+                                            r.jsxs)(a.Z, {
+                                                sx: {
+                                                    display: "flex",
+                                                    alignItems: "center",
+                                                    gap: 1
+                                                },
+                                                children: [(0,
+                                                r.jsx)(w.Z, {
+                                                    fontSize: "small"
+                                                }), "Agendamento"]
+                                            })
+                                        }), (0,
+                                        r.jsx)(h.Z, {
+                                            value: "emergency",
+                                            children: (0,
+                                            r.jsxs)(a.Z, {
+                                                sx: {
+                                                    display: "flex",
+                                                    alignItems: "center",
+                                                    gap: 1
+                                                },
+                                                children: [(0,
+                                                r.jsx)(F.Z, {
+                                                    fontSize: "small"
+                                                }), "Fila"]
+                                            })
+                                        })]
+                                    })]
+                                })
+                            }), (0,
+                            r.jsx)(d.ZP, {
+                                item: !0,
+                                xs: 12,
+                                sm: 6,
+                                md: 2.5,
+                                children: (0,
+                                r.jsxs)(c.Z, {
+                                    fullWidth: !0,
+                                    sx: {
+                                        "& .MuiOutlinedInput-root": {
+                                            borderRadius: 2
+                                        }
+                                    },
+                                    children: [(0,
+                                    r.jsx)(x.Z, {
+                                        id: "status-filter-label",
+                                        sx: {
+                                            backgroundColor: "white",
+                                            padding: "0 6px",
+                                            color: "primary.main"
+                                        },
+                                        children: "Status"
+                                    }), (0,
+                                    r.jsxs)(u.Z, {
+                                        labelId: "status-filter-label",
+                                        id: "status-filter",
+                                        value: ee,
+                                        onChange: e => {
+                                            en(e.target.value)
+                                        }
+                                        ,
+                                        label: "Status",
+                                        children: [(0,
+                                        r.jsx)(h.Z, {
+                                            value: "",
+                                            children: "Todos os status"
+                                        }), (0,
+                                        r.jsx)(h.Z, {
+                                            value: "FINISHED",
+                                            children: (0,
+                                            r.jsx)(m.Z, {
+                                                label: "Finalizado",
+                                                size: "small",
+                                                color: "success",
+                                                variant: "outlined"
+                                            })
+                                        }), (0,
+                                        r.jsx)(h.Z, {
+                                            value: "UNFINISHED",
+                                            children: (0,
+                                            r.jsx)(m.Z, {
+                                                label: "Em Andamento",
+                                                size: "small",
+                                                color: "warning",
+                                                variant: "outlined"
+                                            })
+                                        }), (0,
+                                        r.jsx)(h.Z, {
+                                            value: "SCHEDULED",
+                                            children: (0,
+                                            r.jsx)(m.Z, {
+                                                label: "Agendado",
+                                                size: "small",
+                                                color: "info",
+                                                variant: "outlined"
+                                            })
+                                        }), (0,
+                                        r.jsx)(h.Z, {
+                                            value: "CANCELED",
+                                            children: (0,
+                                            r.jsx)(m.Z, {
+                                                label: "Cancelado",
+                                                size: "small",
+                                                color: "error",
+                                                variant: "outlined"
+                                            })
+                                        })]
+                                    })]
+                                })
+                            }), (0,
+                            r.jsx)(d.ZP, {
+                                item: !0,
+                                xs: 12,
+                                sm: 12,
+                                md: 2,
+                                children: (0,
+                                r.jsx)(p.Z, {
+                                    variant: "contained",
+                                    fullWidth: !0,
+                                    disabled: !!L,
+                                    onClick: () => {
+                                        eu()
+                                    }
+                                    ,
+                                    sx: {
+                                        height: 56,
+                                        borderRadius: 2,
+                                        textTransform: "none",
+                                        fontSize: "1rem",
+                                        fontWeight: 600,
+                                        background: "linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)",
+                                        boxShadow: "0 3px 5px 2px rgba(33, 203, 243, .3)",
+                                        "&:hover": {
+                                            background: "linear-gradient(45deg, #1976D2 30%, #1CB9E8 90%)",
+                                            boxShadow: "0 4px 8px 3px rgba(33, 203, 243, .4)"
+                                        },
+                                        "&:disabled": {
+                                            background: "#e0e0e0",
+                                            boxShadow: "none"
+                                        }
+                                    },
+                                    children: L ? (0,
+                                    r.jsxs)(r.Fragment, {
+                                        children: [(0,
+                                        r.jsx)(j.Z, {
+                                            sx: {
+                                                mr: 1,
+                                                width: 20,
+                                                height: 4,
+                                                borderRadius: 2
+                                            }
+                                        }), "Buscando..."]
+                                    }) : (0,
+                                    r.jsxs)(r.Fragment, {
+                                        children: [(0,
+                                        r.jsx)(C.Z, {
+                                            sx: {
+                                                mr: 1
+                                            }
+                                        }), "Filtrar"]
+                                    })
+                                })
+                            })]
+                        })]
+                    }), (0,
+                    r.jsxs)("div", {
+                        style: {
+                            backgroundColor: "white",
+                            borderRadius: 5,
+                            padding: "0 15px 15px 15px",
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center"
+                        },
+                        children: [(0,
+                        r.jsx)(d.ZP, {
+                            container: !0,
+                            spacing: 2,
+                            sx: {
+                                marginTop: 2,
+                                width: "100%"
+                            },
+                            children: null == e ? void 0 : e.map(e => (0,
+                            r.jsx)(d.ZP, {
+                                item: !0,
+                                xs: 12,
+                                sm: 6,
+                                md: 4,
+                                children: (0,
+                                r.jsx)(g.Z, {
+                                    sx: {
+                                        width: "100%",
+                                        backgroundColor: "#e9f2fa"
+                                    },
+                                    children: (0,
+                                    r.jsxs)(f.Z, {
+                                        children: [(0,
+                                        r.jsx)(Z.Z, {
+                                            direction: "row",
+                                            style: {
+                                                justifyContent: "end"
+                                            }
+                                        }), (0,
+                                        r.jsxs)(Z.Z, {
+                                            direction: "row",
+                                            style: {
+                                                justifyContent: "space-between"
+                                            },
+                                            children: [(0,
+                                            r.jsxs)("div", {
+                                                style: {
+                                                    flexDirection: "column"
+                                                },
+                                                children: [(0,
+                                                r.jsxs)("div", {
+                                                    style: {
+                                                        fontSize: 11,
+                                                        color: "#777"
+                                                    },
+                                                    children: [(0,
+                                                    r.jsx)("strong", {
+                                                        children: "Tipo: "
+                                                    }), "emergency" === e.type && (0,
+                                                    r.jsx)(r.Fragment, {
+                                                        children: (0,
+                                                        r.jsx)("span", {
+                                                            children: "Fila"
+                                                        })
+                                                    }), "scheduled" === e.type && (0,
+                                                    r.jsx)(r.Fragment, {
+                                                        children: (0,
+                                                        r.jsx)("span", {
+                                                            children: "Agendado"
+                                                        })
+                                                    })]
+                                                }), (0,
+                                                r.jsxs)("div", {
+                                                    style: {
+                                                        fontSize: 11,
+                                                        color: "#777"
+                                                    },
+                                                    children: [(0,
+                                                    r.jsx)("strong", {
+                                                        children: "Status: "
+                                                    }), "FINISHED" === e.status && (0,
+                                                    r.jsx)(r.Fragment, {
+                                                        children: (0,
+                                                        r.jsx)("span", {
+                                                            children: "Finalizado"
+                                                        })
+                                                    }), "UNFINISHED" === e.status && (0,
+                                                    r.jsx)(r.Fragment, {
+                                                        children: (0,
+                                                        r.jsx)("span", {
+                                                            children: "N\xe3o realizado"
+                                                        })
+                                                    }), "CANCELLED" === e.status && (0,
+                                                    r.jsx)(r.Fragment, {
+                                                        children: (0,
+                                                        r.jsx)("span", {
+                                                            children: "Cancelado"
+                                                        })
+                                                    })]
+                                                })]
+                                            }), (0,
+                                            r.jsxs)("div", {
+                                                style: {
+                                                    flexDirection: "column",
+                                                    justifyContent: "end",
+                                                    textAlign: "right"
+                                                },
+                                                children: [(0,
+                                                r.jsxs)("div", {
+                                                    style: {
+                                                        fontSize: 11,
+                                                        color: "#777"
+                                                    },
+                                                    children: [(0,
+                                                    r.jsx)("strong", {
+                                                        children: "In\xedcio: "
+                                                    }), e.appointmentBegin]
+                                                }), "FINISHED" == e.status && (0,
+                                                r.jsxs)("div", {
+                                                    style: {
+                                                        fontSize: 11,
+                                                        color: "#777"
+                                                    },
+                                                    children: [(0,
+                                                    r.jsx)("strong", {
+                                                        children: "T\xe9rmino: "
+                                                    }), e.appointmentEnd]
+                                                })]
+                                            })]
+                                        }), (0,
+                                        r.jsx)(y.Z, {}), (0,
+                                        r.jsxs)(l.Z, {
+                                            variant: "body2",
+                                            style: {
+                                                marginBottom: 5,
+                                                marginTop: 10
+                                            },
+                                            children: [(0,
+                                            r.jsx)("small", {
+                                                children: (0,
+                                                r.jsx)("b", {
+                                                    children: "Profissional"
+                                                })
+                                            }), (0,
+                                            r.jsx)("br", {}), "Dr(a) ", e.professional.name]
+                                        }), e.professional && (0,
+                                        r.jsxs)(l.Z, {
+                                            variant: "body2",
+                                            style: {
+                                                marginBottom: 5
+                                            },
+                                            children: [(0,
+                                            r.jsx)("small", {
+                                                children: (0,
+                                                r.jsx)("b", {
+                                                    children: "Especialidade"
+                                                })
+                                            }), (0,
+                                            r.jsx)("br", {}), e.professional.specialties[0].name]
+                                        }), e.beneficiaryMedicalReferral && (0,
+                                        r.jsxs)(l.Z, {
+                                            variant: "body2",
+                                            style: {
+                                                marginBottom: 5
+                                            },
+                                            children: [(0,
+                                            r.jsx)("small", {
+                                                children: (0,
+                                                r.jsx)("b", {
+                                                    children: "Agendado em fun\xe7\xe3o de:"
+                                                })
+                                            }), (0,
+                                            r.jsx)("br", {}), (0,
+                                            r.jsx)("a", {
+                                                href: e.beneficiaryMedicalReferral.urlPath,
+                                                target: "_blank",
+                                                rel: "noopener noreferrer",
+                                                children: "ver encaminhamento"
+                                            })]
+                                        }), "documents"in e && (0,
+                                        r.jsx)("div", {
+                                            style: {
+                                                marginTop: 10
+                                            },
+                                            children: (0,
+                                            r.jsxs)(b.Z, {
+                                                children: [(0,
+                                                r.jsx)(v.Z, {
+                                                    expandIcon: (0,
+                                                    r.jsx)(R.Z, {}),
+                                                    "aria-controls": "panel1-content",
+                                                    id: "panel1-header",
+                                                    children: (0,
+                                                    r.jsx)(l.Z, {
+                                                        component: "span",
+                                                        children: "Documentos do atendimento"
+                                                    })
+                                                }), (0,
+                                                r.jsx)(I.Z, {
+                                                    children: e.documents.map( (e, n) => {
+                                                        let {icon: t, title: i} = ( () => {
+                                                            switch (e.type) {
+                                                            case "exam":
+                                                                return {
+                                                                    icon: (0,
+                                                                    r.jsx)(N.Z, {
+                                                                        color: "primary"
+                                                                    }),
+                                                                    title: "Exame"
+                                                                };
+                                                            case "referral":
+                                                                return {
+                                                                    icon: (0,
+                                                                    r.jsx)(T.Z, {
+                                                                        color: "primary"
+                                                                    }),
+                                                                    title: "Encaminhamento"
+                                                                };
+                                                            case "medicines":
+                                                                return {
+                                                                    icon: (0,
+                                                                    r.jsx)(k.Z, {
+                                                                        color: "primary"
+                                                                    }),
+                                                                    title: "Medicamento"
+                                                                };
+                                                            case "notes":
+                                                                return {
+                                                                    icon: (0,
+                                                                    r.jsx)(A.Z, {
+                                                                        color: "primary"
+                                                                    }),
+                                                                    title: "Atestado"
+                                                                };
+                                                            case "report":
+                                                                return {
+                                                                    icon: (0,
+                                                                    r.jsx)(U.Z, {
+                                                                        color: "primary"
+                                                                    }),
+                                                                    title: "Relat\xf3rio"
+                                                                };
+                                                            default:
+                                                                return {
+                                                                    icon: (0,
+                                                                    r.jsx)(R.Z, {}),
+                                                                    title: "Documento"
+                                                                }
+                                                            }
+                                                        }
+                                                        )();
+                                                        return (0,
+                                                        r.jsxs)("div", {
+                                                            style: {
+                                                                display: "flex",
+                                                                alignItems: "center",
+                                                                justifyContent: "space-between",
+                                                                padding: "8px 0",
+                                                                borderBottom: "1px solid #ddd"
+                                                            },
+                                                            children: [(0,
+                                                            r.jsxs)("div", {
+                                                                style: {
+                                                                    display: "flex",
+                                                                    alignItems: "center",
+                                                                    gap: 10
+                                                                },
+                                                                children: [t, (0,
+                                                                r.jsx)(l.Z, {
+                                                                    component: "span",
+                                                                    style: {
+                                                                        fontWeight: 500
+                                                                    },
+                                                                    children: i
+                                                                })]
+                                                            }), (0,
+                                                            r.jsx)(S.Z, {
+                                                                href: e.url,
+                                                                target: "_blank",
+                                                                rel: "noopener noreferrer",
+                                                                style: {
+                                                                    color: "#007bff"
+                                                                },
+                                                                title: "Ver documento",
+                                                                children: (0,
+                                                                r.jsx)(Y.Z, {})
+                                                            })]
+                                                        }, n)
+                                                    }
+                                                    )
+                                                })]
+                                            })
+                                        })]
+                                    })
+                                })
+                            }, e.uuid))
+                        }), !L && e && 0 === e.length && (0,
+                        r.jsx)(a.Z, {
+                            sx: {
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                width: "100%",
+                                minHeight: "200px"
+                            },
+                            children: (0,
+                            r.jsx)(_.Z, {})
+                        })]
+                    })]
+                })
+            })
+        })
+    },
+    88818: function(e, n, t) {
+        "use strict";
+        var r = t(57437);
+        t(2265);
+        var i = t(16449)
+          , s = t(5002)
+          , a = t(56359);
+        n.Z = e => {
+            let {message: n="Nenhum registro encontrado.", suggestion: t=!1} = e;
+            return (0,
+            r.jsxs)(i.Z, {
+                sx: {
+                    textAlign: "center",
+                    marginTop: 4,
+                    padding: 5
+                },
+                children: [(0,
+                r.jsx)(a.Z, {
+                    sx: {
+                        fontSize: 48,
+                        color: "gray"
+                    }
+                }), (0,
+                r.jsx)(s.Z, {
+                    variant: "body1",
+                    sx: {
+                        marginTop: 1,
+                        color: "#888"
+                    },
+                    children: n
+                }), t && (0,
+                r.jsx)(s.Z, {
+                    variant: "body2",
+                    sx: {
+                        color: "gray"
+                    },
+                    children: t
+                })]
+            })
+        }
+    },
+    53324: function(e, n, t) {
+        "use strict";
+        t.d(n, {
+            E: function() {
+                return o
+            }
+        });
+        var r = t(57437)
+          , i = t(13634)
+          , s = t(84603)
+          , a = t(99376)
+          , l = t(2265);
+        function o(e) {
+            var n;
+            return n = function(n) {
+                return (0,
+                r.jsx)(i.Z, {
+                    children: (0,
+                    r.jsx)(e, {
+                        ...n
+                    })
+                })
+            }
+            ,
+            function(e) {
+                let {isAuthenticated: t, isLoading: i} = (0,
+                s.a)()
+                  , o = (0,
+                a.useRouter)();
+                return ((0,
+                l.useEffect)( () => {
+                    i || t || o.push("/login")
+                }
+                , [i, t, o]),
+                i) ? (0,
+                r.jsx)("div", {
+                    children: "Carregando..."
+                }) : t ? (0,
+                r.jsx)(n, {
+                    ...e
+                }) : null
+            }
+        }
+    },
+    84603: function(e, n, t) {
+        "use strict";
+        t.d(n, {
+            a: function() {
+                return s
+            }
+        });
+        var r = t(80605)
+          , i = t(99376);
+        function s() {
+            let {data: e, status: n} = (0,
+            r.useSession)()
+              , t = (0,
+            i.useRouter)()
+              , s = async () => {
+                await (0,
+                r.signOut)({
+                    redirect: !1
+                }),
+                t.push("/login"),
+                t.refresh()
+            }
+            ;
+            return {
+                user: null == e ? void 0 : e.user,
+                isAuthenticated: "authenticated" === n,
+                isLoading: "loading" === n,
+                logout: s,
+                session: e,
+                status: n
+            }
+        }
+    }
+}, function(e) {
+    e.O(0, [8218, 7293, 1021, 6307, 7152, 8489, 8645, 6946, 717, 7818, 4242, 7571, 2713, 9414, 4560, 3888, 5982, 9798, 3634, 2971, 2117, 1744], function() {
+        return e(e.s = 92067)
+    }),
+    _N_E = e.O()
+}
+]);

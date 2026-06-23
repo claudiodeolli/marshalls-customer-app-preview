@@ -11,6 +11,12 @@ body {
   padding-bottom: 2rem !important;
 }
 
+/* Gap entre o header sticky e o conteúdo: 7.75rem (original) − 1.3rem (padding-top do
+   app-content) − 4.45rem (min-height do header) = 2rem. */
+.content-wrapper {
+  padding-top: 2rem !important;
+}
+
 /* Remove o gradiente que o Vuexy renderiza atrás do navbar flutuante —
    ele cobre a largura total do viewport (incluindo o scrollbar), criando
    um fade visível no topo da barra de rolagem. O navbar já tem sombra
@@ -24,7 +30,7 @@ body {
    garantindo que --sw seja sempre mensurável via JS. */
 html {
   scrollbar-width: thin;
-  scrollbar-color: #c1c1c1 transparent;
+  scrollbar-color: #aaa #2b2b2b;
 }
 
 html::-webkit-scrollbar {
@@ -32,11 +38,11 @@ html::-webkit-scrollbar {
 }
 
 html::-webkit-scrollbar-track {
-  background: transparent;
+  background: #2b2b2b;
 }
 
 html::-webkit-scrollbar-thumb {
-  background: #c1c1c1;
+  background: #aaa;
   border-radius: 3px;
 }
 
@@ -44,17 +50,22 @@ html::-webkit-scrollbar-thumb:hover {
   background: #aaa;
 }
 
-/* Alinha o navbar flutuante (position:fixed) com o padding dos cards.
-   Ajusta TANTO o width quanto o margin-right pelo valor real do scrollbar
-   (--sw medido por JS), pois fixed usa 100vw enquanto o conteúdo usa clientWidth. */
-@media (min-width: 1200px) {
-  .header-navbar.floating-nav {
-    width: calc(100% - 4rem - 260px - var(--sw, 0px)) !important;
-  }
+/* Navbar sticky dentro do app-content — herda o padding horizontal do container
+   (2rem de cada lado via html[dir] .content.app-content). */
+.header-navbar.floating-nav {
+  position: sticky !important;
+  top: 0 !important;
+  left: auto !important;
+  right: auto !important;
+  width: 100% !important;
+  margin: 0 !important;
+  z-index: 1030 !important;
+}
 
-  [dir=ltr] .header-navbar.floating-nav {
-    margin-right: calc(2rem + var(--sw, 0px)) !important;
-  }
+/* O padding-top do app-content empurrava o conteúdo abaixo do header fixo (7.75rem).
+   Com sticky, o header ocupa espaço no fluxo — basta o gap visual de 1.3rem no topo. */
+html[dir] .content.app-content {
+  padding-top: 1.3rem !important;
 }
 
 /* ── Faixa inferior: left dinâmico conforme estado do sidebar ── */
@@ -455,6 +466,10 @@ img._logo-collapsed {
   margin-right: 0 !important;
 }
 
+.vertical-layout.vertical-menu-modern.menu-collapsed .main-menu:not(.expanded) [data-plantao-shortcut]>a ._sb-plantao-icon-wrap {
+  margin-right: 0 !important;
+}
+
 /* ── Padding bottom do navigation — valor original do Vuexy ── */
 #main-menu-navigation {
   padding-bottom: .75rem !important;
@@ -622,9 +637,11 @@ input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type=
 .form-control:not(textarea):not(select),
 select.form-control,
 .custom-select {
-  height: 42px !important;
+  min-height: 42px !important;
   border-radius: 11px !important;
   padding: 6px 12px !important;
+  font-size: 16px !important;
+  line-height: 1.5 !important;
 }
 
 /* Botão Sair do dropdown de usuário */
@@ -730,21 +747,13 @@ select.form-control,
     margin-left: 0 !important;
   }
 
-  /* Navbar floating: remove margens e bordas no tablet/mobile — gruda no topo */
-  [dir=ltr] .horizontal-layout .header-navbar.floating-nav,
-  [dir=ltr] .vertical-layout .header-navbar.floating-nav {
-    left: 0 !important;
-    width: 100% !important;
-    margin: 0 !important;
-    border-radius: 0 !important;
-  }
-
   /* Transição persistente para abertura e fechamento do sidebar.
      Usa top+bottom em vez de height para não depender de cálculo svh —
      robusto mesmo quando o bottom nav tem safe-area-inset no iOS. */
   .main-menu {
     transition: transform 0.25s ease !important;
-    width: 294px !important;
+    width: min(92vw, 390px) !important;
+    max-width: 300px !important;
     top: 0 !important;
     bottom: calc(79px + env(safe-area-inset-bottom, 0px)) !important;
     height: auto !important;

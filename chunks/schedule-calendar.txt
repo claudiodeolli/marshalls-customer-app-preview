@@ -1,0 +1,1270 @@
+(self.webpackChunk_N_E = self.webpackChunk_N_E || []).push([[9109], {
+    88477: function(e, a, r) {
+        Promise.resolve().then(r.bind(r, 1691))
+    },
+    95904: function(e, a, r) {
+        var i;
+        i = function(e) {
+            "use strict";
+            var a = {
+                name: "pt-br",
+                weekdays: "domingo_segunda-feira_ter\xe7a-feira_quarta-feira_quinta-feira_sexta-feira_s\xe1bado".split("_"),
+                weekdaysShort: "dom_seg_ter_qua_qui_sex_s\xe1b".split("_"),
+                weekdaysMin: "Do_2\xaa_3\xaa_4\xaa_5\xaa_6\xaa_S\xe1".split("_"),
+                months: "janeiro_fevereiro_mar\xe7o_abril_maio_junho_julho_agosto_setembro_outubro_novembro_dezembro".split("_"),
+                monthsShort: "jan_fev_mar_abr_mai_jun_jul_ago_set_out_nov_dez".split("_"),
+                ordinal: function(e) {
+                    return e + "\xba"
+                },
+                formats: {
+                    LT: "HH:mm",
+                    LTS: "HH:mm:ss",
+                    L: "DD/MM/YYYY",
+                    LL: "D [de] MMMM [de] YYYY",
+                    LLL: "D [de] MMMM [de] YYYY [\xe0s] HH:mm",
+                    LLLL: "dddd, D [de] MMMM [de] YYYY [\xe0s] HH:mm"
+                },
+                relativeTime: {
+                    future: "em %s",
+                    past: "h\xe1 %s",
+                    s: "poucos segundos",
+                    m: "um minuto",
+                    mm: "%d minutos",
+                    h: "uma hora",
+                    hh: "%d horas",
+                    d: "um dia",
+                    dd: "%d dias",
+                    M: "um m\xeas",
+                    MM: "%d meses",
+                    y: "um ano",
+                    yy: "%d anos"
+                }
+            };
+            return (e && "object" == typeof e && "default"in e ? e : {
+                default: e
+            }).default.locale(a, null, !0),
+            a
+        }
+        ,
+        e.exports = i(r(71096))
+    },
+    1691: function(e, a, r) {
+        "use strict";
+        r.r(a),
+        r.d(a, {
+            default: function() {
+                return G
+            }
+        });
+        var i = r(57437)
+          , o = r(2265);
+        r(78294);
+        var n = r(98589)
+          , t = r(69250)
+          , s = r(86009)
+          , l = r(1119)
+          , d = r(74610)
+          , c = r(61994)
+          , u = r(21988)
+          , p = r(16210)
+          , x = r(64119)
+          , m = r(20801)
+          , f = r(80839)
+          , h = r(50738)
+          , g = r(94143);
+        let b = e => (0,
+        h.ZP)("MuiDayCalendarSkeleton", e);
+        (0,
+        g.Z)("MuiDayCalendarSkeleton", ["root", "week", "daySkeleton"]);
+        let v = ["className"]
+          , y = e => {
+            let {classes: a} = e;
+            return (0,
+            m.Z)({
+                root: ["root"],
+                week: ["week"],
+                daySkeleton: ["daySkeleton"]
+            }, b, a)
+        }
+          , j = (0,
+        p.ZP)("div", {
+            name: "MuiDayCalendarSkeleton",
+            slot: "Root",
+            overridesResolver: (e, a) => a.root
+        })({
+            alignSelf: "start"
+        })
+          , C = (0,
+        p.ZP)("div", {
+            name: "MuiDayCalendarSkeleton",
+            slot: "Week",
+            overridesResolver: (e, a) => a.week
+        })({
+            margin: "".concat(f.yh, "px 0"),
+            display: "flex",
+            justifyContent: "center"
+        })
+          , Z = (0,
+        p.ZP)(u.Z, {
+            name: "MuiDayCalendarSkeleton",
+            slot: "DaySkeleton",
+            overridesResolver: (e, a) => a.daySkeleton
+        })({
+            margin: "0 ".concat(f.yh, "px"),
+            variants: [{
+                props: {
+                    day: 0
+                },
+                style: {
+                    visibility: "hidden"
+                }
+            }]
+        })
+          , S = [[0, 1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 0, 0, 0]];
+        function k(e) {
+            let a = (0,
+            x.Z)({
+                props: e,
+                name: "MuiDayCalendarSkeleton"
+            })
+              , {className: r} = a
+              , o = (0,
+            d.Z)(a, v)
+              , n = y(o);
+            return (0,
+            i.jsx)(j, (0,
+            l.Z)({
+                className: (0,
+                c.Z)(n.root, r)
+            }, o, {
+                children: S.map( (e, a) => (0,
+                i.jsx)(C, {
+                    className: n.week,
+                    children: e.map( (e, a) => (0,
+                    i.jsx)(Z, {
+                        variant: "circular",
+                        width: f.p2,
+                        height: f.p2,
+                        className: n.daySkeleton,
+                        ownerState: {
+                            day: e
+                        }
+                    }, a))
+                }, a))
+            }))
+        }
+        var _ = r(3989)
+          , w = r(71096)
+          , M = r.n(w);
+        r(95904);
+        var D = r(98489)
+          , A = r(16449)
+          , Y = r(5002)
+          , R = r(35389)
+          , E = r(12713)
+          , I = r(94013)
+          , L = r(76501)
+          , N = r(83464)
+          , z = r(77398)
+          , P = r.n(z)
+          , W = r(94242);
+        r(2648);
+        var H = r(99376)
+          , T = r(81705)
+          , U = r(3918)
+          , F = r(84603)
+          , B = r(53324)
+          , O = r(47848);
+        let q = {
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: "90%",
+            maxWidth: "500px",
+            maxHeight: "80vh",
+            bgcolor: "background.paper",
+            borderRadius: 2,
+            boxShadow: 24,
+            p: 4,
+            overflow: "auto"
+        }
+          , K = {
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            padding: "16px",
+            borderBottom: "1px solid #eee",
+            cursor: "pointer",
+            "&:hover": {
+                backgroundColor: "#f8f9fa"
+            }
+        };
+        var G = (0,
+        B.E)( () => {
+            var e;
+            let a = (0,
+            H.useSearchParams)()
+              , [r,l] = (0,
+            o.useState)(a.get("referral") || "")
+              , d = (0,
+            F.a)().user
+              , c = (0,
+            H.useRouter)()
+              , [u,p] = (0,
+            o.useState)(!0)
+              , x = (0,
+            o.useRef)(null)
+              , [m,f] = (0,
+            o.useState)(!1)
+              , [h,g] = (0,
+            o.useState)([1, 2, 15])
+              , [b,v] = (0,
+            o.useState)([])
+              , [y,j] = (0,
+            o.useState)()
+              , [C,Z] = (0,
+            o.useState)(M()())
+              , [S,w] = (0,
+            o.useState)(null)
+              , [z,B] = (0,
+            o.useState)(!1)
+              , [G,V] = (0,
+            o.useState)([])
+              , [$,J] = (0,
+            o.useState)([])
+              , [Q,X] = (0,
+            o.useState)(!1)
+              , [ee,ea] = (0,
+            o.useState)([])
+              , [er,ei] = (0,
+            o.useState)(!0)
+              , [eo,en] = (0,
+            o.useState)(!1)
+              , [et,es] = (0,
+            o.useState)(!1)
+              , el = (0,
+            o.useRef)(null)
+              , ed = (0,
+            o.useRef)(null)
+              , [ec,eu] = (0,
+            o.useState)("")
+              , [ep,ex] = (0,
+            o.useState)("")
+              , [em,ef] = (0,
+            o.useState)("")
+              , [eh,eg] = (0,
+            o.useState)("")
+              , [eb,ev] = (0,
+            o.useState)("")
+              , [ey,ej] = (0,
+            o.useState)(!1)
+              , [eC,eZ] = (0,
+            o.useState)(!1)
+              , [eS,ek] = (0,
+            o.useState)([])
+              , [e_,ew] = (0,
+            o.useState)(!1)
+              , [eM,eD] = (0,
+            o.useState)(null)
+              , [eA,eY] = (0,
+            o.useState)(!1)
+              , [eR,eE] = (0,
+            o.useState)(null)
+              , [eI,eL] = (0,
+            o.useState)(!1)
+              , [eN,ez] = (0,
+            o.useState)(null)
+              , eP = async () => {
+                try {
+                    localStorage.getItem("BENEFICIARY_UUID");
+                    let e = await N.Z.get("/api/schedule/specialties")
+                      , a = [];
+                    e.data.forEach(e => {
+                        "Nutri\xe7\xe3o" === e.name ? e.price = 70 : "Psicologia" === e.name ? e.price = 70 : e.price = 95,
+                        a.push(e)
+                    }
+                    ),
+                    ea(a),
+                    ei(!1)
+                } catch (e) {
+                    ei(!1)
+                }
+            }
+              , eW = async () => {
+                ew(!0);
+                try {
+                    let e = await N.Z.get("/api/referrals");
+                    ek(e.data)
+                } catch (e) {
+                    W.Am.error("Erro ao carregar encaminhamentos")
+                } finally {
+                    ew(!1)
+                }
+            }
+              , eH = async e => {
+                let a = P()().format("DD/MM/YYYY")
+                  , r = P()().add(30, "days").format("DD/MM/YYYY");
+                try {
+                    en(!0);
+                    let i = await N.Z.post("/api/schedule/specialty-availability", {
+                        specialtyUuid: e.uuid,
+                        dateInitial: a,
+                        dateFinal: r
+                    });
+                    "success"in i.data || (V(i.data),
+                    J(function(e) {
+                        let a = new Set;
+                        return e.forEach(e => {
+                            let[r,i,o] = e.date.split("/")
+                              , n = "".concat(o, "-").concat(i, "-").concat(r);
+                            a.add(n)
+                        }
+                        ),
+                        Array.from(a)
+                    }(i.data)))
+                } catch (e) {} finally {
+                    en(!1)
+                }
+            }
+              , eT = () => ee && Array.isArray(ee) ? ee.filter(e => (0,
+            O.Kt)(null == d ? void 0 : d.plans, e.name, "S") ? "Nutri\xe7\xe3o" === e.name && (0,
+            O.h)(null == d ? void 0 : d.plans, "Nutri\xe7\xe3o") ? (e.referral = !1,
+            !0) : "Psicologia" === e.name && (0,
+            O.h)(null == d ? void 0 : d.plans, "Psicologia") ? (e.referral = !1,
+            !0) : !!(0,
+            O.h)(null == d ? void 0 : d.plans, e.name) && "Psicologia" !== e.name && (e.referral = !0,
+            !0) : !!((0,
+            O.Kt)(null == d ? void 0 : d.plans, e.name, "A") && (0,
+            O.h)(null == d ? void 0 : d.plans, e.name)) && (e.referral = !1,
+            !0)) : [];
+            (0,
+            o.useEffect)( () => (ej(!0),
+            d && (ex(d.userToken),
+            ef(d.clientId)),
+            eP(),
+            () => {
+                var e;
+                return null === (e = x.current) || void 0 === e ? void 0 : e.abort()
+            }
+            ), [d]),
+            (0,
+            o.useEffect)( () => {
+                (async () => {
+                    if (r && ee.length > 0 && !eM && d)
+                        try {
+                            ei(!0);
+                            let e = await N.Z.get("/api/referrals");
+                            ei(!1);
+                            let a = e.data.find(e => e.uuid === r);
+                            if (a && a.specialty) {
+                                let e = eT().find(e => {
+                                    var r;
+                                    return e.uuid === (null === (r = a.specialty) || void 0 === r ? void 0 : r.uuid)
+                                }
+                                );
+                                e && e.uuid === a.specialty.uuid && (eL(!0),
+                                ez(e.uuid),
+                                eU(e))
+                            }
+                        } catch (e) {
+                            ei(!1),
+                            console.error("Erro ao buscar referrals para auto-sele\xe7\xe3o:", e)
+                        }
+                }
+                )()
+            }
+            , [r, ee, d]);
+            let eU = e => {
+                eD(e),
+                v([]),
+                w(null),
+                eH(e),
+                setTimeout( () => {
+                    var e;
+                    null === (e = el.current) || void 0 === e || e.scrollIntoView({
+                        behavior: "smooth"
+                    })
+                }
+                , 100)
+            }
+              , eF = e => {
+                eD(null),
+                v([]),
+                w(null),
+                j(""),
+                V([]),
+                J([]),
+                !0 !== e.referral || (null == d ? void 0 : d.checkoutAllowed) ? eU(e) : r ? eU(e) : (eZ(!0),
+                eW())
+            }
+              , eB = () => {
+                eZ(!1),
+                l("")
+            }
+              , eO = e => {
+                l(e.uuid)
+            }
+              , eq = (e, a) => {
+                w(null),
+                j(e),
+                es(!0),
+                a && Z(a),
+                setTimeout( () => {
+                    v(G.filter(a => (a.selected = !1,
+                    a.date === e))),
+                    es(!1),
+                    setTimeout( () => {
+                        var e;
+                        null === (e = ed.current) || void 0 === e || e.scrollIntoView({
+                            behavior: "smooth"
+                        })
+                    }
+                    , 100)
+                }
+                , 800)
+            }
+              , eK = e => {
+                let a = b.map(a => (a.selected = a.from === e.from,
+                a));
+                w(e),
+                v(a)
+            }
+              , eG = b.filter(e => e.from.toLowerCase().includes(eh.toLowerCase()))
+              , eV = ( () => {
+                let e = eT();
+                return eI && eN ? e.filter(e => e.uuid === eN) : e.filter(e => e.name.toLowerCase().includes(eb.toLowerCase()))
+            }
+            )()
+              , e$ = async e => {
+                if (Q)
+                    return;
+                X(!0);
+                let a = e || eR;
+                try {
+                    if (a && "object" == typeof a) {
+                        a.specialtyUuid = null == eM ? void 0 : eM.uuid,
+                        a.availabilityUuid = null == S ? void 0 : S.uuid,
+                        a.beneficiaryMedicalReferralUuid = r || null,
+                        (!r || (0,
+                        O.Kt)(null == d ? void 0 : d.plans, null == eM ? void 0 : eM.name, "A")) && (a.approveAdditionalPayment = !0);
+                        let e = await N.Z.post("/api/schedule/appointments", a);
+                        X(!1),
+                        200 === e.status || 201 === e.status ? (W.Am.success("Agendado com sucesso."),
+                        B(!1),
+                        setTimeout( () => {
+                            c.back()
+                        }
+                        , 2e3)) : W.Am.error(e.data.message)
+                    } else
+                        X(!1),
+                        W.Am.error("Erro: dados inv\xe1lidos para o agendamento")
+                } catch (e) {
+                    X(!1),
+                    void 0 !== e.response ? W.Am.error(e.response.data.message) : "message"in e ? W.Am.error(e.message) : W.Am.error("Falha ao executar esta a\xe7\xe3o.")
+                }
+            }
+              , eJ = e => {
+                if (eE(e),
+                (0,
+                O.Kt)(null == d ? void 0 : d.plans, null == eM ? void 0 : eM.name, "A")) {
+                    eY(!0);
+                    return
+                }
+                e$(e)
+            }
+              , eQ = () => {
+                eY(!1),
+                eE(null)
+            }
+            ;
+            return !ey || er ? (0,
+            i.jsx)(D.Z, {
+                maxWidth: "xl",
+                sx: {
+                    py: 0,
+                    bgcolor: "#fff",
+                    borderRadius: 2,
+                    padding: 2
+                },
+                children: (0,
+                i.jsxs)(A.Z, {
+                    sx: {
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        minHeight: "60vh",
+                        p: 3,
+                        position: "relative",
+                        backgroundColor: "white",
+                        borderRadius: {
+                            xs: "0px",
+                            sm: "16px"
+                        }
+                    },
+                    children: [(0,
+                    i.jsx)(Y.Z, {
+                        variant: "h6",
+                        sx: {
+                            mb: 3
+                        },
+                        children: er ? "Carregando especialidades..." : "Carregando..."
+                    }), (0,
+                    i.jsx)(R.Z, {
+                        size: 60,
+                        sx: {
+                            color: "primary.main",
+                            mt: 2
+                        }
+                    })]
+                })
+            }) : (0,
+            i.jsxs)(D.Z, {
+                maxWidth: "xl",
+                sx: {
+                    py: 0,
+                    bgcolor: "#fff",
+                    borderRadius: 2,
+                    padding: 2
+                },
+                children: [(0,
+                i.jsxs)(A.Z, {
+                    sx: {
+                        width: "100%",
+                        margin: "0 auto",
+                        padding: {
+                            xs: "16px",
+                            sm: "24px"
+                        },
+                        backgroundColor: "white",
+                        borderRadius: {
+                            xs: "0px",
+                            sm: "16px"
+                        }
+                    },
+                    children: [!eI && (0,
+                    i.jsx)(E.Z, {
+                        fullWidth: !0,
+                        placeholder: "Digite a especialidade",
+                        variant: "outlined",
+                        value: eb,
+                        onChange: e => ev(e.target.value),
+                        sx: {
+                            marginBottom: "24px",
+                            "& .MuiOutlinedInput-root": {
+                                borderRadius: "8px"
+                            }
+                        },
+                        InputProps: {
+                            endAdornment: (0,
+                            i.jsx)(A.Z, {
+                                component: "span",
+                                sx: {
+                                    color: "#9ca3af"
+                                },
+                                children: "\uD83D\uDD0D"
+                            })
+                        }
+                    }), (0,
+                    i.jsx)(Y.Z, {
+                        variant: "h6",
+                        sx: {
+                            fontSize: "18px",
+                            fontWeight: "bold",
+                            marginBottom: "16px"
+                        },
+                        children: eI ? "Especialidade do Encaminhamento" : "Nossas especialidades"
+                    }), (0,
+                    i.jsx)(A.Z, {
+                        sx: {
+                            backgroundColor: {
+                                xs: "transparent",
+                                sm: "#fff"
+                            },
+                            borderRadius: "12px",
+                            overflow: "hidden"
+                        },
+                        children: 0 === eV.length ? (0,
+                        i.jsxs)(Y.Z, {
+                            sx: {
+                                textAlign: "center",
+                                color: "#666",
+                                padding: "20px 0"
+                            },
+                            children: ['Nenhuma especialidade encontrada para "', eb, '"']
+                        }) : eV.map(e => (0,
+                        i.jsxs)(A.Z, {
+                            onClick: () => !eo && !eI && eF(e),
+                            sx: {
+                                ...K,
+                                padding: {
+                                    xs: "12px",
+                                    sm: "16px"
+                                },
+                                backgroundColor: (null == eM ? void 0 : eM.uuid) === e.uuid ? "#f0f9ff" : "transparent",
+                                borderLeft: (null == eM ? void 0 : eM.uuid) === e.uuid ? "4px solid #4daab6" : "none",
+                                opacity: eo && (null == eM ? void 0 : eM.uuid) === e.uuid ? .7 : 1,
+                                cursor: eo || eI ? "default" : "pointer",
+                                pointerEvents: eo && (null == eM ? void 0 : eM.uuid) === e.uuid ? "none" : "auto",
+                                "&:hover": eI ? {} : {
+                                    backgroundColor: "#f8f9fa"
+                                }
+                            },
+                            children: [(0,
+                            i.jsxs)(A.Z, {
+                                sx: {
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: 2
+                                },
+                                children: [(0,
+                                i.jsx)(Y.Z, {
+                                    children: e.name
+                                }), eo && (null == eM ? void 0 : eM.uuid) === e.uuid && (0,
+                                i.jsx)(R.Z, {
+                                    size: 16,
+                                    sx: {
+                                        color: "#4daab6",
+                                        ml: 1
+                                    }
+                                })]
+                            }), (0,
+                            i.jsx)(Y.Z, {
+                                sx: {
+                                    color: "#666"
+                                },
+                                children: (null == d ? void 0 : d.checkoutAllowed) ? e.price ? "R$ ".concat(e.price.toFixed(2).replace(".", ",")) : e.price : ""
+                            })]
+                        }, e.uuid))
+                    }), eM && (0,
+                    i.jsxs)(i.Fragment, {
+                        children: [(0,
+                        i.jsx)(A.Z, {
+                            sx: {
+                                marginTop: "24px"
+                            },
+                            ref: el,
+                            children: eo ? (0,
+                            i.jsxs)(A.Z, {
+                                sx: {
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    minHeight: "300px",
+                                    p: 3
+                                },
+                                children: [(0,
+                                i.jsx)(Y.Z, {
+                                    variant: "h6",
+                                    sx: {
+                                        mb: 3,
+                                        color: "#666"
+                                    },
+                                    children: "Carregando datas dispon\xedveis..."
+                                }), (0,
+                                i.jsx)(R.Z, {
+                                    size: 50,
+                                    sx: {
+                                        color: "#4daab6",
+                                        mt: 2
+                                    }
+                                })]
+                            }) : (0,
+                            i.jsx)(A.Z, {
+                                sx: {
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    maxWidth: "350px",
+                                    margin: "0 auto"
+                                },
+                                children: (0,
+                                i.jsx)(t._, {
+                                    dateAdapter: _.y,
+                                    adapterLocale: "pt-br",
+                                    children: (0,
+                                    i.jsx)(s.W, {
+                                        value: C,
+                                        onChange: e => {
+                                            e && eq(e.format("DD/MM/YYYY"), e)
+                                        }
+                                        ,
+                                        loading: m,
+                                        renderLoading: () => (0,
+                                        i.jsx)(k, {}),
+                                        slots: {
+                                            day: e => {
+                                                let {day: a, outsideCurrentMonth: r, ...o} = e
+                                                  , t = $.includes(a.format("YYYY-MM-DD"));
+                                                return (0,
+                                                i.jsxs)("div", {
+                                                    onClick: () => {
+                                                        eq(a.format("DD/MM/YYYY"), a)
+                                                    }
+                                                    ,
+                                                    children: [(0,
+                                                    i.jsx)(n.H, {
+                                                        ...o,
+                                                        outsideCurrentMonth: r,
+                                                        day: a
+                                                    }), t && (0,
+                                                    i.jsx)("div", {
+                                                        style: {
+                                                            borderRadius: 100,
+                                                            width: 5,
+                                                            height: 5,
+                                                            backgroundColor: "blue",
+                                                            margin: "0 auto"
+                                                        }
+                                                    })]
+                                                })
+                                            }
+                                        },
+                                        sx: {
+                                            width: "100%",
+                                            "& .MuiPickersCalendarHeader-root": {
+                                                display: "flex",
+                                                alignItems: "center",
+                                                justifyContent: "space-between",
+                                                padding: "8px 4px 0px 4px",
+                                                marginBottom: "8px",
+                                                "& .MuiPickersArrowSwitcher-root": {
+                                                    "& .MuiIconButton-root": {
+                                                        color: "#666",
+                                                        padding: "4px",
+                                                        "&:hover": {
+                                                            backgroundColor: "#f0f9ff"
+                                                        }
+                                                    }
+                                                },
+                                                "& .MuiPickersCalendarHeader-label": {
+                                                    color: e => e.palette.primary.main,
+                                                    fontSize: "14px",
+                                                    fontWeight: 500,
+                                                    margin: 0
+                                                }
+                                            },
+                                            "& .MuiDayCalendar-header": {
+                                                "& .MuiDayCalendar-weekDayLabel": {
+                                                    color: e => e.palette.text.secondary,
+                                                    fontSize: "14px",
+                                                    width: "40px",
+                                                    height: "40px",
+                                                    margin: "0",
+                                                    '&[aria-label="Sunday"], &[aria-label="Saturday"]': {
+                                                        color: "#4daab6"
+                                                    }
+                                                }
+                                            },
+                                            "& .MuiDayCalendar-monthContainer": {
+                                                marginTop: "8px"
+                                            },
+                                            "& .MuiDayCalendar-weekContainer": {
+                                                margin: "4px 0",
+                                                justifyContent: "space-around"
+                                            },
+                                            "& .MuiPickersDay-root": {
+                                                fontSize: "14px",
+                                                width: "40px",
+                                                height: "40px",
+                                                margin: "0",
+                                                borderRadius: "4px",
+                                                "&.Mui-selected": {
+                                                    backgroundColor: "#4daab6",
+                                                    color: "white",
+                                                    "&:hover, &:focus": {
+                                                        backgroundColor: "#4daab6"
+                                                    }
+                                                },
+                                                "&:hover": {
+                                                    backgroundColor: "#f0f9ff"
+                                                },
+                                                "&.MuiPickersDay-today": {
+                                                    border: "none",
+                                                    color: "#fff",
+                                                    "&:not(.Mui-selected)": {
+                                                        border: "none",
+                                                        color: "#4daab6"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    })
+                                })
+                            })
+                        }), (0,
+                        i.jsxs)(A.Z, {
+                            sx: {
+                                marginTop: "24px"
+                            },
+                            ref: ed,
+                            children: [(0,
+                            i.jsx)(E.Z, {
+                                fullWidth: !0,
+                                placeholder: "Hor\xe1rios dispon\xedveis",
+                                variant: "outlined",
+                                value: eh,
+                                onChange: e => eg(e.target.value),
+                                sx: {
+                                    marginBottom: "16px",
+                                    "& .MuiOutlinedInput-root": {
+                                        borderRadius: "8px"
+                                    }
+                                },
+                                InputProps: {
+                                    endAdornment: (0,
+                                    i.jsx)(A.Z, {
+                                        component: "span",
+                                        sx: {
+                                            color: "#9ca3af"
+                                        },
+                                        children: "⏰"
+                                    })
+                                }
+                            }), et ? (0,
+                            i.jsxs)(A.Z, {
+                                sx: {
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    minHeight: "200px",
+                                    p: 3
+                                },
+                                children: [(0,
+                                i.jsx)(Y.Z, {
+                                    variant: "h6",
+                                    sx: {
+                                        mb: 3,
+                                        color: "#666"
+                                    },
+                                    children: "Carregando hor\xe1rios dispon\xedveis..."
+                                }), (0,
+                                i.jsx)(R.Z, {
+                                    size: 40,
+                                    sx: {
+                                        color: "#4daab6",
+                                        mt: 2
+                                    }
+                                })]
+                            }) : 0 === b.length ? (0,
+                            i.jsx)(Y.Z, {
+                                sx: {
+                                    textAlign: "center",
+                                    color: "#666",
+                                    padding: "20px 0"
+                                },
+                                children: y ? "N\xe3o h\xe1 hor\xe1rios dispon\xedveis para esta data." : "Selecione uma data para ver os hor\xe1rios dispon\xedveis."
+                            }) : 0 === eG.length ? (0,
+                            i.jsxs)(Y.Z, {
+                                sx: {
+                                    textAlign: "center",
+                                    color: "#666",
+                                    padding: "20px 0"
+                                },
+                                children: ['Nenhum hor\xe1rio encontrado para "', eh, '"']
+                            }) : (0,
+                            i.jsx)(A.Z, {
+                                sx: {
+                                    display: "grid",
+                                    gridTemplateColumns: {
+                                        xs: "repeat(3, 1fr)",
+                                        sm: "repeat(4, 1fr)"
+                                    },
+                                    gap: {
+                                        xs: "6px",
+                                        sm: "8px"
+                                    }
+                                },
+                                children: eG.map(e => (0,
+                                i.jsx)(I.Z, {
+                                    variant: e.selected ? "contained" : "outlined",
+                                    onClick: () => eK(e),
+                                    sx: {
+                                        borderRadius: "24px",
+                                        padding: {
+                                            xs: "3px 3px",
+                                            sm: "3px 3px"
+                                        },
+                                        fontSize: {
+                                            xs: "14px",
+                                            sm: "16px"
+                                        },
+                                        backgroundColor: e.selected ? "#4daab6" : "transparent",
+                                        color: e.selected ? "white" : "#666",
+                                        "&:hover": {
+                                            backgroundColor: e.selected ? "#0284c7" : "#f8f9fa"
+                                        }
+                                    },
+                                    children: e.from
+                                }, e.from))
+                            })]
+                        })]
+                    }), (0,
+                    i.jsx)(I.Z, {
+                        fullWidth: !0,
+                        variant: "contained",
+                        onClick: () => {
+                            (null == d ? void 0 : d.checkoutAllowed) ? B(!0) : eJ({
+                                specialtyUuid: null == eM ? void 0 : eM.uuid,
+                                availabilityUuid: null == S ? void 0 : S.uuid,
+                                beneficiaryMedicalReferralUuid: r,
+                                rdpayTransactionUuid: null
+                            })
+                        }
+                        ,
+                        disabled: !S || Q,
+                        sx: {
+                            marginTop: "24px",
+                            padding: {
+                                xs: "10px",
+                                sm: "12px"
+                            },
+                            borderRadius: "24px",
+                            background: S ? "linear-gradient(90deg, #4daab6 0%,rgb(70, 27, 239) 100%)" : void 0,
+                            textTransform: "none",
+                            fontSize: {
+                                xs: "14px",
+                                sm: "16px"
+                            },
+                            fontWeight: "bold",
+                            opacity: S && !Q ? 1 : .7,
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 1
+                        },
+                        children: Q ? (0,
+                        i.jsxs)(i.Fragment, {
+                            children: [(0,
+                            i.jsx)(R.Z, {
+                                size: 20,
+                                sx: {
+                                    color: "white"
+                                }
+                            }), "AGENDANDO..."]
+                        }) : "AGENDAR"
+                    })]
+                }), (0,
+                i.jsx)(U.Z, {
+                    open: z,
+                    onClose: () => {
+                        B(!1)
+                    }
+                    ,
+                    selectedTime: S,
+                    onSuccess: eJ,
+                    onError: e => {
+                        W.Am.error(e)
+                    }
+                    ,
+                    price: null !== (e = null == eM ? void 0 : eM.price) && void 0 !== e ? e : 0,
+                    specialty: eM
+                }), (0,
+                i.jsx)(L.Z, {
+                    open: eC,
+                    onClose: eB,
+                    "aria-labelledby": "referral-modal-title",
+                    "aria-describedby": "referral-modal-description",
+                    children: (0,
+                    i.jsxs)(A.Z, {
+                        sx: q,
+                        children: [(0,
+                        i.jsxs)(A.Z, {
+                            sx: {
+                                display: "flex",
+                                justifyContent: "space-between",
+                                alignItems: "center",
+                                mb: 2
+                            },
+                            children: [(0,
+                            i.jsx)(Y.Z, {
+                                id: "referral-modal-title",
+                                variant: "h6",
+                                component: "h2",
+                                children: "Selecionar Encaminhamento"
+                            }), (0,
+                            i.jsx)(I.Z, {
+                                onClick: eB,
+                                sx: {
+                                    minWidth: "auto",
+                                    p: 1
+                                },
+                                children: (0,
+                                i.jsx)(T.Z, {})
+                            })]
+                        }), (0,
+                        i.jsx)(Y.Z, {
+                            id: "referral-modal-description",
+                            sx: {
+                                mb: 3,
+                                color: "#666"
+                            },
+                            children: "Selecione um encaminhamento m\xe9dico. A especialidade do encaminhamento ser\xe1 selecionada automaticamente:"
+                        }), e_ ? (0,
+                        i.jsxs)(A.Z, {
+                            sx: {
+                                display: "flex",
+                                flexDirection: "column",
+                                alignItems: "center",
+                                py: 4
+                            },
+                            children: [(0,
+                            i.jsx)(Y.Z, {
+                                sx: {
+                                    mb: 2
+                                },
+                                children: "Carregando encaminhamentos..."
+                            }), (0,
+                            i.jsx)(R.Z, {
+                                size: 40
+                            })]
+                        }) : 0 === eS.length ? (0,
+                        i.jsxs)(A.Z, {
+                            sx: {
+                                textAlign: "center",
+                                py: 4
+                            },
+                            children: [(0,
+                            i.jsx)(Y.Z, {
+                                sx: {
+                                    color: "#666",
+                                    mb: 2
+                                },
+                                children: "Voc\xea n\xe3o possui encaminhamentos dispon\xedveis."
+                            }), (0,
+                            i.jsx)(Y.Z, {
+                                sx: {
+                                    color: "#666",
+                                    fontSize: "14px"
+                                },
+                                children: "Solicite um encaminhamento m\xe9dico para agendar esta especialidade."
+                            })]
+                        }) : (0,
+                        i.jsxs)(i.Fragment, {
+                            children: [(0,
+                            i.jsx)(A.Z, {
+                                sx: {
+                                    maxHeight: "300px",
+                                    overflowY: "auto",
+                                    mb: 3
+                                },
+                                children: eS.filter(e => "PENDING" === e.status).map( (e, a) => {
+                                    var o;
+                                    return (0,
+                                    i.jsxs)(A.Z, {
+                                        onClick: () => eO(e),
+                                        sx: {
+                                            p: 2,
+                                            border: "1px solid #e0e0e0",
+                                            borderRadius: "8px",
+                                            mb: 1,
+                                            cursor: "pointer",
+                                            backgroundColor: r === e.uuid ? "#f0f9ff" : "transparent",
+                                            borderColor: r === e.uuid ? "#4daab6" : "#e0e0e0",
+                                            "&:hover": {
+                                                backgroundColor: "#f8f9fa"
+                                            }
+                                        },
+                                        children: [(0,
+                                        i.jsx)(Y.Z, {
+                                            sx: {
+                                                fontWeight: "bold",
+                                                mb: .5,
+                                                fontSize: "16px"
+                                            },
+                                            children: (null === (o = e.specialty) || void 0 === o ? void 0 : o.name) || "Especialidade n\xe3o informada"
+                                        }), (0,
+                                        i.jsxs)(Y.Z, {
+                                            sx: {
+                                                color: "#666",
+                                                fontSize: "14px"
+                                            },
+                                            children: ["Criado em: ", e.createdAt]
+                                        })]
+                                    }, e.uuid || a)
+                                }
+                                )
+                            }), (0,
+                            i.jsxs)(A.Z, {
+                                sx: {
+                                    display: "flex",
+                                    gap: 2,
+                                    justifyContent: "flex-end"
+                                },
+                                children: [(0,
+                                i.jsx)(I.Z, {
+                                    variant: "outlined",
+                                    onClick: eB,
+                                    sx: {
+                                        borderRadius: "24px",
+                                        px: 3
+                                    },
+                                    children: "Cancelar"
+                                }), (0,
+                                i.jsx)(I.Z, {
+                                    variant: "contained",
+                                    onClick: () => {
+                                        if (r) {
+                                            let e = eS.find(e => e.uuid === r);
+                                            if (e && e.specialty) {
+                                                let a = eT().find(a => {
+                                                    var r;
+                                                    return a.uuid === (null === (r = e.specialty) || void 0 === r ? void 0 : r.uuid)
+                                                }
+                                                );
+                                                a ? (eL(!0),
+                                                ez(a.uuid),
+                                                eZ(!1),
+                                                eU(a)) : (console.error("❌ Especialidade n\xe3o encontrada na lista"),
+                                                W.Am.error("Especialidade do encaminhamento n\xe3o est\xe1 dispon\xedvel."))
+                                            } else
+                                                console.error("❌ Referral sem especialidade"),
+                                                W.Am.error("Este encaminhamento n\xe3o possui uma especialidade definida.")
+                                        }
+                                    }
+                                    ,
+                                    disabled: !r,
+                                    sx: {
+                                        borderRadius: "24px",
+                                        px: 3,
+                                        backgroundColor: "#4daab6",
+                                        "&:hover": {
+                                            backgroundColor: "#0284c7"
+                                        }
+                                    },
+                                    children: "Confirmar"
+                                })]
+                            })]
+                        })]
+                    })
+                }), (0,
+                i.jsx)(L.Z, {
+                    open: eA,
+                    onClose: eQ,
+                    "aria-labelledby": "confirm-modal-title",
+                    "aria-describedby": "confirm-modal-description",
+                    children: (0,
+                    i.jsxs)(A.Z, {
+                        sx: {
+                            ...q,
+                            maxWidth: "400px",
+                            textAlign: "center"
+                        },
+                        children: [(0,
+                        i.jsxs)(A.Z, {
+                            sx: {
+                                display: "flex",
+                                justifyContent: "space-between",
+                                alignItems: "center",
+                                mb: 3
+                            },
+                            children: [(0,
+                            i.jsx)(Y.Z, {
+                                id: "confirm-modal-title",
+                                variant: "h6",
+                                component: "h2",
+                                sx: {
+                                    fontWeight: "bold"
+                                },
+                                children: "Confirmar Agendamento"
+                            }), (0,
+                            i.jsx)(I.Z, {
+                                onClick: eQ,
+                                sx: {
+                                    minWidth: "auto",
+                                    p: 1
+                                },
+                                children: (0,
+                                i.jsx)(T.Z, {})
+                            })]
+                        }), (0,
+                        i.jsx)(A.Z, {
+                            sx: {
+                                mb: 4,
+                                textAlign: "center"
+                            },
+                            children: (0,
+                            i.jsx)(Y.Z, {
+                                id: "confirm-modal-description",
+                                sx: {
+                                    fontSize: "16px",
+                                    color: "#666",
+                                    lineHeight: 1.6
+                                },
+                                children: "Este agendamento poder\xe1 gerar cobran\xe7as adicionais. Deseja prosseguir?"
+                            })
+                        }), (0,
+                        i.jsxs)(A.Z, {
+                            sx: {
+                                display: "flex",
+                                gap: 2,
+                                justifyContent: "center"
+                            },
+                            children: [(0,
+                            i.jsx)(I.Z, {
+                                variant: "outlined",
+                                onClick: eQ,
+                                disabled: Q,
+                                sx: {
+                                    borderRadius: "24px",
+                                    px: 4,
+                                    py: 1.5,
+                                    minWidth: "120px",
+                                    borderColor: "#ccc",
+                                    color: "#666",
+                                    "&:hover": {
+                                        backgroundColor: "#f5f5f5"
+                                    }
+                                },
+                                children: "Cancelar"
+                            }), (0,
+                            i.jsx)(I.Z, {
+                                variant: "contained",
+                                onClick: () => {
+                                    eY(!1),
+                                    e$(eR)
+                                }
+                                ,
+                                disabled: Q,
+                                sx: {
+                                    borderRadius: "24px",
+                                    px: 4,
+                                    py: 1.5,
+                                    minWidth: "120px",
+                                    backgroundColor: "#4daab6",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: 1,
+                                    "&:hover": {
+                                        backgroundColor: "#0284c7"
+                                    }
+                                },
+                                children: Q ? (0,
+                                i.jsxs)(i.Fragment, {
+                                    children: [(0,
+                                    i.jsx)(R.Z, {
+                                        size: 16,
+                                        sx: {
+                                            color: "white"
+                                        }
+                                    }), "Confirmando..."]
+                                }) : "Confirmar"
+                            })]
+                        })]
+                    })
+                }), (0,
+                i.jsx)(W.Ix, {})]
+            })
+        }
+        )
+    },
+    2648: function() {},
+    78294: function() {}
+}, function(e) {
+    e.O(0, [7635, 5676, 8218, 6990, 7293, 1021, 6307, 7152, 8489, 8645, 6946, 717, 7818, 4242, 7571, 2713, 4560, 3888, 9803, 9798, 3634, 5797, 2971, 2117, 1744], function() {
+        return e(e.s = 88477)
+    }),
+    _N_E = e.O()
+}
+]);

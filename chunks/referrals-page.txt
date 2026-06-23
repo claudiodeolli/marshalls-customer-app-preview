@@ -1,0 +1,558 @@
+(self.webpackChunk_N_E = self.webpackChunk_N_E || []).push([[2700], {
+    90559: function(e, r, n) {
+        Promise.resolve().then(n.bind(n, 63420))
+    },
+    63420: function(e, r, n) {
+        "use strict";
+        n.r(r);
+        var t = n(57437)
+          , i = n(2265)
+          , l = n(16449)
+          , a = n(35389)
+          , s = n(5002)
+          , o = n(82279)
+          , d = n(96207)
+          , u = n(89414)
+          , c = n(67208)
+          , x = n(36137)
+          , m = n(67571)
+          , h = n(94013)
+          , f = n(98489)
+          , p = n(41327)
+          , b = n(10020)
+          , g = n(65298)
+          , v = n(42187)
+          , j = n(53324)
+          , Z = n(84603)
+          , y = n(88818)
+          , N = n(83464)
+          , E = n(32797)
+          , I = n(56756)
+          , S = n(12276)
+          , C = n(90964)
+          , D = n(59064)
+          , w = n(88506)
+          , P = n(99376)
+          , z = n(47848);
+        let O = {
+            auth: "Autenticando...",
+            referrals: "Buscando encaminhamentos"
+        }
+          , A = {
+            referrals: "Ocorreu um erro ao acessar os seus encaminhamentos.",
+            other: "Ocorreu um erro ao entrar. Tente novamente mais tarde ou entre em contato com o suporte."
+        }
+          , k = e => {
+            if (!e)
+                return null;
+            let r = function(e) {
+                if (!e)
+                    return null;
+                let[r,n] = e.split(" ");
+                if (!r || !n)
+                    return null;
+                let[t,i,l] = r.split("/").map(Number)
+                  , [a,s,o] = n.split(":").map(Number);
+                return new Date(l,i - 1,t,a,s,o)
+            }(e) || new Date(e);
+            return isNaN(r.getTime()) ? null : r.toLocaleString("pt-BR", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit"
+            })
+        }
+          , R = {
+            PENDING: {
+                label: "Pendente",
+                color: "warning"
+            },
+            SCHEDULED: {
+                label: "Agendado",
+                color: "success"
+            },
+            default: {
+                label: "Pendente",
+                color: "default"
+            }
+        }
+          , _ = [{
+            label: "Todos",
+            value: null
+        }, {
+            label: "Pendente",
+            value: "PENDING"
+        }, {
+            label: "Agendada",
+            value: "SCHEDULED"
+        }, {
+            label: "Realizada",
+            value: "FINISHED"
+        }, {
+            label: "N\xe3o Realizada",
+            value: "UNFINISHED"
+        }];
+        r.default = (0,
+        j.E)(function() {
+            let e = (0,
+            P.useRouter)()
+              , [r,n] = (0,
+            i.useState)([])
+              , [j,G] = (0,
+            i.useState)(null)
+              , [H,T] = (0,
+            i.useState)(null)
+              , [L,M] = (0,
+            i.useState)("PENDING")
+              , {user: W} = (0,
+            Z.a)();
+            (0,
+            i.useEffect)( () => {
+                (async () => {
+                    if (W) {
+                        G("referrals");
+                        try {
+                            let {data: e} = await N.Z.get("/api/referrals");
+                            n(e),
+                            T(null)
+                        } catch (e) {
+                            T("referrals"),
+                            console.error(e)
+                        } finally {
+                            G(null)
+                        }
+                    }
+                }
+                )()
+            }
+            , [W]);
+            let U = L ? r.filter(e => e.status === L) : r
+              , B = e => {
+                e && window.open(e, "_blank", "noopener,noreferrer")
+            }
+              , F = r => {
+                e.push("/schedule/calendar?referral=" + r)
+            }
+            ;
+            return (0,
+            t.jsxs)(f.Z, {
+                children: [(0,
+                t.jsxs)(l.Z, {
+                    sx: {
+                        mb: 4
+                    },
+                    children: [(0,
+                    t.jsx)(s.Z, {
+                        variant: "h4",
+                        component: "h1",
+                        sx: {
+                            mb: 1,
+                            fontWeight: 700
+                        },
+                        children: "Encaminhamentos"
+                    }), (0,
+                    t.jsx)(s.Z, {
+                        variant: "body1",
+                        color: "text.primary",
+                        sx: {
+                            mb: 2
+                        },
+                        children: "Visualize e acompanhe seus encaminhamentos m\xe9dicos"
+                    }), (0,
+                    t.jsxs)(p.Z, {
+                        sx: {
+                            minWidth: 200
+                        },
+                        size: "small",
+                        children: [(0,
+                        t.jsx)(b.Z, {
+                            id: "status-filter-label",
+                            sx: {
+                                color: "text.primary",
+                                "&.Mui-focused": {
+                                    color: "primary.main"
+                                }
+                            },
+                            children: "Status"
+                        }), (0,
+                        t.jsx)(g.Z, {
+                            labelId: "status-filter-label",
+                            value: null != L ? L : "",
+                            label: "Status",
+                            onChange: e => M(e.target.value || null),
+                            sx: {
+                                "& .MuiOutlinedInput-notchedOutline": {
+                                    borderColor: "divider"
+                                },
+                                "&:hover .MuiOutlinedInput-notchedOutline": {
+                                    borderColor: "primary.main"
+                                },
+                                "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                                    borderColor: "primary.main"
+                                }
+                            },
+                            children: _.map(e => {
+                                var r;
+                                return (0,
+                                t.jsx)(v.Z, {
+                                    value: null !== (r = e.value) && void 0 !== r ? r : "",
+                                    children: e.label
+                                }, e.label)
+                            }
+                            )
+                        })]
+                    })]
+                }), j ? (0,
+                t.jsxs)(l.Z, {
+                    sx: {
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        height: "50vh"
+                    },
+                    children: [(0,
+                    t.jsx)(a.Z, {}), (0,
+                    t.jsx)(s.Z, {
+                        sx: {
+                            ml: 2
+                        },
+                        children: O[j]
+                    })]
+                }) : H ? (0,
+                t.jsx)(o.Z, {
+                    severity: "error",
+                    children: A[H]
+                }) : U && 0 !== U.length ? (0,
+                t.jsx)(d.Z, {
+                    elevation: 0,
+                    sx: {
+                        width: "100%",
+                        p: {
+                            xs: 1,
+                            sm: 2,
+                            md: 3
+                        },
+                        borderRadius: 4
+                    },
+                    children: (0,
+                    t.jsx)(u.ZP, {
+                        container: !0,
+                        spacing: 3,
+                        children: U.map(e => {
+                            var r, n, i, a;
+                            return (0,
+                            t.jsx)(u.ZP, {
+                                item: !0,
+                                xs: 12,
+                                sm: 6,
+                                md: 4,
+                                children: (0,
+                                t.jsxs)(c.Z, {
+                                    sx: {
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        height: "100%",
+                                        borderRadius: 3,
+                                        border: "1px solid",
+                                        borderColor: "divider",
+                                        boxShadow: "0 8px 32px rgba(0,0,0,0.08)",
+                                        transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                                        position: "relative",
+                                        overflow: "hidden",
+                                        "&:hover": {
+                                            transform: "translateY(-8px)",
+                                            boxShadow: "0 20px 40px rgba(0,0,0,0.12)",
+                                            borderColor: "primary.main"
+                                        },
+                                        "&::before": {
+                                            content: '""',
+                                            position: "absolute",
+                                            top: 0,
+                                            left: 0,
+                                            right: 0,
+                                            height: 4,
+                                            background: "SCHEDULED" === e.status ? "linear-gradient(90deg, #4caf50, #81c784)" : "PENDING" === e.status ? "linear-gradient(90deg, #ff9800, #ffb74d)" : "linear-gradient(90deg, #757575, #bdbdbd)"
+                                        }
+                                    },
+                                    children: [(0,
+                                    t.jsxs)(x.Z, {
+                                        sx: {
+                                            flexGrow: 1,
+                                            p: 3
+                                        },
+                                        children: [(0,
+                                        t.jsxs)(l.Z, {
+                                            sx: {
+                                                display: "flex",
+                                                alignItems: "center",
+                                                mb: 1
+                                            },
+                                            children: [(0,
+                                            t.jsx)(E.Z, {
+                                                color: "primary",
+                                                sx: {
+                                                    mr: 1.5
+                                                }
+                                            }), (0,
+                                            t.jsx)(s.Z, {
+                                                variant: "h6",
+                                                component: "div",
+                                                fontWeight: "bold",
+                                                color: "primary.main",
+                                                children: (null === (r = e.beneficiary) || void 0 === r ? void 0 : r.name) || "Benefici\xe1rio"
+                                            })]
+                                        }), (0,
+                                        t.jsxs)(l.Z, {
+                                            sx: {
+                                                display: "flex",
+                                                alignItems: "center",
+                                                mb: 1.5
+                                            },
+                                            children: [(0,
+                                            t.jsx)(I.Z, {
+                                                fontSize: "small",
+                                                sx: {
+                                                    mr: 1.5,
+                                                    color: "text.primary"
+                                                }
+                                            }), (0,
+                                            t.jsx)(s.Z, {
+                                                variant: "body2",
+                                                fontWeight: "medium",
+                                                color: "text.primary",
+                                                children: (null === (n = e.specialty) || void 0 === n ? void 0 : n.name) || "Especialidade n\xe3o informada"
+                                            })]
+                                        }), (0,
+                                        t.jsxs)(l.Z, {
+                                            sx: {
+                                                display: "flex",
+                                                alignItems: "center",
+                                                color: "text.primary",
+                                                mb: 1
+                                            },
+                                            children: [(0,
+                                            t.jsx)(S.Z, {
+                                                fontSize: "small",
+                                                sx: {
+                                                    mr: 1.5
+                                                }
+                                            }), (0,
+                                            t.jsxs)(s.Z, {
+                                                variant: "body2",
+                                                children: ["Criado em: ", k(e.createdAt) || "N\xe3o informado"]
+                                            })]
+                                        }), (0,
+                                        t.jsxs)(l.Z, {
+                                            sx: {
+                                                display: "flex",
+                                                alignItems: "center",
+                                                color: "text.primary",
+                                                mb: 2
+                                            },
+                                            children: [(0,
+                                            t.jsx)(C.Z, {
+                                                fontSize: "small",
+                                                sx: {
+                                                    mr: 1.5
+                                                }
+                                            }), (0,
+                                            t.jsxs)(s.Z, {
+                                                variant: "body2",
+                                                children: ["Atualizado em: ", k(e.updatedAt) || "N\xe3o informado"]
+                                            })]
+                                        }), (0,
+                                        t.jsx)(m.Z, {
+                                            icon: (0,
+                                            t.jsx)(D.Z, {
+                                                fontSize: "small"
+                                            }),
+                                            label: (null === (i = R[e.status]) || void 0 === i ? void 0 : i.label) || R.default.label,
+                                            color: (null === (a = R[e.status]) || void 0 === a ? void 0 : a.color) || R.default.color,
+                                            size: "small",
+                                            sx: {
+                                                fontWeight: "bold",
+                                                mb: 2
+                                            }
+                                        })]
+                                    }), (0,
+                                    t.jsxs)(l.Z, {
+                                        sx: {
+                                            p: 2,
+                                            pt: 2,
+                                            display: "flex",
+                                            gap: 1.5,
+                                            justifyContent: "flex-end",
+                                            borderTop: "1px solid #f0f0f0",
+                                            mt: "auto"
+                                        },
+                                        children: [(0,
+                                        t.jsx)(h.Z, {
+                                            variant: "outlined",
+                                            size: "small",
+                                            startIcon: (0,
+                                            t.jsx)(w.Z, {}),
+                                            onClick: () => B(e.urlPath),
+                                            disabled: !(void 0 !== e.urlPath && e.urlPath && e.urlPath.trim()),
+                                            children: "Abrir"
+                                        }), (0,
+                                        t.jsx)(h.Z, {
+                                            variant: "contained",
+                                            size: "small",
+                                            startIcon: (0,
+                                            t.jsx)(D.Z, {}),
+                                            onClick: () => F(e.uuid),
+                                            disabled: !((0,
+                                            z.Kt)(null == W ? void 0 : W.plans, "Nutri\xe7\xe3o", "S") && (0,
+                                            z.h)(null == W ? void 0 : W.plans, "Nutri\xe7\xe3o") && "PENDING" === e.status),
+                                            children: "Agendar"
+                                        })]
+                                    })]
+                                })
+                            }, e.uuid)
+                        }
+                        )
+                    })
+                }) : (0,
+                t.jsx)(l.Z, {
+                    sx: {
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        width: "100%",
+                        minHeight: "200px"
+                    },
+                    children: (0,
+                    t.jsx)(y.Z, {
+                        message: "Nenhum encaminhamento encontrado."
+                    })
+                })]
+            })
+        })
+    },
+    88818: function(e, r, n) {
+        "use strict";
+        var t = n(57437);
+        n(2265);
+        var i = n(16449)
+          , l = n(5002)
+          , a = n(56359);
+        r.Z = e => {
+            let {message: r="Nenhum registro encontrado.", suggestion: n=!1} = e;
+            return (0,
+            t.jsxs)(i.Z, {
+                sx: {
+                    textAlign: "center",
+                    marginTop: 4,
+                    padding: 5
+                },
+                children: [(0,
+                t.jsx)(a.Z, {
+                    sx: {
+                        fontSize: 48,
+                        color: "gray"
+                    }
+                }), (0,
+                t.jsx)(l.Z, {
+                    variant: "body1",
+                    sx: {
+                        marginTop: 1,
+                        color: "#888"
+                    },
+                    children: r
+                }), n && (0,
+                t.jsx)(l.Z, {
+                    variant: "body2",
+                    sx: {
+                        color: "gray"
+                    },
+                    children: n
+                })]
+            })
+        }
+    },
+    53324: function(e, r, n) {
+        "use strict";
+        n.d(r, {
+            E: function() {
+                return o
+            }
+        });
+        var t = n(57437)
+          , i = n(13634)
+          , l = n(84603)
+          , a = n(99376)
+          , s = n(2265);
+        function o(e) {
+            var r;
+            return r = function(r) {
+                return (0,
+                t.jsx)(i.Z, {
+                    children: (0,
+                    t.jsx)(e, {
+                        ...r
+                    })
+                })
+            }
+            ,
+            function(e) {
+                let {isAuthenticated: n, isLoading: i} = (0,
+                l.a)()
+                  , o = (0,
+                a.useRouter)();
+                return ((0,
+                s.useEffect)( () => {
+                    i || n || o.push("/login")
+                }
+                , [i, n, o]),
+                i) ? (0,
+                t.jsx)("div", {
+                    children: "Carregando..."
+                }) : n ? (0,
+                t.jsx)(r, {
+                    ...e
+                }) : null
+            }
+        }
+    },
+    84603: function(e, r, n) {
+        "use strict";
+        n.d(r, {
+            a: function() {
+                return l
+            }
+        });
+        var t = n(80605)
+          , i = n(99376);
+        function l() {
+            let {data: e, status: r} = (0,
+            t.useSession)()
+              , n = (0,
+            i.useRouter)()
+              , l = async () => {
+                await (0,
+                t.signOut)({
+                    redirect: !1
+                }),
+                n.push("/login"),
+                n.refresh()
+            }
+            ;
+            return {
+                user: null == e ? void 0 : e.user,
+                isAuthenticated: "authenticated" === r,
+                isLoading: "loading" === r,
+                logout: l,
+                session: e,
+                status: r
+            }
+        }
+    }
+}, function(e) {
+    e.O(0, [8218, 7293, 1021, 6307, 7152, 8489, 8645, 6946, 717, 7818, 7571, 9414, 2184, 9798, 3634, 2971, 2117, 1744], function() {
+        return e(e.s = 90559)
+    }),
+    _N_E = e.O()
+}
+]);

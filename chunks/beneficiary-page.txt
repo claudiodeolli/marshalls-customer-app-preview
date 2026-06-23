@@ -1,0 +1,328 @@
+(self.webpackChunk_N_E = self.webpackChunk_N_E || []).push([[2710], {
+    36932: function(e, t, n) {
+        Promise.resolve().then(n.bind(n, 88764))
+    },
+    88764: function(e, t, n) {
+        "use strict";
+        n.r(t);
+        var a = n(57437)
+          , i = n(98489)
+          , r = n(16449)
+          , o = n(5002)
+          , s = n(35389)
+          , c = n(94013)
+          , l = n(99376)
+          , u = n(2265)
+          , d = n(94242)
+          , m = n(3918)
+          , f = n(53324)
+          , h = n(84603)
+          , p = n(21844)
+          , x = n(72223);
+        let b = {
+            media: "O acesso \xe0 c\xe2mera e/ou ao microfone est\xe1 bloqueado. Verifique as permiss\xf5es no seu navegador e tente novamente."
+        };
+        t.default = (0,
+        f.E)(function() {
+            let[e,t] = (0,
+            u.useState)();
+            (0,
+            l.useParams)();
+            let n = (0,
+            l.useRouter)()
+              , f = (0,
+            l.useSearchParams)()
+              , [g,I] = (0,
+            u.useState)(null)
+              , [v,j] = (0,
+            u.useState)(null)
+              , [y,A] = (0,
+            u.useState)("")
+              , [E,Z] = (0,
+            u.useState)(!1)
+              , {user: w} = (0,
+            h.a)()
+              , [N,C] = (0,
+            u.useState)( () => "1" !== new URLSearchParams(window.location.search).get("skipTotemRedirect"));
+            (0,
+            u.useEffect)( () => {
+                if ("1" === f.get("skipTotemRedirect")) {
+                    C(!1);
+                    return
+                }
+                let e = !1;
+                return (async () => {
+                    try {
+                        let t = await fetch((0,
+                        x.vj)(), {
+                            method: "GET"
+                        }).catch( () => null);
+                        if (e)
+                            return;
+                        if (null == t ? void 0 : t.ok) {
+                            n.replace("/totem");
+                            return
+                        }
+                    } catch (e) {}
+                    e || C(!1)
+                }
+                )().catch( () => {
+                    e || C(!1)
+                }
+                ),
+                () => {
+                    e = !0
+                }
+            }
+            , [n, f]);
+            let T = async (e, n) => {
+                if ("media" !== g) {
+                    t("");
+                    try {
+                        I("media");
+                        let a = {
+                            beneficiaryUuid: y
+                        };
+                        null != e && "" !== e && (a.rdpayTransactionUuid = null != e ? e : ""),
+                        null != n && "" !== n && (a.groupId = n);
+                        let i = await fetch("/api/appointment", {
+                            method: "GET",
+                            headers: a
+                        })
+                          , r = await i.json();
+                        if (r.success && "" != r.url) {
+                            t(r.url);
+                            try {
+                                await navigator.mediaDevices.getUserMedia({
+                                    video: !0,
+                                    audio: !0
+                                })
+                            } catch (e) {
+                                d.Am.warning(b.media)
+                            }
+                        } else
+                            "Alcan\xe7ou o limite de atendimentos mensais." === r.message ? Z(!0) : d.Am.error("Ops! Algo deu errado. Tente novamente em instantes. Caso o problema persista, entre em contato com o suporte")
+                    } catch (e) {
+                        j("media")
+                    } finally {
+                        I(null)
+                    }
+                }
+            }
+              , S = async e => {
+                e.groupId ? await T(void 0, e.groupId) : await T()
+            }
+            ;
+            u.useEffect( () => {
+                var e;
+                A(null !== (e = localStorage.getItem("BENEFICIARY_UUID")) && void 0 !== e ? e : "")
+            }
+            , []);
+            let O = (0,
+            p.Zb)((null == w ? void 0 : w.clientId) || "");
+            return N ? (0,
+            a.jsx)(i.Z, {
+                children: (0,
+                a.jsxs)(r.Z, {
+                    sx: {
+                        my: 4,
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        minHeight: "60vh"
+                    },
+                    children: [(0,
+                    a.jsx)(o.Z, {
+                        variant: "h6",
+                        component: "div",
+                        children: "Verificando totem..."
+                    }), (0,
+                    a.jsx)(s.Z, {
+                        size: 60,
+                        sx: {
+                            mt: 2
+                        }
+                    })]
+                })
+            }) : (0,
+            a.jsxs)(i.Z, {
+                children: [(0,
+                a.jsx)(d.Ix, {}), (0,
+                a.jsxs)(r.Z, {
+                    sx: {
+                        mb: 4
+                    },
+                    children: [(0,
+                    a.jsx)(o.Z, {
+                        variant: "h4",
+                        component: "h1",
+                        sx: {
+                            mb: 1,
+                            fontWeight: 600
+                        },
+                        children: "Atendimento M\xe9dico"
+                    }), (0,
+                    a.jsx)(o.Z, {
+                        variant: "body1",
+                        color: "text.primary",
+                        children: "Inicie seu atendimento m\xe9dico online de forma segura"
+                    })]
+                }), (0,
+                a.jsx)(r.Z, {
+                    sx: {
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        minHeight: "60vh",
+                        p: 3,
+                        position: "relative"
+                    },
+                    children: e ? (0,
+                    a.jsx)(r.Z, {
+                        sx: {
+                            width: "100%",
+                            height: "70vh",
+                            border: "1px solid",
+                            borderColor: "divider",
+                            borderRadius: 2,
+                            overflow: "hidden"
+                        },
+                        children: (0,
+                        a.jsx)("iframe", {
+                            id: "appointment-iframe",
+                            src: e,
+                            allow: "camera;microphone",
+                            allowFullScreen: !0,
+                            style: {
+                                width: "100%",
+                                height: "100%",
+                                border: "none"
+                            }
+                        })
+                    }) : (0,
+                    a.jsxs)(r.Z, {
+                        sx: {
+                            textAlign: "center"
+                        },
+                        children: [(0,
+                        a.jsx)(o.Z, {
+                            variant: "h6",
+                            sx: {
+                                mb: 3
+                            },
+                            children: "media" === g ? "Acessando sua c\xe2mera e microfone..." : "Clique no bot\xe3o abaixo para iniciar seu atendimento"
+                        }), "media" === g ? (0,
+                        a.jsx)(s.Z, {
+                            size: 60,
+                            sx: {
+                                color: "primary.main",
+                                mt: 2
+                            }
+                        }) : (0,
+                        a.jsx)(r.Z, {
+                            sx: {
+                                display: "flex",
+                                flexDirection: "column",
+                                gap: 2,
+                                alignItems: "center"
+                            },
+                            children: O.buttons.map( (e, t) => (0,
+                            a.jsx)(c.Z, {
+                                variant: "contained",
+                                onClick: () => S(e),
+                                size: "large",
+                                color: "secondary",
+                                sx: {
+                                    py: 2,
+                                    px: 4,
+                                    fontSize: "1.1rem",
+                                    fontWeight: "bold"
+                                },
+                                children: e.label
+                            }, t))
+                        })]
+                    })
+                }), (0,
+                a.jsx)(m.Z, {
+                    open: E,
+                    onClose: () => Z(!1),
+                    onSuccess: e => {
+                        Z(!1),
+                        T(e.rdpayTransactionUuid)
+                    }
+                    ,
+                    onError: e => {
+                        d.Am.error(e)
+                    }
+                    ,
+                    alertMessage: "Voc\xea j\xe1 realizou suas 3 consultas gratuitas neste m\xeas. Para realizar uma nova consulta, por favor, siga com o pagamento abaixo. Ap\xf3s a confirma\xe7\xe3o, iniciaremos o seu atendimento.",
+                    price: 70
+                })]
+            })
+        })
+    },
+    72223: function(e, t, n) {
+        "use strict";
+        function a() {
+            return "http://127.0.0.1:5117/Integration"
+        }
+        function i() {
+            return "".concat(a(), "/healthcheck")
+        }
+        function r() {
+            return "".concat(a(), "/capture")
+        }
+        function o() {
+            return "".concat(a(), "/read")
+        }
+        n.d(t, {
+            eZ: function() {
+                return r
+            },
+            ud: function() {
+                return o
+            },
+            vj: function() {
+                return i
+            }
+        })
+    },
+    21844: function(e, t, n) {
+        "use strict";
+        n.d(t, {
+            Zb: function() {
+                return r
+            }
+        });
+        let a = {
+            "8116988b-aa0e-47f1-9f51-73e04422427d": {
+                buttons: [{
+                    label: "2\xaa OPINI\xc3O INTERNACIONAL"
+                }, {
+                    label: "TELEMEDICINA NACIONAL",
+                    groupId: "947d754c-e627-4b29-bc9d-6eb6264976ea"
+                }]
+            },
+            "87bf00c4-d55c-4332-840d-41c29ae96610": {
+                buttons: [{
+                    label: "INICIAR ATENDIMENTO",
+                    groupId: "3cda9ff2-e8e9-4ca3-8856-8229c7a5201f"
+                }]
+            }
+        }
+          , i = {
+            buttons: [{
+                label: "INICIAR ATENDIMENTO"
+            }]
+        }
+          , r = e => a[e] || i
+    }
+}, function(e) {
+    e.O(0, [8218, 7293, 1021, 6307, 7152, 8489, 8645, 6946, 717, 7818, 4242, 7571, 2713, 4560, 3888, 9803, 9798, 3634, 5797, 2971, 2117, 1744], function() {
+        return e(e.s = 36932)
+    }),
+    _N_E = e.O()
+}
+]);

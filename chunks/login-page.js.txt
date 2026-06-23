@@ -1,0 +1,577 @@
+(self.webpackChunk_N_E = self.webpackChunk_N_E || []).push([[2626], {
+    75380: function(e, t, n) {
+        Promise.resolve().then(n.bind(n, 38991))
+    },
+    38991: function(e, t, n) {
+        "use strict";
+        n.r(t),
+        n.d(t, {
+            default: function() {
+                return C
+            }
+        });
+        var r = n(57437)
+          , i = n(2265)
+          , o = n(80605)
+          , a = n(99376)
+          , s = n(16449)
+          , l = n(98489)
+          , c = n(5002)
+          , d = n(12713)
+          , u = n(82279)
+          , h = n(94013)
+          , m = n(35389)
+          , g = n(31691)
+          , f = n(17150)
+          , x = n(89414)
+          , p = n(55859)
+          , b = n(17637)
+          , v = n(47848);
+        let y = (0,
+        p.i)().catch( () => null);
+        function j(e, t) {
+            let n = e.replace("#", "")
+              , r = parseInt(n.substring(0, 2), 16)
+              , i = parseInt(n.substring(2, 4), 16)
+              , o = parseInt(n.substring(4, 6), 16);
+            return "rgba(".concat(r, ", ").concat(i, ", ").concat(o, ", ").concat(t, ")")
+        }
+        let w = (0,
+        i.memo)(e => {
+            let {config: t, registration: n, password: i, setRegistration: o, setPassword: a, error: g, autoLoginMessage: f, isLoading: x, onSubmit: p, theme: v} = e;
+            return (0,
+            r.jsx)(s.Z, {
+                sx: {
+                    height: "100vh",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    backgroundColor: "#fff",
+                    padding: v.spacing(3)
+                },
+                children: (0,
+                r.jsx)(l.Z, {
+                    maxWidth: "sm",
+                    children: (0,
+                    r.jsxs)(s.Z, {
+                        sx: {
+                            padding: {
+                                xs: v.spacing(3),
+                                sm: v.spacing(5)
+                            },
+                            maxWidth: 400,
+                            margin: "0 auto"
+                        },
+                        children: [(0,
+                        r.jsxs)(s.Z, {
+                            sx: {
+                                display: "flex",
+                                flexDirection: "column",
+                                alignItems: "center",
+                                mb: 5
+                            },
+                            children: [(0,
+                            r.jsx)(s.Z, {
+                                sx: {
+                                    mb: 3
+                                },
+                                children: (0,
+                                r.jsx)(b.Z, {
+                                    config: t,
+                                    width: 440,
+                                    height: 82
+                                })
+                            }), (0,
+                            r.jsx)(c.Z, {
+                                variant: "body1",
+                                color: "textSecondary",
+                                sx: {
+                                    textAlign: "center",
+                                    fontSize: {
+                                        xs: "0.85rem",
+                                        sm: "0.95rem"
+                                    },
+                                    paddingX: 5,
+                                    lineHeight: 1.5,
+                                    color: "#666"
+                                },
+                                children: "Entre com suas credenciais para acessar sua conta"
+                            })]
+                        }), (0,
+                        r.jsxs)(s.Z, {
+                            component: "form",
+                            onSubmit: p,
+                            sx: {
+                                mt: 1
+                            },
+                            children: [(0,
+                            r.jsx)(d.Z, {
+                                margin: "normal",
+                                required: !0,
+                                fullWidth: !0,
+                                id: "registration",
+                                label: "Registro",
+                                name: "registration",
+                                autoComplete: "username",
+                                value: n,
+                                onChange: e => o(e.target.value),
+                                sx: {
+                                    mb: 2,
+                                    "& .MuiInputLabel-root": {
+                                        color: "#555",
+                                        "&.Mui-focused": {
+                                            color: (null == t ? void 0 : t.primaryColor) || "#1976d2"
+                                        }
+                                    },
+                                    "& .MuiOutlinedInput-root": {
+                                        "&.Mui-focused fieldset": {
+                                            borderColor: (null == t ? void 0 : t.primaryColor) || "#1976d2"
+                                        }
+                                    }
+                                }
+                            }), (0,
+                            r.jsx)(d.Z, {
+                                margin: "normal",
+                                required: !0,
+                                fullWidth: !0,
+                                name: "password",
+                                label: "Senha",
+                                type: "password",
+                                id: "password",
+                                autoComplete: "current-password",
+                                value: i,
+                                onChange: e => a(e.target.value),
+                                sx: {
+                                    mb: 3,
+                                    "& .MuiInputLabel-root": {
+                                        color: "#555",
+                                        "&.Mui-focused": {
+                                            color: (null == t ? void 0 : t.primaryColor) || "#1976d2"
+                                        }
+                                    },
+                                    "& .MuiOutlinedInput-root": {
+                                        "&.Mui-focused fieldset": {
+                                            borderColor: (null == t ? void 0 : t.primaryColor) || "#1976d2"
+                                        }
+                                    }
+                                }
+                            }), g && (0,
+                            r.jsx)(u.Z, {
+                                severity: "error",
+                                sx: {
+                                    mt: 2,
+                                    mb: 2,
+                                    borderRadius: 2,
+                                    fontSize: "0.9rem"
+                                },
+                                children: g
+                            }), f && (0,
+                            r.jsx)(u.Z, {
+                                severity: "info",
+                                sx: {
+                                    mt: 2,
+                                    mb: 2,
+                                    borderRadius: 2,
+                                    fontSize: "0.9rem"
+                                },
+                                children: f
+                            }), (0,
+                            r.jsx)(h.Z, {
+                                type: "submit",
+                                fullWidth: !0,
+                                variant: "contained",
+                                sx: {
+                                    mt: 2,
+                                    py: 1.8,
+                                    fontSize: "1.1rem",
+                                    fontWeight: 600,
+                                    color: (null == t ? void 0 : t.textColorSecondary) || "#fff",
+                                    borderRadius: 3,
+                                    textTransform: "none",
+                                    backgroundColor: (null == t ? void 0 : t.primaryColor) || "#1976d2",
+                                    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
+                                    "&:hover": {
+                                        backgroundColor: (null == t ? void 0 : t.primaryColor) ? "".concat(t.primaryColor, "dd") : "#1565c0",
+                                        boxShadow: "0 6px 16px rgba(25, 118, 210, 0.4)",
+                                        transform: "translateY(-1px)"
+                                    },
+                                    "&:active": {
+                                        transform: "translateY(0)"
+                                    },
+                                    transition: "all 0.2s ease-in-out"
+                                },
+                                disabled: x,
+                                children: x ? (0,
+                                r.jsx)(m.Z, {
+                                    size: 24,
+                                    color: "inherit"
+                                }) : "Entrar"
+                            })]
+                        })]
+                    })
+                })
+            })
+        }
+        );
+        function S() {
+            var e;
+            let t = (0,
+            i.use)(y)
+              , n = (0,
+            a.useRouter)()
+              , {status: l, data: d} = (0,
+            o.useSession)()
+              , u = (0,
+            g.Z)()
+              , h = (0,
+            f.Z)(u.breakpoints.down("lg"))
+              , [m,p] = (0,
+            i.useState)("")
+              , [b,S] = (0,
+            i.useState)("")
+              , [Z,C] = (0,
+            i.useState)("")
+              , [I,k] = (0,
+            i.useState)(!1)
+              , [E,z] = (0,
+            i.useState)("");
+            (0,
+            i.useEffect)( () => {
+                if ("authenticated" === l) {
+                    var e;
+                    let t = null == d ? void 0 : null === (e = d.user) || void 0 === e ? void 0 : e.plans;
+                    n.push((0,
+                    v.LO)(t, "G") ? "/beneficiary" : "/schedule")
+                }
+            }
+            , [n, l, null == d ? void 0 : null === (e = d.user) || void 0 === e ? void 0 : e.plans]);
+            let L = (0,
+            i.useCallback)(async e => {
+                e.preventDefault(),
+                C(""),
+                k(!0);
+                try {
+                    if (!(null == t ? void 0 : t.clientId)) {
+                        C("Erro ao obter configura\xe7\xe3o do sistema. Tente novamente."),
+                        k(!1);
+                        return
+                    }
+                    let e = await (0,
+                    o.signIn)("credentials", {
+                        redirect: !1,
+                        registration: m,
+                        password: b,
+                        loginType: "credentialsLogin",
+                        clientId: t.clientId
+                    });
+                    (null == e ? void 0 : e.error) ? C("Credenciais inv\xe1lidas. Por favor, verifique seu registro e senha.") : (n.push("/"),
+                    n.refresh())
+                } catch (e) {
+                    C("Ocorreu um erro durante o login. Por favor, tente novamente."),
+                    console.error("Erro de login com credenciais:", e)
+                } finally {
+                    k(!1)
+                }
+            }
+            , [m, b, n]);
+            return (0,
+            r.jsx)(s.Z, {
+                sx: {
+                    minHeight: "100vh"
+                },
+                children: (0,
+                r.jsxs)(x.ZP, {
+                    container: !0,
+                    sx: {
+                        minHeight: "100vh"
+                    },
+                    children: [!h && (0,
+                    r.jsx)(x.ZP, {
+                        item: !0,
+                        xs: 12,
+                        lg: 7.2,
+                        children: (0,
+                        r.jsx)( () => (0,
+                        r.jsxs)(s.Z, {
+                            sx: {
+                                height: "100vh",
+                                background: "linear-gradient(".concat(j((null == t ? void 0 : t.primaryColor) || "#1976d2", .5), ", ").concat(j((null == t ? void 0 : t.primaryColor) || "#1976d2", .98), "), url('/medica.jpg')"),
+                                backgroundSize: "cover",
+                                backgroundPosition: "center",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                flexDirection: "column",
+                                color: "white",
+                                textAlign: "center",
+                                padding: u.spacing(4)
+                            },
+                            children: [(0,
+                            r.jsx)(c.Z, {
+                                variant: "h2",
+                                component: "h1",
+                                sx: {
+                                    fontWeight: "bold",
+                                    mb: 3,
+                                    fontSize: {
+                                        xs: "2.5rem",
+                                        md: "3.5rem"
+                                    },
+                                    textShadow: "2px 2px 4px rgba(0,0,0,0.3)"
+                                },
+                                children: "Bem-vindo"
+                            }), (0,
+                            r.jsx)(c.Z, {
+                                variant: "h5",
+                                component: "h2",
+                                sx: {
+                                    mb: 4,
+                                    maxWidth: "85%",
+                                    fontSize: {
+                                        xs: "1.3rem",
+                                        md: "1.6rem"
+                                    },
+                                    fontWeight: 300,
+                                    lineHeight: 1.4,
+                                    textShadow: "1px 1px 2px rgba(0,0,0,0.3)"
+                                },
+                                children: "Sua sa\xfade cuidada com tecnologia, humaniza\xe7\xe3o e excel\xeancia m\xe9dica."
+                            }), (0,
+                            r.jsx)(c.Z, {
+                                variant: "body1",
+                                sx: {
+                                    opacity: .95,
+                                    maxWidth: "75%",
+                                    fontSize: {
+                                        xs: "1rem",
+                                        md: "1.1rem"
+                                    },
+                                    lineHeight: 1.6,
+                                    textShadow: "1px 1px 2px rgba(0,0,0,0.2)"
+                                },
+                                children: "Acesse sua conta e tenha controle total sobre seus agendamentos, consultas e hist\xf3rico m\xe9dico."
+                            })]
+                        }), {})
+                    }), (0,
+                    r.jsx)(x.ZP, {
+                        item: !0,
+                        xs: 12,
+                        lg: h ? 12 : 4.8,
+                        children: (0,
+                        r.jsx)(w, {
+                            config: t,
+                            registration: m,
+                            password: b,
+                            setRegistration: p,
+                            setPassword: S,
+                            error: Z,
+                            autoLoginMessage: E,
+                            isLoading: I,
+                            onSubmit: L,
+                            theme: u
+                        })
+                    })]
+                })
+            })
+        }
+        function Z() {
+            return (0,
+            r.jsx)(s.Z, {
+                sx: {
+                    height: "100vh",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    backgroundColor: "#fff"
+                },
+                children: (0,
+                r.jsx)(m.Z, {})
+            })
+        }
+        function C() {
+            return (0,
+            r.jsx)(i.Suspense, {
+                fallback: (0,
+                r.jsx)(Z, {}),
+                children: (0,
+                r.jsx)(S, {})
+            })
+        }
+    },
+    55859: function(e, t, n) {
+        "use strict";
+        n.d(t, {
+            i: function() {
+                return o
+            }
+        });
+        let r = null
+          , i = async () => {
+            try {
+                let e = await fetch("/api/webapp?domain=" + window.location.hostname)
+                  , t = await e.json();
+                if (t.success && t.data)
+                    return sessionStorage.setItem("config", JSON.stringify(t.data)),
+                    t.data
+            } catch (e) {
+                console.error("Erro ao buscar informa\xe7\xf5es do webapp:", e)
+            }
+            return null
+        }
+          , o = async () => {
+            if (window.location.pathname.includes("/beneficiary/") || window.location.pathname.includes("/login"))
+                sessionStorage.removeItem("config");
+            else {
+                let e = sessionStorage.getItem("config");
+                if (e)
+                    try {
+                        return JSON.parse(e)
+                    } catch (e) {
+                        console.error("Erro ao processar dados armazenados:", e),
+                        sessionStorage.removeItem("config")
+                    }
+            }
+            return r || (r = i().finally( () => {
+                r = null
+            }
+            )),
+            r
+        }
+    },
+    17637: function(e, t, n) {
+        "use strict";
+        var r = n(57437)
+          , i = n(16449)
+          , o = n(21988)
+          , a = n(5002)
+          , s = n(2265);
+        t.Z = function(e) {
+            let {config: t, compact: n=!1, width: l=220, height: c=82} = e
+              , [d,u] = (0,
+            s.useState)(!1)
+              , [h,m] = (0,
+            s.useState)(!1)
+              , [g,f] = (0,
+            s.useState)(null);
+            (0,
+            s.useEffect)( () => {
+                (null == t ? void 0 : t.logo) ? (f(t.logo.replace(/^\uFEFF/, "").trim()),
+                m(!1),
+                u(!1)) : f(null)
+            }
+            , [t]);
+            let x = n ? {
+                width: 40,
+                height: 40
+            } : {
+                width: l,
+                height: c
+            };
+            return t && g ? h ? (0,
+            r.jsx)(i.Z, {
+                sx: {
+                    width: x.width,
+                    height: x.height,
+                    marginBottom: n ? "0px" : "30px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    backgroundColor: "#f5f5f5",
+                    border: "1px dashed #ff5722",
+                    borderRadius: 1
+                },
+                children: (0,
+                r.jsx)(a.Z, {
+                    variant: "caption",
+                    color: "error",
+                    children: n ? "Logo" : "Erro ao carregar logo"
+                })
+            }) : (0,
+            r.jsx)(i.Z, {
+                children: (0,
+                r.jsx)("img", {
+                    src: g,
+                    alt: "Logomarca",
+                    style: {
+                        width: x.width,
+                        height: n ? x.height : "auto",
+                        maxHeight: x.height,
+                        objectFit: "contain",
+                        opacity: d ? 1 : .9,
+                        transition: "opacity 0.3s ease"
+                    },
+                    onLoad: () => {
+                        u(!0)
+                    }
+                    ,
+                    onError: e => {
+                        m(!0)
+                    }
+                }, g)
+            }) : (0,
+            r.jsx)(i.Z, {
+                sx: {
+                    width: x.width,
+                    height: x.height,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center"
+                },
+                children: (0,
+                r.jsx)(o.Z, {
+                    variant: "rectangular",
+                    width: x.width,
+                    height: x.height
+                })
+            })
+        }
+    },
+    47848: function(e, t, n) {
+        "use strict";
+        function r(e) {
+            switch (e) {
+            case "Psicologia":
+                return "P";
+            case "Nutri\xe7\xe3o":
+            default:
+                return "S";
+            case "Telemedicina":
+            case "Tema":
+                return "G"
+            }
+        }
+        function i(e, t) {
+            return !!e && 0 !== e.length && e.some(e => e.plan.serviceType.includes(t))
+        }
+        function o(e, t, n) {
+            if (!e || 0 === e.length)
+                return !1;
+            let i = r(t)
+              , o = e.find(e => e.plan.serviceType.includes(i));
+            return (null == o ? void 0 : o.paymentType) === n
+        }
+        function a(e, t) {
+            if (!e || 0 === e.length)
+                return !1;
+            let n = r(t);
+            return e.some(e => e.plan.serviceType.includes(n))
+        }
+        n.d(t, {
+            Kt: function() {
+                return o
+            },
+            LO: function() {
+                return i
+            },
+            h: function() {
+                return a
+            }
+        })
+    }
+}, function(e) {
+    e.O(0, [7293, 1021, 6307, 7152, 8489, 8645, 7818, 2713, 9414, 1928, 2971, 2117, 1744], function() {
+        return e(e.s = 75380)
+    }),
+    _N_E = e.O()
+}
+]);

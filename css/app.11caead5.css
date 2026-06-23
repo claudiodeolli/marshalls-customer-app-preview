@@ -27091,7 +27091,7 @@ footer.footer span i,footer.footer span svg {
 }
 
 .main-menu .shadow-bottom {
-    display: none;
+    display: block;
     position: absolute;
     z-index: 2;
     height: 15px !important;
@@ -27101,7 +27101,6 @@ footer.footer span i,footer.footer span svg {
 }
 
 [dir] .main-menu .shadow-bottom {
-    margin-top: -.25rem;
     background: linear-gradient(#fff 41%,hsla(0,0%,100%,.11) 95%,hsla(0,0%,100%,0))
 }
 
@@ -38029,9 +38028,6 @@ footer.footer .footer-wrapper { padding: 0 !important; }
 
 /* Footer sem altura minima e sem fixed */
 footer.footer { min-height: 0 !important; position: static !important; }
-
-/* Shadow-bottom menor */
-.main-menu .shadow-bottom { height: 15px !important; filter: blur(1px) !important; }
 
 
 /* Footer sempre colado no fundo - layout flex */
