@@ -208,15 +208,17 @@ function PhoneInput({ countryCode, onCountryChange, value, onChange, placeholder
   );
 
   return (
-    <div style={{ display: 'flex', position: 'relative' }}>
+    <div style={{
+      display: 'flex', position: 'relative',
+      border: '1px solid #d8d6de', borderRadius: '11px', overflow: 'hidden',
+    }}>
       <button
         type="button"
         onClick={() => { setOpen(o => !o); setSearch(''); }}
         style={{
           display: 'flex', alignItems: 'center', gap: '4px',
-          padding: '0 10px', height: '38px',
-          border: '1px solid #d8d6de', borderRight: 'none',
-          borderRadius: '0.357rem 0 0 0.357rem',
+          padding: '0 10px', alignSelf: 'stretch',
+          border: 'none', borderRight: '1px solid #d8d6de', borderRadius: 0,
           background: '#f8f8f8', cursor: 'pointer',
           fontSize: '14px', whiteSpace: 'nowrap', flexShrink: 0,
         }}
@@ -274,7 +276,7 @@ function PhoneInput({ countryCode, onCountryChange, value, onChange, placeholder
         placeholder={placeholder}
         value={value}
         onChange={e => onChange(e.target.value)}
-        style={{ borderRadius: '0 0.357rem 0.357rem 0', flex: 1 }}
+        style={{ border: 'none', borderRadius: 0, flex: 1, boxShadow: 'none' }}
         onClick={() => open && setOpen(false)}
       />
     </div>
@@ -633,7 +635,7 @@ export default function MeusDadosPage() {
       <LGPDSection />
 
       {/* Encerrar Conta */}
-      <div className="card mt-2" style={{ border: '1px solid #fde8e8' }}>
+      <div className="card mt-5" style={{ border: '1px solid #fde8e8' }}>
         <div className="card-body">
           <h6 style={{ fontWeight: 700, color: '#ea5455', marginBottom: '8px' }}>Encerrar Conta</h6>
           <p style={{ fontSize: '13px', color: '#6e6b7b', marginBottom: '6px' }}>Deseja encerrar sua conta?</p>

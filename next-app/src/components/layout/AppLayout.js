@@ -74,6 +74,7 @@ export default function AppLayout({ children }) {
   useEffect(() => {
     const handleNavClick = (e) => {
       if (e.ctrlKey || e.metaKey || e.shiftKey || e.altKey || e.button !== 0) return;
+      if (e.target.closest('.main-menu')) return;
       const anchor = e.target.closest('a[href]');
       if (!anchor) return;
       const href = anchor.getAttribute('href');

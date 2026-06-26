@@ -3,7 +3,7 @@
 import { menuItems, plantaoItem } from '@/data/menuItems';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 
 /* SVG inline montado a partir da definição de ícone do menuItems.js */
@@ -35,7 +35,15 @@ export default function MainMenu({ collapsed, onToggleCollapse, onOverlayClick, 
   const pathname = usePathname();
   const [tooltip, setTooltip] = useState({ visible: false, text: '', top: 0, left: 0 });
   const [capTop, setCapTop] = useState(null);
+  const [isMobile, setIsMobile] = useState(false);
   const menuRef = useRef(null);
+
+  useLayoutEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 1200);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
 
   useLayoutEffect(() => {
     const update = () => {
@@ -63,6 +71,22 @@ export default function MainMenu({ collapsed, onToggleCollapse, onOverlayClick, 
       ro?.disconnect();
     };
   }, []);
+
+  useEffect(() => {
+    if (!isMobile) return;
+    const menu = menuRef.current;
+    const content = menu?.querySelector('.main-menu-content');
+    if (!content) return;
+
+    const checkBottom = () => {
+      const atBottom = content.scrollHeight - content.scrollTop - content.clientHeight < 2;
+      menu.classList.toggle('_menu-at-bottom', atBottom);
+    };
+
+    checkBottom();
+    content.addEventListener('scroll', checkBottom, { passive: true });
+    return () => content.removeEventListener('scroll', checkBottom);
+  }, [isMobile, mobileOpen]);
 
   /* Plantão ativo se nenhum item de menu está ativo */
   const p = pathname === '/' ? '/' : pathname.replace(/\/$/, '');
@@ -157,36 +181,45 @@ export default function MainMenu({ collapsed, onToggleCollapse, onOverlayClick, 
         <div className="shadow-bottom" style={capTop !== null ? { top: capTop + 10 } : undefined} />
 
         {/* ── Lista de itens do menu ── */}
-        <PerfectScrollbar
-          className="main-menu-content"
-          options={{ suppressScrollX: true }}
-          onMouseOver={handleMouseOver}
-          onMouseLeave={handleMouseLeave}
-        >
-          <ul className="navigation navigation-main" id="main-menu-navigation">
-            {menuItems.map((item, idx) => {
-              if (item.header) {
+        {/* No mobile usa <div> nativo para evitar que o PerfectScrollbar chame
+            preventDefault() nos eventos de touch, o que bloqueia a síntese de
+            click no iOS Safari e exige dois toques para navegar. */}
+        {(() => {
+          const menuList = (
+            <ul className="navigation navigation-main" id="main-menu-navigation">
+              {menuItems.map((item, idx) => {
+                if (item.header) {
+                  return (
+                    <li key={`header-${idx}`} className="navigation-header text-truncate">
+                      <span>{item.header}</span>
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="16" height="16">
+                        <circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/>
+                      </svg>
+                    </li>
+                  );
+                }
+                const isActive = p === item.href || p.startsWith(item.href + '/');
                 return (
-                  <li key={`header-${idx}`} className="navigation-header text-truncate">
-                    <span>{item.header}</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="16" height="16">
-                      <circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/>
-                    </svg>
+                  <li key={item.href} className={`nav-item${isActive ? ' active' : ''}`}>
+                    <Link href={item.href} className={isActive ? 'active' : ''} aria-current={isActive ? 'page' : undefined} onClick={(e) => { if (isActive) e.preventDefault(); onOverlayClick(); }}>
+                      <MenuIcon def={item.icon} />
+                      <span className="menu-title">{item.title}</span>
+                    </Link>
                   </li>
                 );
-              }
-              const isActive = p === item.href || p.startsWith(item.href + '/');
-              return (
-                <li key={item.href} className={`nav-item${isActive ? ' active' : ''}`}>
-                  <Link href={item.href} className={isActive ? 'active' : ''} aria-current={isActive ? 'page' : undefined} onClick={(e) => { if (isActive) e.preventDefault(); onOverlayClick(); }}>
-                    <MenuIcon def={item.icon} />
-                    <span className="menu-title">{item.title}</span>
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </PerfectScrollbar>
+              })}
+            </ul>
+          );
+          return isMobile ? (
+            <div className="main-menu-content" onMouseOver={handleMouseOver} onMouseLeave={handleMouseLeave}>
+              {menuList}
+            </div>
+          ) : (
+            <PerfectScrollbar className="main-menu-content" options={{ suppressScrollX: true }} onMouseOver={handleMouseOver} onMouseLeave={handleMouseLeave}>
+              {menuList}
+            </PerfectScrollbar>
+          );
+        })()}
 
         {/* ── Decorative squares above ps__rail-y ── */}
         {capTop !== null && <>

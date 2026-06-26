@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
 import { USER } from '@/data/user';
+import { useState } from 'react';
 
 /*
   Chunk: beneficiary.js (módulo 88764)
@@ -391,7 +391,7 @@ export default function PlantaoPage() {
               <p>
                 Toque no botão abaixo para iniciar
               </p>
-              <div style={{ animation: 'fade_down 2s ease-in-out infinite', display: 'inline-flex' }}>
+              <div style={{ animation: 'fade_down 2.6s ease-in-out infinite', display: 'inline-flex' }}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <polyline points="7 8 12 13 17 8" />
                   <polyline points="7 13 12 18 17 13" />
@@ -403,6 +403,9 @@ export default function PlantaoPage() {
               onClick={handleStartAppointment}
               style={{
                 display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '12px',
                 padding: '27px 32px',
                 fontSize: '18px',
                 borderRadius: '100px',
@@ -412,9 +415,7 @@ export default function PlantaoPage() {
                 boxShadow: '0px 0px 4px 0px rgba(0,0,0,0.5)'
               }}
             >
-              <div className="plantao-pulse-dot-container">
-                <span className="plantao-pulse-dot" />
-              </div>
+              <span className="plantao-pulse-dot" style={{ width: '10px', height: '10px', flexShrink: 0 }} />
               Iniciar atendimento
             </button>
           </>

@@ -15,7 +15,7 @@ const ITEMS = [
     label: 'Clube',
     href: '/meu-clube',
     icon: {
-      viewBox: '1 1 22 22',
+      viewBox: '0 0 24 24',
       fill: 'currentColor',
       stroke: 'none',
       strokeWidth: '0',

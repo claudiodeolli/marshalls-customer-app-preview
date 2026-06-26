@@ -194,6 +194,7 @@ function StatusChip({ label, color }) {
       fontWeight: 600,
       lineHeight: 1.4,
       background: 'transparent',
+      whiteSpace: 'nowrap',
     }}>
       {label}
     </span>
@@ -226,10 +227,10 @@ function StatusSelect({ value, onChange }) {
           padding: '0 12px', fontSize: '14px', color: '#6e6b7b',
         }}
       >
-        <span>
+        <span style={{ overflow: 'hidden', minWidth: 0 }}>
           {selected.color
             ? <StatusChip label={selected.label} color={selected.color} />
-            : <span style={{ fontSize: '14px' }}>{selected.label}</span>
+            : <span style={{ fontSize: '14px', whiteSpace: 'nowrap' }}>{selected.label}</span>
           }
         </span>
         <svg width="10" height="6" viewBox="0 0 10 6" fill="none" style={{ flexShrink: 0, marginLeft: 6 }}>
@@ -574,7 +575,7 @@ export default function HistoricoPage() {
 
           {filterOpen && <div className="row" style={{ rowGap: '12px', alignItems: 'flex-end' }}>
             {/* Date initial */}
-            <div className="col-12 col-sm-6 col-md-3">
+            <div className="col-12 col-sm-6 col-md-2">
               <label className="form-label" style={{ fontSize: '13px', color: 'var(--primary,#0052ff)', marginBottom: '4px' }}>
                 Data inicial
               </label>
@@ -588,7 +589,7 @@ export default function HistoricoPage() {
             </div>
 
             {/* Date final */}
-            <div className="col-12 col-sm-6 col-md-3">
+            <div className="col-12 col-sm-6 col-md-2">
               <label className="form-label" style={{ fontSize: '13px', color: 'var(--primary,#0052ff)', marginBottom: '4px' }}>
                 Data final
               </label>
@@ -619,7 +620,7 @@ export default function HistoricoPage() {
             </div>
 
             {/* Status */}
-            <div className="col-12 col-sm-6 col-md-2">
+            <div className="col-12 col-sm-6 col-md-3">
               <label className="form-label" style={{ fontSize: '13px', color: 'var(--primary,#0052ff)', marginBottom: '4px' }}>
                 Status
               </label>
@@ -627,7 +628,7 @@ export default function HistoricoPage() {
             </div>
 
             {/* Filter button */}
-            <div className="col-12 col-sm-12 col-md-2">
+            <div className="col-12 col-sm-12 col-md-3">
               <button
                 disabled={loading}
                 onClick={applyFilter}

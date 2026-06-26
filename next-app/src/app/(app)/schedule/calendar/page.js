@@ -69,6 +69,11 @@ function ScheduleContent() {
   // Show avulsa prices on specialty list
   const [showPrices, setShowPrices] = useState(false);
 
+  // Avulsa payment flow
+  const [paymentStep, setPaymentStep] = useState(null); // null | 'select' | 'pix' | 'card-new' | 'success' | 'done-later'
+  const [avulsaSpecialty, setAvulsaSpecialty] = useState(null);
+  const [cardForm, setCardForm] = useState({ number: '', name: '', expiry: '', cvv: '' });
+
   const calendarRef = useRef(null);
   const slotsRef = useRef(null);
 
@@ -159,7 +164,8 @@ function ScheduleContent() {
   function handleSpecialtyClick(spec) {
     if (loadingAvailability || specialtyLocked) return;
     if (showPrices) {
-      doSelectSpecialty(spec);
+      setAvulsaSpecialty(spec);
+      setPaymentStep('select');
       return;
     }
     let requiresReferral;
@@ -235,6 +241,16 @@ function ScheduleContent() {
     setLockedSpecialtyUuid(spec.uuid);
     setReferralModal(false);
     doSelectSpecialty(spec);
+  }
+
+  function handleAgendarAgora() {
+    setPaymentStep(null);
+    setShowPrices(false);
+    doSelectSpecialty(avulsaSpecialty);
+  }
+
+  function handleAgendarDepois() {
+    setPaymentStep('done-later');
   }
 
   function handleDayClick(day) {
@@ -380,6 +396,326 @@ function ScheduleContent() {
             Voltar
           </button>
         </div>
+      </div>
+    );
+  }
+
+  // ── Payment flow: select method ───────────────────────────────────────────
+  if (paymentStep === 'select') {
+    const price = avulsaSpecialty?.price ?? 0;
+    const optionCard = (onClick, icon, title, subtitle) => (
+      <div
+        className="card mb-2"
+        onClick={onClick}
+        style={{ cursor: 'pointer', border: '1.5px solid #ebe9f1' }}
+        onMouseEnter={e => { e.currentTarget.style.border = '1.5px solid #4daab6'; }}
+        onMouseLeave={e => { e.currentTarget.style.border = '1.5px solid #ebe9f1'; }}
+      >
+        <div className="card-body d-flex align-items-center" style={{ gap: 14, padding: '14px 18px' }}>
+          <div style={{ width: 44, height: 44, borderRadius: 12, background: '#f3f2f7', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            {icon}
+          </div>
+          <div>
+            <div style={{ fontWeight: 600, fontSize: 15, color: '#5e5873' }}>{title}</div>
+            <div style={{ fontSize: 13, color: '#6e6b7b' }}>{subtitle}</div>
+          </div>
+          <svg style={{ marginLeft: 'auto', flexShrink: 0 }} xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#b9b9c3" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="9 18 15 12 9 6" />
+          </svg>
+        </div>
+      </div>
+    );
+    return (
+      <div style={{ maxWidth: 480, margin: '0 auto' }}>
+        <div className="card mb-3">
+          <div className="card-body" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 20px' }}>
+            <div>
+              <div style={{ fontSize: 12, color: '#6e6b7b', marginBottom: 2 }}>Consulta avulsa</div>
+              <div style={{ fontWeight: 700, fontSize: 17, color: '#5e5873' }}>{avulsaSpecialty?.name}</div>
+            </div>
+            <span style={{ fontWeight: 700, fontSize: 20, color: '#28c76f' }}>
+              R$ {price.toFixed(2).replace('.', ',')}
+            </span>
+          </div>
+        </div>
+
+        <h6 style={{ fontWeight: 700, color: '#5e5873', marginBottom: 14 }}>Forma de pagamento</h6>
+
+        {optionCard(
+          () => setPaymentStep('pix'),
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#32BCAD" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M11.5 2L2 11.5l10 10 9.5-9.5L11.5 2z" />
+            <path d="M7 11.5l4.5 4.5 5.5-5.5" />
+          </svg>,
+          'PIX',
+          'Gera chave ou QR Code'
+        )}
+
+        {optionCard(
+          () => setPaymentStep('success'),
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6e6b7b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="1" y="4" width="22" height="16" rx="2" ry="2" />
+            <line x1="1" y1="10" x2="23" y2="10" />
+          </svg>,
+          'Visa •••• 4242',
+          'Cartão já cadastrado'
+        )}
+
+        {optionCard(
+          () => setPaymentStep('card-new'),
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6e6b7b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="1" y="4" width="22" height="16" rx="2" ry="2" />
+            <line x1="1" y1="10" x2="23" y2="10" />
+            <line x1="7" y1="15" x2="7.01" y2="15" />
+            <line x1="11" y1="15" x2="11.01" y2="15" />
+          </svg>,
+          'Usar outro cartão',
+          'Pagar com novo cartão de crédito'
+        )}
+
+        <button
+          onClick={() => { setPaymentStep(null); setShowPrices(false); }}
+          style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#ea5455', fontWeight: 600, fontSize: 14, padding: '8px 0', marginTop: 4 }}
+        >
+          Cancelar
+        </button>
+      </div>
+    );
+  }
+
+  // ── Payment flow: PIX ─────────────────────────────────────────────────────
+  if (paymentStep === 'pix') {
+    const pixKey = 'contato@marshallsmed.com.br';
+    const price = avulsaSpecialty?.price ?? 0;
+    return (
+      <div style={{ maxWidth: 480, margin: '0 auto' }}>
+        <div className="card">
+          <div className="card-header" style={{ padding: '16px 20px' }}>
+            <h6 style={{ margin: 0, fontWeight: 700, color: '#5e5873' }}>Pagamento via PIX</h6>
+          </div>
+          <div className="card-body" style={{ textAlign: 'center' }}>
+            <div style={{
+              width: 160, height: 160, margin: '0 auto 16px',
+              border: '2px solid #32BCAD', borderRadius: 8,
+              background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}>
+              <svg width="120" height="120" viewBox="0 0 120 120">
+                <rect width="120" height="120" fill="white" />
+                <rect x="10" y="10" width="40" height="40" fill="none" stroke="#000" strokeWidth="4" />
+                <rect x="18" y="18" width="24" height="24" fill="#000" />
+                <rect x="70" y="10" width="40" height="40" fill="none" stroke="#000" strokeWidth="4" />
+                <rect x="78" y="18" width="24" height="24" fill="#000" />
+                <rect x="10" y="70" width="40" height="40" fill="none" stroke="#000" strokeWidth="4" />
+                <rect x="18" y="78" width="24" height="24" fill="#000" />
+                <rect x="70" y="70" width="8" height="8" fill="#000" />
+                <rect x="82" y="70" width="8" height="8" fill="#000" />
+                <rect x="94" y="70" width="16" height="8" fill="#000" />
+                <rect x="70" y="82" width="16" height="8" fill="#000" />
+                <rect x="90" y="82" width="8" height="8" fill="#000" />
+                <rect x="70" y="94" width="8" height="16" fill="#000" />
+                <rect x="82" y="94" width="8" height="8" fill="#000" />
+                <rect x="94" y="90" width="16" height="10" fill="#000" />
+                <rect x="50" y="50" width="8" height="8" fill="#000" />
+                <rect x="62" y="50" width="8" height="8" fill="#000" />
+                <rect x="50" y="62" width="8" height="8" fill="#000" />
+                <rect x="62" y="62" width="8" height="8" fill="#000" />
+              </svg>
+            </div>
+            <p style={{ fontSize: 13, color: '#6e6b7b', marginBottom: 6 }}>Ou copie a chave PIX:</p>
+            <div style={{
+              display: 'flex', alignItems: 'center', gap: 8, justifyContent: 'center',
+              background: '#f3f2f7', borderRadius: 8, padding: '8px 12px', marginBottom: 8,
+            }}>
+              <span style={{ fontSize: 13, color: '#5e5873', wordBreak: 'break-all' }}>{pixKey}</span>
+              <button
+                onClick={() => navigator.clipboard?.writeText(pixKey)}
+                style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 2, flexShrink: 0 }}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6e6b7b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                </svg>
+              </button>
+            </div>
+            <p style={{ fontSize: 12, color: '#b9b9c3', marginBottom: 20 }}>
+              Valor: R$ {price.toFixed(2).replace('.', ',')}
+            </p>
+            <button
+              onClick={() => setPaymentStep('success')}
+              className="btn btn-primary"
+              style={{ width: '100%', borderRadius: 24, fontWeight: 700 }}
+            >
+              Confirmar pagamento
+            </button>
+          </div>
+        </div>
+        <button
+          onClick={() => setPaymentStep('select')}
+          style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#6e6b7b', fontWeight: 600, fontSize: 14, marginTop: 12, padding: '4px 0' }}
+        >
+          ← Voltar
+        </button>
+      </div>
+    );
+  }
+
+  // ── Payment flow: new card ─────────────────────────────────────────────────
+  if (paymentStep === 'card-new') {
+    return (
+      <div style={{ maxWidth: 480, margin: '0 auto' }}>
+        <div className="card">
+          <div className="card-header" style={{ padding: '16px 20px' }}>
+            <h6 style={{ margin: 0, fontWeight: 700, color: '#5e5873' }}>Dados do Cartão</h6>
+          </div>
+          <div className="card-body">
+            <div className="form-group mb-1">
+              <label style={{ fontSize: 13, color: '#6e6b7b', display: 'block', marginBottom: 4 }}>Número do cartão</label>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="0000 0000 0000 0000"
+                maxLength={19}
+                value={cardForm.number}
+                onChange={e => {
+                  const digits = e.target.value.replace(/\D/g, '');
+                  const formatted = digits.replace(/(.{4})/g, '$1 ').trim();
+                  setCardForm(f => ({ ...f, number: formatted }));
+                }}
+              />
+            </div>
+            <div className="form-group mb-1">
+              <label style={{ fontSize: 13, color: '#6e6b7b', display: 'block', marginBottom: 4 }}>Nome do titular</label>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Nome impresso no cartão"
+                value={cardForm.name}
+                onChange={e => setCardForm(f => ({ ...f, name: e.target.value }))}
+              />
+            </div>
+            <div className="row">
+              <div className="col-6">
+                <div className="form-group mb-1">
+                  <label style={{ fontSize: 13, color: '#6e6b7b', display: 'block', marginBottom: 4 }}>Validade</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="MM/AA"
+                    maxLength={5}
+                    value={cardForm.expiry}
+                    onChange={e => {
+                      const v = e.target.value.replace(/\D/g, '');
+                      setCardForm(f => ({ ...f, expiry: v.length > 2 ? v.slice(0, 2) + '/' + v.slice(2) : v }));
+                    }}
+                  />
+                </div>
+              </div>
+              <div className="col-6">
+                <div className="form-group mb-1">
+                  <label style={{ fontSize: 13, color: '#6e6b7b', display: 'block', marginBottom: 4 }}>CVV</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="000"
+                    maxLength={4}
+                    value={cardForm.cvv}
+                    onChange={e => setCardForm(f => ({ ...f, cvv: e.target.value.replace(/\D/g, '') }))}
+                  />
+                </div>
+              </div>
+            </div>
+            <button
+              onClick={() => setPaymentStep('success')}
+              className="btn btn-primary"
+              style={{ width: '100%', borderRadius: 24, fontWeight: 700, marginTop: 10 }}
+            >
+              Finalizar pagamento
+            </button>
+          </div>
+        </div>
+        <button
+          onClick={() => setPaymentStep('select')}
+          style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#6e6b7b', fontWeight: 600, fontSize: 14, marginTop: 12, padding: '4px 0' }}
+        >
+          ← Voltar
+        </button>
+      </div>
+    );
+  }
+
+  // ── Payment flow: success ─────────────────────────────────────────────────
+  if (paymentStep === 'success') {
+    return (
+      <div style={{ maxWidth: 480, margin: '0 auto', textAlign: 'center', padding: '2.5rem 0' }}>
+        <div style={{
+          width: 72, height: 72, borderRadius: '50%', background: '#e6f9ee',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.25rem',
+        }}>
+          <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none"
+            stroke="#28c76f" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
+        </div>
+        <h5 style={{ fontWeight: 700, color: '#5e5873', marginBottom: 6 }}>Recebemos seu pagamento!</h5>
+        <p style={{ color: '#6e6b7b', fontSize: 14, marginBottom: 28 }}>
+          {avulsaSpecialty?.name} — R$ {(avulsaSpecialty?.price ?? 0).toFixed(2).replace('.', ',')}
+        </p>
+        <button
+          onClick={handleAgendarAgora}
+          className="btn btn-primary"
+          style={{ width: '100%', borderRadius: 24, fontWeight: 700, marginBottom: 12, fontSize: 16 }}
+        >
+          Agendar Agora
+        </button>
+        <button
+          onClick={handleAgendarDepois}
+          style={{
+            width: '100%', background: 'none', border: '1.5px solid #ebe9f1',
+            borderRadius: 24, fontWeight: 600, fontSize: 15, color: '#6e6b7b',
+            cursor: 'pointer', padding: '10px',
+          }}
+        >
+          Agendar depois
+        </button>
+      </div>
+    );
+  }
+
+  // ── Payment flow: schedule later ──────────────────────────────────────────
+  if (paymentStep === 'done-later') {
+    return (
+      <div style={{ maxWidth: 520, margin: '0 auto' }}>
+        <h5 style={{ fontWeight: 700, color: '#5e5873', marginBottom: 4 }}>Gerencie seus agendamentos médicos</h5>
+        <p style={{ color: '#6e6b7b', fontSize: 14, marginBottom: 20 }}>E agende novas consultas</p>
+        <div className="card" style={{ border: '1.5px solid #d4def1' }}>
+          <div className="card-body">
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+              <span style={{ fontWeight: 700, fontSize: 16, color: '#5e5873' }}>{avulsaSpecialty?.name}</span>
+              <span style={{ fontSize: 12, fontWeight: 600, color: '#ff9f43', background: '#fff4e5', borderRadius: 12, padding: '2px 10px' }}>
+                Aguardando agendamento
+              </span>
+            </div>
+            <p style={{ color: '#6e6b7b', fontSize: 13, margin: 0 }}>
+              Consulta avulsa — R$ {(avulsaSpecialty?.price ?? 0).toFixed(2).replace('.', ',')}
+            </p>
+            <p style={{ color: '#b9b9c3', fontSize: 12, marginTop: 4, marginBottom: 14 }}>
+              Pagamento confirmado · Agende quando quiser
+            </p>
+            <button
+              onClick={handleAgendarAgora}
+              className="btn btn-primary btn-sm"
+              style={{ borderRadius: 24, fontWeight: 700 }}
+            >
+              Agendar agora
+            </button>
+          </div>
+        </div>
+        <button
+          onClick={() => router.push('/agendamentos')}
+          style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#4daab6', fontWeight: 600, fontSize: 14, marginTop: 16, padding: '4px 0' }}
+        >
+          Ver todos os agendamentos →
+        </button>
       </div>
     );
   }

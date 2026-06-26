@@ -30,7 +30,7 @@ body {
    garantindo que --sw seja sempre mensurável via JS. */
 html {
   scrollbar-width: thin;
-  scrollbar-color: #aaa #2b2b2b;
+  scrollbar-color: #aaa transparent;
 }
 
 html::-webkit-scrollbar {
@@ -38,7 +38,7 @@ html::-webkit-scrollbar {
 }
 
 html::-webkit-scrollbar-track {
-  background: #2b2b2b;
+  background: transparent;
 }
 
 html::-webkit-scrollbar-thumb {
@@ -285,7 +285,7 @@ html[dir] .content.app-content {
 }
 
 .plantao-pulse-dot-container {
-  padding-right: 36px;
+  padding-right: 0;
 }
 
 ._sb-plantao-icon-wrap {
@@ -661,12 +661,21 @@ body._page-leaving .content-body {
   border-radius: 4px;
 }
 
+/* Gradiente do botão "Iniciar atendimento": blend centralizado horizontalmente */
+[dir] .btn-primary._start-btn {
+  background: linear-gradient(90deg, #003DFF 0%, #00E5FF 100%) !important;
+}
+
 /* Border-radius uniforme em todos os cards */
 [dir] .card {
   border-radius: 12px !important;
 }
 
 /* ── Campos de formulário ── */
+label {
+  font-size: 13px !important;
+}
+
 input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]):not([type="range"]):not([type="file"]):not([type="color"]),
 .form-control:not(textarea):not(select),
 select.form-control,
@@ -791,9 +800,14 @@ select.form-control,
     top: 0 !important;
     bottom: calc(79px + env(safe-area-inset-bottom, 0px)) !important;
     height: auto !important;
-    border-radius: 0 28px 28px 0 !important;
+    border-radius: 0 28px 0 0 !important;
     overflow: hidden !important;
+    transition: transform 0.25s ease, border-radius 0.2s ease !important;
     border: 1px solid #D4DEF1 !important;
+  }
+
+  .main-menu._menu-at-bottom {
+    border-radius: 0 28px 28px 0 !important;
   }
 
   /* Scroll lock: impede que a página role enquanto o sidebar está aberto.
@@ -810,12 +824,13 @@ select.form-control,
   }
 
   /* Previne scroll chaining: scroll dentro do sidebar não propaga para a página.
-     overflow-y: auto + -webkit-overflow-scrolling garante scroll nativo no iOS,
-     onde o PerfectScrollbar pode não funcionar corretamente. */
-  .main-menu .main-menu-content {
+     Seletor .main-menu.menu-fixed .main-menu-content (0,3,0) iguala a especificidade
+     da regra base que define overflow:hidden, garantindo que overflow-y:auto vença. */
+  .main-menu.menu-fixed .main-menu-content {
     overscroll-behavior: contain;
     touch-action: pan-y;
     overflow-y: auto !important;
+    overflow-x: hidden !important;
     -webkit-overflow-scrolling: touch !important;
   }
 
@@ -835,6 +850,10 @@ select.form-control,
   /* Espaçamento inferior no último item — sobrescreve o padding-bottom:0 global */
   #main-menu-navigation {
     padding-bottom: 5rem !important;
+  }
+
+  .main-menu .navigation li.nav-item {
+    margin-bottom: 30px;
   }
 
   /* Remove transições e animações dos itens do menu no mobile
@@ -997,6 +1016,10 @@ select.form-control,
     padding-right: 0.75rem !important;
   }
 
+  .content-wrapper {
+    margin: 0 -1.2rem !important;
+  }
+
   /* Cards ainda menores */
   .card .card-body {
     padding: 0.75rem !important;
@@ -1076,6 +1099,13 @@ select.form-control,
 
   .content-body h5 {
     font-size: 1rem !important;
+  }
+
+  input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]):not([type="range"]):not([type="file"]):not([type="color"]),
+  .form-control:not(textarea):not(select),
+  select.form-control,
+  .custom-select {
+    min-height: 44px !important;
   }
 }
 

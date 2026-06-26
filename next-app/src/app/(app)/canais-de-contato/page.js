@@ -29,7 +29,7 @@ export default function CanaisDeContatoPage() {
                 href="https://wa.me/5500000000000"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn btn-primary btn-sm _contact-btn"
+                className="btn btn-primary _contact-btn"
               >
                 Falar no WhatsApp
               </a>
@@ -51,7 +51,7 @@ export default function CanaisDeContatoPage() {
               </div>
               <a
                 href="mailto:contato@marshallsmed.com.br"
-                className="btn btn-outline-primary btn-sm _contact-btn"
+                className="btn btn-outline-primary _contact-btn"
               >
                 Enviar e-mail
               </a>
