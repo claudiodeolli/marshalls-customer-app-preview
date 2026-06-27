@@ -852,10 +852,6 @@ select.form-control,
     padding-bottom: 5rem !important;
   }
 
-  .main-menu .navigation li.nav-item {
-    margin-bottom: 30px;
-  }
-
   /* Remove transições e animações dos itens do menu no mobile
      para garantir navegação com toque único no iOS */
   .main-menu .navigation li,
@@ -1014,10 +1010,6 @@ select.form-control,
   [dir=ltr] .vertical-layout .app-content .content-wrapper {
     padding-left: 0.75rem !important;
     padding-right: 0.75rem !important;
-  }
-
-  .content-wrapper {
-    margin: 0 -1.2rem !important;
   }
 
   /* Cards ainda menores */

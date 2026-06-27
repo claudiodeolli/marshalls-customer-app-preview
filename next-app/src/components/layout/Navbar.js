@@ -135,7 +135,7 @@ export default function Navbar({ onHamburgerClick }) {
                   width: '40px',
                   height: '40px',
                   borderRadius: '50%',
-                  background: profilePhoto ? 'transparent' : 'linear-gradient(135deg,#0052ff 0%,#00b7ff 100%)',
+                  background: profilePhoto ? 'transparent' : 'linear-gradient(90deg, #003DFF 0%, #00E5FF 100%)',
                   color: 'white',
                   display: 'flex',
                   alignItems: 'center',
