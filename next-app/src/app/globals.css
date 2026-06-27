@@ -757,6 +757,11 @@ select.form-control,
    no primeiro toque, evitando o comportamento de duplo-clique no Safari */
 .main-menu .navigation li.nav-item {
   cursor: pointer;
+  margin-bottom: 4px;
+}
+
+.main-menu .navigation li.nav-item:has(+ .navigation-header) {
+  margin-bottom: 0;
 }
 
 @media (hover: hover) {
