@@ -183,7 +183,7 @@ function ScheduleContent() {
     if (loadingAvailability || specialtyLocked) return;
     if (showPrices) {
       setAvulsaSpecialty(spec);
-      doSelectSpecialty(spec);
+      setShowSlotChoiceModal(true);
       return;
     }
     let requiresReferral;
@@ -274,9 +274,9 @@ function ScheduleContent() {
     setAvulsaConfirmed(true);
     setPaymentStep(null);
     setShowPrices(false);
-    setSelectedDate(null);
-    setSelectedSlot(null);
-    setSlots([]);
+    setSpecialtyLocked(true);
+    setLockedSpecialtyUuid(avulsaSpecialty?.uuid);
+    doSelectSpecialty(avulsaSpecialty);
   }
 
   function handleAgendarDepois() {
@@ -300,7 +300,6 @@ function ScheduleContent() {
     setTimeout(() => {
       setSlots(availabilities.filter(a => a.date === dateStr));
       setLoadingSlots(false);
-      if (showPrices) setShowSlotChoiceModal(true);
       setTimeout(() => slotsRef.current?.scrollIntoView({ behavior: 'smooth' }), 100);
     }, 800);
   }
@@ -398,7 +397,7 @@ function ScheduleContent() {
   const cells = buildCalendar(viewYear, viewMonth);
 
   // ── Loading screen ────────────────────────────────────────────────────────
-  if (loadingSpecialties) {
+  if (loadingSpecialties || (urlAvulsaSpec && !selectedSpecialty)) {
     return (
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '60vh' }}>
         <h6 style={{ fontWeight: 400, color: '#5e5873', marginBottom: '1.5rem' }}>
@@ -1079,11 +1078,16 @@ function ScheduleContent() {
           {showPrices ? (
             <button
               onClick={handleRealizarPagamento}
+              disabled={!selectedSlot}
               style={{
                 width: '100%', marginTop: 8, padding: '14px',
-                borderRadius: 24, border: 'none', cursor: 'pointer',
-                background: 'linear-gradient(90deg, #4daab6 0%, #461bef 100%)',
+                borderRadius: 24, border: 'none',
+                cursor: selectedSlot ? 'pointer' : 'not-allowed',
+                background: selectedSlot
+                  ? 'linear-gradient(90deg, #4daab6 0%, #461bef 100%)'
+                  : '#d0d0d0',
                 color: '#fff', fontWeight: 700, fontSize: 15, letterSpacing: 1,
+                opacity: selectedSlot ? 1 : 0.7,
               }}
             >
               Realizar Pagamento
@@ -1152,24 +1156,26 @@ function ScheduleContent() {
             textAlign: 'center',
           }}>
             <p style={{ fontSize: 15, color: '#5e5873', lineHeight: 1.6, marginBottom: 20 }}>
-              Você não precisa escolher o horário agora, pode fazer isso depois.
+              Você não precisa escolher o dia e horário agora, pode fazer isso depois.
               <br /><br />
-              Mas, se preferir, vá em frente e selecione agora mesmo o horário da sua consulta avulsa.
+              Mas, se preferir, vá em frente e selecione agora mesmo o dia e horário da sua consulta avulsa.
             </p>
             <div style={{ display: 'flex', gap: 10 }}>
               <button
-                onClick={() => setShowSlotChoiceModal(false)}
+                onClick={() => {
+                  setShowSlotChoiceModal(false);
+                  doSelectSpecialty(avulsaSpecialty);
+                }}
                 className="btn btn-primary"
                 style={{ flex: 1, borderRadius: 24, fontWeight: 700 }}
               >
-                Escolher horário agora
+                Agendar agora
               </button>
               <button
                 onClick={() => {
                   setShowSlotChoiceModal(false);
-                  setSelectedDate(null);
-                  setSelectedSlot(null);
-                  setSlots([]);
+                  setAvulsaBooked(false);
+                  setPaymentStep('select');
                 }}
                 style={{
                   flex: 1, background: 'none', border: '1.5px solid #ebe9f1',
@@ -1177,7 +1183,7 @@ function ScheduleContent() {
                   cursor: 'pointer', padding: '10px',
                 }}
               >
-                Escolher horário depois
+                Agendar depois
               </button>
             </div>
           </div>
