@@ -48,7 +48,7 @@ export const menuItems = [
     },
   },
   {
-    title: 'Meus arquivos',
+    title: 'Enviar arquivos',
     href: '/meus-arquivos',
     icon: {
       viewBox: '0 0 24 24',

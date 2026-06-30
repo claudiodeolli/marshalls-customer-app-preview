@@ -36,8 +36,8 @@ export const routeConfig = {
     breadcrumb: [{ text: 'Informações pessoais', active: true }],
   },
   '/meus-arquivos': {
-    pageTitle: 'Meus arquivos',
-    breadcrumb: [{ text: 'Meus arquivos', active: true }],
+    pageTitle: 'Enviar arquivos',
+    breadcrumb: [{ text: 'Enviar arquivos', active: true }],
   },
   '/encerrar-conta': {
     pageTitle: 'Encerrar Conta',
