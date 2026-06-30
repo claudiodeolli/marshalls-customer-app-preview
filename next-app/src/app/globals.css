@@ -1106,6 +1106,16 @@ select.form-control,
   }
 }
 
+._mob-break {
+  display: none;
+}
+
+@media (max-width: 1199.98px) {
+  ._mob-break {
+    display: inline;
+  }
+}
+
 /* ── Mobile bottom nav ── */
 ._mob-nav {
   display: none;

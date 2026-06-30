@@ -201,29 +201,43 @@ function ProfilePhotoUpload({ previewUrl, onFileSelect, onRemove }) {
 /* ── Seletor de país com DDI ── */
 function PhoneInput({ countryCode, onCountryChange, value, onChange, placeholder }) {
   const [open, setOpen] = useState(false);
-  const [search, setSearch] = useState('');
+  const wrapperRef = useRef(null);
   const selected = COUNTRIES.find(c => c.code === countryCode) ?? COUNTRIES[0];
-  const filtered = COUNTRIES.filter(c =>
-    c.name.toLowerCase().includes(search.toLowerCase()) || c.dial.includes(search)
-  );
+
+  useEffect(() => {
+    if (!open) return;
+    function handleClickOutside(e) {
+      if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
+        setOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [open]);
 
   return (
-    <div style={{
+    <div ref={wrapperRef} style={{
       display: 'flex', position: 'relative',
-      border: '1px solid #d8d6de', borderRadius: '11px', overflow: 'hidden',
+      border: '1px solid #d8d6de', borderRadius: '11px',
     }}>
       <button
         type="button"
-        onClick={() => { setOpen(o => !o); setSearch(''); }}
+        onClick={() => setOpen(o => !o)}
         style={{
-          display: 'flex', alignItems: 'center', gap: '4px',
+          display: 'flex', alignItems: 'center', gap: '6px',
           padding: '0 10px', alignSelf: 'stretch',
-          border: 'none', borderRight: '1px solid #d8d6de', borderRadius: 0,
+          border: 'none', borderRight: '1px solid #d8d6de', borderRadius: '11px 0 0 11px',
           background: '#f8f8f8', cursor: 'pointer',
           fontSize: '14px', whiteSpace: 'nowrap', flexShrink: 0,
         }}
       >
-        <span>{selected.flag}</span>
+        <img
+          src={`https://flagcdn.com/w20/${selected.code.toLowerCase()}.png`}
+          width="20"
+          height="14"
+          alt={selected.name}
+          style={{ borderRadius: '2px', objectFit: 'cover' }}
+        />
         <span style={{ color: '#6e6b7b', fontSize: '13px' }}>{selected.dial}</span>
         <svg width="8" height="5" viewBox="0 0 10 6" fill="none" style={{ marginLeft: '2px' }}>
           <path d="M1 1l4 4 4-4" stroke="#6e6b7b" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
@@ -234,39 +248,32 @@ function PhoneInput({ countryCode, onCountryChange, value, onChange, placeholder
         <div style={{
           position: 'absolute', top: '100%', left: 0, zIndex: 9999,
           background: '#fff', border: '1px solid #d8d6de', borderRadius: '8px',
-          boxShadow: '0 4px 24px rgba(34,41,47,0.15)', minWidth: '260px',
-          maxHeight: '260px', display: 'flex', flexDirection: 'column', overflow: 'hidden',
+          boxShadow: '0 4px 24px rgba(34,41,47,0.15)', minWidth: '220px',
+          maxHeight: '260px', overflowY: 'auto',
         }}>
-          <div style={{ padding: '8px' }}>
-            <input
-              autoFocus
-              type="text"
-              className="form-control form-control-sm"
-              placeholder="Buscar país..."
-              value={search}
-              onChange={e => setSearch(e.target.value)}
-              style={{ fontSize: '13px' }}
-            />
-          </div>
-          <div style={{ overflowY: 'auto' }}>
-            {filtered.map(c => (
-              <div
-                key={c.code}
-                onClick={() => { onCountryChange(c.code); setOpen(false); }}
-                style={{
-                  padding: '8px 12px', cursor: 'pointer', fontSize: '13px',
-                  display: 'flex', alignItems: 'center', gap: '8px',
-                  background: c.code === countryCode ? '#f3f2f7' : '#fff',
-                }}
-                onMouseEnter={e => { e.currentTarget.style.background = '#f3f2f7'; }}
-                onMouseLeave={e => { e.currentTarget.style.background = c.code === countryCode ? '#f3f2f7' : '#fff'; }}
-              >
-                <span>{c.flag}</span>
-                <span style={{ flex: 1 }}>{c.name}</span>
-                <span style={{ color: '#aaa' }}>{c.dial}</span>
-              </div>
-            ))}
-          </div>
+          {COUNTRIES.map(c => (
+            <div
+              key={c.code}
+              onClick={() => { onCountryChange(c.code); setOpen(false); }}
+              style={{
+                padding: '8px 12px', cursor: 'pointer', fontSize: '13px',
+                display: 'flex', alignItems: 'center', gap: '10px',
+                background: c.code === countryCode ? '#f3f2f7' : '#fff',
+              }}
+              onMouseEnter={e => { e.currentTarget.style.background = '#f3f2f7'; }}
+              onMouseLeave={e => { e.currentTarget.style.background = c.code === countryCode ? '#f3f2f7' : '#fff'; }}
+            >
+              <img
+                src={`https://flagcdn.com/w20/${c.code.toLowerCase()}.png`}
+                width="20"
+                height="14"
+                alt={c.name}
+                style={{ borderRadius: '2px', objectFit: 'cover', flexShrink: 0 }}
+              />
+              <span style={{ flex: 1, color: '#5e5873' }}>{c.name}</span>
+              <span style={{ color: '#aaa', fontWeight: 500 }}>{c.dial}</span>
+            </div>
+          ))}
         </div>
       )}
 
@@ -276,7 +283,7 @@ function PhoneInput({ countryCode, onCountryChange, value, onChange, placeholder
         placeholder={placeholder}
         value={value}
         onChange={e => onChange(e.target.value)}
-        style={{ border: 'none', borderRadius: 0, flex: 1, boxShadow: 'none' }}
+        style={{ border: 'none', borderRadius: '0 11px 11px 0', flex: 1, boxShadow: 'none' }}
         onClick={() => open && setOpen(false)}
       />
     </div>

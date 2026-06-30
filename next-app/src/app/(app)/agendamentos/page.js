@@ -199,10 +199,18 @@ export default function AgendamentosPage() {
   const [pageLoading, setPageLoading]     = useState(true);
   const [timezone, setTimezone]           = useState('');
   const [toast, setToast]                 = useState({ visible: false, message: '', type: 'success' });
+  const [pendingAvulsa, setPendingAvulsa] = useState(null);
 
   useEffect(() => {
     const tz = getBrowserTz();
     if (TIMEZONE_OPTIONS.find(o => o.value === tz)) setTimezone(tz);
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const raw = localStorage.getItem('pendingAvulsa');
+    if (!raw) return;
+    try { setPendingAvulsa(JSON.parse(raw)); } catch { /* ignore */ }
   }, []);
 
   /* Busca agendamentos — usa mock em GitHub Pages, API real no Vercel */
@@ -287,7 +295,7 @@ export default function AgendamentosPage() {
       <div className="d-flex justify-content-between align-items-start flex-wrap mb-2 _agend-header" style={{ gap: '16px' }}>
         <div>
           <p className="text-muted mb-0" style={{ fontSize: '14px' }}>
-            Gerencie seus agendamentos médicos e agende novas consultas
+            Gerencie seus agendamentos<br className="_mob-break" />médicos e agende novas consultas
           </p>
         </div>
         <div className="_agend-tz-wrap" style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
@@ -338,6 +346,47 @@ export default function AgendamentosPage() {
           <IconAdd /> Novo Agendamento
         </button>
       </div>
+
+      {/* Consulta avulsa pendente de agendamento */}
+      {pendingAvulsa && (
+        <div className="card mb-2" style={{ border: '1.5px solid #ffe0a3', background: '#fffbf2' }}>
+          <div className="card-body" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+                <span style={{ fontWeight: 700, fontSize: 16, color: '#5e5873' }}>{pendingAvulsa.name}</span>
+                <span style={{ fontSize: 12, fontWeight: 600, color: '#ff9f43', background: '#fff4e5', borderRadius: 12, padding: '2px 10px' }}>
+                  Aguardando agendamento
+                </span>
+              </div>
+              <p style={{ fontSize: 13, color: '#6e6b7b', margin: 0 }}>
+                Consulta avulsa — R$ {(pendingAvulsa.price ?? 0).toFixed(2).replace('.', ',')}
+              </p>
+              <p style={{ fontSize: 12, color: '#b9b9c3', margin: '4px 0 0' }}>
+                Pagamento confirmado · Escolha uma data e horário quando quiser
+              </p>
+            </div>
+            <div style={{ display: 'flex', gap: 8, flexShrink: 0 }}>
+              <button
+                className="btn btn-primary btn-sm"
+                style={{ borderRadius: 24, fontWeight: 700, whiteSpace: 'nowrap' }}
+                onClick={() => router.push(`/schedule/calendar?avulsaSpec=${pendingAvulsa.uuid}`)}
+              >
+                Agendar agora
+              </button>
+              <button
+                className="btn btn-outline-secondary btn-sm"
+                style={{ borderRadius: 24, whiteSpace: 'nowrap' }}
+                onClick={() => {
+                  setPendingAvulsa(null);
+                  if (typeof window !== 'undefined') localStorage.removeItem('pendingAvulsa');
+                }}
+              >
+                Dispensar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Appointment list */}
       <div style={{ marginTop: '1rem' }}>

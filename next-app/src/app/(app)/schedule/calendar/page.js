@@ -26,6 +26,7 @@ function ScheduleContent() {
   const { user } = useAuth();
   const params = useSearchParams();
   const urlReferral = params.get('referral') || '';
+  const urlAvulsaSpec = params.get('avulsaSpec') || '';
 
   const [referralId, setReferralId] = useState(urlReferral);
 
@@ -70,9 +71,13 @@ function ScheduleContent() {
   const [showPrices, setShowPrices] = useState(false);
 
   // Avulsa payment flow
-  const [paymentStep, setPaymentStep] = useState(null); // null | 'select' | 'pix' | 'card-new' | 'success' | 'done-later'
+  const [paymentStep, setPaymentStep] = useState(null); // null | 'select' | 'pix' | 'card-new' | 'success'
   const [avulsaSpecialty, setAvulsaSpecialty] = useState(null);
   const [cardForm, setCardForm] = useState({ number: '', name: '', expiry: '', cvv: '' });
+  const [showPaymentConfirm, setShowPaymentConfirm] = useState(false);
+  const [showSlotChoiceModal, setShowSlotChoiceModal] = useState(false);
+  const [avulsaBooked, setAvulsaBooked] = useState(false);   // selected slot before payment
+  const [avulsaConfirmed, setAvulsaConfirmed] = useState(false); // came via avulsa path
 
   const calendarRef = useRef(null);
   const slotsRef = useRef(null);
@@ -120,6 +125,19 @@ function ScheduleContent() {
     })();
   }, [urlReferral, loadingSpecialties, specialties]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Auto-enter avulsa mode when coming from "Agendar agora" in /agendamentos (already paid)
+  useEffect(() => {
+    if (!urlAvulsaSpec || loadingSpecialties || specialties.length === 0) return;
+    const spec = specialties.find(s => s.uuid === urlAvulsaSpec);
+    if (!spec) return;
+    setShowPrices(false);
+    setAvulsaConfirmed(true);
+    setAvulsaSpecialty(spec);
+    setSpecialtyLocked(true);
+    setLockedSpecialtyUuid(spec.uuid);
+    doSelectSpecialty(spec);
+  }, [urlAvulsaSpec, loadingSpecialties, specialties]); // eslint-disable-line react-hooks/exhaustive-deps
+
   function doSelectSpecialty(spec) {
     setSelectedSpecialty(spec);
     setSelectedDate(null);
@@ -165,7 +183,7 @@ function ScheduleContent() {
     if (loadingAvailability || specialtyLocked) return;
     if (showPrices) {
       setAvulsaSpecialty(spec);
-      setPaymentStep('select');
+      doSelectSpecialty(spec);
       return;
     }
     let requiresReferral;
@@ -226,6 +244,10 @@ function ScheduleContent() {
     setAvailabilities([]);
     setAvailableDates(new Set());
     setShowPrices(true);
+    setAvulsaBooked(false);
+    setAvulsaConfirmed(false);
+    setShowSlotChoiceModal(false);
+    setPaymentStep(null);
   }
 
   // Confirm modal: find referral's specialty, lock list, auto-select
@@ -243,14 +265,29 @@ function ScheduleContent() {
     doSelectSpecialty(spec);
   }
 
+  function handleRealizarPagamento() {
+    setAvulsaBooked(!!selectedSlot);
+    setPaymentStep('select');
+  }
+
   function handleAgendarAgora() {
+    setAvulsaConfirmed(true);
     setPaymentStep(null);
     setShowPrices(false);
-    doSelectSpecialty(avulsaSpecialty);
+    setSelectedDate(null);
+    setSelectedSlot(null);
+    setSlots([]);
   }
 
   function handleAgendarDepois() {
-    setPaymentStep('done-later');
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('pendingAvulsa', JSON.stringify({
+        uuid: avulsaSpecialty?.uuid,
+        name: avulsaSpecialty?.name,
+        price: avulsaSpecialty?.price,
+      }));
+    }
+    router.push('/agendamentos');
   }
 
   function handleDayClick(day) {
@@ -263,6 +300,7 @@ function ScheduleContent() {
     setTimeout(() => {
       setSlots(availabilities.filter(a => a.date === dateStr));
       setLoadingSlots(false);
+      if (showPrices) setShowSlotChoiceModal(true);
       setTimeout(() => slotsRef.current?.scrollIntoView({ behavior: 'smooth' }), 100);
     }, 800);
   }
@@ -374,8 +412,8 @@ function ScheduleContent() {
   // ── Success screen ────────────────────────────────────────────────────────
   if (confirmed) {
     return (
-      <div className="card" style={{ maxWidth: '520px', margin: '2rem auto', textAlign: 'center' }}>
-        <div className="card-body" style={{ padding: '2.5rem' }}>
+      <div className="card" style={{ maxWidth: '520px', margin: '2rem auto' }}>
+        <div className="card-body" style={{ padding: '2.5rem', textAlign: 'center' }}>
           <div style={{
             width: 64, height: 64, borderRadius: '50%', background: '#e6f9ee',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -387,18 +425,112 @@ function ScheduleContent() {
             </svg>
           </div>
           <h5 style={{ fontWeight: 700, color: '#5e5873', marginBottom: '0.5rem' }}>
-            Agendado com sucesso.
+            Agendado com sucesso!
           </h5>
-          <p className="text-muted mb-0">
+          <p className="text-muted">
             {selectedSpecialty?.name} — {selectedDate} às {selectedSlot?.from}
           </p>
-          <button className="btn btn-primary mt-2" onClick={() => router.back()}>
-            Voltar
-          </button>
+          {avulsaConfirmed && (
+            <div style={{
+              textAlign: 'left', background: '#f8f8f8', borderRadius: 10,
+              padding: '14px 18px', marginTop: 8, marginBottom: 16,
+            }}>
+              <p style={{ fontWeight: 700, fontSize: 14, color: '#5e5873', marginBottom: 8 }}>
+                Dicas para o dia da sua consulta
+              </p>
+              <ul style={{ margin: 0, paddingLeft: 18, fontSize: 13, color: '#6e6b7b', display: 'flex', flexDirection: 'column', gap: 6 }}>
+                <li>Chegue com 15 minutos de antecedência</li>
+                <li>Traga um documento de identificação com foto</li>
+                <li>Leve exames ou laudos médicos anteriores, se houver</li>
+                <li>Em caso de cancelamento, avise com pelo menos 24h de antecedência</li>
+              </ul>
+            </div>
+          )}
+          {avulsaConfirmed ? (
+            <button className="btn btn-primary" style={{ width: '100%', borderRadius: 24, fontWeight: 700 }}
+              onClick={() => {
+                if (typeof window !== 'undefined') localStorage.removeItem('pendingAvulsa');
+                router.push('/agendamentos');
+              }}>
+              Ver meus Agendamentos
+            </button>
+          ) : (
+            <button className="btn btn-primary mt-2" onClick={() => router.back()}>
+              Voltar
+            </button>
+          )}
         </div>
       </div>
     );
   }
+
+  // ── Payment confirmation modal (shared across payment steps) ─────────────
+  const paymentMethodLabel =
+    paymentStep === 'pix' ? 'PIX'
+    : paymentStep === 'card-new' ? 'Cartão de crédito'
+    : 'Visa •••• 4242';
+
+  const confirmModal = showPaymentConfirm ? (
+    <div
+      style={{
+        position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)',
+        zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center',
+        padding: '1rem',
+      }}
+      onClick={() => setShowPaymentConfirm(false)}
+    >
+      <div
+        style={{
+          background: '#fff', borderRadius: 12, width: '100%', maxWidth: 400,
+          boxShadow: '0 8px 32px rgba(0,0,0,0.18)', overflow: 'hidden',
+        }}
+        onClick={e => e.stopPropagation()}
+      >
+        <div style={{ padding: '20px 24px 16px', borderBottom: '1px solid #f3f2f7' }}>
+          <h6 style={{ fontWeight: 700, color: '#5e5873', margin: 0 }}>Confirmar pagamento</h6>
+        </div>
+        <div style={{ padding: '16px 24px 20px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 10 }}>
+            <span style={{ fontSize: 14, color: '#6e6b7b' }}>Especialidade</span>
+            <span style={{ fontSize: 14, fontWeight: 600, color: '#5e5873' }}>{avulsaSpecialty?.name}</span>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 10 }}>
+            <span style={{ fontSize: 14, color: '#6e6b7b' }}>Tipo</span>
+            <span style={{ fontSize: 14, fontWeight: 600, color: '#5e5873' }}>Consulta avulsa</span>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 10 }}>
+            <span style={{ fontSize: 14, color: '#6e6b7b' }}>Pagamento</span>
+            <span style={{ fontSize: 14, fontWeight: 600, color: '#5e5873' }}>{paymentMethodLabel}</span>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: 12, borderTop: '1px solid #f3f2f7' }}>
+            <span style={{ fontSize: 16, fontWeight: 700, color: '#5e5873' }}>Total</span>
+            <span style={{ fontSize: 16, fontWeight: 700, color: '#28c76f' }}>
+              R$ {(avulsaSpecialty?.price ?? 0).toFixed(2).replace('.', ',')}
+            </span>
+          </div>
+        </div>
+        <div style={{ display: 'flex', gap: 10, padding: '0 24px 20px' }}>
+          <button
+            onClick={() => setShowPaymentConfirm(false)}
+            style={{
+              flex: 1, background: 'none', border: '1.5px solid #ebe9f1',
+              borderRadius: 24, fontWeight: 600, fontSize: 14, color: '#6e6b7b',
+              cursor: 'pointer', padding: '10px',
+            }}
+          >
+            Cancelar
+          </button>
+          <button
+            onClick={() => { setShowPaymentConfirm(false); setPaymentStep('success'); }}
+            className="btn btn-primary"
+            style={{ flex: 1, borderRadius: 24, fontWeight: 700, fontSize: 14 }}
+          >
+            Confirmar
+          </button>
+        </div>
+      </div>
+    </div>
+  ) : null;
 
   // ── Payment flow: select method ───────────────────────────────────────────
   if (paymentStep === 'select') {
@@ -426,6 +558,7 @@ function ScheduleContent() {
       </div>
     );
     return (
+      <>
       <div style={{ maxWidth: 480, margin: '0 auto' }}>
         <div className="card mb-3">
           <div className="card-body" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 20px' }}>
@@ -452,7 +585,7 @@ function ScheduleContent() {
         )}
 
         {optionCard(
-          () => setPaymentStep('success'),
+          () => setShowPaymentConfirm(true),
           <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6e6b7b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <rect x="1" y="4" width="22" height="16" rx="2" ry="2" />
             <line x1="1" y1="10" x2="23" y2="10" />
@@ -480,6 +613,8 @@ function ScheduleContent() {
           Cancelar
         </button>
       </div>
+      {confirmModal}
+    </>
     );
   }
 
@@ -488,6 +623,7 @@ function ScheduleContent() {
     const pixKey = 'contato@marshallsmed.com.br';
     const price = avulsaSpecialty?.price ?? 0;
     return (
+      <>
       <div style={{ maxWidth: 480, margin: '0 auto' }}>
         <div className="card">
           <div className="card-header" style={{ padding: '16px 20px' }}>
@@ -541,7 +677,7 @@ function ScheduleContent() {
               Valor: R$ {price.toFixed(2).replace('.', ',')}
             </p>
             <button
-              onClick={() => setPaymentStep('success')}
+              onClick={() => setShowPaymentConfirm(true)}
               className="btn btn-primary"
               style={{ width: '100%', borderRadius: 24, fontWeight: 700 }}
             >
@@ -556,12 +692,15 @@ function ScheduleContent() {
           ← Voltar
         </button>
       </div>
+      {confirmModal}
+      </>
     );
   }
 
   // ── Payment flow: new card ─────────────────────────────────────────────────
   if (paymentStep === 'card-new') {
     return (
+      <>
       <div style={{ maxWidth: 480, margin: '0 auto' }}>
         <div className="card">
           <div className="card-header" style={{ padding: '16px 20px' }}>
@@ -625,7 +764,7 @@ function ScheduleContent() {
               </div>
             </div>
             <button
-              onClick={() => setPaymentStep('success')}
+              onClick={() => setShowPaymentConfirm(true)}
               className="btn btn-primary"
               style={{ width: '100%', borderRadius: 24, fontWeight: 700, marginTop: 10 }}
             >
@@ -640,6 +779,8 @@ function ScheduleContent() {
           ← Voltar
         </button>
       </div>
+      {confirmModal}
+      </>
     );
   }
 
@@ -660,62 +801,35 @@ function ScheduleContent() {
         <p style={{ color: '#6e6b7b', fontSize: 14, marginBottom: 28 }}>
           {avulsaSpecialty?.name} — R$ {(avulsaSpecialty?.price ?? 0).toFixed(2).replace('.', ',')}
         </p>
-        <button
-          onClick={handleAgendarAgora}
-          className="btn btn-primary"
-          style={{ width: '100%', borderRadius: 24, fontWeight: 700, marginBottom: 12, fontSize: 16 }}
-        >
-          Agendar Agora
-        </button>
-        <button
-          onClick={handleAgendarDepois}
-          style={{
-            width: '100%', background: 'none', border: '1.5px solid #ebe9f1',
-            borderRadius: 24, fontWeight: 600, fontSize: 15, color: '#6e6b7b',
-            cursor: 'pointer', padding: '10px',
-          }}
-        >
-          Agendar depois
-        </button>
-      </div>
-    );
-  }
-
-  // ── Payment flow: schedule later ──────────────────────────────────────────
-  if (paymentStep === 'done-later') {
-    return (
-      <div style={{ maxWidth: 520, margin: '0 auto' }}>
-        <h5 style={{ fontWeight: 700, color: '#5e5873', marginBottom: 4 }}>Gerencie seus agendamentos médicos</h5>
-        <p style={{ color: '#6e6b7b', fontSize: 14, marginBottom: 20 }}>E agende novas consultas</p>
-        <div className="card" style={{ border: '1.5px solid #d4def1' }}>
-          <div className="card-body">
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-              <span style={{ fontWeight: 700, fontSize: 16, color: '#5e5873' }}>{avulsaSpecialty?.name}</span>
-              <span style={{ fontSize: 12, fontWeight: 600, color: '#ff9f43', background: '#fff4e5', borderRadius: 12, padding: '2px 10px' }}>
-                Aguardando agendamento
-              </span>
-            </div>
-            <p style={{ color: '#6e6b7b', fontSize: 13, margin: 0 }}>
-              Consulta avulsa — R$ {(avulsaSpecialty?.price ?? 0).toFixed(2).replace('.', ',')}
-            </p>
-            <p style={{ color: '#b9b9c3', fontSize: 12, marginTop: 4, marginBottom: 14 }}>
-              Pagamento confirmado · Agende quando quiser
-            </p>
+        {avulsaBooked ? (
+          <button
+            onClick={() => router.push('/agendamentos')}
+            className="btn btn-primary"
+            style={{ width: '100%', borderRadius: 24, fontWeight: 700, fontSize: 16 }}
+          >
+            Ver meu agendamento
+          </button>
+        ) : (
+          <>
             <button
               onClick={handleAgendarAgora}
-              className="btn btn-primary btn-sm"
-              style={{ borderRadius: 24, fontWeight: 700 }}
+              className="btn btn-primary"
+              style={{ width: '100%', borderRadius: 24, fontWeight: 700, marginBottom: 12, fontSize: 16 }}
             >
-              Agendar agora
+              Agendar Agora
             </button>
-          </div>
-        </div>
-        <button
-          onClick={() => router.push('/agendamentos')}
-          style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#4daab6', fontWeight: 600, fontSize: 14, marginTop: 16, padding: '4px 0' }}
-        >
-          Ver todos os agendamentos →
-        </button>
+            <button
+              onClick={handleAgendarDepois}
+              style={{
+                width: '100%', background: 'none', border: '1.5px solid #ebe9f1',
+                borderRadius: 24, fontWeight: 600, fontSize: 15, color: '#6e6b7b',
+                cursor: 'pointer', padding: '10px',
+              }}
+            >
+              Agendar depois
+            </button>
+          </>
+        )}
       </div>
     );
   }
@@ -956,44 +1070,45 @@ function ScheduleContent() {
             </div>
           )}
 
-          {/* AGENDAR button — always visible once specialty is selected, disabled until slot is picked */}
+          {/* Bottom action button */}
           {bookingError && (
             <div className="alert alert-danger mb-1" style={{ fontSize: 13 }}>
               {bookingError}
             </div>
           )}
-          <button
-            onClick={handleBook}
-            disabled={!selectedSlot || booking}
-            style={{
-              width: '100%',
-              marginTop: 8,
-              padding: '12px',
-              borderRadius: 24,
-              background: selectedSlot && !booking
-                ? 'linear-gradient(90deg, #4daab6 0%, #461bef 100%)'
-                : '#ccc',
-              color: '#fff',
-              fontWeight: 700,
-              fontSize: 15,
-              letterSpacing: 1,
-              border: 'none',
-              cursor: selectedSlot && !booking ? 'pointer' : 'default',
-              transition: 'opacity 0.2s',
-              opacity: selectedSlot && !booking ? 1 : 0.7,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: 8,
-            }}
-          >
-            {booking ? (
-              <>
-                <div className="spinner-border spinner-border-sm" style={{ width: 18, height: 18, borderWidth: 2, color: '#fff' }} />
-                AGENDANDO...
-              </>
-            ) : 'AGENDAR'}
-          </button>
+          {showPrices ? (
+            <button
+              onClick={handleRealizarPagamento}
+              style={{
+                width: '100%', marginTop: 8, padding: '14px',
+                borderRadius: 24, border: 'none', cursor: 'pointer',
+                background: 'linear-gradient(90deg, #4daab6 0%, #461bef 100%)',
+                color: '#fff', fontWeight: 700, fontSize: 15, letterSpacing: 1,
+              }}
+            >
+              Realizar Pagamento
+            </button>
+          ) : (
+            <button
+              onClick={handleBook}
+              disabled={!selectedSlot || booking}
+              style={{
+                width: '100%', marginTop: 8, padding: '12px', borderRadius: 24,
+                background: selectedSlot && !booking ? 'linear-gradient(90deg, #4daab6 0%, #461bef 100%)' : '#ccc',
+                color: '#fff', fontWeight: 700, fontSize: 15, letterSpacing: 1,
+                border: 'none', cursor: selectedSlot && !booking ? 'pointer' : 'default',
+                transition: 'opacity 0.2s', opacity: selectedSlot && !booking ? 1 : 0.7,
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+              }}
+            >
+              {booking ? (
+                <>
+                  <div className="spinner-border spinner-border-sm" style={{ width: 18, height: 18, borderWidth: 2, color: '#fff' }} />
+                  AGENDANDO...
+                </>
+              ) : 'AGENDAR'}
+            </button>
+          )}
         </div>
       )}
 
@@ -1020,6 +1135,53 @@ function ScheduleContent() {
         >
           ← Voltar
         </button>
+      )}
+
+      {/* ── Slot choice modal (avulsa) ───────────────────────────────────────── */}
+      {showSlotChoiceModal && (
+        <div
+          style={{
+            position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.45)',
+            zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center',
+            padding: '1rem',
+          }}
+        >
+          <div style={{
+            background: '#fff', borderRadius: 12, width: '100%', maxWidth: 420,
+            boxShadow: '0 8px 32px rgba(0,0,0,0.18)', padding: '28px 24px 24px',
+            textAlign: 'center',
+          }}>
+            <p style={{ fontSize: 15, color: '#5e5873', lineHeight: 1.6, marginBottom: 20 }}>
+              Você não precisa escolher o horário agora, pode fazer isso depois.
+              <br /><br />
+              Mas, se preferir, vá em frente e selecione agora mesmo o horário da sua consulta avulsa.
+            </p>
+            <div style={{ display: 'flex', gap: 10 }}>
+              <button
+                onClick={() => setShowSlotChoiceModal(false)}
+                className="btn btn-primary"
+                style={{ flex: 1, borderRadius: 24, fontWeight: 700 }}
+              >
+                Escolher horário agora
+              </button>
+              <button
+                onClick={() => {
+                  setShowSlotChoiceModal(false);
+                  setSelectedDate(null);
+                  setSelectedSlot(null);
+                  setSlots([]);
+                }}
+                style={{
+                  flex: 1, background: 'none', border: '1.5px solid #ebe9f1',
+                  borderRadius: 24, fontWeight: 600, fontSize: 14, color: '#6e6b7b',
+                  cursor: 'pointer', padding: '10px',
+                }}
+              >
+                Escolher horário depois
+              </button>
+            </div>
+          </div>
+        </div>
       )}
 
       {/* ── Referral selection modal ────────────────────────────────────────── */}
