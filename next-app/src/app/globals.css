@@ -73,16 +73,22 @@ html[dir] .content.app-content {
 @media (max-width: 1199.98px) {
   html[dir] .content.app-content {
     padding-top: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
   }
 
-  /* Navbar full-bleed: margens negativas compensam o padding de 2rem do pai em cada lado.
-     Prefixo html[dir] eleva especificidade (0,3,1) acima da regra Vuexy ≤575px
-     (0,2,0) que re-aplica width: calc(100% - 2.4rem)!important via cascata posterior. */
+  /* Navbar full-bleed: padding horizontal do app-content é 0, margens negativas não são mais necessárias. */
   html[dir] .header-navbar.floating-nav {
-    margin-left: -2rem !important;
-    margin-right: -2rem !important;
-    width: calc(100% + 4rem) !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    width: 100% !important;
     border-radius: 0 !important;
+  }
+
+  /* Espaçamento lateral realocado do app-content para o content-wrapper */
+  .content-wrapper {
+    padding-left: 1.2rem !important;
+    padding-right: 1.2rem !important;
   }
 
   /* Overlay deve cobrir navbar (1030) e bottom nav (1025).
@@ -1011,10 +1017,10 @@ select.form-control,
 /* ── < 576px: mobile pequeno ── */
 @media (max-width: 575.98px) {
 
-  /* Conteúdo: padding mais apertado */
+  /* Conteúdo: padding lateral — alinhado com a regra do bloco 1199.98px */
   [dir=ltr] .vertical-layout .app-content .content-wrapper {
-    padding-left: 0.75rem !important;
-    padding-right: 0.75rem !important;
+    padding-left: 1.2rem !important;
+    padding-right: 1.2rem !important;
   }
 
   /* Cards ainda menores */

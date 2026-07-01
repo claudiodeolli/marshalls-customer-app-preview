@@ -605,12 +605,20 @@ function ScheduleContent() {
           'Pagar com novo cartão de crédito'
         )}
 
-        <button
-          onClick={() => { setPaymentStep(null); setShowPrices(false); }}
-          style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#ea5455', fontWeight: 600, fontSize: 14, padding: '8px 0', marginTop: 4 }}
-        >
-          Cancelar
-        </button>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 4 }}>
+          <button
+            onClick={() => setPaymentStep(null)}
+            style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#6e6b7b', fontWeight: 600, fontSize: 14, padding: '8px 0' }}
+          >
+            ← Voltar
+          </button>
+          <button
+            onClick={() => { setPaymentStep(null); setShowPrices(false); }}
+            style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#ea5455', fontWeight: 600, fontSize: 14, padding: '8px 0' }}
+          >
+            Cancelar
+          </button>
+        </div>
       </div>
       {confirmModal}
     </>
@@ -1121,16 +1129,12 @@ function ScheduleContent() {
           onClick={() => router.back()}
           style={{
             background: 'none', border: 'none', cursor: 'pointer',
-            color: '#ea5455', fontWeight: 600, fontSize: 14,
+            color: '#6e6b7b', fontWeight: 600, fontSize: 14,
             display: 'flex', alignItems: 'center', gap: 6,
             padding: '4px 0', marginTop: 4,
           }}
         >
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
-          </svg>
-          Cancelar
+          ← Voltar
         </button>
       ) : (
         <button
@@ -1144,30 +1148,34 @@ function ScheduleContent() {
       {/* ── Slot choice modal (avulsa) ───────────────────────────────────────── */}
       {showSlotChoiceModal && (
         <div
+          onClick={() => setShowSlotChoiceModal(false)}
           style={{
             position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.45)',
             zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center',
             padding: '1rem',
           }}
         >
-          <div style={{
-            background: '#fff', borderRadius: 12, width: '100%', maxWidth: 420,
-            boxShadow: '0 8px 32px rgba(0,0,0,0.18)', padding: '28px 24px 24px',
-            textAlign: 'center',
-          }}>
+          <div
+            onClick={e => e.stopPropagation()}
+            style={{
+              background: '#fff', borderRadius: 12, width: '100%', maxWidth: 420,
+              boxShadow: '0 8px 32px rgba(0,0,0,0.18)', padding: '28px 24px 24px',
+              textAlign: 'center',
+            }}
+          >
             <p style={{ fontSize: 15, color: '#5e5873', lineHeight: 1.6, marginBottom: 20 }}>
               Você não precisa escolher o dia e horário agora, pode fazer isso depois.
               <br /><br />
               Mas, se preferir, vá em frente e selecione agora mesmo o dia e horário da sua consulta avulsa.
             </p>
-            <div style={{ display: 'flex', gap: 10 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               <button
                 onClick={() => {
                   setShowSlotChoiceModal(false);
                   doSelectSpecialty(avulsaSpecialty);
                 }}
                 className="btn btn-primary"
-                style={{ flex: 1, borderRadius: 24, fontWeight: 700 }}
+                style={{ width: '100%', borderRadius: 24, fontWeight: 700, padding: '10px', lineHeight: 1.5, border: '1.5px solid transparent' }}
               >
                 Agendar agora
               </button>
@@ -1178,9 +1186,9 @@ function ScheduleContent() {
                   setPaymentStep('select');
                 }}
                 style={{
-                  flex: 1, background: 'none', border: '1.5px solid #ebe9f1',
+                  width: '100%', background: 'none', border: '1.5px solid #ebe9f1',
                   borderRadius: 24, fontWeight: 600, fontSize: 14, color: '#6e6b7b',
-                  cursor: 'pointer', padding: '10px',
+                  cursor: 'pointer', padding: '10px', lineHeight: 1.5,
                 }}
               >
                 Agendar depois
