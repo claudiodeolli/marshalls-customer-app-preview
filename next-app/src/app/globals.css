@@ -87,8 +87,8 @@ html[dir] .content.app-content {
 
   /* Espaçamento lateral realocado do app-content para o content-wrapper */
   .content-wrapper {
-    padding-left: 1.2rem !important;
-    padding-right: 1.2rem !important;
+    padding-left: 1.95rem !important;
+    padding-right: 1.95rem !important;
   }
 
   /* Overlay deve cobrir navbar (1030) e bottom nav (1025).
@@ -1019,8 +1019,8 @@ select.form-control,
 
   /* Conteúdo: padding lateral — alinhado com a regra do bloco 1199.98px */
   [dir=ltr] .vertical-layout .app-content .content-wrapper {
-    padding-left: 1.2rem !important;
-    padding-right: 1.2rem !important;
+    padding-left: 1.95rem !important;
+    padding-right: 1.95rem !important;
   }
 
   /* Cards ainda menores */
