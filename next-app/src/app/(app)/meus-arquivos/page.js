@@ -189,112 +189,10 @@ export default function MeusArquivosPage() {
     setLinkedApt(null);
   }
 
-  /* ── Render ─────────────────────────────────────────── */
-  return (
-    <div style={{ paddingBottom: '1.5rem' }}>
-
-      {/* Intro */}
-      <p className="text-muted mb-2" style={{ fontSize: 14 }}>
-        Envie e acompanhe seus arquivos para análise médica, como resultados de exames, laudos e outros documentos de saúde.
-      </p>
-
-      {/* Security banner */}
-      <div style={{
-        background: '#fff8f0', border: '1px solid #ffe0b2', borderRadius: 10,
-        padding: '14px 16px', marginBottom: '1.25rem',
-        display: 'flex', gap: 12, alignItems: 'flex-start',
-      }}>
-        <span style={{ color: '#ff9f43', flexShrink: 0, marginTop: 1 }}><IconLock /></span>
-        <div style={{ fontSize: 13, color: '#5e5873', lineHeight: 1.75 }}>
-          <strong>Seus arquivos são protegidos por criptografia.</strong><br />
-          Somente você e os médicos autorizados poderão acessá-los.<br />
-          Os arquivos enviados nesta área poderão ser excluídos por você a qualquer momento ou removidos automaticamente após <strong>40 dias</strong>, preservados os registros necessários ao atendimento médico.
-        </div>
-      </div>
-
-      {/* ── Upload button + Filter (stacked) ────────── */}
-      {!showForm ? (
-        <>
-          <button
-            onClick={openForm}
-            className="btn btn-primary _upload-btn"
-            style={{ width: '100%', marginBottom: '1.25rem', borderRadius: 10, fontWeight: 700, padding: '0 12px', fontSize: 15 }}
-          >
-            Enviar novo arquivo
-          </button>
-          <div className="card mb-2" style={{
-            background: 'linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%)',
-            border: '1px solid #e3f2fd',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
-          }}>
-            <div className="card-body _filter-card-body">
-              <div
-                className="_filter-card-header"
-                style={{
-                  display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-                  cursor: 'pointer', userSelect: 'none',
-                  padding: '0 16px',
-                }}
-                onClick={() => setFilterOpen(o => !o)}
-              >
-                <h6 style={{ margin: 0, fontWeight: 600, color: 'var(--primary, #0052ff)', display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <IconFilter /> Filtrar arquivos
-                </h6>
-                <span style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#aaa', fontSize: 13 }}>
-                  {!filterOpen && 'Toque para abrir'}
-                  <IconChevron open={filterOpen} />
-                </span>
-              </div>
-              {filterOpen && (
-                <div style={{ padding: '0 16px 16px' }}>
-                  <div className="row" style={{ rowGap: '12px', alignItems: 'flex-end' }}>
-                    <div className="col-12 col-md-4">
-                      <label className="form-label" style={{ fontSize: 12, fontWeight: 700, color: 'var(--primary,#0052ff)', marginBottom: 4 }}>TÍTULO</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        placeholder="Informe o nome do documento"
-                        value={filterTitulo}
-                        onChange={e => setFilterTitulo(e.target.value)}
-                        style={{ borderRadius: 8 }}
-                      />
-                    </div>
-                    <div className="col-12 col-md-3">
-                      <label className="form-label" style={{ fontSize: 12, fontWeight: 700, color: 'var(--primary,#0052ff)', marginBottom: 4 }}>PACIENTE</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        value={paciente}
-                        readOnly
-                        style={{ borderRadius: 8, background: '#f3f2f7', cursor: 'not-allowed', color: '#6e6b7b' }}
-                      />
-                    </div>
-                    <div className="col-12 col-md-3">
-                      <label className="form-label" style={{ fontSize: 12, fontWeight: 700, color: 'var(--primary,#0052ff)', marginBottom: 4 }}>DATA DE ENVIO</label>
-                      <input
-                        type="date"
-                        className="form-control"
-                        value={filterData}
-                        onChange={e => setFilterData(e.target.value)}
-                        style={{ borderRadius: 8 }}
-                      />
-                    </div>
-                    <div className="col-12 col-md-2">
-                      <button
-                        onClick={applyFilter}
-                        className="btn btn-primary"
-                        style={{ width: '100%', height: 38, borderRadius: 8, fontWeight: 700 }}
-                      >
-                        FILTRAR
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-        </>
-      ) : (
+  /* ── Render: form screen (clean) ───────────────────── */
+  if (showForm) {
+    return (
+      <div style={{ paddingBottom: '1.5rem' }}>
         <div className="card mb-3">
           <div className="card-header" style={{ padding: '14px 20px' }}>
             <h5 className="card-title mb-0">Informações do Arquivo</h5>
@@ -308,7 +206,6 @@ export default function MeusArquivosPage() {
               <div className="alert alert-danger" style={{ fontSize: 13, padding: '8px 14px' }}>{formError}</div>
             )}
 
-            {/* Título */}
             <div className="form-group">
               <label className="form-label">Título</label>
               <input
@@ -320,7 +217,6 @@ export default function MeusArquivosPage() {
               />
             </div>
 
-            {/* Tipo de documento */}
             <div className="form-group">
               <label className="form-label">Tipo de documento</label>
               <select className="custom-select" value={tipo} onChange={e => setTipo(e.target.value)}>
@@ -329,7 +225,6 @@ export default function MeusArquivosPage() {
               </select>
             </div>
 
-            {/* Paciente (locked) */}
             <div className="form-group">
               <label className="form-label">Paciente</label>
               <input
@@ -341,7 +236,6 @@ export default function MeusArquivosPage() {
               />
             </div>
 
-            {/* Arquivo — drop zone */}
             <div className="form-group">
               <label className="form-label" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                 Arquivo
@@ -374,26 +268,23 @@ export default function MeusArquivosPage() {
                     <span style={{ fontSize: 12, color: '#4daab6', textDecoration: 'underline', marginTop: 2 }}>Trocar arquivo</span>
                   </div>
                 ) : (
-                  <>
-                    <div style={{
-                      background: dragOver ? '#20a152' : 'linear-gradient(135deg, #28c76f 0%, #1e9e55 100%)',
-                      borderRadius: 14, padding: '18px 24px', textAlign: 'center',
-                      transition: 'background 0.2s, transform 0.15s',
-                      transform: dragOver ? 'scale(1.01)' : 'scale(1)',
-                      boxShadow: '0 4px 18px rgba(40,199,111,0.35)',
-                    }}>
-                      <span style={{ color: '#fff', fontWeight: 700, fontSize: 16, lineHeight: 1.5, display: 'block' }}>
-                        Arraste o arquivo aqui<br />ou clique para enviar
-                      </span>
-                    </div>
-                  </>
+                  <div style={{
+                    background: dragOver ? '#20a152' : 'linear-gradient(135deg, #28c76f 0%, #1e9e55 100%)',
+                    borderRadius: 14, padding: '18px 24px', textAlign: 'center',
+                    transition: 'background 0.2s, transform 0.15s',
+                    transform: dragOver ? 'scale(1.01)' : 'scale(1)',
+                    boxShadow: '0 4px 18px rgba(40,199,111,0.35)',
+                  }}>
+                    <span style={{ color: '#fff', fontWeight: 700, fontSize: 16, lineHeight: 1.5, display: 'block' }}>
+                      Arraste o arquivo aqui<br />ou clique para enviar
+                    </span>
+                  </div>
                 )}
               </div>
               <input ref={fileInputRef} type="file" accept={ACCEPT} style={{ display: 'none' }} onChange={e => pickFile(e.target.files?.[0])} />
               {fileError && <small style={{ color: '#ea5455', fontSize: 12, marginTop: 4, display: 'block' }}>{fileError}</small>}
             </div>
 
-            {/* Data de envio (locked) */}
             <div className="form-group">
               <label className="form-label">Data de envio</label>
               <input
@@ -405,7 +296,6 @@ export default function MeusArquivosPage() {
               />
             </div>
 
-            {/* Form buttons */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginTop: 8 }}>
               <button
                 onClick={closeForm}
@@ -428,7 +318,151 @@ export default function MeusArquivosPage() {
             </div>
           </div>
         </div>
-      )}
+
+        {infoModalOpen && (
+          <div
+            onClick={() => setInfoModalOpen(false)}
+            style={{
+              position: 'fixed', inset: 0, zIndex: 10000,
+              background: 'rgba(34,41,47,0.55)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px',
+            }}
+          >
+            <div
+              onClick={e => e.stopPropagation()}
+              style={{ background: '#fff', borderRadius: 12, width: '100%', maxWidth: 380, boxShadow: '0 12px 40px rgba(34,41,47,0.25)' }}
+            >
+              <div style={{ padding: '18px 24px 16px', borderBottom: '1px solid #ebe9f1', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <h5 style={{ margin: 0, fontWeight: 600, color: '#5e5873', fontSize: 16 }}>Informações do arquivo</h5>
+                <button
+                  onClick={() => setInfoModalOpen(false)}
+                  style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#aaa', fontSize: 24, lineHeight: 1, padding: '0 4px' }}
+                >×</button>
+              </div>
+              <div style={{ padding: '20px 24px' }}>
+                <div style={{ marginBottom: 16 }}>
+                  <div style={{ fontSize: 12, fontWeight: 700, color: '#aaa', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: 6 }}>Formatos aceitos</div>
+                  <div style={{ fontSize: 14, color: '#5e5873' }}>JPG/JPEG, PNG, PDF, MP4 e MOV</div>
+                </div>
+                <div>
+                  <div style={{ fontSize: 12, fontWeight: 700, color: '#aaa', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: 6 }}>Limite por arquivo</div>
+                  <div style={{ fontSize: 14, color: '#5e5873', lineHeight: 1.6 }}>
+                    20 MB para imagens e PDFs<br />
+                    50 MB para vídeos
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  /* ── Render: main screen ────────────────────────────── */
+  return (
+    <div style={{ paddingBottom: '1.5rem' }}>
+
+      {/* Intro */}
+      <p className="text-muted mb-2" style={{ fontSize: 14 }}>
+        Envie e acompanhe seus arquivos para análise médica, como resultados de exames, laudos e outros documentos de saúde.
+      </p>
+
+      {/* Security banner */}
+      <div style={{
+        background: '#fff8f0', border: '1px solid #ffe0b2', borderRadius: 10,
+        padding: '14px 16px', marginBottom: '1.25rem',
+        display: 'flex', gap: 12, alignItems: 'flex-start',
+      }}>
+        <span style={{ color: '#ff9f43', flexShrink: 0, marginTop: 1 }}><IconLock /></span>
+        <div style={{ fontSize: 13, color: '#5e5873', lineHeight: 1.75 }}>
+          <strong>Seus arquivos são protegidos por criptografia.</strong><br />
+          Somente você e os médicos autorizados poderão acessá-los.<br />
+          Os arquivos enviados nesta área poderão ser excluídos por você a qualquer momento ou removidos automaticamente após <strong>40 dias</strong>, preservados os registros necessários ao atendimento médico.
+        </div>
+      </div>
+
+      {/* Upload button */}
+      <button
+        onClick={openForm}
+        className="btn btn-primary _upload-btn"
+        style={{ width: '100%', marginBottom: '1.25rem', borderRadius: 10, fontWeight: 700, padding: '0 12px', fontSize: 15 }}
+      >
+        Enviar novo arquivo
+      </button>
+
+      {/* Filter */}
+      <div className="card mb-2" style={{
+        background: 'linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%)',
+        border: '1px solid #e3f2fd',
+        boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+      }}>
+        <div className="card-body _filter-card-body">
+          <div
+            className="_filter-card-header"
+            style={{
+              display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+              cursor: 'pointer', userSelect: 'none',
+              padding: '0 16px',
+            }}
+            onClick={() => setFilterOpen(o => !o)}
+          >
+            <h6 style={{ margin: 0, fontWeight: 600, color: 'var(--primary, #0052ff)', display: 'flex', alignItems: 'center', gap: 6 }}>
+              <IconFilter /> Filtrar arquivos
+            </h6>
+            <span style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#aaa', fontSize: 13 }}>
+              {!filterOpen && 'Toque para abrir'}
+              <IconChevron open={filterOpen} />
+            </span>
+          </div>
+          {filterOpen && (
+            <div style={{ padding: '0 16px 16px' }}>
+              <div className="row" style={{ rowGap: '12px', alignItems: 'flex-end' }}>
+                <div className="col-12 col-md-4">
+                  <label className="form-label" style={{ fontSize: 12, fontWeight: 700, color: 'var(--primary,#0052ff)', marginBottom: 4 }}>TÍTULO</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Informe o nome do documento"
+                    value={filterTitulo}
+                    onChange={e => setFilterTitulo(e.target.value)}
+                    style={{ borderRadius: 8 }}
+                  />
+                </div>
+                <div className="col-12 col-md-3">
+                  <label className="form-label" style={{ fontSize: 12, fontWeight: 700, color: 'var(--primary,#0052ff)', marginBottom: 4 }}>PACIENTE</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={paciente}
+                    readOnly
+                    style={{ borderRadius: 8, background: '#f3f2f7', cursor: 'not-allowed', color: '#6e6b7b' }}
+                  />
+                </div>
+                <div className="col-12 col-md-3">
+                  <label className="form-label" style={{ fontSize: 12, fontWeight: 700, color: 'var(--primary,#0052ff)', marginBottom: 4 }}>DATA DE ENVIO</label>
+                  <input
+                    type="date"
+                    className="form-control"
+                    value={filterData}
+                    onChange={e => setFilterData(e.target.value)}
+                    style={{ borderRadius: 8 }}
+                  />
+                </div>
+                <div className="col-12 col-md-2">
+                  <button
+                    onClick={applyFilter}
+                    className="btn btn-primary"
+                    style={{ width: '100%', height: 38, borderRadius: 8, fontWeight: 700 }}
+                  >
+                    FILTRAR
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
 
       {/* ── Post-upload: link to appointment ─────────── */}
       {lastUploaded && (
@@ -551,43 +585,6 @@ export default function MeusArquivosPage() {
         )}
       </div>
 
-      {/* ── Info modal: formatos e limites ───────────── */}
-      {infoModalOpen && (
-        <div
-          onClick={() => setInfoModalOpen(false)}
-          style={{
-            position: 'fixed', inset: 0, zIndex: 10000,
-            background: 'rgba(34,41,47,0.55)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px',
-          }}
-        >
-          <div
-            onClick={e => e.stopPropagation()}
-            style={{ background: '#fff', borderRadius: 12, width: '100%', maxWidth: 380, boxShadow: '0 12px 40px rgba(34,41,47,0.25)' }}
-          >
-            <div style={{ padding: '18px 24px 16px', borderBottom: '1px solid #ebe9f1', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <h5 style={{ margin: 0, fontWeight: 600, color: '#5e5873', fontSize: 16 }}>Informações do arquivo</h5>
-              <button
-                onClick={() => setInfoModalOpen(false)}
-                style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#aaa', fontSize: 24, lineHeight: 1, padding: '0 4px' }}
-              >×</button>
-            </div>
-            <div style={{ padding: '20px 24px' }}>
-              <div style={{ marginBottom: 16 }}>
-                <div style={{ fontSize: 12, fontWeight: 700, color: '#aaa', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: 6 }}>Formatos aceitos</div>
-                <div style={{ fontSize: 14, color: '#5e5873' }}>JPG/JPEG, PNG, PDF, MP4 e MOV</div>
-              </div>
-              <div>
-                <div style={{ fontSize: 12, fontWeight: 700, color: '#aaa', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: 6 }}>Limite por arquivo</div>
-                <div style={{ fontSize: 14, color: '#5e5873', lineHeight: 1.6 }}>
-                  20 MB para imagens e PDFs<br />
-                  50 MB para vídeos
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
