@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/AuthContext';
 import { mockAppointments } from '@/data/mockData';
+import { IconLock, IconUploadCloud, IconFile, IconTrash, IconChevron, IconLink, IconFilter } from '@/components/features/meus-arquivos/icons';
 
 const IS_MOCK = process.env.NEXT_PUBLIC_MOCK_MODE === '1';
 const LS_KEY = 'meus_arquivos';
@@ -51,61 +52,6 @@ function lsSave(arr) {
   try { localStorage.setItem(LS_KEY, JSON.stringify(arr)); } catch {}
 }
 
-/* ── Icons ──────────────────────────────────────────────── */
-function IconLock() {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-      <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
-    </svg>
-  );
-}
-function IconUploadCloud() {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-      <polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/>
-      <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/>
-    </svg>
-  );
-}
-function IconFile() {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
-    </svg>
-  );
-}
-function IconTrash() {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/>
-      <path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/>
-    </svg>
-  );
-}
-function IconChevron({ open }) {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-      style={{ transition: 'transform 0.2s', transform: open ? 'rotate(180deg)' : 'rotate(0deg)', flexShrink: 0 }}>
-      <polyline points="6 9 12 15 18 9"/>
-    </svg>
-  );
-}
-function IconLink() {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
-      <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
-    </svg>
-  );
-}
-function IconFilter() {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
-    </svg>
-  );
-}
-
 /* ── Main Page ──────────────────────────────────────────── */
 export default function MeusArquivosPage() {
   const router      = useRouter();
@@ -137,6 +83,9 @@ export default function MeusArquivosPage() {
   const [filterTitulo, setFilterTitulo] = useState('');
   const [filterData,   setFilterData]   = useState('');
   const [filterApplied,setFilterApplied]= useState(false);
+
+  /* info modal */
+  const [infoModalOpen, setInfoModalOpen] = useState(false);
 
   /* file list */
   const [files,         setFiles]         = useState([]);
@@ -263,15 +212,88 @@ export default function MeusArquivosPage() {
         </div>
       </div>
 
-      {/* ── Upload button / form ──────────────────────── */}
+      {/* ── Upload button + Filter (stacked) ────────── */}
       {!showForm ? (
-        <button
-          onClick={openForm}
-          className="btn btn-primary"
-          style={{ width: '100%', marginBottom: '1.25rem', borderRadius: 10, fontWeight: 700, padding: '12px', fontSize: 15 }}
-        >
-          Enviar novo arquivo
-        </button>
+        <>
+          <button
+            onClick={openForm}
+            className="btn btn-primary _upload-btn"
+            style={{ width: '100%', marginBottom: '1.25rem', borderRadius: 10, fontWeight: 700, padding: '0 12px', fontSize: 15 }}
+          >
+            Enviar novo arquivo
+          </button>
+          <div className="card mb-2" style={{
+            background: 'linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%)',
+            border: '1px solid #e3f2fd',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+          }}>
+            <div className="card-body _filter-card-body">
+              <div
+                className="_filter-card-header"
+                style={{
+                  display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                  cursor: 'pointer', userSelect: 'none',
+                  padding: '0 16px',
+                }}
+                onClick={() => setFilterOpen(o => !o)}
+              >
+                <h6 style={{ margin: 0, fontWeight: 600, color: 'var(--primary, #0052ff)', display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <IconFilter /> Filtrar arquivos
+                </h6>
+                <span style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#aaa', fontSize: 13 }}>
+                  {!filterOpen && 'Toque para abrir'}
+                  <IconChevron open={filterOpen} />
+                </span>
+              </div>
+              {filterOpen && (
+                <div style={{ padding: '0 16px 16px' }}>
+                  <div className="row" style={{ rowGap: '12px', alignItems: 'flex-end' }}>
+                    <div className="col-12 col-md-4">
+                      <label className="form-label" style={{ fontSize: 12, fontWeight: 700, color: 'var(--primary,#0052ff)', marginBottom: 4 }}>TÍTULO</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        placeholder="Informe o nome do documento"
+                        value={filterTitulo}
+                        onChange={e => setFilterTitulo(e.target.value)}
+                        style={{ borderRadius: 8 }}
+                      />
+                    </div>
+                    <div className="col-12 col-md-3">
+                      <label className="form-label" style={{ fontSize: 12, fontWeight: 700, color: 'var(--primary,#0052ff)', marginBottom: 4 }}>PACIENTE</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        value={paciente}
+                        readOnly
+                        style={{ borderRadius: 8, background: '#f3f2f7', cursor: 'not-allowed', color: '#6e6b7b' }}
+                      />
+                    </div>
+                    <div className="col-12 col-md-3">
+                      <label className="form-label" style={{ fontSize: 12, fontWeight: 700, color: 'var(--primary,#0052ff)', marginBottom: 4 }}>DATA DE ENVIO</label>
+                      <input
+                        type="date"
+                        className="form-control"
+                        value={filterData}
+                        onChange={e => setFilterData(e.target.value)}
+                        style={{ borderRadius: 8 }}
+                      />
+                    </div>
+                    <div className="col-12 col-md-2">
+                      <button
+                        onClick={applyFilter}
+                        className="btn btn-primary"
+                        style={{ width: '100%', height: 38, borderRadius: 8, fontWeight: 700 }}
+                      >
+                        FILTRAR
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </>
       ) : (
         <div className="card mb-3">
           <div className="card-header" style={{ padding: '14px 20px' }}>
@@ -324,11 +346,11 @@ export default function MeusArquivosPage() {
               <label className="form-label" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                 Arquivo
                 <span
-                  title="Formatos aceitos: JPG/JPEG, PNG, PDF, MP4 e MOV. Limite: 20 MB para imagens e PDFs; 50 MB para vídeos."
+                  onClick={() => setInfoModalOpen(true)}
                   style={{
                     width: 17, height: 17, borderRadius: '50%',
                     background: '#e0e0e0', color: '#6e6b7b',
-                    fontSize: 11, fontWeight: 700, cursor: 'help',
+                    fontSize: 11, fontWeight: 700, cursor: 'pointer',
                     display: 'inline-flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
                   }}
                 >?</span>
@@ -338,35 +360,33 @@ export default function MeusArquivosPage() {
                 onDragLeave={() => setDragOver(false)}
                 onDrop={handleDrop}
                 onClick={() => fileInputRef.current?.click()}
-                style={{
-                  border: `2px dashed ${dragOver ? '#4daab6' : chosenFile ? '#28c76f' : '#d8d6de'}`,
-                  borderRadius: 10, padding: '28px 16px', textAlign: 'center',
-                  cursor: 'pointer', transition: 'all 0.2s',
-                  background: dragOver ? '#f0fafc' : chosenFile ? '#f0fff6' : '#fafafa',
-                }}
+                style={{ cursor: 'pointer' }}
               >
                 {chosenFile ? (
-                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
+                  <div style={{
+                    border: '2px dashed #28c76f', borderRadius: 10, padding: '20px 16px',
+                    textAlign: 'center', background: '#f0fff6',
+                    display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6,
+                  }}>
                     <span style={{ color: '#28c76f' }}><IconFile /></span>
                     <span style={{ fontSize: 14, fontWeight: 600, color: '#5e5873' }}>{chosenFile.name}</span>
                     <span style={{ fontSize: 12, color: '#b9b9c3' }}>{formatSize(chosenFile.size)}</span>
                     <span style={{ fontSize: 12, color: '#4daab6', textDecoration: 'underline', marginTop: 2 }}>Trocar arquivo</span>
                   </div>
                 ) : (
-                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
-                    <span style={{ color: '#b9b9c3' }}><IconUploadCloud /></span>
-                    {isMobile ? (
-                      <span style={{ fontSize: 14, color: '#6e6b7b' }}>Toque para selecionar</span>
-                    ) : (
-                      <>
-                        <span style={{ fontSize: 14, color: '#6e6b7b' }}>Arraste seus arquivos aqui</span>
-                        <span style={{ fontSize: 13, color: '#b9b9c3' }}>ou clique para selecionar</span>
-                      </>
-                    )}
-                    <span style={{ fontSize: 11, color: '#c0bdd0', marginTop: 2 }}>
-                      JPG/JPEG, PNG, PDF, MP4, MOV · máx. 20 MB (vídeos: 50 MB)
-                    </span>
-                  </div>
+                  <>
+                    <div style={{
+                      background: dragOver ? '#20a152' : 'linear-gradient(135deg, #28c76f 0%, #1e9e55 100%)',
+                      borderRadius: 14, padding: '18px 24px', textAlign: 'center',
+                      transition: 'background 0.2s, transform 0.15s',
+                      transform: dragOver ? 'scale(1.01)' : 'scale(1)',
+                      boxShadow: '0 4px 18px rgba(40,199,111,0.35)',
+                    }}>
+                      <span style={{ color: '#fff', fontWeight: 700, fontSize: 16, lineHeight: 1.5, display: 'block' }}>
+                        Arraste o arquivo aqui<br />ou clique para enviar
+                      </span>
+                    </div>
+                  </>
                 )}
               </div>
               <input ref={fileInputRef} type="file" accept={ACCEPT} style={{ display: 'none' }} onChange={e => pickFile(e.target.files?.[0])} />
@@ -483,77 +503,6 @@ export default function MeusArquivosPage() {
         </div>
       )}
 
-      {/* ── Filter collapsible ────────────────────────── */}
-      <div className="card mb-2" style={{
-        background: 'linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%)',
-        border: '1px solid #e3f2fd',
-        boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
-      }}>
-        <div className="card-body">
-          <div
-            style={{
-              display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-              cursor: 'pointer', userSelect: 'none',
-              marginBottom: filterOpen ? '1.25rem' : 0,
-            }}
-            onClick={() => setFilterOpen(o => !o)}
-          >
-            <h6 style={{ margin: 0, fontWeight: 600, color: 'var(--primary, #0052ff)', display: 'flex', alignItems: 'center', gap: 6 }}>
-              <IconFilter /> Filtrar arquivos
-            </h6>
-            <span style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#aaa', fontSize: 13 }}>
-              {!filterOpen && 'Toque para abrir'}
-              <IconChevron open={filterOpen} />
-            </span>
-          </div>
-
-          {filterOpen && (
-            <div className="row" style={{ rowGap: '12px', alignItems: 'flex-end' }}>
-              <div className="col-12 col-md-4">
-                <label className="form-label" style={{ fontSize: 12, fontWeight: 700, color: 'var(--primary,#0052ff)', marginBottom: 4 }}>TÍTULO</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Informe o nome do documento"
-                  value={filterTitulo}
-                  onChange={e => setFilterTitulo(e.target.value)}
-                  style={{ borderRadius: 8 }}
-                />
-              </div>
-              <div className="col-12 col-md-3">
-                <label className="form-label" style={{ fontSize: 12, fontWeight: 700, color: 'var(--primary,#0052ff)', marginBottom: 4 }}>PACIENTE</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  value={paciente}
-                  readOnly
-                  style={{ borderRadius: 8, background: '#f3f2f7', cursor: 'not-allowed', color: '#6e6b7b' }}
-                />
-              </div>
-              <div className="col-12 col-md-3">
-                <label className="form-label" style={{ fontSize: 12, fontWeight: 700, color: 'var(--primary,#0052ff)', marginBottom: 4 }}>DATA DE ENVIO</label>
-                <input
-                  type="date"
-                  className="form-control"
-                  value={filterData}
-                  onChange={e => setFilterData(e.target.value)}
-                  style={{ borderRadius: 8 }}
-                />
-              </div>
-              <div className="col-12 col-md-2">
-                <button
-                  onClick={applyFilter}
-                  className="btn btn-primary"
-                  style={{ width: '100%', height: 38, borderRadius: 8, fontWeight: 700 }}
-                >
-                  FILTRAR
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-
       {/* ── File list ────────────────────────────────── */}
       <div style={{ marginTop: '1rem' }}>
         {filteredFiles.length === 0 ? (
@@ -601,6 +550,44 @@ export default function MeusArquivosPage() {
           </div>
         )}
       </div>
+
+      {/* ── Info modal: formatos e limites ───────────── */}
+      {infoModalOpen && (
+        <div
+          onClick={() => setInfoModalOpen(false)}
+          style={{
+            position: 'fixed', inset: 0, zIndex: 10000,
+            background: 'rgba(34,41,47,0.55)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px',
+          }}
+        >
+          <div
+            onClick={e => e.stopPropagation()}
+            style={{ background: '#fff', borderRadius: 12, width: '100%', maxWidth: 380, boxShadow: '0 12px 40px rgba(34,41,47,0.25)' }}
+          >
+            <div style={{ padding: '18px 24px 16px', borderBottom: '1px solid #ebe9f1', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <h5 style={{ margin: 0, fontWeight: 600, color: '#5e5873', fontSize: 16 }}>Informações do arquivo</h5>
+              <button
+                onClick={() => setInfoModalOpen(false)}
+                style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#aaa', fontSize: 24, lineHeight: 1, padding: '0 4px' }}
+              >×</button>
+            </div>
+            <div style={{ padding: '20px 24px' }}>
+              <div style={{ marginBottom: 16 }}>
+                <div style={{ fontSize: 12, fontWeight: 700, color: '#aaa', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: 6 }}>Formatos aceitos</div>
+                <div style={{ fontSize: 14, color: '#5e5873' }}>JPG/JPEG, PNG, PDF, MP4 e MOV</div>
+              </div>
+              <div>
+                <div style={{ fontSize: 12, fontWeight: 700, color: '#aaa', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: 6 }}>Limite por arquivo</div>
+                <div style={{ fontSize: 14, color: '#5e5873', lineHeight: 1.6 }}>
+                  20 MB para imagens e PDFs<br />
+                  50 MB para vídeos
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

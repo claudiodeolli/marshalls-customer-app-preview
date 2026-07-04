@@ -5,7 +5,7 @@ export default function MeuClubePage() {
     <div>
       <div style={{ marginBottom: '1.5rem' }}>
         <p className="text-muted mb-0" style={{ fontSize: '14px' }}>
-          Acesse seu Clube e aproveite<br className="_br-mobile" /> vantagens exclusivas
+          Acesse seu Clube e aproveite<br className="_br-mobile" /> vantagens exclusivas.
         </p>
       </div>
       <div

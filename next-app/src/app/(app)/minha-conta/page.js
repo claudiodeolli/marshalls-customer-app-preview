@@ -1,6 +1,9 @@
 'use client';
 
 import { useState } from 'react';
+import Modal from '@/components/ui/Modal';
+import { MastercardIcon, AlertTriangle } from '@/components/features/minha-conta/icons';
+import SituacaoBadge from '@/components/features/minha-conta/SituacaoBadge';
 
 const SUBSCRIPTION = {
   titular:     'João Oliveira da Silva',
@@ -51,80 +54,6 @@ const MOCK_PAYMENTS = [
 
 const PARENTESCO_OPTIONS = ['Cônjuge', 'Filho(a)', 'Pai', 'Mãe', 'Irmão(ã)'];
 const EMPTY_DEP = { nome: '', dataNasc: '', cpf: '', parentesco: '', email: '', telefone: '' };
-
-/* ── Overlay modal genérico ── */
-function Modal({ title, onClose, children, footer }) {
-  return (
-    <div style={{
-      position: 'fixed', inset: 0, zIndex: 10000,
-      background: 'rgba(34,41,47,0.55)',
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
-      padding: '16px',
-    }}>
-      <div style={{
-        background: '#fff', borderRadius: '12px',
-        width: '100%', maxWidth: 500,
-        boxShadow: '0 12px 40px rgba(34,41,47,0.25)',
-      }}>
-        <div style={{
-          padding: '18px 24px 16px',
-          display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-          borderBottom: '1px solid #ebe9f1',
-        }}>
-          <h5 style={{ margin: 0, fontWeight: 600, color: '#5e5873', fontSize: '16px' }}>{title}</h5>
-          {onClose && (
-            <button onClick={onClose} style={{
-              background: 'none', border: 'none', cursor: 'pointer',
-              color: '#aaa', fontSize: '24px', lineHeight: 1, padding: '0 4px',
-            }}>×</button>
-          )}
-        </div>
-        <div style={{ padding: '20px 24px' }}>{children}</div>
-        {footer && (
-          <div style={{ padding: '0 24px 20px', display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
-            {footer}
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
-
-function MastercardIcon() {
-  return (
-    <svg width="34" height="22" viewBox="0 0 34 22">
-      <circle cx="13" cy="11" r="10" fill="#eb001b" fillOpacity="0.9"/>
-      <circle cx="21" cy="11" r="10" fill="#f79e1b" fillOpacity="0.9"/>
-    </svg>
-  );
-}
-
-function SituacaoBadge({ s }) {
-  const map = {
-    'Pago':      { bg: '#e8f5e9', color: '#2e7d32' },
-    'Pendente':  { bg: '#fff8e1', color: '#f57f17' },
-    'Cancelado': { bg: '#fce4ec', color: '#c62828' },
-  };
-  const st = map[s] ?? { bg: '#eeeeee', color: '#616161' };
-  return (
-    <span style={{
-      background: st.bg, color: st.color,
-      fontSize: '11px', fontWeight: 700, padding: '3px 9px',
-      borderRadius: '4px', whiteSpace: 'nowrap',
-    }}>{s}</span>
-  );
-}
-
-function AlertTriangle({ color = '#ea5455', size = 48 }) {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24"
-      fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
-      <line x1="12" y1="9" x2="12" y2="13"/>
-      <line x1="12" y1="17" x2="12.01" y2="17"/>
-    </svg>
-  );
-}
 
 export default function MinhaContaPage() {
   const [planType, setPlanType] = useState('individual');
@@ -196,6 +125,11 @@ export default function MinhaContaPage() {
 
   return (
     <div>
+      <div style={{ marginBottom: '1.5rem' }}>
+        <p className="text-muted mb-0" style={{ fontSize: '14px' }}>
+          Consulte as informações do seu plano<br className="_br-mobile" /> e gerencie sua assinatura.
+        </p>
+      </div>
       {/* ── Cabeçalho da assinatura ── */}
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px' }}>
         <h4 style={{ margin: 0, fontWeight: 600, fontSize: '1.1rem', color: '#5e5873' }}>{plan.label}</h4>

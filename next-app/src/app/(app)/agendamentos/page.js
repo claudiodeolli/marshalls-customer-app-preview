@@ -1,10 +1,15 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import CancelDialog from '@/components/features/agendamentos/CancelDialog';
+import EmptyState from '@/components/features/agendamentos/EmptyState';
+import { IconAdd, IconArticle, IconClock, IconDoctor, IconHospital } from '@/components/features/agendamentos/icons';
+import SkeletonRow from '@/components/features/agendamentos/SkeletonRow';
+import Toast from '@/components/ui/Toast';
+import { mockAppointments } from '@/data/mockData';
 import api from '@/lib/api';
 import { useAuth } from '@/lib/AuthContext';
-import { mockAppointments } from '@/data/mockData';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 const IS_MOCK = process.env.NEXT_PUBLIC_MOCK_MODE === '1';
 
@@ -63,128 +68,6 @@ function convertDateTime(date, time, tz) {
       time: dt.toLocaleTimeString('pt-BR', { timeZone: zone, hour: '2-digit', minute: '2-digit', hour12: false }),
     };
   } catch { return null; }
-}
-
-function IconDoctor() {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
-    </svg>
-  );
-}
-
-function IconHospital() {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-      <path d="M19 3H5c-1.1 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-6 3c1.93 0 3.5 1.57 3.5 3.5S14.93 13 13 13s-3.5-1.57-3.5-3.5S11.07 6 13 6zm7 13H6v-.23c0-.62.28-1.2.76-1.58C8.47 15.82 10.64 15 13 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"/>
-    </svg>
-  );
-}
-
-function IconClock() {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
-    </svg>
-  );
-}
-
-function IconArticle() {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-      <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
-    </svg>
-  );
-}
-
-function IconAdd() {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/>
-    </svg>
-  );
-}
-
-function EmptyState() {
-  return (
-    <div className="card">
-      <div className="card-body" style={{ textAlign: 'center', padding: '2.5rem', color: '#aaa' }}>
-        <p className="mb-0" style={{ fontSize: '15px' }}>Não há agendamentos no momento.</p>
-      </div>
-    </div>
-  );
-}
-
-function SkeletonRow() {
-  return (
-    <div className="card mb-0">
-      <div className="card-body">
-        <div className="d-flex justify-content-between align-items-start">
-          <div style={{ flex: 1 }}>
-            <div className="d-flex align-items-center mb-50">
-              <div className="sk" style={{ width: 20, height: 20, borderRadius: '50%', marginRight: 8, flexShrink: 0 }} />
-              <div className="sk" style={{ width: '42%', height: 18 }} />
-            </div>
-            <div className="d-flex align-items-center mb-50">
-              <div className="sk" style={{ width: 20, height: 20, borderRadius: '50%', marginRight: 8, flexShrink: 0 }} />
-              <div className="sk" style={{ width: '36%', height: 14 }} />
-            </div>
-            <div className="d-flex align-items-center mb-50">
-              <div className="sk" style={{ width: 20, height: 20, borderRadius: '50%', marginRight: 8, flexShrink: 0 }} />
-              <div className="sk" style={{ width: '52%', height: 14 }} />
-            </div>
-            <div className="sk" style={{ width: 70, height: 18, borderRadius: '10px', marginTop: '6px' }} />
-          </div>
-          <div style={{ marginLeft: '16px', flexShrink: 0 }}>
-            <div className="sk" style={{ width: 135, height: 30, borderRadius: '4px' }} />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function CancelDialog({ open, appointment, loading, onClose, onConfirm }) {
-  if (!open || !appointment) return null;
-  const specialtyName = appointment.professional?.specialties?.[0]?.name || '';
-  const doctorName = appointment.professional?.name || '';
-  return (
-    <div style={{
-      position: 'fixed', inset: 0, zIndex: 9998,
-      background: 'rgba(0,0,0,0.5)',
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
-    }}>
-      <div className="card mb-0" style={{ width: '400px', maxWidth: '90vw', borderRadius: '12px' }}>
-        <div className="card-body" style={{ padding: '1.5rem' }}>
-          <h5 style={{ fontWeight: 700, marginBottom: '0.75rem' }}>Atenção</h5>
-          <p style={{ color: '#333', marginBottom: '1.5rem', fontSize: '14px' }}>
-            Você está prestes a cancelar o agendamento de <strong>{specialtyName}</strong> com o(a) Dr(a). <strong>{doctorName}</strong>. Deseja continuar?
-          </p>
-          <div className="d-flex justify-content-end" style={{ gap: '8px' }}>
-            <button className="btn btn-outline-secondary btn-sm" onClick={onClose}>Não</button>
-            <button className="btn btn-danger btn-sm" disabled={loading} onClick={onConfirm}>
-              {loading ? 'Aguarde...' : 'Sim'}
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function Toast({ message, type, visible }) {
-  if (!visible) return null;
-  const cls = type === 'success' ? 'alert-success' : 'alert-danger';
-  return (
-    <div className={`alert ${cls} mb-0`} style={{
-      position: 'fixed', bottom: '1.5rem', right: '1.5rem',
-      zIndex: 9999, minWidth: '280px', maxWidth: '380px',
-      boxShadow: '0 4px 20px rgba(0,0,0,0.15)',
-      borderRadius: '8px', fontWeight: 500,
-    }}>
-      {message}
-    </div>
-  );
 }
 
 export default function AgendamentosPage() {
@@ -295,7 +178,7 @@ export default function AgendamentosPage() {
       <div className="d-flex justify-content-between align-items-start flex-wrap mb-2 _agend-header" style={{ gap: '16px' }}>
         <div>
           <p className="text-muted mb-0" style={{ fontSize: '14px' }}>
-            Gerencie seus agendamentos<br className="_mob-break" />médicos e agende novas consultas
+            Gerencie seus agendamentos<br className="_mob-break" /> médicos e agende novas consultas.
           </p>
         </div>
         <div className="_agend-tz-wrap" style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>

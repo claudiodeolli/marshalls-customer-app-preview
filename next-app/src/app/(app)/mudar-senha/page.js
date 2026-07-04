@@ -1,65 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-
-function EyeIcon({ open }) {
-  return open ? (
-    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
-    </svg>
-  ) : (
-    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>
-    </svg>
-  );
-}
-
-function PasswordField({ label, value, onChange, show, onToggle, id, hint }) {
-  return (
-    <div className="form-group">
-      <label className="form-label" htmlFor={id}>{label}</label>
-      <div style={{
-        display: 'flex',
-        border: '1px solid #d8d6de',
-        borderRadius: '0.357rem',
-      }}>
-        <input
-          id={id}
-          type={show ? 'text' : 'password'}
-          className="form-control"
-          value={value}
-          onChange={e => onChange(e.target.value)}
-          placeholder="••••••••"
-          style={{
-            border: 'none',
-            borderRadius: '0.357rem 0 0 0.357rem',
-            boxShadow: 'none',
-            flex: 1,
-          }}
-        />
-        <button
-          type="button"
-          onClick={onToggle}
-          tabIndex={-1}
-          style={{
-            background: 'none',
-            border: 'none',
-            borderRadius: '0 0.357rem 0.357rem 0',
-            padding: '0 12px',
-            cursor: 'pointer',
-            color: '#6e6b7b',
-            display: 'flex',
-            alignItems: 'center',
-            flexShrink: 0,
-          }}
-        >
-          <EyeIcon open={show} />
-        </button>
-      </div>
-      {hint && <small className="text-muted d-block mt-25" style={{ fontSize: '12px' }}>{hint}</small>}
-    </div>
-  );
-}
+import PasswordField from '@/components/ui/PasswordField';
 
 export default function MudarSenhaPage() {
   const [current,  setCurrent]  = useState('');
@@ -90,6 +32,12 @@ export default function MudarSenhaPage() {
   }
 
   return (
+    <div>
+      <div style={{ marginBottom: '1.5rem' }}>
+        <p className="text-muted mb-0" style={{ fontSize: '14px' }}>
+          Informe a senha atual e defina uma nova<br className="_br-mobile" /> para acessar sua conta.
+        </p>
+      </div>
     <div className="row">
       <div className="col-12 col-md-6 col-lg-5">
         <div className="card">
@@ -149,6 +97,7 @@ export default function MudarSenhaPage() {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 }

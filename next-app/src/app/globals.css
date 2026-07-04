@@ -677,6 +677,33 @@ body._page-leaving .content-body {
   border-radius: 12px !important;
 }
 
+/* ── Meus Arquivos: upload button + filter trigger same height ── */
+._upload-btn {
+  height: 42px !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+html[dir] .card .card-body._filter-card-body {
+  padding: 0 !important;
+}
+
+._filter-card-header {
+  height: 42px !important;
+}
+
+@media (max-width: 1199.98px) {
+  ._upload-btn {
+    height: 44px !important;
+  }
+  ._filter-card-header {
+    height: 44px !important;
+  }
+}
+
 /* ── Campos de formulário ── */
 label {
   font-size: 13px !important;
