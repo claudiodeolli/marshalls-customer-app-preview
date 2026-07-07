@@ -59,6 +59,10 @@ export default function MeusDadosPage() {
   }
 
   function handleSave() {
+    if (!gender) {
+      showSnack('error', 'Selecione o gênero.');
+      return;
+    }
     if (!photoFile) {
       showSnack('success', 'Informações atualizadas com sucesso!');
       return;
@@ -152,7 +156,7 @@ export default function MeusDadosPage() {
               </div>
 
               <div className="form-group">
-                <label className="form-label">Gênero</label>
+                <label className="form-label">Gênero <strong style={{ color: '#ea5455' }}>*</strong></label>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', marginTop: '6px' }}>
                   {['Masculino', 'Feminino', 'Não-binário'].map(g => (
                     <label key={g} style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer', fontSize: '14px', color: '#5e5873' }}>

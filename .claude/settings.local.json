@@ -43,7 +43,10 @@
       "Bash(git -C \"d:\\\\Freela\\\\marshalls-customer-app-preview\" show 690a531:src/views/Encaminhamentos.vue)",
       "Bash(git -C \"d:\\\\Freela\\\\marshalls-customer-app-preview\" show bba250b:src/views/Encaminhamentos.vue)",
       "Bash(git -C \"d:\\\\Freela\\\\marshalls-customer-app-preview\" show bba250b --name-only)",
-      "Bash(git -C \"d:\\\\Freela\\\\marshalls-customer-app-preview\" ls-tree -r --name-only d6fc6ad)"
+      "Bash(git -C \"d:\\\\Freela\\\\marshalls-customer-app-preview\" ls-tree -r --name-only d6fc6ad)",
+      "Bash(node -e \"require\\('playwright'\\)\")",
+      "Bash(node -e \"const {chromium}=require\\('playwright'\\);\\(async\\(\\)=>{const b=await chromium.launch\\({args:['--no-sandbox']}\\);const p=await b.newPage\\(\\);await p.goto\\('http://localhost:3000/login'\\);await p.waitForSelector\\('input[type=email]'\\);await p.fill\\('input[type=email]','test@test.com'\\);await p.fill\\('input[type=password]','123456'\\);await p.click\\('button[type=submit]'\\);await p.waitForURL\\('**/painel',{timeout:8000}\\).catch\\(\\(\\)=>{}\\);console.log\\('url:',p.url\\(\\)\\);await b.close\\(\\);}\\)\\(\\)\")",
+      "Bash(npx playwright *)"
     ]
   }
 }
