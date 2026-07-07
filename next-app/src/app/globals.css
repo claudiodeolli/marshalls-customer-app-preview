@@ -342,11 +342,13 @@ html[dir] .content.app-content {
   transition: box-shadow 200ms ease;
 }
 
-.nav-item-user-btn--open {
+.nav-item-user-btn--open,
+.nav-item-user-btn:hover {
   background-color: rgba(0, 132, 255, 0.2) !important;
 }
 
-.nav-item-user-btn--open ._user-avatar {
+.nav-item-user-btn--open ._user-avatar,
+.nav-item-user-btn:hover ._user-avatar {
   box-shadow: 0 0 10px 1px rgba(0, 82, 255, 0.6) !important;
 }
 
@@ -679,7 +681,8 @@ body._page-leaving .content-body {
 
 /* ── Meus Arquivos: upload button + filter trigger same height ── */
 ._upload-btn {
-  height: 42px !important;
+  height: 46px !important;
+  width: 35% !important;
   padding-top: 0 !important;
   padding-bottom: 0 !important;
   display: flex !important;
@@ -692,15 +695,27 @@ html[dir] .card .card-body._filter-card-body {
 }
 
 ._filter-card-header {
-  height: 42px !important;
+  min-height: 46px !important;
 }
 
 @media (max-width: 1199.98px) {
   ._upload-btn {
     height: 44px !important;
+    width: 100% !important;
   }
   ._filter-card-header {
-    height: 44px !important;
+    min-height: 44px !important;
+  }
+}
+
+/* Separador visível apenas no desktop */
+._dot-separator {
+  display: inline;
+}
+
+@media (max-width: 767.98px) {
+  ._dot-separator {
+    display: none;
   }
 }
 
@@ -718,6 +733,11 @@ select.form-control,
   padding: 6px 12px !important;
   font-size: 16px !important;
   line-height: 1.5 !important;
+}
+
+/* Remove arredondamento direito no input de busca dentro de input-group */
+input._search-input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]):not([type="range"]):not([type="file"]):not([type="color"]) {
+  border-radius: 11px 0 0 11px !important;
 }
 
 /* Botão Sair do dropdown de usuário */

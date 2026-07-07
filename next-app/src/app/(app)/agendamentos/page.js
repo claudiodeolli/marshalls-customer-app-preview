@@ -355,16 +355,14 @@ export default function AgendamentosPage() {
                       {apt.status === 'SCHEDULED' && (
                         <div className="d-flex flex-column _appt-card-actions" style={{ gap: '8px', marginLeft: '16px', flexShrink: 0 }}>
                           <button
-                            className="btn btn-success btn-sm"
-                            style={{ whiteSpace: 'nowrap' }}
+                            className="btn btn-success _contact-btn"
                             onClick={() => handleEnterAppointment(apt)}
                           >
                             Entrar no atendimento
                           </button>
                           {apt.cancel && (
                             <button
-                              className="btn btn-outline-danger btn-sm"
-                              style={{ whiteSpace: 'nowrap' }}
+                              className="btn btn-outline-danger _contact-btn"
                               onClick={() => setCancelTarget(apt)}
                             >
                               Cancelar

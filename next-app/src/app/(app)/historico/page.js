@@ -194,6 +194,7 @@ export default function HistoricoPage() {
               cursor: 'pointer',
               userSelect: 'none',
               padding: '0 16px',
+              minHeight: '46px',
             }}
             onClick={() => setFilterOpen(o => !o)}
           >

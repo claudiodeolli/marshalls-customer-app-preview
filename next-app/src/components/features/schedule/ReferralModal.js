@@ -34,7 +34,7 @@ export default function ReferralModal({ open, loadingReferrals, pendingReferrals
 
         <div style={{ padding: '16px 20px', overflowY: 'auto', flex: 1 }}>
           <p style={{ fontSize: 14, color: '#666', marginBottom: 16 }}>
-            Selecione um encaminhamento médico. A especialidade do encaminhamento será selecionada automaticamente:
+            Selecione um encaminhamento médico.<br /> A especialidade do encaminhamento será selecionada automaticamente:
           </p>
 
           {loadingReferrals ? (

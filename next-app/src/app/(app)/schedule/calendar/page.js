@@ -468,9 +468,8 @@ function ScheduleContent() {
     return (
       <PaymentPixStep
         avulsaSpecialty={avulsaSpecialty}
-        onConfirmPayment={() => setShowPaymentConfirm(true)}
+        onConfirmPayment={() => setPaymentStep('success')}
         onBack={() => setPaymentStep('select')}
-        confirmModal={confirmModal}
       />
     );
   }
@@ -510,13 +509,13 @@ function ScheduleContent() {
           <div className="input-group">
             <input
               type="text"
-              className="form-control"
-              placeholder="Digite a especialidade"
+              className="form-control _search-input"
+              placeholder="Buscar especialidade"
               value={specSearch}
               onChange={e => setSpecSearch(e.target.value)}
             />
             <div className="input-group-append">
-              <span className="input-group-text" style={{ background: '#f8f8f8' }}>
+              <span className="input-group-text" style={{ background: '#f8f8f8', borderRadius: '0 11px 11px 0' }}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
                   stroke="#6e6b7b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />

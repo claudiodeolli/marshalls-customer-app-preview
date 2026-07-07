@@ -139,7 +139,9 @@ export default function MinhaContaPage() {
       </div>
       <p style={{ color: '#6e6b7b', fontSize: '14px', marginBottom: '4px' }}>
         Titular Responsável: <strong>{SUBSCRIPTION.titular}</strong>
-        &nbsp;·&nbsp; CPF: {SUBSCRIPTION.cpf}
+        <span className="_dot-separator">&nbsp;·&nbsp;</span>
+        <br className="_br-mobile" />
+        CPF: {SUBSCRIPTION.cpf}
       </p>
       <div style={{
         display: 'inline-block', border: '1px solid #d8d6de', borderRadius: '12px',

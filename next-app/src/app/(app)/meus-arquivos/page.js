@@ -26,6 +26,12 @@ function nowStr() {
   return `${p(d.getDate())}/${p(d.getMonth() + 1)}/${d.getFullYear()} às ${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`;
 }
 
+function nowDateStr() {
+  const d = new Date();
+  const p = n => String(n).padStart(2, '0');
+  return `${p(d.getDate())}/${p(d.getMonth() + 1)}/${d.getFullYear()}`;
+}
+
 function formatSize(bytes) {
   if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(0)} KB`;
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
@@ -102,7 +108,7 @@ export default function MeusArquivosPage() {
   }, []);
 
   function openForm() {
-    setDataEnvio(nowStr());
+    setDataEnvio(nowDateStr());
     setTitulo('');
     setTipo('');
     setChosenFile(null);
@@ -124,6 +130,7 @@ export default function MeusArquivosPage() {
     if (err) { setFileError(err); setChosenFile(null); return; }
     setFileError('');
     setChosenFile(file);
+    setDataEnvio(nowStr());
   }
 
   function handleDrop(e) {
@@ -146,7 +153,7 @@ export default function MeusArquivosPage() {
         tipo,
         paciente,
         arquivo:  { name: chosenFile.name, size: chosenFile.size },
-        dataEnvio,
+        dataEnvio: nowStr(),
       };
       const updated = [entry, ...lsLoad()];
       lsSave(updated);
@@ -195,9 +202,9 @@ export default function MeusArquivosPage() {
       <div style={{ paddingBottom: '1.5rem' }}>
         <div className="card mb-3">
           <div className="card-header" style={{ padding: '14px 20px' }}>
-            <h5 className="card-title mb-0">Informações do Arquivo</h5>
+            <h5 className="card-title mb-0" style={{ fontWeight: 700 }}>Informações do Arquivo</h5>
           </div>
-          <div className="card-body">
+          <div className="card-body" style={{ padding: '24px 28px' }}>
             <p style={{ fontSize: 13, color: '#6e6b7b', marginBottom: '1.25rem' }}>
               Preencha os campos abaixo para enviar um novo arquivo.
             </p>
@@ -207,7 +214,7 @@ export default function MeusArquivosPage() {
             )}
 
             <div className="form-group">
-              <label className="form-label">Título</label>
+              <label className="form-label" style={{ fontWeight: 700 }}>Título</label>
               <input
                 type="text"
                 className="form-control"
@@ -218,7 +225,7 @@ export default function MeusArquivosPage() {
             </div>
 
             <div className="form-group">
-              <label className="form-label">Tipo de documento</label>
+              <label className="form-label" style={{ fontWeight: 700 }}>Tipo de documento</label>
               <select className="custom-select" value={tipo} onChange={e => setTipo(e.target.value)}>
                 <option value="">Selecione</option>
                 {TIPOS.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
@@ -226,7 +233,7 @@ export default function MeusArquivosPage() {
             </div>
 
             <div className="form-group">
-              <label className="form-label">Paciente</label>
+              <label className="form-label" style={{ fontWeight: 700 }}>Paciente</label>
               <input
                 type="text"
                 className="form-control"
@@ -237,72 +244,87 @@ export default function MeusArquivosPage() {
             </div>
 
             <div className="form-group">
-              <label className="form-label" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <label className="form-label" style={{ fontWeight: 700, display: 'flex', alignItems: 'center', gap: 6 }}>
                 Arquivo
-                <span
+                <button
+                  type="button"
                   onClick={() => setInfoModalOpen(true)}
-                  style={{
-                    width: 17, height: 17, borderRadius: '50%',
-                    background: '#e0e0e0', color: '#6e6b7b',
-                    fontSize: 11, fontWeight: 700, cursor: 'pointer',
-                    display: 'inline-flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                  title="Formatos e limites aceitos"
+                  onMouseEnter={e => {
+                    e.currentTarget.style.background = '#d0d0d0';
+                    e.currentTarget.style.boxShadow = '0 1px 2px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.6)';
                   }}
-                >?</span>
+                  onMouseLeave={e => {
+                    e.currentTarget.style.background = '#e8e8e8';
+                    e.currentTarget.style.boxShadow = '0 2px 4px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.7)';
+                  }}
+                  style={{
+                    width: 20, height: 20, borderRadius: '50%',
+                    background: '#e8e8e8', color: '#555',
+                    fontSize: 12, fontWeight: 700, cursor: 'pointer',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                    border: '1px solid #c0c0c0', padding: 0, lineHeight: 1,
+                    boxShadow: '0 2px 4px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.7)',
+                    transition: 'background 0.1s, box-shadow 0.1s',
+                  }}
+                >?</button>
               </label>
-              <div
-                onDragOver={e => { e.preventDefault(); setDragOver(true); }}
-                onDragLeave={() => setDragOver(false)}
-                onDrop={handleDrop}
-                onClick={() => fileInputRef.current?.click()}
-                style={{ cursor: 'pointer' }}
-              >
-                {chosenFile ? (
-                  <div style={{
-                    border: '2px dashed #28c76f', borderRadius: 10, padding: '20px 16px',
-                    textAlign: 'center', background: '#f0fff6',
-                    display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6,
-                  }}>
-                    <span style={{ color: '#28c76f' }}><IconFile /></span>
-                    <span style={{ fontSize: 14, fontWeight: 600, color: '#5e5873' }}>{chosenFile.name}</span>
-                    <span style={{ fontSize: 12, color: '#b9b9c3' }}>{formatSize(chosenFile.size)}</span>
-                    <span style={{ fontSize: 12, color: '#4daab6', textDecoration: 'underline', marginTop: 2 }}>Trocar arquivo</span>
-                  </div>
-                ) : (
-                  <div style={{
-                    background: dragOver ? '#20a152' : 'linear-gradient(135deg, #28c76f 0%, #1e9e55 100%)',
-                    borderRadius: 14, padding: '18px 24px', textAlign: 'center',
-                    transition: 'background 0.2s, transform 0.15s',
-                    transform: dragOver ? 'scale(1.01)' : 'scale(1)',
-                    boxShadow: '0 4px 18px rgba(40,199,111,0.35)',
-                  }}>
-                    <span style={{ color: '#fff', fontWeight: 700, fontSize: 16, lineHeight: 1.5, display: 'block' }}>
-                      Arraste o arquivo aqui<br />ou clique para enviar
-                    </span>
-                  </div>
-                )}
+              <div style={{ width: isMobile ? '90%' : '35%' }}>
+                <div
+                  onDragOver={e => { e.preventDefault(); setDragOver(true); }}
+                  onDragLeave={() => setDragOver(false)}
+                  onDrop={handleDrop}
+                  onClick={() => fileInputRef.current?.click()}
+                  style={{ cursor: 'pointer' }}
+                >
+                  {chosenFile ? (
+                    <div style={{
+                      border: '2px dashed #28c76f', borderRadius: 10, padding: '20px 16px',
+                      textAlign: 'center', background: '#f0fff6',
+                      display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6,
+                    }}>
+                      <span style={{ color: '#28c76f' }}><IconFile /></span>
+                      <span style={{ fontSize: 14, fontWeight: 600, color: '#5e5873', maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{chosenFile.name}</span>
+                      <span style={{ fontSize: 12, color: '#b9b9c3' }}>{formatSize(chosenFile.size)}</span>
+                      <span style={{ fontSize: 12, color: '#4daab6', textDecoration: 'underline', marginTop: 2 }}>Trocar arquivo</span>
+                    </div>
+                  ) : (
+                    <div style={{
+                      background: dragOver ? '#20a152' : 'linear-gradient(135deg, #28c76f 0%, #1e9e55 100%)',
+                      borderRadius: 14, padding: '18px 24px', textAlign: 'center',
+                      transition: 'background 0.2s, transform 0.15s',
+                      transform: dragOver ? 'scale(1.01)' : 'scale(1)',
+                      boxShadow: '0 4px 18px rgba(40,199,111,0.35)',
+                    }}>
+                      <span style={{ color: '#fff', fontWeight: 700, fontSize: 16, lineHeight: 1.5, display: 'block', whiteSpace: 'nowrap' }}>
+                        {isMobile ? 'Toque para enviar' : 'Arraste o arquivo aqui ou clique para enviar'}
+                      </span>
+                    </div>
+                  )}
+                </div>
               </div>
               <input ref={fileInputRef} type="file" accept={ACCEPT} style={{ display: 'none' }} onChange={e => pickFile(e.target.files?.[0])} />
               {fileError && <small style={{ color: '#ea5455', fontSize: 12, marginTop: 4, display: 'block' }}>{fileError}</small>}
             </div>
 
-            <div className="form-group">
-              <label className="form-label">Data de envio</label>
+            <div className="form-group" style={{ marginTop: 18 }}>
+              <label className="form-label" style={{ fontWeight: 700 }}>Data de envio</label>
               <input
                 type="text"
                 className="form-control"
                 value={dataEnvio}
                 readOnly
-                style={{ background: '#f3f2f7', cursor: 'not-allowed', color: '#6e6b7b' }}
+                style={{ background: '#f3f2f7', cursor: 'not-allowed', color: '#6e6b7b', width: '35%' }}
               />
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginTop: 8 }}>
+            <div style={{ display: 'flex', flexDirection: 'row', gap: 10, marginTop: 8, justifyContent: 'flex-end' }}>
               <button
                 onClick={closeForm}
                 style={{
                   background: 'none', border: '1.5px solid #ebe9f1', borderRadius: 24,
                   fontWeight: 600, fontSize: 14, color: '#6e6b7b', cursor: 'pointer',
-                  padding: '10px', lineHeight: 1.5,
+                  padding: '10px 20px', lineHeight: 1.5,
                 }}
               >
                 ← Voltar
@@ -311,7 +333,7 @@ export default function MeusArquivosPage() {
                 onClick={handleSubmit}
                 disabled={submitting}
                 className="btn btn-primary"
-                style={{ borderRadius: 24, fontWeight: 700, padding: '11px', lineHeight: 1.5, border: '1.5px solid transparent' }}
+                style={{ borderRadius: 24, fontWeight: 700, padding: '11px 20px', lineHeight: 1.5, border: '1.5px solid transparent' }}
               >
                 {submitting ? 'Enviando...' : 'Anexar Arquivo'}
               </button>
@@ -386,7 +408,7 @@ export default function MeusArquivosPage() {
       <button
         onClick={openForm}
         className="btn btn-primary _upload-btn"
-        style={{ width: '100%', marginBottom: '1.25rem', borderRadius: 10, fontWeight: 700, padding: '0 12px', fontSize: 15 }}
+        style={{ marginBottom: '1.25rem', borderRadius: 10, fontWeight: 700, padding: '0 12px', fontSize: 15 }}
       >
         Enviar novo arquivo
       </button>
@@ -541,7 +563,7 @@ export default function MeusArquivosPage() {
       <div style={{ marginTop: '1rem' }}>
         {filteredFiles.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '2.5rem', color: '#b9b9c3', fontSize: 14 }}>
-            {filterApplied ? '- Nenhum resultado encontrado -' : '- Resultados aqui -'}
+            {filterApplied ? 'Nenhum resultado encontrado' : 'Resultados aqui'}
           </div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>

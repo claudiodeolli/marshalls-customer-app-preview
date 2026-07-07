@@ -30,7 +30,7 @@ export default function FilterSelect({ value, onChange }) {
         type="button"
         onClick={() => setOpen(o => !o)}
         style={{
-          width: '100%', height: '38px', border: '1px solid #d8d6de', borderRadius: '12px',
+          width: '100%', height: '42px', border: '1px solid #d8d6de', borderRadius: '12px',
           background: '#fff', cursor: 'pointer',
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           padding: '0 12px', fontSize: '14px', color: '#6e6b7b',

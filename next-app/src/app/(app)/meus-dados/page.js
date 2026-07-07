@@ -85,14 +85,14 @@ export default function MeusDadosPage() {
           Mantenha seus dados pessoais e contato de emergência sempre atualizados.
         </p>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', fontSize: '12px', color: '#6e6b7b' }}>
-          <span><strong style={{ color: '#ea5455' }}>*</strong> Campo obrigatório</span>
+          <span><strong style={{ color: '#ea5455' }}>*</strong> Campo obrigatório.</span>
           <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
             <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
               fill="none" stroke="#aaa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
               <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
             </svg>
-            Entre em contato com o suporte se precisar alterar
+            Entre em contato com o suporte se precisar alterar.
           </span>
         </div>
       </div>
