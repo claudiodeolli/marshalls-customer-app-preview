@@ -318,7 +318,7 @@ export default function MeusArquivosPage() {
               />
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'row', gap: 10, marginTop: 24, justifyContent: 'flex-end' }}>
+            <div style={{ display: 'flex', flexDirection: 'row', gap: 10, marginTop: 36, justifyContent: 'flex-end' }}>
               <button
                 onClick={closeForm}
                 style={{
