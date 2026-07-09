@@ -708,6 +708,13 @@ html[dir] .card .card-body._filter-card-body {
   }
 }
 
+/* Título do card de arquivos: fonte maior no mobile */
+@media (max-width: 767.98px) {
+  ._arquivo-card-title {
+    font-size: 1.3rem !important;
+  }
+}
+
 /* Separador visível apenas no desktop */
 ._dot-separator {
   display: inline;

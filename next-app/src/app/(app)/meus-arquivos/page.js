@@ -202,7 +202,7 @@ export default function MeusArquivosPage() {
       <div style={{ paddingBottom: '1.5rem' }}>
         <div className="card mb-3">
           <div className="card-header" style={{ padding: '14px 20px' }}>
-            <h5 className="card-title mb-0" style={{ fontWeight: 700 }}>Informações do Arquivo</h5>
+            <h5 className="card-title mb-0 _arquivo-card-title" style={{ fontWeight: 700 }}>Informações do Arquivo</h5>
           </div>
           <div className="card-body" style={{ padding: '24px 28px' }}>
             <p style={{ fontSize: 13, color: '#6e6b7b', marginBottom: '1.25rem' }}>
