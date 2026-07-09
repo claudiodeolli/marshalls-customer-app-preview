@@ -710,7 +710,7 @@ html[dir] .card .card-body._filter-card-body {
 
 /* Título do card de arquivos: fonte maior no mobile */
 @media (max-width: 767.98px) {
-  ._arquivo-card-title {
+  .content-body h5._arquivo-card-title {
     font-size: 1.3rem !important;
   }
 }
