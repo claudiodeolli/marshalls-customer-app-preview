@@ -38,7 +38,7 @@ export default function SlotChoiceModal({ show, onClose, onAgendarAgora, onAgend
               cursor: 'pointer', padding: '10px', lineHeight: 1.5,
             }}
           >
-            Agendar depois, continuar para o pagamento
+            Agendar depois,<br />continuar para o pagamento
           </button>
         </div>
       </div>
