@@ -69,7 +69,7 @@ export default function PaymentPixStep({ avulsaSpecialty, onConfirmPayment, onBa
               </svg>
             </button>
           </div>
-          <p style={{ fontSize: 12, color: '#b9b9c3', marginBottom: 4 }}>
+          <p style={{ fontSize: 14, fontWeight: 700, color: '#28c76f', marginBottom: 4 }}>
             Valor: R$ {price.toFixed(2).replace('.', ',')}
           </p>
           {avulsaSpecialty?.name && (

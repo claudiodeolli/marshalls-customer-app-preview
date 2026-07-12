@@ -1,4 +1,4 @@
-export default function BookingSuccessScreen({ selectedSpecialty, selectedDate, selectedSlot, avulsaConfirmed, onViewAppointments, onBack }) {
+export default function BookingSuccessScreen({ selectedSpecialty, selectedDate, selectedSlot, onViewAppointments }) {
   return (
     <div className="card" style={{ maxWidth: '520px', margin: '2rem auto' }}>
       <div className="card-body" style={{ padding: '2.5rem', textAlign: 'center' }}>
@@ -15,35 +15,27 @@ export default function BookingSuccessScreen({ selectedSpecialty, selectedDate, 
         <h5 style={{ fontWeight: 700, color: '#5e5873', marginBottom: '0.5rem' }}>
           Agendado com sucesso!
         </h5>
-        <p className="text-muted">
+        <p className="text-muted" style={{ marginBottom: '1.5rem' }}>
           {selectedSpecialty?.name} — {selectedDate} às {selectedSlot?.from}
         </p>
-        {avulsaConfirmed && (
-          <div style={{
-            textAlign: 'left', background: '#f8f8f8', borderRadius: 10,
-            padding: '14px 18px', marginTop: 8, marginBottom: 16,
-          }}>
-            <p style={{ fontWeight: 700, fontSize: 14, color: '#5e5873', marginBottom: 8 }}>
-              Dicas para o dia da sua consulta
-            </p>
-            <ul style={{ margin: 0, paddingLeft: 18, fontSize: 13, color: '#6e6b7b', display: 'flex', flexDirection: 'column', gap: 6 }}>
-              <li>Chegue com 15 minutos de antecedência</li>
-              <li>Traga um documento de identificação com foto</li>
-              <li>Leve exames ou laudos médicos anteriores, se houver</li>
-              <li>Em caso de cancelamento, avise com pelo menos 24h de antecedência</li>
-            </ul>
-          </div>
-        )}
-        {avulsaConfirmed ? (
-          <button className="btn btn-primary" style={{ width: '100%', borderRadius: 24, fontWeight: 700 }}
-            onClick={onViewAppointments}>
-            Ver meus Agendamentos
-          </button>
-        ) : (
-          <button className="btn btn-primary mt-2" onClick={onBack}>
-            Voltar
-          </button>
-        )}
+        <div style={{
+          textAlign: 'left', background: '#f8f8f8', borderRadius: 10,
+          padding: '14px 18px', marginBottom: '1.5rem',
+        }}>
+          <p style={{ fontWeight: 700, fontSize: 14, color: '#5e5873', marginBottom: 10 }}>
+            Orientações para sua consulta online
+          </p>
+          <ul style={{ margin: 0, paddingLeft: 18, fontSize: 13, color: '#6e6b7b', display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <li>Acesse a sala da consulta com <strong>5 minutos de antecedência</strong>.</li>
+            <li>Verifique se sua conexão com a internet, câmera e microfone estão funcionando corretamente.</li>
+            <li>Escolha um ambiente silencioso, privado e bem iluminado.</li>
+            <li>Tenha em mãos um documento de identificação, seus exames ou laudos médicos, se houver, e a relação dos medicamentos em uso.</li>
+          </ul>
+        </div>
+        <button className="btn btn-primary" style={{ width: '100%', borderRadius: 24, fontWeight: 700 }}
+          onClick={onViewAppointments}>
+          Ver meus agendamentos
+        </button>
       </div>
     </div>
   );

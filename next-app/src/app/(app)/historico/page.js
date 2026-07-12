@@ -165,6 +165,8 @@ export default function HistoricoPage() {
     }
   }
 
+  const isFilterModified = dateInitial !== sevenAgo || dateFinal !== today || typeFilter !== 'all' || statusFilter !== '';
+
   return (
     <div style={{ paddingBottom: '1.5rem' }}>
       {/* Page header */}
@@ -218,7 +220,7 @@ export default function HistoricoPage() {
                 className="form-control"
                 value={dateInitial}
                 onChange={e => setDateInitial(e.target.value)}
-                style={{ borderRadius: '8px' }}
+                style={{ borderRadius: '8px', minWidth: '140px' }}
               />
             </div>
 
@@ -232,7 +234,7 @@ export default function HistoricoPage() {
                 className="form-control"
                 value={dateFinal}
                 onChange={e => setDateFinal(e.target.value)}
-                style={{ borderRadius: '8px' }}
+                style={{ borderRadius: '8px', minWidth: '140px' }}
               />
             </div>
 
@@ -254,15 +256,15 @@ export default function HistoricoPage() {
             </div>
 
             {/* Status */}
-            <div className="col-12 col-sm-6 col-md-3">
+            <div className="col-12 col-sm-6 col-md-4">
               <label className="form-label" style={{ fontSize: '13px', color: 'var(--primary,#0052ff)', marginBottom: '4px' }}>
                 Status
               </label>
               <StatusSelect value={statusFilter} onChange={setStatus} />
             </div>
 
-            {/* Filter button */}
-            <div className="col-12 col-sm-12 col-md-3">
+            {/* Filter + Limpar buttons */}
+            <div className="col-12 col-sm-12 col-md-2" style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
               <button
                 disabled={loading}
                 onClick={applyFilter}
@@ -294,6 +296,33 @@ export default function HistoricoPage() {
                   <><IconEvent /> Filtrar</>
                 )}
               </button>
+              {isFilterModified && (
+                <button
+                  onClick={() => {
+                    setDateInitial(sevenAgo);
+                    setDateFinal(today);
+                    setTypeFilter('all');
+                    setStatus('');
+                    const defaults = { dateInitial: sevenAgo, dateFinal: today, typeFilter: 'all', statusFilter: '' };
+                    saveFilter(defaults);
+                    (async () => {
+                      setLoading(true);
+                      try {
+                        const data = await fetchHistory(defaults);
+                        setAllRecords(data);
+                        setRecords(data);
+                      } catch { /* ignore */ } finally { setLoading(false); }
+                    })();
+                  }}
+                  style={{
+                    width: '100%', height: '32px', borderRadius: '8px',
+                    border: '1px solid #d8d6de', background: '#fff',
+                    cursor: 'pointer', fontSize: '13px', fontWeight: 500, color: '#6e6b7b',
+                  }}
+                >
+                  Limpar filtro
+                </button>
+              )}
             </div>
           </div></div>}
         </div>
@@ -313,9 +342,7 @@ export default function HistoricoPage() {
             <div className="spinner-border text-primary" />
           </div>
         ) : (() => {
-          const displayRecords = filterOpen
-            ? records
-            : (allRecords.length > 0 ? [getLastRecord(allRecords)] : []);
+          const displayRecords = records;
           if (displayRecords.length === 0) return <EmptyState />;
           return (
           <div className="row" style={{}}>

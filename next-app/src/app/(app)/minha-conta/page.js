@@ -147,7 +147,7 @@ export default function MinhaContaPage() {
         display: 'inline-block', border: '1px solid #d8d6de', borderRadius: '12px',
         padding: '8px 16px', marginBottom: '1.5rem', background: '#fff',
       }}>
-        <small style={{ display: 'block', fontSize: '11px', color: '#aaa', marginBottom: '2px' }}>Número do contrato</small>
+        <small style={{ display: 'block', fontSize: '11px', color: '#aaa', marginBottom: '2px' }}>Número da Assinatura</small>
         <span style={{ fontWeight: 700, color: '#5e5873', fontSize: '14px' }}>{SUBSCRIPTION.contract}</span>
       </div>
 

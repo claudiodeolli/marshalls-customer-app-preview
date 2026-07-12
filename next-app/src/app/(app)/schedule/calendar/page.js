@@ -493,6 +493,8 @@ function ScheduleContent() {
       <PaymentSuccessStep
         avulsaSpecialty={avulsaSpecialty}
         avulsaBooked={avulsaBooked}
+        selectedDate={selectedDate}
+        selectedSlot={selectedSlot}
         onViewAppointment={() => router.push('/agendamentos')}
         onAgendarAgora={handleAgendarAgora}
         onAgendarDepois={handleAgendarDepois}
@@ -687,6 +689,18 @@ function ScheduleContent() {
                 </h6>
               </div>
               <div className="card-body">
+                {!referralId && (
+                  <div style={{ marginBottom: 12 }}>
+                    <input
+                      type="text"
+                      className="form-control form-control-sm"
+                      placeholder="Filtrar horários..."
+                      value={slotSearch}
+                      onChange={e => setSlotSearch(e.target.value)}
+                      style={{ borderRadius: 8, maxWidth: 200 }}
+                    />
+                  </div>
+                )}
                 {loadingSlots ? (
                   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '2rem', gap: 12 }}>
                     <p className="text-muted mb-0" style={{ fontSize: 14 }}>
@@ -696,18 +710,6 @@ function ScheduleContent() {
                   </div>
                 ) : (
                   <>
-                    {/* Slot search */}
-                    <div style={{ marginBottom: 14 }}>
-                      <input
-                        type="text"
-                        className="form-control form-control-sm"
-                        placeholder="Filtrar horários"
-                        value={slotSearch}
-                        onChange={e => setSlotSearch(e.target.value)}
-                        style={{ maxWidth: 200 }}
-                      />
-                    </div>
-
                     {filteredSlots.length === 0 ? (
                       <p className="text-muted small mb-0">
                         Não há horários disponíveis para esta data.

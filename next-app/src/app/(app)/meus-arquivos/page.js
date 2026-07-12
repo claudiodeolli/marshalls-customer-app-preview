@@ -130,7 +130,6 @@ export default function MeusArquivosPage() {
     if (err) { setFileError(err); setChosenFile(null); return; }
     setFileError('');
     setChosenFile(file);
-    setDataEnvio(nowStr());
   }
 
   function handleDrop(e) {
@@ -180,8 +179,8 @@ export default function MeusArquivosPage() {
     const result = all.filter(f => {
       if (filterTitulo && !f.titulo.toLowerCase().includes(filterTitulo.toLowerCase())) return false;
       if (filterData) {
-        const [y, m, d] = filterData.split('-');
-        if (!f.dataEnvio.startsWith(`${d}/${m}/${y}`)) return false;
+        const [y, m] = filterData.split('-');
+        if (!f.dataEnvio.includes(`/${m}/${y}`)) return false;
       }
       return true;
     });
@@ -269,7 +268,7 @@ export default function MeusArquivosPage() {
                   }}
                 >?</button>
               </label>
-              <div style={{ width: isMobile ? '90%' : '35%' }}>
+              <div style={{ width: isMobile ? '90%' : '35%', display: 'flex', flexDirection: 'column', gap: 8 }}>
                 <div
                   onDragOver={e => { e.preventDefault(); setDragOver(true); }}
                   onDragLeave={() => setDragOver(false)}
@@ -296,12 +295,31 @@ export default function MeusArquivosPage() {
                       transform: dragOver ? 'scale(1.01)' : 'scale(1)',
                       boxShadow: '0 4px 18px rgba(40,199,111,0.35)',
                     }}>
-                      <span style={{ color: '#fff', fontWeight: 700, fontSize: 16, lineHeight: 1.5, display: 'block', whiteSpace: 'nowrap' }}>
-                        {isMobile ? 'Toque para enviar' : 'Arraste o arquivo aqui ou clique para enviar'}
-                      </span>
+                      {isMobile ? (
+                        <span style={{ color: '#fff', fontWeight: 700, fontSize: 16, lineHeight: 1.5, display: 'block', whiteSpace: 'nowrap' }}>
+                          Toque para enviar
+                        </span>
+                      ) : (
+                        <span style={{ color: '#fff', fontWeight: 700, fontSize: 15, lineHeight: 1.6, display: 'block' }}>
+                          Arraste seus arquivos aqui<br />ou clique para selecionar
+                        </span>
+                      )}
                     </div>
                   )}
                 </div>
+                {chosenFile && (
+                  <button
+                    type="button"
+                    onClick={() => { setChosenFile(null); setFileError(''); }}
+                    style={{
+                      background: 'none', border: '1.5px solid #ebe9f1', borderRadius: 24,
+                      fontWeight: 600, fontSize: 13, color: '#6e6b7b', cursor: 'pointer',
+                      padding: '8px 16px', lineHeight: 1.5,
+                    }}
+                  >
+                    Cancelar
+                  </button>
+                )}
               </div>
               <input ref={fileInputRef} type="file" accept={ACCEPT} style={{ display: 'none' }} onChange={e => pickFile(e.target.files?.[0])} />
               {fileError && <small style={{ color: '#ea5455', fontSize: 12, marginTop: 4, display: 'block' }}>{fileError}</small>}
@@ -314,7 +332,7 @@ export default function MeusArquivosPage() {
                 className="form-control"
                 value={dataEnvio}
                 readOnly
-                style={{ background: '#f3f2f7', cursor: 'not-allowed', color: '#6e6b7b', width: '35%' }}
+                style={{ background: '#f3f2f7', cursor: 'not-allowed', color: '#6e6b7b', width: isMobile ? '100%' : '28%' }}
               />
             </div>
 
@@ -464,7 +482,7 @@ export default function MeusArquivosPage() {
                 <div className="col-12 col-md-3">
                   <label className="form-label" style={{ fontSize: 12, fontWeight: 700, color: 'var(--primary,#0052ff)', marginBottom: 4 }}>DATA DE ENVIO</label>
                   <input
-                    type="date"
+                    type="month"
                     className="form-control"
                     value={filterData}
                     onChange={e => setFilterData(e.target.value)}

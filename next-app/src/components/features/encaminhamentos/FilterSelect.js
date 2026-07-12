@@ -4,11 +4,9 @@ import { useState, useEffect, useRef } from 'react';
 import FilterChip from './FilterChip';
 
 const FILTER_OPTIONS = [
-  { label: 'Todos',         value: '',           color: null },
-  { label: 'Pendente',      value: 'PENDING',    color: '#ff9800' },
-  { label: 'Agendada',      value: 'SCHEDULED',  color: '#4caf50' },
-  { label: 'Realizada',     value: 'FINISHED',   color: '#28c76f' },
-  { label: 'Não Realizada', value: 'UNFINISHED', color: '#ea5455' },
+  { label: 'Todos',    value: '',          color: null },
+  { label: 'Pendentes', value: 'PENDING',  color: '#ff9800' },
+  { label: 'Agendado', value: 'SCHEDULED', color: '#4caf50' },
 ];
 
 export default function FilterSelect({ value, onChange }) {

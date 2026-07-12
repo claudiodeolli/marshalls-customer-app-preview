@@ -342,14 +342,21 @@ html[dir] .content.app-content {
   transition: box-shadow 200ms ease;
 }
 
-.nav-item-user-btn--open,
-.nav-item-user-btn:hover {
+.nav-item-user-btn--open {
   background-color: rgba(0, 132, 255, 0.2) !important;
 }
 
-.nav-item-user-btn--open ._user-avatar,
-.nav-item-user-btn:hover ._user-avatar {
+.nav-item-user-btn--open ._user-avatar {
   box-shadow: 0 0 10px 1px rgba(0, 82, 255, 0.6) !important;
+}
+
+@media (hover: hover) {
+  .nav-item-user-btn:hover {
+    background-color: rgba(0, 132, 255, 0.2) !important;
+  }
+  .nav-item-user-btn:hover ._user-avatar {
+    box-shadow: 0 0 10px 1px rgba(0, 82, 255, 0.6) !important;
+  }
 }
 
 .nav-item-user-btn:focus,
