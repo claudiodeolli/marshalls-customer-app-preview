@@ -17,7 +17,13 @@ export default function AppGroupLayout({ children }) {
   }, [isLoading, isAuthenticated, router]);
 
   useEffect(() => {
+    history.scrollRestoration = 'manual';
+  }, []);
+
+  useEffect(() => {
     window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
   }, [pathname]);
 
   if (isLoading) {

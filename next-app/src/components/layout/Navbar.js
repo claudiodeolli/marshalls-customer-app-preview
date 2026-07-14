@@ -157,6 +157,7 @@ export default function Navbar({ onHamburgerClick }) {
               {dropdownOpen && (
                 <div
                   data-user-dd="1"
+                  className="_dropdown-enter"
                   style={{
                     display: 'block',
                     position: 'absolute',

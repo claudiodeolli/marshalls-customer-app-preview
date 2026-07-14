@@ -124,7 +124,7 @@ function AgendFilterSelect({ value, onChange, minWidth = '200px' }) {
         </svg>
       </button>
       {open && (
-        <div style={{
+        <div className="_dropdown-enter" style={{
           position: 'absolute', top: 'calc(100% + 4px)', left: 0, right: 0,
           background: '#fff', border: '1px solid #d8d6de', borderRadius: '12px',
           boxShadow: '0 4px 24px rgba(34,41,47,0.12)', zIndex: 9999, overflow: 'hidden',
@@ -573,6 +573,7 @@ export default function AgendamentosPage() {
           }}
         >
           <div
+            className="_modal-enter"
             onClick={e => e.stopPropagation()}
             style={{ background: '#fff', borderRadius: 12, width: '100%', maxWidth: 360, boxShadow: '0 12px 40px rgba(34,41,47,0.25)' }}
           >

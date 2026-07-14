@@ -10,6 +10,7 @@ export default function ReferralModal({ open, loadingReferrals, pendingReferrals
       onClick={onClose}
     >
       <div
+        className="_modal-enter"
         style={{
           background: '#fff', borderRadius: 8, width: '100%', maxWidth: 500,
           maxHeight: '80vh', display: 'flex', flexDirection: 'column',

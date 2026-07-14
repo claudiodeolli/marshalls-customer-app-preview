@@ -8,7 +8,7 @@ export default function CancelDialog({ open, appointment, loading, onClose, onCo
       background: 'rgba(0,0,0,0.5)',
       display: 'flex', alignItems: 'center', justifyContent: 'center',
     }}>
-      <div className="card mb-0" style={{ width: '400px', maxWidth: '90vw', borderRadius: '12px' }}>
+      <div className="card mb-0 _modal-enter" style={{ width: '400px', maxWidth: '90vw', borderRadius: '12px' }}>
         <div className="card-body" style={{ padding: '1.5rem' }}>
           <h5 style={{ fontWeight: 700, marginBottom: '0.75rem' }}>Atenção</h5>
           <p style={{ color: '#333', marginBottom: '1.5rem', fontSize: '14px' }}>

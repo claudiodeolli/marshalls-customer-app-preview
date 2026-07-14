@@ -369,6 +369,7 @@ export default function MeusArquivosPage() {
             }}
           >
             <div
+              className="_modal-enter"
               onClick={e => e.stopPropagation()}
               style={{ background: '#fff', borderRadius: 12, width: '100%', maxWidth: 380, boxShadow: '0 12px 40px rgba(34,41,47,0.25)' }}
             >

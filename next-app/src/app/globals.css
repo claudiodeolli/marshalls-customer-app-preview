@@ -455,6 +455,14 @@ html[dir] .content.app-content {
   box-shadow: none !important;
 }
 
+/* Padding horizontal 24px no navbar desktop (≥ 1200px) */
+@media (min-width: 1200px) {
+  [dir] .header-navbar .navbar-container {
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+  }
+}
+
 /* Hamburger roda 90° quando sidebar recolhida */
 .header-navbar .navbar-container .navbar-nav .nav-item:first-child .nav-link svg {
   transition: transform .35s cubic-bezier(.4, 0, .2, 1);
@@ -577,6 +585,18 @@ img._logo-collapsed {
 /* ── Transição de página: zoom-fade out-in (igual ao Vue Router original) ── */
 .content-body {
   animation: zoom-fade-in-opacity .28s ease-in-out, zoom-fade-in-scale .35s ease;
+}
+
+/* ── Modais e dropdowns: mesma animação de entrada ── */
+._modal-enter {
+  animation: zoom-fade-in-opacity .28s ease-in-out, zoom-fade-in-scale .35s ease;
+}
+._dropdown-enter {
+  animation: zoom-fade-in-opacity .20s ease-out, dropdown-slide-in .20s ease-out;
+}
+@keyframes dropdown-slide-in {
+  from { transform: translateY(-6px); }
+  to   { transform: translateY(0); }
 }
 
 body._page-leaving .content-body {

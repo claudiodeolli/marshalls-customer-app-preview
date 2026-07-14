@@ -24,6 +24,7 @@ export default function EvaluationModal({ record, onClose, onSave }) {
       onClick={onClose}
     >
       <div
+        className="_modal-enter"
         style={{ background: '#fff', borderRadius: '16px', padding: '28px', width: '100%', maxWidth: '420px', boxShadow: '0 8px 32px rgba(0,0,0,0.15)' }}
         onClick={e => e.stopPropagation()}
       >

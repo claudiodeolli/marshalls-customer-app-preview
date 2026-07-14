@@ -6,7 +6,7 @@ export default function Modal({ title, onClose, children, footer }) {
       display: 'flex', alignItems: 'center', justifyContent: 'center',
       padding: '16px',
     }}>
-      <div style={{
+      <div className="_modal-enter" style={{
         background: '#fff', borderRadius: '12px',
         width: '100%', maxWidth: 500,
         boxShadow: '0 12px 40px rgba(34,41,47,0.25)',

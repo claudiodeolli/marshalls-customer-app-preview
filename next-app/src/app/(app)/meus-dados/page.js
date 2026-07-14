@@ -294,7 +294,7 @@ export default function MeusDadosPage() {
           background: 'rgba(34,41,47,0.55)',
           display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px',
         }}>
-          <div style={{ background: '#fff', borderRadius: '12px', width: '100%', maxWidth: 400, boxShadow: '0 12px 40px rgba(34,41,47,0.25)' }}>
+          <div className="_modal-enter" style={{ background: '#fff', borderRadius: '12px', width: '100%', maxWidth: 400, boxShadow: '0 12px 40px rgba(34,41,47,0.25)' }}>
             <div style={{ padding: '18px 24px 16px', borderBottom: '1px solid #ebe9f1', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <h5 style={{ margin: 0, fontWeight: 600, color: '#5e5873', fontSize: '16px' }}>Remover foto de perfil</h5>
               <button onClick={() => setShowConfirmRemove(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#aaa', fontSize: '24px', lineHeight: 1, padding: '0 4px' }}>×</button>

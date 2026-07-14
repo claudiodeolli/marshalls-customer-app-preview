@@ -10,6 +10,7 @@ export default function SlotChoiceModal({ show, onClose, onAgendarAgora, onAgend
       }}
     >
       <div
+        className="_modal-enter"
         onClick={e => e.stopPropagation()}
         style={{
           background: '#fff', borderRadius: 12, width: '100%', maxWidth: 420,

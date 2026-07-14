@@ -80,6 +80,7 @@ export default function PaymentModal({ open, onClose, onSuccess, alertMessage, p
       onClick={onClose}
     >
       <div
+        className="_modal-enter"
         style={{ position: 'relative', background: '#fff', borderRadius: '16px', boxShadow: '0 8px 32px rgba(0,0,0,0.08)', width: '100%', maxWidth: '800px', minWidth: '330px', maxHeight: '90vh', overflowY: 'auto', overflowX: 'hidden', padding: '32px' }}
         onClick={e => e.stopPropagation()}
       >

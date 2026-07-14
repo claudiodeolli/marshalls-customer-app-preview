@@ -9,6 +9,7 @@ export default function PaymentConfirmModal({ avulsaSpecialty, paymentMethodLabe
       onClick={onClose}
     >
       <div
+        className="_modal-enter"
         style={{
           background: '#fff', borderRadius: 12, width: '100%', maxWidth: 400,
           boxShadow: '0 8px 32px rgba(0,0,0,0.18)', overflow: 'hidden',
