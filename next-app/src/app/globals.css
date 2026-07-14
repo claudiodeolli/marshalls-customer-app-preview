@@ -574,63 +574,36 @@ img._logo-collapsed {
   opacity: 1;
 }
 
-/* ── Transição de página (zoom-fade out-in — igual ao Vue Router original) ── */
-/* Original: transition: transform .35s, opacity .28s ease-in-out             */
-/* Enter: opacity 0→1 scale(.97→1) ; Leave: opacity 1→0 scale(1→1.03)        */
-@keyframes zoom-fade-in-opacity {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes zoom-fade-in-scale {
-  from {
-    transform: scale(.97);
-  }
-
-  to {
-    transform: scale(1);
-  }
-}
-
-@keyframes zoom-fade-out-opacity {
-  from {
-    opacity: 1;
-  }
-
-  to {
-    opacity: 0;
-  }
-}
-
-@keyframes zoom-fade-out-scale {
-  from {
-    transform: scale(1);
-  }
-
-  to {
-    transform: scale(1.03);
-  }
-}
-
+/* ── Transição de página: zoom-fade out-in (igual ao Vue Router original) ── */
 .content-body {
   animation: zoom-fade-in-opacity .28s ease-in-out, zoom-fade-in-scale .35s ease;
 }
 
-/* out-in: durante a saída da página anterior, a entrada fica em espera.
-   `backwards` mantém o elemento em opacity:0 durante o delay. */
 body._page-leaving .content-body {
   animation:
     zoom-fade-in-opacity .28s ease-in-out 350ms backwards,
     zoom-fade-in-scale .35s ease 350ms backwards;
 }
 
-/* .zoom-fade-leaving não é mais usado como classe React — a animação de
-   saída é aplicada inline no clone DOM pelo click handler do AppLayout */
+@keyframes zoom-fade-in-opacity {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes zoom-fade-in-scale {
+  from { transform: scale(.97); }
+  to   { transform: scale(1); }
+}
+
+@keyframes zoom-fade-out-opacity {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+@keyframes zoom-fade-out-scale {
+  from { transform: scale(1); }
+  to   { transform: scale(1.03); }
+}
 
 /* ── Navigation header (sidebar collapsed: esconde texto, mostra ícone) ── */
 .main-menu .navigation li.navigation-header {

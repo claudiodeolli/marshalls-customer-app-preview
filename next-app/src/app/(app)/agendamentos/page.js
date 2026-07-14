@@ -288,7 +288,21 @@ export default function AgendamentosPage() {
           <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 14 }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginRight: 5 }}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                <small className="text-muted" style={{ paddingLeft: '2px' }}>Fuso horário da nova consulta</small>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <small className="text-muted" style={{ paddingLeft: '2px' }}>Fuso horário da nova consulta</small>
+                  <button
+                    type="button"
+                    onClick={() => setTooltipOpen(true)}
+                    style={{
+                      width: 18, height: 18, borderRadius: '50%',
+                      background: '#e8e8e8', color: '#555',
+                      fontSize: 11, fontWeight: 700, cursor: 'pointer',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                      border: '1px solid #c0c0c0', padding: 0, lineHeight: 1,
+                      boxShadow: '0 2px 4px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.7)',
+                    }}
+                  >?</button>
+                </div>
                 <select
                   className="custom-select _agend-tz-select"
                   style={{ minWidth: '220px', fontSize: '13px' }}
@@ -323,7 +337,21 @@ export default function AgendamentosPage() {
       <div className="d-xl-none card mb-2">
         <div className="card-body" style={{ display: 'flex', flexDirection: 'column', gap: 12, padding: '16px 20px' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-            <small className="text-muted">Fuso horário da nova consulta</small>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <small className="text-muted">Fuso horário da nova consulta</small>
+              <button
+                type="button"
+                onClick={() => setTooltipOpen(true)}
+                style={{
+                  width: 18, height: 18, borderRadius: '50%',
+                  background: '#e8e8e8', color: '#555',
+                  fontSize: 11, fontWeight: 700, cursor: 'pointer',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                  border: '1px solid #c0c0c0', padding: 0, lineHeight: 1,
+                  boxShadow: '0 2px 4px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.7)',
+                }}
+              >?</button>
+            </div>
             <select
               className="custom-select"
               style={{ fontSize: '13px' }}
@@ -370,18 +398,6 @@ export default function AgendamentosPage() {
         <div className="d-xl-none">
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
             <small style={{ fontWeight: 700, color: '#5e5873', fontSize: '13px' }}>Filtrar consultas</small>
-            <button
-              type="button"
-              onClick={() => setTooltipOpen(true)}
-              style={{
-                width: 20, height: 20, borderRadius: '50%',
-                background: '#e8e8e8', color: '#555',
-                fontSize: 12, fontWeight: 700, cursor: 'pointer',
-                display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-                border: '1px solid #c0c0c0', padding: 0, lineHeight: 1,
-                boxShadow: '0 2px 4px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.7)',
-              }}
-            >?</button>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <AgendFilterSelect value={statusFilter} onChange={setStatusFilter} />

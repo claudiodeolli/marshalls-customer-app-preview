@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react'; // useRef para cloneTimerRef
+import { useState, useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import MainMenu from './MainMenu';
@@ -39,21 +39,13 @@ export default function AppLayout({ children }) {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  /* ── Transição zoom-fade via clone DOM (out-in, igual ao Vue Router) ──
-     Clona o .content-body no momento do clique — antes de qualquer
-     re-render — e anima o clone como saída. O App Router do Next.js
-     não permite guardar `children` em state para re-renderizar a página
-     anterior, então manipulação direta de DOM é a única abordagem
-     confiável.                                                          */
-  /* ── Transição zoom-fade via clone DOM (out-in, igual ao Vue Router) ── */
-  const cloneTimerRef  = useRef(null);
-  const bodyTimerRef   = useRef(null);
-  const pathnameRef    = useRef(pathname);
   const mobileOpenRef  = useRef(false);
+  const pathnameRef = useRef(pathname);
+  const cloneTimerRef = useRef(null);
+  const bodyTimerRef = useRef(null);
 
-  useEffect(() => { pathnameRef.current = pathname; }, [pathname]);
   useEffect(() => { mobileOpenRef.current = mobileOpen; }, [mobileOpen]);
-
+  useEffect(() => { pathnameRef.current = pathname; }, [pathname]);
 
   /* Adapta o sidebar dinamicamente ao redimensionar a janela */
   useEffect(() => {
@@ -71,16 +63,17 @@ export default function AppLayout({ children }) {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  const routeCfg = getRouteConfig(pathname);
+
+  /* Transição zoom-fade via clone DOM (out-in) */
   useEffect(() => {
     const handleNavClick = (e) => {
       if (e.ctrlKey || e.metaKey || e.shiftKey || e.altKey || e.button !== 0) return;
-      if (e.target.closest('.main-menu')) return;
       const anchor = e.target.closest('a[href]');
       if (!anchor) return;
       const href = anchor.getAttribute('href');
       if (!href || /^(https?:)?\/\/|^#|^mailto:|^tel:/.test(href)) return;
 
-      /* Não anima se já estamos na página clicada */
       const norm = s => s === '/' ? '/' : s.replace(/\/$/, '');
       if (norm(href) === norm(pathnameRef.current)) return;
 
@@ -91,31 +84,26 @@ export default function AppLayout({ children }) {
       const clone = cb.cloneNode(true);
 
       Object.assign(clone.style, {
-        position:      'fixed',
-        top:           rect.top  + 'px',
-        left:          rect.left + 'px',
-        width:         rect.width  + 'px',
-        height:        rect.height + 'px',
-        margin:        '0',
-        zIndex:        window.innerWidth < 1200 ? '1000' : '9999',
+        position: 'fixed',
+        top: rect.top + 'px',
+        left: rect.left + 'px',
+        width: rect.width + 'px',
+        height: rect.height + 'px',
+        margin: '0',
+        zIndex: window.innerWidth < 1200 ? '1000' : '9999',
         pointerEvents: 'none',
-        overflow:      'hidden',
-        /* leave: igual ao .zoom-fade-leave-to do original */
-        animation:     'zoom-fade-out-opacity .28s ease-in-out forwards, zoom-fade-out-scale .35s ease forwards',
+        overflow: 'hidden',
+        animation: 'zoom-fade-out-opacity .28s ease-in-out forwards, zoom-fade-out-scale .35s ease forwards',
       });
 
       document.body.appendChild(clone);
-
-      /* Marca o body para que o CSS atrase a animação de entrada (out-in) */
       document.body.classList.add('_page-leaving');
 
-      /* Remove clone após a animação de saída (350ms) */
       clearTimeout(cloneTimerRef.current);
       cloneTimerRef.current = setTimeout(() => {
         clone.parentNode?.removeChild(clone);
       }, 360);
 
-      /* Remove a classe após o ciclo completo: saída (350ms) + entrada (350ms) */
       clearTimeout(bodyTimerRef.current);
       bodyTimerRef.current = setTimeout(() => {
         document.body.classList.remove('_page-leaving');
@@ -130,8 +118,6 @@ export default function AppLayout({ children }) {
       document.body.classList.remove('_page-leaving');
     };
   }, []);
-
-  const routeCfg = getRouteConfig(pathname);
 
   /* Sincroniza classes no body (requeridas pelo CSS do Vuexy) */
   useEffect(() => {
