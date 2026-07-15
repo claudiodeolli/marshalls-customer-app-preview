@@ -291,7 +291,7 @@ html[dir] .content.app-content {
 }
 
 .plantao-pulse-dot-container {
-  padding-right: 40px;
+  padding-right: 0;
 }
 
 ._sb-plantao-icon-wrap {
@@ -672,10 +672,6 @@ body._page-leaving .content-body {
 /* Gradiente do botão "Iniciar atendimento": blend centralizado horizontalmente */
 [dir] .btn-primary._start-btn {
   background: linear-gradient(90deg, #003DFF 0%, #00E5FF 100%) !important;
-}
-
-._start-btn {
-  gap: 32px;
 }
 
 /* Border-radius uniforme em todos os cards */
@@ -1140,16 +1136,12 @@ input._search-input:not([type="checkbox"]):not([type="radio"]):not([type="submit
     min-width: unset !important;
     width: 100% !important;
     max-width: 340px !important;
-    padding: 16px 20px !important;
+    padding: 16px 12px 16px 20px !important;
     font-size: 17px !important;
   }
 
   .plantao-pulse-dot-container {
-    padding-right: 40px;
-  }
-
-  ._start-btn {
-    gap: 20px;
+    padding-right: 20px;
   }
 
   /* Confirmação de agendamento: padding menor */
