@@ -137,7 +137,7 @@ export default function PlantaoPage() {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                gap: '12px',
+                gap: '20px',
                 padding: '27px 24px 27px 32px',
                 fontSize: '18px',
                 borderRadius: '100px',
