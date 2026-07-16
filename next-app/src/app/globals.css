@@ -673,6 +673,10 @@ body._page-leaving .content-body {
   background: linear-gradient(90deg, #003DFF 0%, #00E5FF 100%) !important;
 }
 
+._start-btn {
+  width: fit-content !important;
+}
+
 /* Border-radius uniforme em todos os cards */
 [dir] .card {
   border-radius: 12px !important;
@@ -1133,8 +1137,8 @@ input._search-input:not([type="checkbox"]):not([type="radio"]):not([type="submit
     display: flex !important;
     justify-content: center !important;
     min-width: unset !important;
-    width: 100% !important;
-    max-width: 340px !important;
+    width: fit-content !important;
+    max-width: unset !important;
     padding: 16px 24px !important;
     font-size: 17px !important;
   }
