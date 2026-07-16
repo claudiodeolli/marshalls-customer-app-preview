@@ -37,7 +37,7 @@ export const routeConfig = {
   },
   '/meus-arquivos': {
     pageTitle: 'Enviar arquivos',
-    breadcrumb: [{ text: 'Enviar arquivos', active: true }],
+    breadcrumb: [{ text: 'Anexar documentos', active: true }],
   },
   '/encerrar-conta': {
     pageTitle: 'Encerrar Conta',

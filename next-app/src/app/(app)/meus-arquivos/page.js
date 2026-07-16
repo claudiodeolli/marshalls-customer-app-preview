@@ -332,7 +332,7 @@ export default function MeusArquivosPage() {
                 className="form-control"
                 value={dataEnvio}
                 readOnly
-                style={{ background: '#f3f2f7', cursor: 'not-allowed', color: '#6e6b7b', width: isMobile ? '100%' : '28%' }}
+                style={{ background: '#f3f2f7', cursor: 'not-allowed', color: '#6e6b7b', width: 110 }}
               />
             </div>
 
@@ -341,7 +341,7 @@ export default function MeusArquivosPage() {
                 onClick={closeForm}
                 style={{
                   background: 'none', border: '1.5px solid #ebe9f1', borderRadius: 24,
-                  fontWeight: 600, fontSize: 14, color: '#6e6b7b', cursor: 'pointer',
+                  fontWeight: 600, fontSize: 16, color: '#6e6b7b', cursor: 'pointer',
                   padding: '10px 20px', lineHeight: 1.5,
                 }}
               >
@@ -351,7 +351,7 @@ export default function MeusArquivosPage() {
                 onClick={handleSubmit}
                 disabled={submitting}
                 className="btn btn-primary"
-                style={{ borderRadius: 24, fontWeight: 700, padding: '11px 20px', lineHeight: 1.5, border: '1.5px solid transparent' }}
+                style={{ borderRadius: 24, fontWeight: 700, fontSize: 16, padding: '11px 20px', lineHeight: 1.5, border: '1.5px solid transparent' }}
               >
                 {submitting ? 'Enviando...' : 'Anexar Arquivo'}
               </button>
