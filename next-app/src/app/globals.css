@@ -1139,7 +1139,7 @@ input._search-input:not([type="checkbox"]):not([type="radio"]):not([type="submit
     min-width: unset !important;
     width: fit-content !important;
     max-width: unset !important;
-    padding: 16px 24px !important;
+    padding: 16px 28px !important;
     font-size: 17px !important;
   }
 
