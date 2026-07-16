@@ -51,8 +51,8 @@ export const routeConfig = {
     breadcrumb: [{ text: 'Benefícios exclusivos', active: true }],
   },
   '/minha-conta': {
-    pageTitle: 'Minha conta',
-    breadcrumb: [{ text: 'Tipo de Assinatura', active: true }],
+    pageTitle: 'Minha assinatura',
+    breadcrumb: [{ text: 'Tipo de plano', active: true }],
   },
   '/canais-de-contato': {
     pageTitle: 'Canais de contato',
