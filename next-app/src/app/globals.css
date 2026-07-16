@@ -1141,6 +1141,7 @@ input._search-input:not([type="checkbox"]):not([type="radio"]):not([type="submit
     max-width: unset !important;
     padding: 16px 28px !important;
     font-size: 17px !important;
+    gap: 18px !important;
   }
 
   .plantao-pulse-dot-container {
