@@ -61,7 +61,6 @@ function ScheduleContent() {
   // Phase 3: time slots
   const [slots, setSlots] = useState([]);
   const [loadingSlots, setLoadingSlots] = useState(false);
-  const [slotSearch, setSlotSearch] = useState('');
   const [selectedSlot, setSelectedSlot] = useState(null);
 
   // Phase 4: booking
@@ -151,7 +150,6 @@ function ScheduleContent() {
     setSelectedDate(null);
     setSlots([]);
     setSelectedSlot(null);
-    setSlotSearch('');
     fetchAvailability(spec);
   }
 
@@ -303,7 +301,6 @@ function ScheduleContent() {
     const dateStr = dateStrFromParts(viewYear, viewMonth, day);
     setSelectedDate(dateStr);
     setSelectedSlot(null);
-    setSlotSearch('');
     setLoadingSlots(true);
     setTimeout(() => {
       setSlots(availabilities.filter(a => a.date === dateStr));
@@ -394,9 +391,7 @@ function ScheduleContent() {
       : specialties;
   })();
 
-  const filteredSlots = slotSearch
-    ? slots.filter(s => s.from.includes(slotSearch))
-    : slots;
+  const filteredSlots = slots;
 
   const pendingReferrals = IS_MOCK && pendingSpecialty
     ? referrals.filter(r => r.status === 'PENDING' && r.specialty?.name === pendingSpecialty.name)
@@ -689,18 +684,6 @@ function ScheduleContent() {
                 </h6>
               </div>
               <div className="card-body">
-                {!referralId && (
-                  <div style={{ marginBottom: 12 }}>
-                    <input
-                      type="text"
-                      className="form-control form-control-sm"
-                      placeholder="Filtrar horários..."
-                      value={slotSearch}
-                      onChange={e => setSlotSearch(e.target.value)}
-                      style={{ borderRadius: 8, maxWidth: 200 }}
-                    />
-                  </div>
-                )}
                 {loadingSlots ? (
                   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '2rem', gap: 12 }}>
                     <p className="text-muted mb-0" style={{ fontSize: 14 }}>

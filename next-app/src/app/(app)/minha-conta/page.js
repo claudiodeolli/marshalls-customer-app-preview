@@ -36,7 +36,7 @@ const MOCK_PAYMENTS = [
     contrato:    '0001234',
     assinatura:  'MarshallsMed Individual',
     dataGeracao: '09/06/2026',
-    descricao:   'Mensalidade – Junho/2026',
+    descricao:   'Mensalidade julho/2026',
     valor:       'R$ 57,90',
     situacao:    'Pago',
     notaFiscal:  '#',
@@ -45,7 +45,7 @@ const MOCK_PAYMENTS = [
     contrato:    '0001234',
     assinatura:  'MarshallsMed Individual',
     dataGeracao: '09/05/2026',
-    descricao:   'Mensalidade – Maio/2026',
+    descricao:   'Mensalidade junho/2026',
     valor:       'R$ 57,90',
     situacao:    'Pago',
     notaFiscal:  '#',
@@ -137,15 +137,18 @@ export default function MinhaContaPage() {
           ATIVO
         </span>
       </div>
-      <p style={{ color: '#6e6b7b', fontSize: '14px', marginBottom: '4px' }}>
-        Titular Responsável: <strong>{SUBSCRIPTION.titular}</strong>
-        <span className="_dot-separator">&nbsp;·&nbsp;</span>
-        <br className="_br-mobile" />
+      <p style={{ color: '#6e6b7b', fontSize: '14px', margin: '0 0 16px' }}>
+        Plano de assinatura: <strong style={{ color: '#5e5873' }}>{planType === 'individual' ? 'Individual' : 'Familiar'}</strong>
+      </p>
+      <p style={{ color: '#6e6b7b', fontSize: '14px', margin: '0 0 4px' }}>
+        Titular Responsável: <strong style={{ color: '#5e5873' }}>{SUBSCRIPTION.titular}</strong>
+      </p>
+      <p style={{ color: '#6e6b7b', fontSize: '14px', marginBottom: '1.5rem' }}>
         CPF: {SUBSCRIPTION.cpf}
       </p>
       <div style={{
         display: 'inline-block', border: '1px solid #d8d6de', borderRadius: '12px',
-        padding: '8px 16px', marginBottom: '1.5rem', background: '#fff',
+        padding: '8px 16px', marginTop: '8px', marginBottom: '1.5rem', background: '#fff',
       }}>
         <small style={{ display: 'block', fontSize: '11px', color: '#aaa', marginBottom: '2px' }}>Número da Assinatura</small>
         <span style={{ fontWeight: 700, color: '#5e5873', fontSize: '14px' }}>{SUBSCRIPTION.contract}</span>
@@ -228,13 +231,16 @@ export default function MinhaContaPage() {
       {activeTab === 'historico' && (
         <div className="card">
           <div className="table-responsive">
-            <table className="table mb-0">
+            <table className="table mb-0" style={{ tableLayout: 'fixed', width: '100%' }}>
+              <colgroup>
+                {Array(7).fill(null).map((_, i) => <col key={i} style={{ width: `${100/7}%` }} />)}
+              </colgroup>
               <thead style={{ background: '#f8f8f8' }}>
                 <tr>
-                  {['Contrato', 'Assinatura', 'Data de Geração', 'Descrição', 'Valor', 'Situação', 'Nota Fiscal'].map(h => (
+                  {['Assinatura', 'Plano', 'Data de Geração', 'Descrição', 'Valor', 'Situação', 'Nota Fiscal'].map(h => (
                     <th key={h} style={{
                       fontSize: '11px', letterSpacing: '.5px', color: '#6e6b7b',
-                      whiteSpace: 'nowrap', padding: '12px 16px', textTransform: 'uppercase',
+                      padding: '12px 16px', textTransform: 'uppercase',
                     }}>{h}</th>
                   ))}
                 </tr>
@@ -244,9 +250,9 @@ export default function MinhaContaPage() {
                   <tr key={i}>
                     <td style={{ fontSize: '13px', color: '#5e5873', verticalAlign: 'middle' }}>{p.contrato}</td>
                     <td style={{ fontSize: '13px', color: '#6e6b7b', verticalAlign: 'middle' }}>{p.assinatura}</td>
-                    <td style={{ fontSize: '13px', color: '#6e6b7b', verticalAlign: 'middle', whiteSpace: 'nowrap' }}>{p.dataGeracao}</td>
+                    <td style={{ fontSize: '13px', color: '#6e6b7b', verticalAlign: 'middle' }}>{p.dataGeracao}</td>
                     <td style={{ fontSize: '13px', color: '#6e6b7b', verticalAlign: 'middle' }}>{p.descricao}</td>
-                    <td style={{ fontSize: '13px', fontWeight: 600, color: '#5e5873', verticalAlign: 'middle', whiteSpace: 'nowrap' }}>{p.valor}</td>
+                    <td style={{ fontSize: '13px', fontWeight: 600, color: '#5e5873', verticalAlign: 'middle' }}>{p.valor}</td>
                     <td style={{ verticalAlign: 'middle' }}><SituacaoBadge s={p.situacao} /></td>
                     <td style={{ verticalAlign: 'middle' }}>
                       {p.notaFiscal

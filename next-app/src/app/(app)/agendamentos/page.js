@@ -578,7 +578,7 @@ export default function AgendamentosPage() {
             style={{ background: '#fff', borderRadius: 12, width: '100%', maxWidth: 360, boxShadow: '0 12px 40px rgba(34,41,47,0.25)' }}
           >
             <div style={{ padding: '18px 24px 16px', borderBottom: '1px solid #ebe9f1', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <h5 style={{ margin: 0, fontWeight: 600, color: '#5e5873', fontSize: 16 }}>Filtrar consultas</h5>
+              <h5 style={{ margin: 0, fontWeight: 600, color: '#5e5873', fontSize: 16 }}>Fuso horário da nova consulta</h5>
               <button onClick={() => setTooltipOpen(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#aaa', fontSize: 24, lineHeight: 1, padding: '0 4px' }}>×</button>
             </div>
             <div style={{ padding: '20px 24px' }}>
