@@ -238,7 +238,7 @@ const [showAlterarCartao, setShowAlterarCartao] = useState(false);
               ))}
               {MOCK_PAYMENTS.map((p, i) => {
                 const rowBorder = i < MOCK_PAYMENTS.length - 1 ? '1px solid #ebe9f1' : 'none';
-                const dc = (extra = {}) => ({ fontSize: '13px', color: '#6e6b7b', padding: '12px 0', whiteSpace: 'nowrap', borderBottom: rowBorder, ...extra });
+                const dc = (extra = {}) => ({ fontSize: '13px', color: '#6e6b7b', padding: '12px 0', whiteSpace: 'nowrap', textAlign: 'center', borderBottom: rowBorder, ...extra });
                 return (
                   <Fragment key={i}>
                     <div style={dc({ color: '#5e5873', fontWeight: 500 })}>{p.contrato}</div>
@@ -246,7 +246,7 @@ const [showAlterarCartao, setShowAlterarCartao] = useState(false);
                     <div style={dc()}>{p.dataGeracao}</div>
                     <div style={dc()}>{p.descricao}</div>
                     <div style={dc({ color: '#5e5873', fontWeight: 600 })}>{p.valor}</div>
-                    <div style={{ padding: '12px 0', borderBottom: rowBorder }}><SituacaoBadge s={p.situacao} /></div>
+                    <div style={{ padding: '12px 0', textAlign: 'center', borderBottom: rowBorder }}><SituacaoBadge s={p.situacao} /></div>
                     <div style={dc()}>
                       {p.notaFiscal
                         ? <a href={p.notaFiscal} target="_blank" rel="noopener noreferrer" style={{ fontSize: '12px', color: '#7367f0', fontWeight: 600 }}>Visualizar</a>
