@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef, Fragment } from 'react';
+import { useState, Fragment } from 'react';
 import Modal from '@/components/ui/Modal';
 import { MastercardIcon, AlertTriangle } from '@/components/features/minha-conta/icons';
 import SituacaoBadge from '@/components/features/minha-conta/SituacaoBadge';
@@ -61,25 +61,7 @@ export default function MinhaContaPage() {
   const [planType, setPlanType] = useState('individual');
   const [activeTab, setActiveTab] = useState('historico');
 
-  const containerRef = useRef(null);
-  const headerRefs = useRef([]);
-  const [colWidths, setColWidths] = useState(null);
-
-  useEffect(() => {
-    const els = headerRefs.current.filter(Boolean);
-    if (els.length !== HEADERS.length) return;
-
-    const textWidths = els.map(el => el.getBoundingClientRect().width);
-    const containerWidth = containerRef.current?.getBoundingClientRect().width ?? 0;
-    const totalGap = (HEADERS.length - 1) * 24;
-    const sidePadding = 32;
-    const totalText = textWidths.reduce((sum, w) => sum + w, 0);
-    const extraPerCol = Math.max(0, (containerWidth - sidePadding - totalGap - totalText) / HEADERS.length);
-
-    setColWidths(textWidths.map(w => w + extraPerCol));
-  }, []);
-
-  const [showAlterarCartao, setShowAlterarCartao] = useState(false);
+const [showAlterarCartao, setShowAlterarCartao] = useState(false);
   const [cartao, setCartao] = useState({ titular: '', numero: '', vencimento: '', cvv: '', parcelas: '' });
 
   const [showCancelar, setShowCancelar] = useState(false);
@@ -143,41 +125,27 @@ export default function MinhaContaPage() {
 
   const targetPlan = PLAN_INFO[planoDir === 'toFamiliar' ? 'familiar' : 'individual'];
 
-  const gridCols = colWidths ? colWidths.map(w => `${w}px`).join(' ') : 'repeat(7, max-content)';
-
   return (
     <div>
-      <div aria-hidden="true" style={{ position: 'relative', height: 0, overflow: 'hidden' }}>
-        <div style={{ display: 'flex', visibility: 'hidden', whiteSpace: 'nowrap' }}>
-          {HEADERS.map((h, i) => (
-            <span
-              key={h}
-              ref={el => { headerRefs.current[i] = el; }}
-              style={{ fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '.5px' }}
-            >{h}</span>
-          ))}
-        </div>
-      </div>
-      <div style={{ marginBottom: '1.5rem' }}>
+<div style={{ marginBottom: '1.5rem' }}>
         <p className="text-muted mb-0" style={{ fontSize: '14px' }}>
           Consulte as informações do seu plano<br className="_br-mobile" /> e gerencie sua assinatura.
         </p>
       </div>
       {/* ── Cabeçalho da assinatura ── */}
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px' }}>
-        <h4 style={{ margin: 0, fontWeight: 600, fontSize: '1.1rem', color: '#5e5873' }}>{plan.label}</h4>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'center', marginBottom: '6px' }}>
+        <h4 style={{ margin: 0, fontWeight: 600, fontSize: '1.1rem', color: '#5e5873' }}>
+          Plano de assinatura: {planType === 'individual' ? 'Individual' : 'Familiar'}
+        </h4>
         <span style={{ background: '#28c76f', color: '#fff', fontSize: '11px', fontWeight: 700, padding: '3px 10px', borderRadius: '4px', letterSpacing: '0.5px' }}>
           ATIVO
         </span>
       </div>
-      <p style={{ color: '#6e6b7b', fontSize: '14px', margin: '0 0 16px' }}>
-        Plano de assinatura: <strong style={{ color: '#5e5873' }}>{planType === 'individual' ? 'Individual' : 'Familiar'}</strong>
-      </p>
       <p style={{ color: '#6e6b7b', fontSize: '14px', margin: '0 0 4px' }}>
-        Titular Responsável: <strong style={{ color: '#5e5873' }}>{SUBSCRIPTION.titular}</strong>
+        Titular responsável: <strong style={{ color: '#5e5873' }}>{SUBSCRIPTION.titular}</strong>
       </p>
       <p style={{ color: '#6e6b7b', fontSize: '14px', marginBottom: '1.5rem' }}>
-        CPF: {SUBSCRIPTION.cpf}
+        CPF: <strong style={{ color: '#5e5873' }}>{SUBSCRIPTION.cpf}</strong>
       </p>
       <div style={{
         display: 'inline-block', border: '1px solid #d8d6de', borderRadius: '12px',
@@ -263,25 +231,25 @@ export default function MinhaContaPage() {
       {/* ══ Aba: Histórico de pagamentos ══ */}
       {activeTab === 'historico' && (
         <div className="card">
-          <div className="table-responsive" ref={containerRef}>
-            <div style={{ display: 'grid', gridTemplateColumns: gridCols, columnGap: '24px', padding: '0 16px', width: '100%' }}>
+          <div className="table-responsive">
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, minmax(max-content, 1fr))', columnGap: '24px', padding: '0 16px', minWidth: 'max-content', width: '100%' }}>
               {HEADERS.map(h => (
-                <div key={h} style={{ fontSize: '11px', letterSpacing: '.5px', color: '#6e6b7b', padding: '12px 0', textTransform: 'uppercase', fontWeight: 700, whiteSpace: 'nowrap', borderBottom: '2px solid #ebe9f1' }}>{h}</div>
+                <div key={h} style={{ fontSize: '11px', letterSpacing: '.5px', color: '#6e6b7b', padding: '12px 0', textTransform: 'uppercase', fontWeight: 700, whiteSpace: 'nowrap', textAlign: 'center', borderBottom: '2px solid #ebe9f1' }}>{h}</div>
               ))}
               {MOCK_PAYMENTS.map((p, i) => {
                 const rowBorder = i < MOCK_PAYMENTS.length - 1 ? '1px solid #ebe9f1' : 'none';
-                const dc = (extra = {}) => ({ fontSize: '13px', color: '#6e6b7b', padding: '12px 0', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', borderBottom: rowBorder, ...extra });
+                const dc = (extra = {}) => ({ fontSize: '13px', color: '#6e6b7b', padding: '12px 0', whiteSpace: 'nowrap', borderBottom: rowBorder, ...extra });
                 return (
                   <Fragment key={i}>
-                    <div style={dc({ color: '#5e5873', fontWeight: 500 })} title={p.contrato}>{p.contrato}</div>
-                    <div style={dc()} title={p.assinatura}>{p.assinatura}</div>
-                    <div style={dc()} title={p.dataGeracao}>{p.dataGeracao}</div>
-                    <div style={dc()} title={p.descricao}>{p.descricao}</div>
-                    <div style={dc({ color: '#5e5873', fontWeight: 600 })} title={p.valor}>{p.valor}</div>
-                    <div style={{ padding: '12px 0', overflow: 'hidden', borderBottom: rowBorder }}><SituacaoBadge s={p.situacao} /></div>
+                    <div style={dc({ color: '#5e5873', fontWeight: 500 })}>{p.contrato}</div>
+                    <div style={dc()}>{p.assinatura}</div>
+                    <div style={dc()}>{p.dataGeracao}</div>
+                    <div style={dc()}>{p.descricao}</div>
+                    <div style={dc({ color: '#5e5873', fontWeight: 600 })}>{p.valor}</div>
+                    <div style={{ padding: '12px 0', borderBottom: rowBorder }}><SituacaoBadge s={p.situacao} /></div>
                     <div style={dc()}>
                       {p.notaFiscal
-                        ? <a href={p.notaFiscal} target="_blank" rel="noopener noreferrer" style={{ fontSize: '12px', color: '#7367f0' }}>Visualizar</a>
+                        ? <a href={p.notaFiscal} target="_blank" rel="noopener noreferrer" style={{ fontSize: '12px', color: '#7367f0', fontWeight: 600 }}>Visualizar</a>
                         : <span style={{ color: '#aaa', fontSize: '12px' }}>—</span>}
                     </div>
                   </Fragment>
