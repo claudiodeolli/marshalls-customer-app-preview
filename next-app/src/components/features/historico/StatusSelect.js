@@ -4,14 +4,14 @@ import { useState, useEffect, useRef } from 'react';
 import StatusChip from './StatusChip';
 
 const STATUS_OPTIONS = [
-  { value: '',          label: 'Todos os status', color: null },
-  { value: 'FINISHED',  label: 'Finalizado',      color: '#28c76f' },
-  { value: 'UNFINISHED',label: 'Em Andamento',    color: '#ff9f43' },
-  { value: 'SCHEDULED', label: 'Agendado',        color: '#00cfe8' },
-  { value: 'CANCELLED', label: 'Cancelado',       color: '#ea5455' },
+  { value: '',          label: 'Todos os status',       color: '#82868b' },
+  { value: 'FINISHED',  label: 'Consultas finalizadas', color: '#28c76f' },
+  { value: 'UNFINISHED',label: 'Consultas pendentes',   color: '#ff9f43' },
+  { value: 'SCHEDULED', label: 'Consultas agendadas',   color: '#00cfe8' },
+  { value: 'CANCELLED', label: 'Consultas canceladas',  color: '#ea5455' },
 ];
 
-export default function StatusSelect({ value, onChange }) {
+export default function StatusSelect({ value, onChange, disabled = false }) {
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
   const selected = STATUS_OPTIONS.find(o => o.value === value) ?? STATUS_OPTIONS[0];
@@ -28,20 +28,19 @@ export default function StatusSelect({ value, onChange }) {
     <div ref={ref} style={{ position: 'relative' }}>
       <button
         type="button"
-        onClick={() => setOpen(o => !o)}
+        onClick={() => { if (!disabled) setOpen(o => !o); }}
         style={{
           width: '100%', height: '38px',
           border: '1px solid #d8d6de', borderRadius: '12px',
-          background: '#fff', cursor: 'pointer',
+          background: disabled ? '#f8f8f8' : '#fff',
+          cursor: disabled ? 'not-allowed' : 'pointer',
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           padding: '0 12px', fontSize: '14px', color: '#6e6b7b',
+          opacity: disabled ? 0.7 : 1,
         }}
       >
         <span style={{ overflow: 'hidden', minWidth: 0 }}>
-          {selected.color
-            ? <StatusChip label={selected.label} color={selected.color} />
-            : <span style={{ fontSize: '14px', whiteSpace: 'nowrap' }}>{selected.label}</span>
-          }
+          <StatusChip label={selected.label} color={selected.color} />
         </span>
         <svg width="10" height="6" viewBox="0 0 10 6" fill="none" style={{ flexShrink: 0, marginLeft: 6 }}>
           <path d="M1 1l4 4 4-4" stroke="#6e6b7b" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>

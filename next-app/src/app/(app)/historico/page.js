@@ -126,15 +126,15 @@ export default function HistoricoPage() {
   }
 
   useEffect(() => {
-    const saved = loadFilter({ dateInitial: sevenAgo, dateFinal: today, typeFilter: 'all', statusFilter: '' });
-    setDateInitial(saved.dateInitial);
-    setDateFinal(saved.dateFinal);
-    setTypeFilter(saved.typeFilter);
-    setStatus(saved.statusFilter);
+    const defaults = { dateInitial: sevenAgo, dateFinal: today, typeFilter: 'all', statusFilter: '' };
+    setDateInitial(defaults.dateInitial);
+    setDateFinal(defaults.dateFinal);
+    setTypeFilter(defaults.typeFilter);
+    setStatus(defaults.statusFilter);
 
     (async () => {
       try {
-        const data = await fetchHistory(saved);
+        const data = await fetchHistory(defaults);
         setAllRecords(data);
         setRecords(data);
       } catch (err) {
@@ -144,6 +144,10 @@ export default function HistoricoPage() {
         setPageLoading(false);
       }
     })();
+
+    return () => {
+      try { localStorage.removeItem('historico_filter'); } catch {}
+    };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -241,13 +245,17 @@ export default function HistoricoPage() {
             {/* Type */}
             <div className="col-12 col-sm-6 col-md-2">
               <label className="form-label" style={{ fontSize: '13px', color: 'var(--primary,#0052ff)', marginBottom: '4px' }}>
-                Tipo
+                Tipo de consulta
               </label>
               <select
                 className="custom-select"
                 style={{ borderRadius: '8px' }}
                 value={typeFilter}
-                onChange={e => setTypeFilter(e.target.value)}
+                onChange={e => {
+                  const val = e.target.value;
+                  setTypeFilter(val);
+                  if (val === 'emergency') setStatus('FINISHED');
+                }}
               >
                 <option value="all">Todos</option>
                 <option value="scheduled">Agendamento com especialista</option>
@@ -260,7 +268,7 @@ export default function HistoricoPage() {
               <label className="form-label" style={{ fontSize: '13px', color: 'var(--primary,#0052ff)', marginBottom: '4px' }}>
                 Status
               </label>
-              <StatusSelect value={statusFilter} onChange={setStatus} />
+              <StatusSelect value={statusFilter} onChange={setStatus} disabled={typeFilter === 'emergency'} />
             </div>
 
             {/* Filter + Limpar buttons */}
@@ -342,7 +350,14 @@ export default function HistoricoPage() {
             <div className="spinner-border text-primary" />
           </div>
         ) : (() => {
-          const displayRecords = records;
+          const displayRecords = [...records].sort((a, b) => {
+            const da = parseRecordDate(a.appointmentBegin);
+            const db = parseRecordDate(b.appointmentBegin);
+            if (!da && !db) return 0;
+            if (!da) return 1;
+            if (!db) return -1;
+            return da - db;
+          });
           if (displayRecords.length === 0) return <EmptyState />;
           return (
           <div className="row" style={{}}>
@@ -358,8 +373,14 @@ export default function HistoricoPage() {
                           <strong>Tipo: </strong>
                           {typeLabel(r.type)}
                         </div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                          <StatusBadge status={r.status} />
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
+                          <div><StatusBadge status={r.status} /></div>
+                          {(r.status === 'CANCELLED' || r.status === 'CANCELED') && (
+                            <small style={{ fontSize: '11px', color: '#6e6b7b' }}>usuário cancelou a consulta</small>
+                          )}
+                          {r.status === 'UNFINISHED' && (
+                            <small style={{ fontSize: '11px', color: '#6e6b7b' }}>usuário não compareceu a consulta</small>
+                          )}
                         </div>
                       </div>
                       <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', textAlign: 'right', gap: '2px' }}>

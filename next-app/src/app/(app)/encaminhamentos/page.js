@@ -13,8 +13,8 @@ import SkeletonCard from '@/components/features/encaminhamentos/SkeletonCard';
 const IS_MOCK = process.env.NEXT_PUBLIC_MOCK_MODE === '1';
 
 const STATUS_CONFIG = {
-  PENDING:   { label: 'Pendente', badge: 'badge-light-warning',   gradient: 'linear-gradient(90deg, #ff9800, #ffb74d)' },
-  SCHEDULED: { label: 'Agendado', badge: 'badge-light-success',   gradient: 'linear-gradient(90deg, #4caf50, #81c784)' },
+  PENDING:   { label: 'Pendente', badge: 'badge-light-warning', gradient: 'linear-gradient(90deg, #ff9f43, #ffcd94)' },
+  SCHEDULED: { label: 'Agendado', badge: 'badge-light-primary', gradient: 'linear-gradient(90deg, #00cfe8, #84e0f0)' },
   default:   { label: 'Pendente', badge: 'badge-light-secondary', gradient: 'linear-gradient(90deg, #757575, #bdbdbd)' },
 };
 
@@ -71,7 +71,22 @@ export default function EncaminhamentosPage() {
     })();
   }, [user]);
 
-  const visible = filter ? referrals.filter(r => r.status === filter) : referrals;
+  function parseCreatedAt(str) {
+    if (!str) return new Date(0);
+    const iso = new Date(str);
+    if (!isNaN(iso.getTime())) return iso;
+    const parts = str.split(' ');
+    if (parts.length === 2) {
+      const [d, m, y] = parts[0].split('/').map(Number);
+      const [h, min, sec] = parts[1].split(':').map(Number);
+      return new Date(y, m - 1, d, h, min, sec || 0);
+    }
+    return new Date(0);
+  }
+
+  const visible = (filter ? referrals.filter(r => r.status === filter) : referrals)
+    .slice()
+    .sort((a, b) => parseCreatedAt(a.createdAt) - parseCreatedAt(b.createdAt));
 
   return (
     <div>
@@ -100,8 +115,9 @@ export default function EncaminhamentosPage() {
         <div className="row">
           {visible.map(ref => {
             const cfg = getStatusConfig(ref.status);
-            const canOpen = !!(ref.urlPath && ref.urlPath.trim());
-            const canSchedule = ref.status === 'PENDING';
+            const isScheduled = ref.status === 'SCHEDULED';
+            const isPending = ref.status === 'PENDING';
+            const canOpen = !isScheduled && !!(ref.urlPath && ref.urlPath.trim());
 
             return (
               <div key={ref.uuid} className="col-12 col-sm-6 col-xl-4 mb-2">
@@ -161,7 +177,7 @@ export default function EncaminhamentosPage() {
                     </span>
                   </div>
 
-                  {(canOpen || canSchedule) && (
+                  {(canOpen || isPending || isScheduled) && (
                     <div
                       className="d-flex justify-content-end"
                       style={{ gap: '8px', borderTop: '1px solid #f0f0f0', padding: '12px 16px' }}
@@ -175,7 +191,16 @@ export default function EncaminhamentosPage() {
                           <IconExternalLink /> Abrir
                         </button>
                       )}
-                      {canSchedule && (
+                      {isScheduled && (
+                        <button
+                          className="btn btn-outline-primary btn-sm"
+                          onClick={() => router.push('/agendamentos')}
+                          style={{ display: 'flex', alignItems: 'center', gap: '5px' }}
+                        >
+                          <IconSchedule /> Ver agendamento
+                        </button>
+                      )}
+                      {isPending && (
                         <button
                           className="btn btn-primary btn-sm"
                           onClick={() => router.push(`/schedule/calendar?referral=${ref.uuid}`)}

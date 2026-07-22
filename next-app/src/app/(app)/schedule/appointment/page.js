@@ -46,7 +46,7 @@ export default function ScheduleAppointmentPage() {
       <div style={{ marginBottom: '1.5rem' }}>
         <h4 style={{ fontWeight: 600, marginBottom: '4px' }}>Atendimento Médico</h4>
         <p className="text-muted mb-0" style={{ fontSize: '14px' }}>
-          Inicie seu atendimento médico online de forma segura.
+          Inicie seu atendimento médico online de forma segura
         </p>
       </div>
 

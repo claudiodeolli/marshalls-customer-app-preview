@@ -9,7 +9,7 @@ export default function StatusChip({ label, color }) {
       fontSize: '12px',
       fontWeight: 600,
       lineHeight: 1.4,
-      background: 'transparent',
+      background: `${color}1f`,
       whiteSpace: 'nowrap',
     }}>
       {label}

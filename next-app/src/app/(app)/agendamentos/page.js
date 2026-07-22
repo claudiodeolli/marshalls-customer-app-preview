@@ -22,11 +22,11 @@ const STATUS_BADGE = {
 };
 
 const AGEND_STATUS_OPTIONS = [
-  { label: 'Todos',         value: '',           color: null },
-  { label: 'Pendente',      value: 'PENDING',    color: '#ff9800' },
-  { label: 'Agendada',      value: 'SCHEDULED',  color: '#00cfe8' },
-  { label: 'Cancelada',     value: 'CANCELED',   color: '#ea5455' },
-  { label: 'Não Realizada', value: 'UNFINISHED', color: '#6e6b7b' },
+  { label: 'Todos',          value: '',           color: '#82868b' },
+  { label: 'Agendadas',      value: 'SCHEDULED',  color: '#00cfe8' },
+  { label: 'Pendentes',      value: 'PENDING',    color: '#ff9f43' },
+  { label: 'Canceladas',     value: 'CANCELED',   color: '#ea5455' },
+  { label: 'Não realizadas', value: 'UNFINISHED', color: '#82868b' },
 ];
 
 const TIMEZONE_OPTIONS = [
@@ -39,7 +39,19 @@ const TIMEZONE_OPTIONS = [
 ];
 
 function translateStatus(s) {
-  return { SCHEDULED: 'Agendado', CANCELED: 'Cancelado', FINISHED: 'Finalizado', UNFINISHED: 'Não realizado' }[s] || s;
+  return {
+    SCHEDULED:  'Consulta agendada',
+    CANCELED:   'Consulta cancelada',
+    FINISHED:   'Consulta finalizada',
+    UNFINISHED: 'Consulta não realizada',
+    PENDING:    'Consulta pendente',
+  }[s] || s;
+}
+
+function getAppointmentOrigin(apt) {
+  if (apt.type === 'emergency') return 'Pronto atendimento';
+  if (apt.beneficiaryMedicalReferral) return 'Encaminhamento';
+  return 'Consulta avulsa';
 }
 
 function getBrowserTz() {
@@ -500,6 +512,10 @@ export default function AgendamentosPage() {
                           </span>
                         </div>
 
+                        <div className="mb-50" style={{ fontSize: '13px', color: '#6e6b7b' }}>
+                          <strong>Tipo: </strong>{getAppointmentOrigin(apt)}
+                        </div>
+
                         <div className="d-flex align-items-start mb-50" style={{ color: '#6e6b7b' }}>
                           <span style={{ marginRight: '8px', flexShrink: 0, marginTop: '2px' }}><IconClock /></span>
                           <div>
@@ -528,6 +544,12 @@ export default function AgendamentosPage() {
                         <span className={`badge ${badge}`} style={{ fontWeight: 700, fontSize: '11px' }}>
                           {translateStatus(apt.status)}
                         </span>
+                        {apt.status === 'CANCELED' && (
+                          <div style={{ fontSize: '11px', color: '#6e6b7b', marginTop: '3px' }}>usuário cancelou a consulta</div>
+                        )}
+                        {apt.status === 'UNFINISHED' && (
+                          <div style={{ fontSize: '11px', color: '#6e6b7b', marginTop: '3px' }}>usuário não compareceu a consulta</div>
+                        )}
                       </div>
 
                       {apt.status === 'SCHEDULED' && (
