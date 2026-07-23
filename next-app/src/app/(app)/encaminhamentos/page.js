@@ -13,9 +13,9 @@ import SkeletonCard from '@/components/features/encaminhamentos/SkeletonCard';
 const IS_MOCK = process.env.NEXT_PUBLIC_MOCK_MODE === '1';
 
 const STATUS_CONFIG = {
-  PENDING:   { label: 'Pendente', badge: 'badge-light-warning', gradient: 'linear-gradient(90deg, #ff9f43, #ffcd94)' },
-  SCHEDULED: { label: 'Agendado', badge: 'badge-light-primary', gradient: 'linear-gradient(90deg, #00cfe8, #84e0f0)' },
-  default:   { label: 'Pendente', badge: 'badge-light-secondary', gradient: 'linear-gradient(90deg, #757575, #bdbdbd)' },
+  PENDING:   { label: 'Pendente', color: '#ff9f43', gradient: 'linear-gradient(90deg, #ff9f43, #ffcd94)' },
+  SCHEDULED: { label: 'Agendado', color: '#00cfe8', gradient: 'linear-gradient(90deg, #00cfe8, #84e0f0)' },
+  default:   { label: 'Pendente', color: '#82868b', gradient: 'linear-gradient(90deg, #757575, #bdbdbd)' },
 };
 
 function getStatusConfig(status) {
@@ -172,7 +172,12 @@ export default function EncaminhamentosPage() {
                       <small>Atualizado em: {formatDate(ref.updatedAt)}</small>
                     </div>
 
-                    <span className={`badge ${cfg.badge}`} style={{ fontWeight: 700, fontSize: '11px' }}>
+                    <span style={{
+                      display: 'inline-block', padding: '3px 10px',
+                      border: `1px solid ${cfg.color}`, borderRadius: '20px',
+                      color: cfg.color, fontSize: '11px', fontWeight: 700,
+                      lineHeight: 1.4, background: `${cfg.color}1f`, whiteSpace: 'nowrap',
+                    }}>
                       {cfg.label}
                     </span>
                   </div>

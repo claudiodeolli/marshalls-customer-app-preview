@@ -15,10 +15,11 @@ import { useEffect, useRef, useState } from 'react';
 const IS_MOCK = process.env.NEXT_PUBLIC_MOCK_MODE === '1';
 
 const STATUS_BADGE = {
-  SCHEDULED:  'badge-light-primary',
-  FINISHED:   'badge-light-success',
-  CANCELED:   'badge-light-danger',
-  UNFINISHED: 'badge-light-secondary',
+  SCHEDULED:  '#00cfe8',
+  FINISHED:   '#28c76f',
+  CANCELED:   '#ea5455',
+  UNFINISHED: '#82868b',
+  PENDING:    '#ff9f43',
 };
 
 const AGEND_STATUS_OPTIONS = [
@@ -477,7 +478,7 @@ export default function AgendamentosPage() {
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             {appointments.map(apt => {
-              const badge = STATUS_BADGE[apt.status] || 'badge-light-secondary';
+              const badgeColor = STATUS_BADGE[apt.status] ?? '#82868b';
               const tz = timezone || getBrowserTz();
               const converted = !isSameAsBrazil(tz) ? convertDateTime(apt.detail?.date, apt.detail?.from, tz) : null;
               const dateChanged = converted && converted.date !== apt.detail?.date;
@@ -541,7 +542,12 @@ export default function AgendamentosPage() {
                           </div>
                         )}
 
-                        <span className={`badge ${badge}`} style={{ fontWeight: 700, fontSize: '11px' }}>
+                        <span style={{
+                          display: 'inline-block', padding: '3px 10px',
+                          border: `1px solid ${badgeColor}`, borderRadius: '20px',
+                          color: badgeColor, fontSize: '11px', fontWeight: 700,
+                          lineHeight: 1.4, background: `${badgeColor}1f`, whiteSpace: 'nowrap',
+                        }}>
                           {translateStatus(apt.status)}
                         </span>
                         {apt.status === 'CANCELED' && (
