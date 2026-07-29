@@ -132,6 +132,7 @@ export const mockReferrals = [
     createdAt: '01/06/2026 10:00:00',
     updatedAt: '01/06/2026 10:00:00',
     urlPath: null,
+    referredByDoctor: { name: 'André Faria' },
   },
   {
     uuid: 'ref-002',
@@ -141,6 +142,7 @@ export const mockReferrals = [
     createdAt: '03/06/2026 14:30:00',
     updatedAt: '03/06/2026 14:30:00',
     urlPath: null,
+    referredByDoctor: { name: 'Carlos Mendes' },
   },
   // SCHEDULED — agendamento realizado (→ apt-001 em agendamentos)
   {
@@ -151,6 +153,7 @@ export const mockReferrals = [
     createdAt: '20/05/2026 09:00:00',
     updatedAt: '25/05/2026 11:00:00',
     urlPath: 'https://example.com/docs/encaminhamento-003.pdf',
+    referredByDoctor: { name: 'Paulo Salave' },
   },
   // FINISHED — consulta realizada (→ apt-003 em agendamentos + hist-002 em histórico)
   {
@@ -204,15 +207,62 @@ export const mockHistory = [
     ],
     evaluation: null,
   },
-  // Agendamento com especialista — de ref-005 (Dermatologia UNFINISHED) = apt-004
+  // Agendamento com especialista — consulta avulsa UNFINISHED
   {
     uuid: 'hist-003',
     type: 'scheduled',
     status: 'UNFINISHED',
-    appointmentBegin: '15/05/2026 09:00',
+    appointmentBegin: null,
     appointmentEnd: null,
     professional: { name: 'Fernanda Rocha', specialties: [{ name: 'Dermatologia' }] },
     beneficiaryMedicalReferral: null,
+    createdAt: '15/05/2026 08:30:00',
+    updatedAt: '15/05/2026 09:00:00',
+    documents: [],
+  },
+  // Agendamento com especialista — encaminhamento UNFINISHED
+  {
+    uuid: 'hist-006',
+    type: 'scheduled',
+    status: 'UNFINISHED',
+    appointmentBegin: null,
+    appointmentEnd: null,
+    professional: { name: 'Fernanda Rocha', specialties: [{ name: 'Ortopedia' }] },
+    beneficiaryMedicalReferral: {
+      urlPath: 'https://example.com/docs/encaminhamento-006.pdf',
+      referredByDoctor: { name: 'André Faria' },
+    },
+    createdAt: '10/05/2026 14:00:00',
+    updatedAt: '10/05/2026 14:00:00',
+    documents: [],
+  },
+  // Agendamento com especialista — SCHEDULED com encaminhamento
+  {
+    uuid: 'hist-007',
+    type: 'scheduled',
+    status: 'SCHEDULED',
+    appointmentBegin: '30/07/2026 10:00',
+    appointmentEnd: null,
+    professional: { name: 'Carlos Alves', specialties: [{ name: 'Psiquiatria' }] },
+    beneficiaryMedicalReferral: {
+      urlPath: 'https://example.com/docs/encaminhamento-007.pdf',
+      referredByDoctor: { name: 'André Faria' },
+    },
+    createdAt: '20/07/2026 09:00:00',
+    updatedAt: '22/07/2026 11:00:00',
+    documents: [],
+  },
+  // Agendamento com especialista — SCHEDULED consulta avulsa
+  {
+    uuid: 'hist-008',
+    type: 'scheduled',
+    status: 'SCHEDULED',
+    appointmentBegin: '05/08/2026 15:00',
+    appointmentEnd: null,
+    professional: { name: 'Carla Borges', specialties: [{ name: 'Psicologia' }] },
+    beneficiaryMedicalReferral: null,
+    createdAt: '25/07/2026 10:00:00',
+    updatedAt: '25/07/2026 10:00:00',
     documents: [],
   },
   // Consulta avulsa cancelada — sem encaminhamento = apt-005
@@ -261,6 +311,7 @@ export const mockAppointments = [
     specialty: { name: 'Psicologia' },
     detail: { date: '05/07/2026', from: '15:00' },
     beneficiaryMedicalReferral: null,
+    createdAt: '25/06/2026',
     cancel: false,
   },
   // FINISHED — originado de ref-004 (Neurologia FINISHED) → também em hist-002
@@ -329,6 +380,122 @@ export function getMockAvailability(specialtyUuid) {
     });
   }
   return slots;
+}
+
+export function generateMockAppointments() {
+  function offsetDetail(minutesFromNow) {
+    const d = new Date(Date.now() + minutesFromNow * 60000);
+    const parts = new Intl.DateTimeFormat('pt-BR', {
+      timeZone: 'America/Sao_Paulo',
+      day: '2-digit', month: '2-digit', year: 'numeric',
+      hour: '2-digit', minute: '2-digit', hour12: false,
+    }).formatToParts(d);
+    const get = type => parts.find(p => p.type === type)?.value ?? '00';
+    return {
+      date: `${get('day')}/${get('month')}/${get('year')}`,
+      from: `${get('hour')}:${get('minute')}`,
+    };
+  }
+
+  const todayDate = offsetDetail(0).date;
+
+  return [
+    // 🗓 Em 3 dias
+    {
+      uuid: 'apt-dyn-3days',
+      status: 'SCHEDULED',
+      professional: { name: 'Roberto Silva', specialties: [{ name: 'Ortopedia' }] },
+      specialty: { name: 'Ortopedia' },
+      detail: offsetDetail(3 * 1440),
+      beneficiaryMedicalReferral: { createdAt: '20/05/2026' },
+      cancel: true,
+    },
+    // 🗓 Amanhã (~26h)
+    {
+      uuid: 'apt-dyn-tomorrow',
+      status: 'SCHEDULED',
+      professional: { name: 'Ana Lima', specialties: [{ name: 'Clínica Geral' }] },
+      specialty: { name: 'Clínica Geral' },
+      detail: offsetDetail(26 * 60),
+      beneficiaryMedicalReferral: null,
+      createdAt: todayDate,
+      cancel: true,
+    },
+    // ⏱ Em 5 horas
+    {
+      uuid: 'apt-dyn-5h',
+      status: 'SCHEDULED',
+      professional: { name: 'Marcos Teixeira', specialties: [{ name: 'Cardiologia' }] },
+      specialty: { name: 'Cardiologia' },
+      detail: offsetDetail(5 * 60),
+      beneficiaryMedicalReferral: null,
+      createdAt: todayDate,
+      cancel: false,
+    },
+    // ⏱ Em 30 minutos
+    {
+      uuid: 'apt-dyn-30min',
+      status: 'SCHEDULED',
+      professional: { name: 'Carlos Mendes', specialties: [{ name: 'Neurologia' }] },
+      specialty: { name: 'Neurologia' },
+      detail: offsetDetail(30),
+      beneficiaryMedicalReferral: null,
+      createdAt: todayDate,
+      cancel: true,
+    },
+    // 🟢 Em 8 minutos (Você já pode entrar)
+    {
+      uuid: 'apt-dyn-8min',
+      status: 'SCHEDULED',
+      professional: { name: 'Carla Borges', specialties: [{ name: 'Psicologia' }] },
+      specialty: { name: 'Psicologia' },
+      detail: offsetDetail(8),
+      beneficiaryMedicalReferral: null,
+      createdAt: todayDate,
+      cancel: false,
+    },
+    // 🟢 Em instantes (passado)
+    {
+      uuid: 'apt-dyn-now',
+      status: 'SCHEDULED',
+      professional: { name: 'Fernanda Rocha', specialties: [{ name: 'Dermatologia' }] },
+      specialty: { name: 'Dermatologia' },
+      detail: offsetDetail(-5),
+      beneficiaryMedicalReferral: null,
+      createdAt: todayDate,
+      cancel: false,
+    },
+    // FINISHED
+    {
+      uuid: 'apt-003',
+      status: 'FINISHED',
+      professional: { name: 'Paulo Salave', specialties: [{ name: 'Neurologia' }] },
+      specialty: { name: 'Neurologia' },
+      detail: { date: '20/05/2026', from: '10:00' },
+      beneficiaryMedicalReferral: { createdAt: '05/05/2026' },
+      cancel: false,
+    },
+    // UNFINISHED
+    {
+      uuid: 'apt-004',
+      status: 'UNFINISHED',
+      professional: { name: 'Fernanda Rocha', specialties: [{ name: 'Dermatologia' }] },
+      specialty: { name: 'Dermatologia' },
+      detail: { date: '15/05/2026', from: '09:00' },
+      beneficiaryMedicalReferral: { createdAt: '10/05/2026' },
+      cancel: false,
+    },
+    // CANCELED
+    {
+      uuid: 'apt-005',
+      status: 'CANCELED',
+      professional: { name: 'Carlos Mendes', specialties: [{ name: 'Cardiologia' }] },
+      specialty: { name: 'Cardiologia' },
+      detail: { date: '12/05/2026', from: '11:00' },
+      beneficiaryMedicalReferral: null,
+      cancel: false,
+    },
+  ];
 }
 
 export const requerimentos = [

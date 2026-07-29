@@ -3,133 +3,220 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
+const BRAND_COLOR = '#4F68C7';
+
+const REASONS = [
+  { value: 'financial', label: 'Financeiro' },
+  { value: 'quality',   label: 'Qualidade dos atendimentos' },
+  { value: 'other',     label: 'Outros' },
+];
+
+const BULLETS = [
+  'Sua conta será imediatamente encerrada tanto para os atendimentos médicos quanto no Clube de Vantagens e na Marshalls Academy;',
+  'Você perderá o acesso a todas as plataformas, benefícios, serviços e recursos vinculados à sua conta;',
+  'Se desejar, poderá criar uma nova conta a qualquer momento. Entretanto, suas informações atuais, como histórico de atendimentos, receitas, atestados, solicitações e demais registros existentes, serão excluídas das telas atuais, e eventuais saldos de cashback acumulados no Clube de Vantagens, bem como descontos recorrentes na Marshalls Academy, também serão perdidos;',
+  'Seus dados pessoais serão excluídos ou anonimizados, (quando aplicável), conforme a LGPD;',
+  'Informações que devam ser preservadas por obrigação legal ou regulatória poderão ser mantidas pelo prazo exigido na legislação.',
+];
+
 export default function EncerrarContaPage() {
   const router = useRouter();
-  const [agreed, setAgreed]       = useState(false);
-  const [password, setPassword]   = useState('');
-  const [confirm, setConfirm]     = useState('');
-  const [loading, setLoading]     = useState(false);
-  const [done, setDone]           = useState(false);
+  const [confirmed, setConfirmed] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [reason, setReason]       = useState('');
+  const [otherText, setOtherText] = useState('');
+  const [submitted, setSubmitted] = useState(false);
 
-  const canSubmit = agreed && password.trim().length > 0 && confirm.trim() === 'encerrar' && !loading;
+  const canConfirm = reason && (reason !== 'other' || otherText.trim());
 
-  function handleSubmit() {
-    if (!canSubmit) return;
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      setDone(true);
-    }, 1200);
+  function handleModalConfirm() {
+    if (!canConfirm) return;
+    setSubmitted(true);
+    setModalOpen(false);
   }
 
-  if (done) {
+  if (submitted) {
     return (
-      <div style={{ maxWidth: '560px', margin: '3rem auto', textAlign: 'center', padding: '0 16px' }}>
-        <svg xmlns="http://www.w3.org/2000/svg" width="56" height="56" viewBox="0 0 24 24" fill="none"
-          stroke="#28c76f" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ marginBottom: '16px' }}>
-          <circle cx="12" cy="12" r="10"/><polyline points="9 12 11 14 15 10"/>
-        </svg>
-        <h5 style={{ fontWeight: 700, marginBottom: '8px' }}>Solicitação recebida</h5>
-        <p style={{ color: '#6e6b7b', fontSize: '14px' }}>
-          Sua solicitação de encerramento de conta foi registrada. Você receberá uma confirmação por e-mail em breve.
-        </p>
+      <div style={{ maxWidth: 560, margin: '2rem auto', textAlign: 'center', padding: '0 16px' }}>
+        <div className="card" style={{ border: `1px solid ${BRAND_COLOR}33`, padding: '40px 24px' }}>
+          <div style={{ marginBottom: '16px' }}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24"
+              fill="none" stroke={BRAND_COLOR} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+              <polyline points="22 4 12 14.01 9 11.01"/>
+            </svg>
+          </div>
+          <h5 style={{ fontWeight: 700, color: '#5e5873', marginBottom: '8px' }}>Solicitação recebida</h5>
+          <p style={{ fontSize: '14px', color: '#6e6b7b', marginBottom: '24px' }}>
+            Sua solicitação de encerramento de conta foi registrada. Nossa equipe entrará em contato em até <strong>5 dias úteis</strong> para concluir o processo.
+          </p>
+          <button className="btn btn-primary" onClick={() => router.push('/meus-dados')}>
+            Voltar para Meus Dados
+          </button>
+        </div>
       </div>
     );
   }
 
   return (
-    <div style={{ maxWidth: '620px', margin: '0 auto', padding: '0 8px' }}>
-      <h4 style={{ fontWeight: 700, marginBottom: '4px', color: '#ea5455' }}>Encerrar Conta e Excluir meus Dados</h4>
-      <p style={{ fontSize: '14px', color: '#6e6b7b', marginBottom: '1.5rem' }}>
-        Para solicitar o encerramento da sua conta e a exclusão dos seus dados armazenados em nosso sistema,
-        por gentileza, confirme no formulário abaixo.
+    <div style={{ maxWidth: 680, margin: '0 auto', paddingBottom: '2rem' }}>
+
+      {/* Parágrafo introdutório */}
+      <p style={{ fontSize: '14px', color: '#5e5873', fontWeight: 600, lineHeight: 1.7, marginBottom: '20px' }}>
+        Para solicitar o encerramento definitivo da sua conta e a exclusão dos seus dados pessoais armazenados em nosso sistema, conforme previsto na LGPD, revise e confirme as informações abaixo.
       </p>
 
-      {/* Aviso em vermelho */}
+      {/* Bloco de atenção */}
       <div style={{
-        background: '#fff5f5', border: '1px solid #fecaca', borderRadius: '8px',
-        padding: '16px', marginBottom: '1.5rem', color: '#dc2626', fontSize: '13px', lineHeight: 1.7,
+        background: '#fff8f8', border: '1.5px solid #fca5a5', borderRadius: '10px',
+        padding: '16px 20px', marginBottom: '20px',
       }}>
-        <strong>Atenção: esta operação é irreversível.</strong> Uma vez removidos, seus dados e informações
-        atuais não poderão ser recuperados e sua conta será imediatamente encerrada tanto aqui quanto no seu
-        clube de vantagens. Se desejar, poderá criar uma nova conta a qualquer momento, porém, suas
-        informações atuais como histórico de atendimentos, receitas etc também serão deletadas; e os
-        possíveis saldos de cashback acumulados no Clube até o momento também serão deletados.
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+            fill="none" stroke="#ea5455" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+            <line x1="12" y1="9" x2="12" y2="13"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+          <span style={{ fontWeight: 700, color: '#ea5455', fontSize: '14px' }}>Atenção</span>
+        </div>
+
+        <p style={{ margin: '0 0 4px', fontSize: '13px', color: '#ea5455', fontWeight: 600 }}>
+          Esta solicitação é irreversível.
+        </p>
+        <p style={{ margin: '0 0 12px', fontSize: '13px', color: '#6e6b7b' }}>
+          Ao confirmar:
+        </p>
+
+        <div style={{ background: '#fff', border: '1px solid #fca5a5', borderRadius: '8px', padding: '14px 16px' }}>
+          <ul style={{ margin: 0, paddingLeft: '18px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            {BULLETS.map((text, i) => (
+              <li key={i} style={{ fontSize: '13px', color: '#ea5455', lineHeight: 1.6 }}>
+                {text}
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
 
-      {/* Checkbox de ciência */}
-      <div style={{ marginBottom: '1.25rem' }}>
-        <label style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', cursor: 'pointer', fontSize: '13px', color: '#5e5873' }}>
-          <input
-            type="checkbox"
-            checked={agreed}
-            onChange={e => setAgreed(e.target.checked)}
-            style={{ marginTop: '2px', flexShrink: 0, accentColor: '#ea5455' }}
-          />
-          Ao encerrar minha conta, concordo e reconheço que não mais terei acesso a eventuais pedidos
-          realizados através da minha conta que sejam pendentes de processamento ou utilização.
-        </label>
-      </div>
-
-      {/* Senha */}
-      <div className="form-group">
-        <label className="form-label" style={{ fontWeight: 600 }}>Senha atual</label>
-        <input
-          type="password"
-          className="form-control"
-          placeholder="Digite sua senha atual"
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-          style={{ maxWidth: '280px' }}
-        />
-      </div>
-
-      {/* Confirmação por texto */}
-      <div className="form-group">
-        <label className="form-label" style={{ fontWeight: 600 }}>
-          Digite a palavra <span style={{ fontStyle: 'italic' }}>"encerrar"</span> para confirmar
-        </label>
-        <input
-          type="text"
-          className="form-control"
-          placeholder='encerrar'
-          value={confirm}
-          onChange={e => setConfirm(e.target.value)}
-          style={{
-            maxWidth: '280px',
-            borderColor: confirm.length > 0 && confirm !== 'encerrar' ? '#ea5455' : undefined,
-          }}
-        />
-        {confirm.length > 0 && confirm !== 'encerrar' && (
-          <small style={{ color: '#ea5455' }}>Digite exatamente a palavra "encerrar"</small>
-        )}
+      {/* Checkbox */}
+      <div
+        className="card mb-3"
+        style={{ border: confirmed ? `1.5px solid ${BRAND_COLOR}` : '1px solid #e0e0e0', transition: 'border-color 0.2s' }}
+      >
+        <div className="card-body" style={{ padding: '16px 20px' }}>
+          <label style={{ display: 'flex', gap: '12px', alignItems: 'flex-start', cursor: 'pointer' }}>
+            <input
+              type="checkbox"
+              checked={confirmed}
+              onChange={e => setConfirmed(e.target.checked)}
+              style={{ marginTop: '3px', width: '16px', height: '16px', flexShrink: 0, accentColor: BRAND_COLOR }}
+            />
+            <span style={{ fontSize: '13px', color: '#5e5873', lineHeight: 1.7 }}>
+              Confirmo que compreendo as consequências do encerramento da minha conta e da solicitação de exclusão dos meus dados pessoais. Concordo e reconheço, portanto, que não mais terei acesso aos pedidos, serviços, benefícios, créditos, funcionalidades e demais recursos vinculados à minha conta, inclusive aqueles ainda pendentes de utilização, conclusão, resgate ou disponibilização.
+            </span>
+          </label>
+        </div>
       </div>
 
       {/* Botões */}
-      <div style={{ display: 'flex', gap: '12px', marginTop: '1.5rem', flexWrap: 'wrap' }}>
-        <button
-          className="btn btn-outline-secondary"
-          onClick={() => router.push('/meus-dados')}
-          disabled={loading}
-        >
+      <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
+        <button className="btn btn-outline-secondary" onClick={() => router.push('/meus-dados')}>
           Cancelar
         </button>
         <button
-          disabled={!canSubmit}
-          onClick={handleSubmit}
-          style={{
-            background: canSubmit ? '#ea5455' : '#e0e0e0',
-            color: '#fff', border: 'none', borderRadius: '6px',
-            padding: '10px 24px', fontWeight: 700, fontSize: '14px',
-            cursor: canSubmit ? 'pointer' : 'default',
-            display: 'flex', alignItems: 'center', gap: '8px',
-            transition: 'background 0.2s',
-          }}
+          className="btn btn-primary"
+          disabled={!confirmed}
+          onClick={() => setModalOpen(true)}
+          style={{ opacity: confirmed ? 1 : 0.5 }}
         >
-          {loading && <span className="spinner-border spinner-border-sm" style={{ width: '14px', height: '14px', borderWidth: '2px' }} />}
-          Encerrar Conta e Excluir meus Dados
+          Solicitar encerramento
         </button>
       </div>
+
+      {/* Modal — motivo */}
+      {modalOpen && (
+        <div
+          style={{
+            position: 'fixed', inset: 0, zIndex: 10000,
+            background: 'rgba(34,41,47,0.55)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px',
+          }}
+          onClick={e => { if (e.target === e.currentTarget) setModalOpen(false); }}
+        >
+          <div className="_modal-enter" style={{
+            background: '#fff', borderRadius: '12px',
+            width: '100%', maxWidth: 460,
+            boxShadow: '0 12px 40px rgba(34,41,47,0.25)',
+          }}>
+            <div style={{
+              padding: '18px 24px 16px', borderBottom: '1px solid #ebe9f1',
+              display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+            }}>
+              <h5 style={{ margin: 0, fontWeight: 700, color: '#5e5873', fontSize: '16px' }}>
+                Motivo do encerramento
+              </h5>
+              <button
+                onClick={() => setModalOpen(false)}
+                style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#aaa', fontSize: '24px', lineHeight: 1, padding: '0 4px' }}
+              >×</button>
+            </div>
+
+            <div style={{ padding: '20px 24px' }}>
+              <p style={{ fontSize: '13px', color: '#6e6b7b', marginBottom: '16px' }}>
+                Para nos ajudar a melhorar, informe o principal motivo do encerramento:
+              </p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                {REASONS.map(r => (
+                  <label key={r.value} style={{ display: 'flex', gap: '10px', alignItems: 'flex-start', cursor: 'pointer', fontSize: '14px', color: '#5e5873' }}>
+                    <input
+                      type="radio"
+                      name="closeReason"
+                      value={r.value}
+                      checked={reason === r.value}
+                      onChange={() => setReason(r.value)}
+                      style={{ marginTop: '3px', accentColor: BRAND_COLOR }}
+                    />
+                    {r.label}
+                  </label>
+                ))}
+              </div>
+
+              {reason === 'other' && (
+                <textarea
+                  placeholder="Descreva o motivo..."
+                  value={otherText}
+                  onChange={e => setOtherText(e.target.value)}
+                  rows={3}
+                  style={{
+                    marginTop: '14px', width: '100%', resize: 'vertical',
+                    border: '1px solid #d8d6de', borderRadius: '8px',
+                    padding: '10px 12px', fontSize: '13px', color: '#5e5873',
+                    outline: 'none', boxSizing: 'border-box',
+                  }}
+                />
+              )}
+            </div>
+
+            <div style={{
+              padding: '16px 24px 20px', borderTop: '1px solid #ebe9f1',
+              display: 'flex', gap: '10px', justifyContent: 'flex-end',
+            }}>
+              <button className="btn btn-outline-secondary" onClick={() => setModalOpen(false)}>
+                Cancelar
+              </button>
+              <button
+                className="btn btn-primary"
+                disabled={!canConfirm}
+                onClick={handleModalConfirm}
+                style={{ opacity: canConfirm ? 1 : 0.5 }}
+              >
+                Confirmar encerramento
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

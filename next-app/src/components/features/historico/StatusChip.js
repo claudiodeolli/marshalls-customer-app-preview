@@ -1,8 +1,8 @@
-export default function StatusChip({ label, color }) {
+export default function StatusChip({ label, color, large }) {
   return (
     <span style={{
       display: 'inline-block',
-      padding: '3px 10px',
+      padding: large ? '6px 16px' : '3px 10px',
       border: `1px solid ${color}`,
       borderRadius: '20px',
       color,

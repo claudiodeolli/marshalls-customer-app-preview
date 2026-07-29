@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import api from '@/lib/api';
 import { useAuth } from '@/lib/AuthContext';
 import { mockReferrals } from '@/data/mockData';
-import { IconPerson, IconMedical, IconCalendar, IconRefresh, IconExternalLink, IconSchedule } from '@/components/features/encaminhamentos/icons';
+import { IconPerson, IconMedical, IconCalendar, IconRefresh, IconSchedule } from '@/components/features/encaminhamentos/icons';
 import FilterSelect from '@/components/features/encaminhamentos/FilterSelect';
 import EmptyState from '@/components/features/encaminhamentos/EmptyState';
 import SkeletonCard from '@/components/features/encaminhamentos/SkeletonCard';
@@ -24,18 +24,19 @@ function getStatusConfig(status) {
 
 function formatDate(str) {
   if (!str) return 'Não informado';
+  let date;
   const parts = str.split(' ');
   if (parts.length === 2) {
     const [d, m, y] = parts[0].split('/').map(Number);
     const [h, min] = parts[1].split(':').map(Number);
-    const date = new Date(y, m - 1, d, h, min);
-    if (!isNaN(date.getTime())) {
-      return date.toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' });
-    }
+    date = new Date(y, m - 1, d, h, min);
+  } else {
+    date = new Date(str);
   }
-  const date = new Date(str);
   if (!isNaN(date.getTime())) {
-    return date.toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    const datePart = date.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    const timePart = date.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    return `${datePart}, às ${timePart}`;
   }
   return str;
 }
@@ -117,7 +118,6 @@ export default function EncaminhamentosPage() {
             const cfg = getStatusConfig(ref.status);
             const isScheduled = ref.status === 'SCHEDULED';
             const isPending = ref.status === 'PENDING';
-            const canOpen = !isScheduled && !!(ref.urlPath && ref.urlPath.trim());
 
             return (
               <div key={ref.uuid} className="col-12 col-sm-6 col-xl-4 mb-2">
@@ -172,6 +172,14 @@ export default function EncaminhamentosPage() {
                       <small>Atualizado em: {formatDate(ref.updatedAt)}</small>
                     </div>
 
+                    {/* Referred by */}
+                    {ref.referredByDoctor?.name && (
+                      <div className="d-flex align-items-center mb-1" style={{ color: '#6e6b7b' }}>
+                        <span style={{ marginRight: '8px', flexShrink: 0 }}><IconPerson /></span>
+                        <small>Encaminhado por: Dr(a). {ref.referredByDoctor.name}</small>
+                      </div>
+                    )}
+
                     <span style={{
                       display: 'inline-block', padding: '3px 10px',
                       border: `1px solid ${cfg.color}`, borderRadius: '20px',
@@ -182,23 +190,14 @@ export default function EncaminhamentosPage() {
                     </span>
                   </div>
 
-                  {(canOpen || isPending || isScheduled) && (
+                  {(isPending || isScheduled) && (
                     <div
                       className="d-flex justify-content-end"
                       style={{ gap: '8px', borderTop: '1px solid #f0f0f0', padding: '12px 16px' }}
                     >
-                      {canOpen && (
-                        <button
-                          className="btn btn-outline-primary btn-sm"
-                          onClick={() => window.open(ref.urlPath, '_blank', 'noopener,noreferrer')}
-                          style={{ display: 'flex', alignItems: 'center', gap: '5px' }}
-                        >
-                          <IconExternalLink /> Abrir
-                        </button>
-                      )}
                       {isScheduled && (
                         <button
-                          className="btn btn-outline-primary btn-sm"
+                          className="btn btn-primary btn-sm"
                           onClick={() => router.push('/agendamentos')}
                           style={{ display: 'flex', alignItems: 'center', gap: '5px' }}
                         >

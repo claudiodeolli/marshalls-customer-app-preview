@@ -1,8 +1,10 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import api from '@/lib/api';
 import { useAuth } from '@/lib/AuthContext';
+import { USER } from '@/data/user';
 import { mockHistory } from '@/data/mockData';
 import { IconEvent, IconChevronDown } from '@/components/features/historico/icons';
 import StatusBadge from '@/components/features/historico/StatusBadge';
@@ -38,9 +40,16 @@ function inputToDate(str) {
 }
 
 function typeLabel(type) {
-  if (type === 'emergency') return 'Pronto atendimento';
+  if (type === 'emergency') return 'Pronto Atendimento';
   if (type === 'scheduled') return 'Agendamento com especialista';
   return type;
+}
+
+function formatHistDate(str) {
+  if (!str) return 'Não informado';
+  const parts = str.split(' ');
+  if (parts.length === 2) return `${parts[0]}, às ${parts[1]}`;
+  return str;
 }
 
 function getLastRecord(records) {
@@ -75,6 +84,7 @@ function isoToBR(str) {
 export default function HistoricoPage() {
   const today = todayStr();
   const sevenAgo = daysAgoStr(7);
+  const router = useRouter();
   const { user } = useAuth();
 
   const [filterOpen, setFilterOpen]   = useState(false);
@@ -259,7 +269,7 @@ export default function HistoricoPage() {
               >
                 <option value="all">Todos</option>
                 <option value="scheduled">Agendamento com especialista</option>
-                <option value="emergency">Pronto atendimento</option>
+                <option value="emergency">Pronto Atendimento</option>
               </select>
             </div>
 
@@ -366,88 +376,203 @@ export default function HistoricoPage() {
                 <div className="card mb-0 h-100" style={{ backgroundColor: '#e9f2fa' }}>
                   <div className="card-body" style={{ padding: '14px' }}>
 
-                    {/* Type + Status row (top labels) */}
-                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                        <div style={{ fontSize: 11, color: '#777' }}>
-                          <strong>Tipo: </strong>
-                          {typeLabel(r.type)}
-                        </div>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
-                          <div><StatusBadge status={r.status} /></div>
-                          {(r.status === 'CANCELLED' || r.status === 'CANCELED') && (
-                            <small style={{ fontSize: '11px', color: '#6e6b7b' }}>usuário cancelou a consulta</small>
-                          )}
-                          {r.status === 'UNFINISHED' && (
-                            <small style={{ fontSize: '11px', color: '#6e6b7b' }}>usuário não compareceu a consulta</small>
-                          )}
-                        </div>
-                      </div>
-                      <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', textAlign: 'right', gap: '2px' }}>
-                        <div style={{ fontSize: 11, color: '#777' }}>
-                          <strong>Início: </strong>{r.appointmentBegin}
-                        </div>
-                        {r.status === 'FINISHED' && r.appointmentEnd && (
-                          <div style={{ fontSize: 11, color: '#777' }}>
-                            <strong>Término: </strong>{r.appointmentEnd}
-                          </div>
+                    {/* Type row */}
+                    <div style={{ marginBottom: '6px' }}>
+                      <span style={{ fontSize: '13px', color: '#5e5873' }}>
+                        <strong>Tipo: </strong>{typeLabel(r.type)}
+                      </span>
+                    </div>
+
+                    {/* Badge + dates row */}
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '6px' }}>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
+                        <div><StatusBadge status={r.status} /></div>
+                        {(r.status === 'CANCELLED' || r.status === 'CANCELED') && (
+                          <small style={{ fontSize: '11px', color: '#6e6b7b' }}>usuário cancelou a consulta</small>
                         )}
                       </div>
+                      {r.status !== 'UNFINISHED' && (
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '2px' }}>
+                          {r.appointmentBegin && (
+                            <div style={{ fontSize: 11, color: '#777' }}>
+                              <strong>Início: </strong>{r.appointmentBegin}
+                            </div>
+                          )}
+                          {r.appointmentEnd && (
+                            <div style={{ fontSize: 11, color: '#777' }}>
+                              <strong>Término: </strong>{r.appointmentEnd}
+                            </div>
+                          )}
+                        </div>
+                      )}
                     </div>
 
                     <hr style={{ margin: '8px 0', borderColor: 'rgba(0,0,0,0.1)' }} />
 
-                    {/* Professional */}
-                    <p style={{ fontSize: '13px', marginBottom: '4px' }}>
-                      <small><b>Profissional</b></small><br />
-                      Dr(a) {r.professional.name}
-                    </p>
+                    {r.status === 'SCHEDULED' ? (
+                      <>
+                        <p style={{ fontSize: '13px', marginBottom: '4px' }}>
+                          <small><b>Especialidade</b></small><br />
+                          {r.professional.specialties[0].name}
+                        </p>
 
-                    {/* Specialty */}
-                    <p style={{ fontSize: '13px', marginBottom: '4px' }}>
-                      <small><b>Especialidade</b></small><br />
-                      {r.professional.specialties[0].name}
-                    </p>
+                        <p style={{ fontSize: '13px', marginBottom: '4px' }}>
+                          <small><b>Origem</b></small><br />
+                          {r.beneficiaryMedicalReferral ? 'Encaminhamento' : 'Consulta avulsa'}
+                        </p>
 
-                    {/* Referral link */}
-                    {r.beneficiaryMedicalReferral && (
-                      <p style={{ fontSize: '13px', marginBottom: '4px' }}>
-                        <small><b>Agendado em função de:</b></small><br />
-                        <a
-                          href={r.beneficiaryMedicalReferral.urlPath}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          ver encaminhamento
-                        </a>
-                      </p>
-                    )}
+                        {r.beneficiaryMedicalReferral?.referredByDoctor?.name ? (
+                          <p style={{ fontSize: '13px', marginBottom: '4px' }}>
+                            <small><b>Encaminhado por</b></small><br />
+                            Dr(a). {r.beneficiaryMedicalReferral.referredByDoctor.name}
+                          </p>
+                        ) : (
+                          <p style={{ fontSize: '13px', marginBottom: '4px' }}>
+                            <small><b>Adquirida por</b></small><br />
+                            <span style={{ color: '#4F68C7' }}>{USER.name} {USER.lastName}</span>
+                          </p>
+                        )}
 
-                    {/* Documents accordion */}
-                    {'documents' in r && r.documents.length > 0 && (
-                      <DocumentsAccordion documents={r.documents} />
-                    )}
+                        {r.createdAt && (
+                          <p style={{ fontSize: '13px', marginBottom: '4px', color: '#6e6b7b' }}>
+                            <small>Criado em: {formatHistDate(r.createdAt)}</small>
+                          </p>
+                        )}
+                        {r.updatedAt && (
+                          <p style={{ fontSize: '13px', marginBottom: '2px', color: '#6e6b7b' }}>
+                            <small>Atualizado em: {formatHistDate(r.updatedAt)}</small>
+                          </p>
+                        )}
 
-                    {/* Evaluation */}
-                    {r.status === 'FINISHED' && (
-                      <div style={{ marginTop: '10px', paddingTop: '10px', borderTop: '1px solid rgba(0,0,0,0.08)' }}>
-                        {r.evaluation ? (
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                            <Stars value={r.evaluation.rating} size={16} />
-                            {r.evaluation.comment && (
-                              <span style={{ fontSize: '11px', color: '#6e6b7b', fontStyle: 'italic' }}>"{r.evaluation.comment}"</span>
+                        <div style={{ marginTop: '10px', paddingTop: '10px', borderTop: '1px solid rgba(0,0,0,0.08)', display: 'flex', justifyContent: 'flex-end' }}>
+                          <button
+                            className="btn btn-primary btn-sm"
+                            style={{ fontSize: '12px', display: 'flex', alignItems: 'center', gap: '5px' }}
+                            onClick={() => router.push('/agendamentos')}
+                          >
+                            Ver agendamento
+                          </button>
+                        </div>
+                      </>
+                    ) : r.status === 'UNFINISHED' ? (
+                      <>
+                        <p style={{ fontSize: '13px', marginBottom: '4px' }}>
+                          <small><b>Especialidade</b></small><br />
+                          {r.professional.specialties[0].name}
+                        </p>
+
+                        <p style={{ fontSize: '13px', marginBottom: '4px' }}>
+                          <small><b>Origem</b></small><br />
+                          {r.beneficiaryMedicalReferral ? 'Encaminhamento' : 'Consulta avulsa'}
+                        </p>
+
+                        {r.beneficiaryMedicalReferral?.referredByDoctor?.name ? (
+                          <p style={{ fontSize: '13px', marginBottom: '4px' }}>
+                            <small><b>Encaminhado por</b></small><br />
+                            Dr(a). {r.beneficiaryMedicalReferral.referredByDoctor.name}
+                          </p>
+                        ) : (
+                          <p style={{ fontSize: '13px', marginBottom: '4px' }}>
+                            <small><b>Adquirida por</b></small><br />
+                            <span style={{ color: '#4F68C7' }}>{USER.name} {USER.lastName}</span>
+                          </p>
+                        )}
+
+                        {r.createdAt && (
+                          <p style={{ fontSize: '13px', marginBottom: '4px', color: '#6e6b7b' }}>
+                            <small>Criado em: {formatHistDate(r.createdAt)}</small>
+                          </p>
+                        )}
+                        {r.updatedAt && (
+                          <p style={{ fontSize: '13px', marginBottom: '2px', color: '#6e6b7b' }}>
+                            <small>Atualizado em: {formatHistDate(r.updatedAt)}</small>
+                          </p>
+                        )}
+
+                        <div style={{ marginTop: '10px', paddingTop: '10px', borderTop: '1px solid rgba(0,0,0,0.08)', display: 'flex', justifyContent: 'flex-end' }}>
+                          <button
+                            className="btn btn-primary btn-sm"
+                            style={{ fontSize: '12px', display: 'flex', alignItems: 'center', gap: '5px' }}
+                            onClick={() => router.push('/schedule/calendar')}
+                          >
+                            Agendar
+                          </button>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        {/* Professional */}
+                        <p style={{ fontSize: '13px', marginBottom: '4px' }}>
+                          <small><b>Profissional</b></small><br />
+                          Dr(a) {r.professional.name}
+                        </p>
+
+                        {/* Specialty */}
+                        <p style={{ fontSize: '13px', marginBottom: '4px' }}>
+                          <small><b>Especialidade</b></small><br />
+                          {r.professional.specialties[0].name}
+                        </p>
+
+                        {/* Referral origin */}
+                        {r.type === 'scheduled' && (
+                          <p style={{ fontSize: '13px', marginBottom: '4px' }}>
+                            <small><b>Origem</b></small><br />
+                            {r.beneficiaryMedicalReferral ? (
+                              <>
+                                Encaminhamento
+                                {r.status === 'FINISHED' && (
+                                  <><br />
+                                    <a
+                                      href={r.beneficiaryMedicalReferral.urlPath}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                    >
+                                      ver encaminhamento
+                                    </a>
+                                  </>
+                                )}
+                              </>
+                            ) : (
+                              'Consulta avulsa'
+                            )}
+                          </p>
+                        )}
+
+                        {/* Adquirida por — consulta avulsa cancelada */}
+                        {(r.status === 'CANCELLED' || r.status === 'CANCELED') && r.type === 'scheduled' && !r.beneficiaryMedicalReferral && (
+                          <p style={{ fontSize: '13px', marginBottom: '4px' }}>
+                            <small><b>Adquirida por</b></small><br />
+                            <span style={{ color: '#4F68C7' }}>{USER.name} {USER.lastName}</span>
+                          </p>
+                        )}
+
+                        {/* Documents accordion */}
+                        {'documents' in r && r.documents.length > 0 && (
+                          <DocumentsAccordion documents={r.documents} />
+                        )}
+
+                        {/* Evaluation */}
+                        {r.status === 'FINISHED' && (
+                          <div style={{ marginTop: '10px', paddingTop: '10px', borderTop: '1px solid rgba(0,0,0,0.08)' }}>
+                            {r.evaluation ? (
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <Stars value={r.evaluation.rating} size={16} />
+                                {r.evaluation.comment && (
+                                  <span style={{ fontSize: '11px', color: '#6e6b7b', fontStyle: 'italic' }}>"{r.evaluation.comment}"</span>
+                                )}
+                              </div>
+                            ) : (
+                              <button
+                                className="btn btn-outline-primary btn-sm"
+                                style={{ fontSize: '12px', padding: '3px 10px' }}
+                                onClick={() => setEvalTarget(r)}
+                              >
+                                ★ Avaliar consulta
+                              </button>
                             )}
                           </div>
-                        ) : (
-                          <button
-                            className="btn btn-outline-primary btn-sm"
-                            style={{ fontSize: '12px', padding: '3px 10px' }}
-                            onClick={() => setEvalTarget(r)}
-                          >
-                            ★ Avaliar consulta
-                          </button>
                         )}
-                      </div>
+                      </>
                     )}
                   </div>
                 </div>

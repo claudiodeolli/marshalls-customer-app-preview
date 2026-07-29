@@ -1,6 +1,6 @@
 const STATUS_BADGE = {
   FINISHED:   { label: 'Consulta finalizada', color: '#28c76f' },
-  UNFINISHED: { label: 'Consulta pendente',   color: '#ff9f43' },
+  UNFINISHED: { label: 'Consulta em andamento', color: '#ff9f43' },
   CANCELLED:  { label: 'Consulta cancelada',  color: '#ea5455' },
   CANCELED:   { label: 'Consulta cancelada',  color: '#ea5455' },
   SCHEDULED:  { label: 'Consulta agendada',   color: '#00cfe8' },

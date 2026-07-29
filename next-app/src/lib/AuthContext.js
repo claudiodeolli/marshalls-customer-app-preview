@@ -16,6 +16,7 @@ const MOCK_USER = {
   beneficiaryUuid: 'mock-beneficiary-001',
   userToken: 'mock-token-demo',
   clientId: 'mock-client-id',
+  isTitular: true,
 };
 
 function readFromStorage() {

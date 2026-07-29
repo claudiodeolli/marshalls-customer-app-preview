@@ -127,7 +127,7 @@ export default function MobileBottomNav({ onNavClick }) {
         return (
           <Link
             key={item.href}
-            href={item.href}
+            href={item.href === '/meus-dados' ? '/meus-dados?source=mobile-nav' : item.href}
             className={`_mob-nav__item${active ? ' _mob-nav__item--active' : ''}${item.href === '/meu-clube' ? ' _mob-nav__item--club' : ''}`}
             onClick={onNavClick}
           >

@@ -1,18 +1,29 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { USER } from '@/data/user';
+import { useAuth } from '@/lib/AuthContext';
 import PhoneInput from '@/components/features/meus-dados/PhoneInput';
 import ProfilePhotoUpload from '@/components/features/meus-dados/ProfilePhotoUpload';
 import LGPDSection from '@/components/features/meus-dados/LGPDSection';
 import LockedBadge from '@/components/features/meus-dados/LockedBadge';
 import Snackbar from '@/components/features/meus-dados/Snackbar';
 
+const BRAND_COLOR = '#4F68C7';
+
 
 
 /* ── Página principal ── */
 export default function MeusDadosPage() {
+  const router = useRouter();
+  const { user } = useAuth();
+  const [isFromMobileNav, setIsFromMobileNav] = useState(false);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    setIsFromMobileNav(params.get('source') === 'mobile-nav');
+  }, []);
   const [photoFile, setPhotoFile]         = useState(null);
   const [photoUrl, setPhotoUrl]           = useState('');
   const [showConfirmRemove, setShowConfirmRemove] = useState(false);
@@ -30,6 +41,11 @@ export default function MeusDadosPage() {
   const [cep, setCep]       = useState('');
   const [rua, setRua]       = useState('');
   const [numero, setNumero] = useState('');
+
+  function applyMaskCEP(v) {
+    const d = v.replace(/\D/g, '').slice(0, 8);
+    return d.length > 5 ? `${d.slice(0, 5)}-${d.slice(5)}` : d;
+  }
   const [compl, setCompl]   = useState('');
   const [cidade, setCidade] = useState('');
   const [estado, setEstado] = useState('');
@@ -191,7 +207,7 @@ export default function MeusDadosPage() {
             <div className="card-body">
               <div className="form-group">
                 <label className="form-label">CEP <strong style={{ color: '#ea5455' }}>*</strong></label>
-                <input className="form-control" type="text" placeholder="00000-000" value={cep} onChange={e => setCep(e.target.value)} />
+                <input className="form-control" type="text" placeholder="00000-000" inputMode="numeric" value={cep} onChange={e => setCep(applyMaskCEP(e.target.value))} />
               </div>
               <div className="form-group">
                 <label className="form-label">Rua <strong style={{ color: '#ea5455' }}>*</strong></label>
@@ -201,7 +217,7 @@ export default function MeusDadosPage() {
                 <div className="col-5">
                   <div className="form-group">
                     <label className="form-label">Número <strong style={{ color: '#ea5455' }}>*</strong></label>
-                    <input className="form-control" type="text" placeholder="Nº" value={numero} onChange={e => setNumero(e.target.value)} />
+                    <input className="form-control" type="text" placeholder="Nº" inputMode="numeric" value={numero} onChange={e => setNumero(e.target.value.replace(/\D/g, ''))} />
                   </div>
                 </div>
                 <div className="col-7">
@@ -276,16 +292,46 @@ export default function MeusDadosPage() {
       {/* LGPD */}
       <LGPDSection />
 
-      {/* Encerrar Conta */}
-      <div className="card mt-5" style={{ border: '1px solid #fde8e8' }}>
-        <div className="card-body">
-          <h6 style={{ fontWeight: 700, color: '#ea5455', marginBottom: '8px' }}>Encerrar Conta</h6>
-          <p style={{ fontSize: '13px', color: '#6e6b7b', marginBottom: '6px' }}>Deseja encerrar sua conta?</p>
-          <Link href="/encerrar-conta" style={{ fontSize: '13px', color: '#ea5455', textDecoration: 'underline' }}>
-            Clique aqui para solicitar a exclusão de todos os seus dados do nosso sistema.
-          </Link>
+      {/* Encerrar conta — visível para titulares, exceto quando acessado pela nav mobile */}
+      {user?.isTitular && !isFromMobileNav && (
+        <div className="card _encerrar-conta-section" style={{ border: `1px solid ${BRAND_COLOR}33` }}>
+          <div className="card-body" style={{ padding: '16px 20px' }}>
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+              <span style={{ color: BRAND_COLOR, flexShrink: 0, marginTop: '2px' }}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                  fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="3 6 5 6 21 6"/>
+                  <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                  <path d="M10 11v6"/>
+                  <path d="M14 11v6"/>
+                  <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+                </svg>
+              </span>
+              <div style={{ flex: 1 }}>
+                <p style={{ margin: 0, fontWeight: 700, color: BRAND_COLOR, fontSize: '14px' }}>
+                  Encerrar conta
+                </p>
+                <p style={{ margin: '6px 0 4px', fontSize: '13px', color: '#6e6b7b' }}>
+                  Solicite o encerramento da conta.
+                </p>
+                <p style={{ margin: 0, fontSize: '13px', color: '#6e6b7b', lineHeight: 1.6 }}>
+                  <button
+                    onClick={() => router.push('/encerrar-conta')}
+                    style={{
+                      background: 'none', border: 'none', padding: 0,
+                      cursor: 'pointer', color: BRAND_COLOR, fontWeight: 600,
+                      fontSize: '13px', textDecoration: 'underline', textAlign: 'left',
+                      lineHeight: 1.6,
+                    }}
+                  >
+                    Antes da confirmação, você poderá revisar todas as informações importantes relacionadas a essa ação.
+                  </button>
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Modal de confirmação: remover foto */}
       {showConfirmRemove && (

@@ -6,7 +6,7 @@ import { IconAdd, IconArticle, IconClock, IconDoctor, IconHospital } from '@/com
 import SkeletonRow from '@/components/features/agendamentos/SkeletonRow';
 import FilterChip from '@/components/features/encaminhamentos/FilterChip';
 import Toast from '@/components/ui/Toast';
-import { mockAppointments } from '@/data/mockData';
+import { generateMockAppointments } from '@/data/mockData';
 import api from '@/lib/api';
 import { useAuth } from '@/lib/AuthContext';
 import { useRouter } from 'next/navigation';
@@ -50,7 +50,7 @@ function translateStatus(s) {
 }
 
 function getAppointmentOrigin(apt) {
-  if (apt.type === 'emergency') return 'Pronto atendimento';
+  if (apt.type === 'emergency') return 'Pronto Atendimento';
   if (apt.beneficiaryMedicalReferral) return 'Encaminhamento';
   return 'Consulta avulsa';
 }
@@ -95,15 +95,30 @@ function getMinutesUntil(dateStr, timeStr) {
   } catch { return -1; }
 }
 
+function getCountdownIcon(minutes) {
+  if (minutes <= 15) return '🟢';
+  if (minutes < 1440) return '⏱';
+  return '🗓';
+}
+
 function getCountdownText(minutes) {
-  const days = Math.floor(minutes / 1440);
+  if (minutes <= 15) return 'Você já pode entrar';
+  if (minutes < 60) return `Sua consulta começará em ${minutes} minutos`;
   const hours = Math.floor(minutes / 60);
-  if (days > 1) return `Faltam ${days} dias...`;
-  if (days === 1) return 'Falta 1 dia...';
-  if (hours > 1) return `Faltam ${hours} horas...`;
-  if (hours === 1) return 'Falta 1 hora...';
-  if (minutes > 1) return `Faltam ${minutes} minutos...`;
-  return 'Em instantes...';
+  if (hours < 24) return `Sua consulta começará em ${hours} hora${hours > 1 ? 's' : ''}`;
+  if (hours < 48) return 'Sua consulta será amanhã';
+  const days = Math.floor(minutes / 1440);
+  return `Sua consulta será em ${days} dias`;
+}
+
+function getCountdownTextMobile(minutes) {
+  if (minutes <= 15) return 'Pode entrar';
+  if (minutes < 60) return `${minutes} min`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours} h`;
+  if (hours < 48) return 'É amanhã';
+  const days = Math.floor(minutes / 1440);
+  return `${days} dias`;
 }
 
 function AgendFilterSelect({ value, onChange, minWidth = '200px' }) {
@@ -194,9 +209,10 @@ export default function AgendamentosPage() {
     setLoading(true);
     try {
       if (IS_MOCK) {
+        const allMock = generateMockAppointments();
         const filtered = statusFilter
-          ? mockAppointments.filter(a => a.status === statusFilter)
-          : mockAppointments;
+          ? allMock.filter(a => a.status === statusFilter)
+          : allMock;
         setAppointments(filtered);
         return;
       }
@@ -257,28 +273,6 @@ export default function AgendamentosPage() {
     router.push('/schedule/appointment');
   }
 
-  function renderEntrarButton(apt) {
-    if (IS_MOCK) {
-      return (
-        <button className="btn btn-success _contact-btn" onClick={() => handleEnterAppointment(apt)}>
-          Entrar no atendimento
-        </button>
-      );
-    }
-    const mins = getMinutesUntil(apt.detail?.date, apt.detail?.from);
-    if (mins <= 15) {
-      return (
-        <button className="btn btn-success _contact-btn" onClick={() => handleEnterAppointment(apt)}>
-          Entrar no atendimento
-        </button>
-      );
-    }
-    return (
-      <span style={{ fontSize: 13, color: '#6e6b7b', textAlign: 'center', lineHeight: 1.4 }}>
-        {getCountdownText(mins)}
-      </span>
-    );
-  }
 
   return (
     <div style={{ paddingBottom: '1.5rem' }}>
@@ -482,6 +476,9 @@ export default function AgendamentosPage() {
               const tz = timezone || getBrowserTz();
               const converted = !isSameAsBrazil(tz) ? convertDateTime(apt.detail?.date, apt.detail?.from, tz) : null;
               const dateChanged = converted && converted.date !== apt.detail?.date;
+              const mins = apt.status === 'SCHEDULED' ? getMinutesUntil(apt.detail?.date, apt.detail?.from) : -1;
+              const canEnter = mins <= 10;
+              const canReschedule = mins > 1440;
 
               return (
                 <div
@@ -514,7 +511,7 @@ export default function AgendamentosPage() {
                         </div>
 
                         <div className="mb-50" style={{ fontSize: '13px', color: '#6e6b7b' }}>
-                          <strong>Tipo: </strong>{getAppointmentOrigin(apt)}
+                          <strong>Origem: </strong>{getAppointmentOrigin(apt)}
                         </div>
 
                         <div className="d-flex align-items-start mb-50" style={{ color: '#6e6b7b' }}>
@@ -542,6 +539,15 @@ export default function AgendamentosPage() {
                           </div>
                         )}
 
+                        {!apt.beneficiaryMedicalReferral && apt.createdAt && apt.status === 'SCHEDULED' && (
+                          <div className="d-flex align-items-center mb-75" style={{ color: '#6e6b7b' }}>
+                            <span style={{ marginRight: '8px', flexShrink: 0 }}><IconArticle /></span>
+                            <span style={{ fontSize: '14px', color: '#5e5873' }}>
+                              <strong>Consulta adquirida em:</strong> {apt.createdAt}
+                            </span>
+                          </div>
+                        )}
+
                         <span style={{
                           display: 'inline-block', padding: '3px 10px',
                           border: `1px solid ${badgeColor}`, borderRadius: '20px',
@@ -556,16 +562,59 @@ export default function AgendamentosPage() {
                         {apt.status === 'UNFINISHED' && (
                           <div style={{ fontSize: '11px', color: '#6e6b7b', marginTop: '3px' }}>usuário não compareceu a consulta</div>
                         )}
+
+                        {/* Mobile: cronômetro + botões */}
+                        {apt.status === 'SCHEDULED' && (
+                          <div className="d-xl-none" style={{ marginTop: '10px' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
+                              <span style={{ fontSize: '13px', color: '#5e5873', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                                {getCountdownIcon(mins)} {getCountdownTextMobile(mins)}
+                              </span>
+                              {apt.cancel && (
+                                <button className="btn btn-danger btn-sm" style={{ whiteSpace: 'nowrap' }} onClick={() => setCancelTarget(apt)}>
+                                  Cancelar
+                                </button>
+                              )}
+                            </div>
+                            {canReschedule && (
+                              <button className="btn btn-success btn-sm" style={{ width: '100%', marginTop: '8px' }}>
+                                Reagendar
+                              </button>
+                            )}
+                            <button
+                              className="btn btn-success btn-sm"
+                              disabled={!canEnter}
+                              onClick={() => handleEnterAppointment(apt)}
+                              style={{ width: '100%', marginTop: '8px' }}
+                            >
+                              Entrar no atendimento
+                            </button>
+                          </div>
+                        )}
                       </div>
 
+                      {/* Desktop: cronômetro + botões */}
                       {apt.status === 'SCHEDULED' && (
-                        <div className="d-flex flex-column _appt-card-actions" style={{ gap: '8px', marginLeft: '16px', flexShrink: 0 }}>
-                          {renderEntrarButton(apt)}
+                        <div className="d-none d-xl-flex flex-column _appt-card-actions" style={{ gap: '8px', marginLeft: '16px', flexShrink: 0, minWidth: '200px' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
+                            <span style={{ fontSize: '13px', color: '#5e5873', display: 'flex', alignItems: 'center', gap: '5px', flex: 1 }}>
+                              {getCountdownIcon(mins)} {getCountdownText(mins)}
+                            </span>
+                            {canReschedule && (
+                              <button className="btn btn-success btn-sm _contact-btn" style={{ whiteSpace: 'nowrap', flexShrink: 0 }}>
+                                Reagendar
+                              </button>
+                            )}
+                          </div>
+                          <button
+                            className="btn btn-success _contact-btn"
+                            disabled={!canEnter}
+                            onClick={() => handleEnterAppointment(apt)}
+                          >
+                            Entrar no atendimento
+                          </button>
                           {apt.cancel && (
-                            <button
-                              className="btn btn-outline-danger _contact-btn"
-                              onClick={() => setCancelTarget(apt)}
-                            >
+                            <button className="btn btn-outline-danger _contact-btn" onClick={() => setCancelTarget(apt)}>
                               Cancelar
                             </button>
                           )}

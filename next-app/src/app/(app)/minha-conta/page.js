@@ -4,6 +4,27 @@ import { useState, Fragment } from 'react';
 import Modal from '@/components/ui/Modal';
 import { MastercardIcon, AlertTriangle } from '@/components/features/minha-conta/icons';
 import SituacaoBadge from '@/components/features/minha-conta/SituacaoBadge';
+import PhoneInput from '@/components/features/meus-dados/PhoneInput';
+
+function maskCPF(v) {
+  const d = v.replace(/\D/g, '').slice(0, 11);
+  if (d.length <= 3) return d;
+  if (d.length <= 6) return `${d.slice(0, 3)}.${d.slice(3)}`;
+  if (d.length <= 9) return `${d.slice(0, 3)}.${d.slice(3, 6)}.${d.slice(6)}`;
+  return `${d.slice(0, 3)}.${d.slice(3, 6)}.${d.slice(6, 9)}-${d.slice(9)}`;
+}
+
+function maskDate(v) {
+  const d = v.replace(/\D/g, '').slice(0, 8);
+  if (d.length <= 2) return d;
+  if (d.length <= 4) return `${d.slice(0, 2)}/${d.slice(2)}`;
+  return `${d.slice(0, 2)}/${d.slice(2, 4)}/${d.slice(4)}`;
+}
+
+function maskCEP(v) {
+  const d = v.replace(/\D/g, '').slice(0, 8);
+  return d.length > 5 ? `${d.slice(0, 5)}-${d.slice(5)}` : d;
+}
 
 const HEADERS = ['Assinatura', 'Plano', 'Data de Geração', 'Descrição', 'Valor', 'Situação', 'Nota Fiscal'];
 
@@ -55,7 +76,11 @@ const MOCK_PAYMENTS = [
 ];
 
 const PARENTESCO_OPTIONS = ['Cônjuge', 'Filho(a)', 'Pai', 'Mãe', 'Irmão(ã)'];
-const EMPTY_DEP = { nome: '', dataNasc: '', cpf: '', parentesco: '', email: '', telefone: '' };
+const EMPTY_DEP = {
+  nome: '', dataNasc: '', cpf: '', parentesco: '', genero: '',
+  email: '', telefone: '', phoneCountry: 'BR',
+  cep: '', rua: '', numero: '', compl: '', cidade: '', estado: '',
+};
 
 export default function MinhaContaPage() {
   const [planType, setPlanType] = useState('individual');
@@ -113,7 +138,9 @@ const [showAlterarCartao, setShowAlterarCartao] = useState(false);
   }
 
   function handleConfirmDep() {
-    if (!newDep.nome || !newDep.dataNasc || !newDep.cpf || !newDep.parentesco) {
+    if (!newDep.nome || !newDep.dataNasc || !newDep.cpf || !newDep.parentesco ||
+        !newDep.genero || !newDep.email || !newDep.telefone ||
+        !newDep.cep || !newDep.rua || !newDep.numero || !newDep.cidade || !newDep.estado) {
       setDepError('Preencha todos os campos obrigatórios.');
       return;
     }
@@ -314,8 +341,10 @@ const [showAlterarCartao, setShowAlterarCartao] = useState(false);
                       <div style={{ fontSize: '12px', color: '#6e6b7b', display: 'flex', flexWrap: 'wrap', gap: '14px' }}>
                         <span>Nasc.: {dep.dataNasc}</span>
                         <span>CPF: ***.***.***-**</span>
+                        {dep.genero && <span>{dep.genero}</span>}
                         {dep.email && <span>{dep.email}</span>}
                         {dep.telefone && <span>{dep.telefone}</span>}
+                        {dep.cidade && dep.estado && <span>{dep.cidade} — {dep.estado}</span>}
                       </div>
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '5px', flexShrink: 0, color: '#aaa' }}>
@@ -335,26 +364,28 @@ const [showAlterarCartao, setShowAlterarCartao] = useState(false);
                     padding: '16px', marginBottom: '12px', background: '#f9f8ff',
                   }}>
                     <h6 style={{ fontWeight: 600, color: '#5e5873', marginBottom: '14px' }}>Novo dependente</h6>
+
+                    {/* Identificação */}
                     <div className="row">
                       <div className="col-md-6">
                         <div className="form-group">
                           <label className="form-label">Nome completo <strong style={{ color: '#ea5455' }}>*</strong></label>
-                          <input className="form-control" type="text" placeholder="Nome completo"
+                          <input className="form-control" type="text" placeholder="Nome completo" maxLength={100}
                             value={newDep.nome} onChange={e => setNewDep(d => ({ ...d, nome: e.target.value }))} />
                         </div>
                       </div>
                       <div className="col-md-6">
                         <div className="form-group">
                           <label className="form-label">Data de nascimento <strong style={{ color: '#ea5455' }}>*</strong></label>
-                          <input className="form-control" type="text" placeholder="DD/MM/AAAA"
-                            value={newDep.dataNasc} onChange={e => setNewDep(d => ({ ...d, dataNasc: e.target.value }))} />
+                          <input className="form-control" type="text" placeholder="DD/MM/AAAA" inputMode="numeric"
+                            value={newDep.dataNasc} onChange={e => setNewDep(d => ({ ...d, dataNasc: maskDate(e.target.value) }))} />
                         </div>
                       </div>
                       <div className="col-md-6">
                         <div className="form-group">
                           <label className="form-label">CPF <strong style={{ color: '#ea5455' }}>*</strong></label>
-                          <input className="form-control" type="text" placeholder="000.000.000-00"
-                            value={newDep.cpf} onChange={e => setNewDep(d => ({ ...d, cpf: e.target.value }))} />
+                          <input className="form-control" type="text" placeholder="000.000.000-00" inputMode="numeric"
+                            value={newDep.cpf} onChange={e => setNewDep(d => ({ ...d, cpf: maskCPF(e.target.value) }))} />
                         </div>
                       </div>
                       <div className="col-md-6">
@@ -367,25 +398,90 @@ const [showAlterarCartao, setShowAlterarCartao] = useState(false);
                           </select>
                         </div>
                       </div>
+                    </div>
+
+                    {/* Gênero */}
+                    <div className="form-group">
+                      <label className="form-label">Gênero <strong style={{ color: '#ea5455' }}>*</strong></label>
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', marginTop: '6px' }}>
+                        {['Masculino', 'Feminino', 'Não-binário'].map(g => (
+                          <label key={g} style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer', fontSize: '14px', color: '#5e5873' }}>
+                            <input type="radio" name="depGenero" value={g} checked={newDep.genero === g} onChange={() => setNewDep(d => ({ ...d, genero: g }))} />
+                            {g}
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Contato */}
+                    <div className="row">
                       <div className="col-md-6">
                         <div className="form-group">
-                          <label className="form-label">
-                            E-mail <span style={{ color: '#aaa', fontSize: '12px' }}>(opcional)</span>
-                          </label>
-                          <input className="form-control" type="email" placeholder="email@exemplo.com"
+                          <label className="form-label">E-mail <strong style={{ color: '#ea5455' }}>*</strong></label>
+                          <input className="form-control" type="email" placeholder="email@exemplo.com" maxLength={100}
                             value={newDep.email} onChange={e => setNewDep(d => ({ ...d, email: e.target.value }))} />
                         </div>
                       </div>
                       <div className="col-md-6">
                         <div className="form-group">
-                          <label className="form-label">
-                            Telefone <span style={{ color: '#aaa', fontSize: '12px' }}>(opcional)</span>
-                          </label>
-                          <input className="form-control" type="text" placeholder="(00) 00000-0000"
-                            value={newDep.telefone} onChange={e => setNewDep(d => ({ ...d, telefone: e.target.value }))} />
+                          <label className="form-label">Telefone <strong style={{ color: '#ea5455' }}>*</strong></label>
+                          <PhoneInput
+                            countryCode={newDep.phoneCountry}
+                            onCountryChange={v => setNewDep(d => ({ ...d, phoneCountry: v }))}
+                            value={newDep.telefone}
+                            onChange={v => setNewDep(d => ({ ...d, telefone: v }))}
+                            placeholder="(00) 00000-0000"
+                          />
                         </div>
                       </div>
                     </div>
+
+                    {/* Endereço */}
+                    <div className="row">
+                      <div className="col-md-4">
+                        <div className="form-group">
+                          <label className="form-label">CEP <strong style={{ color: '#ea5455' }}>*</strong></label>
+                          <input className="form-control" type="text" placeholder="00000-000" inputMode="numeric"
+                            value={newDep.cep} onChange={e => setNewDep(d => ({ ...d, cep: maskCEP(e.target.value) }))} />
+                        </div>
+                      </div>
+                      <div className="col-md-8">
+                        <div className="form-group">
+                          <label className="form-label">Rua <strong style={{ color: '#ea5455' }}>*</strong></label>
+                          <input className="form-control" type="text" placeholder="Nome da rua" maxLength={150}
+                            value={newDep.rua} onChange={e => setNewDep(d => ({ ...d, rua: e.target.value }))} />
+                        </div>
+                      </div>
+                      <div className="col-4 col-md-3">
+                        <div className="form-group">
+                          <label className="form-label">Número <strong style={{ color: '#ea5455' }}>*</strong></label>
+                          <input className="form-control" type="text" placeholder="Nº" inputMode="numeric"
+                            value={newDep.numero} onChange={e => setNewDep(d => ({ ...d, numero: e.target.value.replace(/\D/g, '') }))} />
+                        </div>
+                      </div>
+                      <div className="col-8 col-md-9">
+                        <div className="form-group">
+                          <label className="form-label">Complemento</label>
+                          <input className="form-control" type="text" placeholder="Apto, sala..." maxLength={60}
+                            value={newDep.compl} onChange={e => setNewDep(d => ({ ...d, compl: e.target.value }))} />
+                        </div>
+                      </div>
+                      <div className="col-md-8">
+                        <div className="form-group">
+                          <label className="form-label">Cidade <strong style={{ color: '#ea5455' }}>*</strong></label>
+                          <input className="form-control" type="text" placeholder="Sua cidade" maxLength={80}
+                            value={newDep.cidade} onChange={e => setNewDep(d => ({ ...d, cidade: e.target.value }))} />
+                        </div>
+                      </div>
+                      <div className="col-md-4">
+                        <div className="form-group">
+                          <label className="form-label">Estado <strong style={{ color: '#ea5455' }}>*</strong></label>
+                          <input className="form-control" type="text" placeholder="UF" maxLength={2}
+                            value={newDep.estado} onChange={e => setNewDep(d => ({ ...d, estado: e.target.value.toUpperCase().replace(/[^A-Z]/g, '') }))} />
+                        </div>
+                      </div>
+                    </div>
+
                     {depError && <p style={{ color: '#ea5455', fontSize: '12px', margin: '0 0 10px' }}>{depError}</p>}
                     <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
                       <button className="btn btn-flat-secondary btn-sm"

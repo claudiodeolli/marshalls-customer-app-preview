@@ -6,7 +6,7 @@ import StatusChip from './StatusChip';
 const STATUS_OPTIONS = [
   { value: '',          label: 'Todos os status',       color: '#82868b' },
   { value: 'FINISHED',  label: 'Consultas finalizadas', color: '#28c76f' },
-  { value: 'UNFINISHED',label: 'Consultas pendentes',   color: '#ff9f43' },
+  { value: 'UNFINISHED',label: 'Consultas em andamento', color: '#ff9f43' },
   { value: 'SCHEDULED', label: 'Consultas agendadas',   color: '#00cfe8' },
   { value: 'CANCELLED', label: 'Consultas canceladas',  color: '#ea5455' },
 ];
@@ -40,7 +40,7 @@ export default function StatusSelect({ value, onChange, disabled = false }) {
         }}
       >
         <span style={{ overflow: 'hidden', minWidth: 0 }}>
-          <StatusChip label={selected.label} color={selected.color} />
+          <StatusChip label={selected.label} color={selected.color} large={selected.value === ''} />
         </span>
         <svg width="10" height="6" viewBox="0 0 10 6" fill="none" style={{ flexShrink: 0, marginLeft: 6 }}>
           <path d="M1 1l4 4 4-4" stroke="#6e6b7b" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
@@ -61,10 +61,7 @@ export default function StatusSelect({ value, onChange, disabled = false }) {
               onMouseEnter={e => { e.currentTarget.style.background = '#f3f2f7'; }}
               onMouseLeave={e => { e.currentTarget.style.background = value === opt.value ? '#f3f2f7' : '#fff'; }}
             >
-              {opt.color
-                ? <StatusChip label={opt.label} color={opt.color} />
-                : <span style={{ fontSize: '14px', color: '#6e6b7b' }}>{opt.label}</span>
-              }
+              <StatusChip label={opt.label} color={opt.color} large={opt.value === ''} />
             </div>
           ))}
         </div>

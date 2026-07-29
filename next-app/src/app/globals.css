@@ -598,6 +598,16 @@ img._logo-collapsed {
   to   { transform: translateY(0); }
 }
 
+._encerrar-conta-section {
+  margin-top: 0.5rem;
+}
+
+@media (min-width: 1200px) {
+  ._encerrar-conta-section {
+    margin-top: 30vh;
+  }
+}
+
 body._page-leaving .content-body {
   animation:
     zoom-fade-in-opacity .28s ease-in-out 350ms backwards,

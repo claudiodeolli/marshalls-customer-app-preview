@@ -12,9 +12,20 @@ import { menuItems, plantaoItem } from '@/data/menuItems';
 /* Ícone feather para o breadcrumb */
 function BreadcrumbIcon({ activeHref }) {
   const href = activeHref === '/' ? '/' : activeHref.replace(/\/$/, '');
-  const activeItem =
+  let activeItem =
     menuItems.find(item => !item.header && (href === item.href || href.startsWith(item.href + '/'))) ||
     (href === plantaoItem.href ? plantaoItem : null);
+
+  if (!activeItem) {
+    const cfg = getRouteConfig(href);
+    const parentHref = cfg?.breadcrumb?.find(b => b.href)?.href;
+    if (parentHref) {
+      activeItem =
+        menuItems.find(item => !item.header && item.href === parentHref) ||
+        (parentHref === plantaoItem.href ? plantaoItem : null);
+    }
+  }
+
   if (!activeItem) return null;
   const def = activeItem.icon;
   return (

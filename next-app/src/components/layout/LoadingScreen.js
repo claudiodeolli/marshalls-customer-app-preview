@@ -4,15 +4,16 @@ import { useEffect, useState } from 'react';
 
 /* Tela de carregamento idêntica ao #loading-bg do index.html original */
 export default function LoadingScreen() {
-  const [hidden, setHidden] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const [hidden, setHidden]   = useState(false);
 
   useEffect(() => {
-    /* Aguarda a montagem do app e oculta a tela de loading */
+    setMounted(true);
     const timer = setTimeout(() => setHidden(true), 400);
     return () => clearTimeout(timer);
   }, []);
 
-  if (hidden) return null;
+  if (!mounted || hidden) return null;
 
   return (
     <div id="loading-bg" style={{ position: 'fixed', inset: 0, zIndex: 99999, background: '#fff', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>

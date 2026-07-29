@@ -26,7 +26,7 @@ export default function RootLayout({ children }) {
         <link rel="stylesheet" href={`${base}/css/chunk-371a653e.53448e5d.css`} />
         <link rel="stylesheet" href={`${base}/css/chunk-d0a9a6f8.4dbea570.css`} />
       </head>
-      <body>
+      <body suppressHydrationWarning>
         <AuthProvider>
           <LoadingScreen />
           <ThemeInjector />
