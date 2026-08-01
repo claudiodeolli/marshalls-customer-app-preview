@@ -383,27 +383,27 @@ export default function HistoricoPage() {
                       </span>
                     </div>
 
-                    {/* Badge + dates row */}
-                    <div className={(r.status !== 'CANCELLED' && r.status !== 'CANCELED') ? 'hist-badge-row-flex-end' : ''} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '6px' }}>
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
-                        <div><StatusBadge status={r.status} /></div>
-                        {(r.status === 'CANCELLED' || r.status === 'CANCELED') && (
-                          <small style={{ fontSize: '11px', color: '#6e6b7b' }}>usuário cancelou a consulta</small>
+                    {/* Início + Término */}
+                    {r.status !== 'UNFINISHED' && (r.appointmentBegin || r.appointmentEnd) && (
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', marginBottom: '6px' }}>
+                        {r.appointmentBegin && (
+                          <div style={{ fontSize: 12, color: '#777' }}>
+                            <strong>Início: </strong>{r.appointmentBegin}
+                          </div>
+                        )}
+                        {r.appointmentEnd && (
+                          <div style={{ fontSize: 12, color: '#777' }}>
+                            <strong>Término: </strong>{r.appointmentEnd}
+                          </div>
                         )}
                       </div>
-                      {r.status !== 'UNFINISHED' && (
-                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '2px' }}>
-                          {r.appointmentBegin && (
-                            <div style={{ fontSize: 12, color: '#777' }}>
-                              <strong>Início: </strong>{r.appointmentBegin}
-                            </div>
-                          )}
-                          {r.appointmentEnd && (
-                            <div style={{ fontSize: 12, color: '#777' }}>
-                              <strong>Término: </strong>{r.appointmentEnd}
-                            </div>
-                          )}
-                        </div>
+                    )}
+
+                    {/* Badge row */}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '3px', marginBottom: '6px' }}>
+                      <div><StatusBadge status={r.status} /></div>
+                      {(r.status === 'CANCELLED' || r.status === 'CANCELED') && (
+                        <small style={{ fontSize: '11px', color: '#6e6b7b' }}>usuário cancelou a consulta</small>
                       )}
                     </div>
 
