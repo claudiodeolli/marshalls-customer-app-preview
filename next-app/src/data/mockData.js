@@ -178,10 +178,10 @@ export const mockReferrals = [
 ];
 
 export const mockHistory = [
-  // Pronto atendimento mais recente — sem encaminhamento, com documentos
+  // Agendamento com especialista — consulta avulsa FINISHED
   {
     uuid: 'hist-001',
-    type: 'emergency',
+    type: 'scheduled',
     status: 'FINISHED',
     appointmentBegin: '08/06/2026 19:15',
     appointmentEnd: '08/06/2026 19:42',
@@ -191,6 +191,7 @@ export const mockHistory = [
       { type: 'notes',    url: 'https://example.com/docs/atestado-hist001.pdf' },
       { type: 'medicines', url: 'https://example.com/docs/receita-hist001.pdf' },
     ],
+    evaluation: null,
   },
   // Agendamento com especialista — de ref-004 (Neurologia FINISHED) = apt-003
   {
