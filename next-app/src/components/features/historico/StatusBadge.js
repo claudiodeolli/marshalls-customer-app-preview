@@ -9,7 +9,7 @@ const STATUS_BADGE = {
 export default function StatusBadge({ status }) {
   const cfg = STATUS_BADGE[status] ?? { label: status, color: '#82868b' };
   return (
-    <span style={{
+    <span className="hist-status-badge" style={{
       display: 'inline-block',
       padding: '3px 10px',
       border: `1px solid ${cfg.color}`,

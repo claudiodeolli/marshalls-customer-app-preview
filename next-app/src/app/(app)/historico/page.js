@@ -378,13 +378,13 @@ export default function HistoricoPage() {
 
                     {/* Type row */}
                     <div style={{ marginBottom: '6px' }}>
-                      <span style={{ fontSize: '13px', color: '#5e5873' }}>
-                        <strong>Tipo: </strong>{typeLabel(r.type)}
+                      <span style={{ color: '#5e5873' }}>
+                        <strong className="hist-label">Tipo: </strong><span className="hist-value">{typeLabel(r.type)}</span>
                       </span>
                     </div>
 
                     {/* Badge + dates row */}
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '6px' }}>
+                    <div className={(r.status !== 'CANCELLED' && r.status !== 'CANCELED') ? 'hist-badge-row-flex-end' : ''} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '6px' }}>
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
                         <div><StatusBadge status={r.status} /></div>
                         {(r.status === 'CANCELLED' || r.status === 'CANCELED') && (
@@ -411,36 +411,36 @@ export default function HistoricoPage() {
 
                     {r.status === 'SCHEDULED' ? (
                       <>
-                        <p style={{ fontSize: '13px', marginBottom: '4px' }}>
-                          <small><b>Especialidade</b></small><br />
-                          {r.professional.specialties[0].name}
+                        <p style={{ marginBottom: '4px' }}>
+                          <small className="hist-label"><b>Especialidade</b></small><br />
+                          <span className="hist-value">{r.professional.specialties[0].name}</span>
                         </p>
 
-                        <p style={{ fontSize: '13px', marginBottom: '4px' }}>
-                          <small><b>Origem</b></small><br />
-                          {r.beneficiaryMedicalReferral ? 'Encaminhamento' : 'Consulta avulsa'}
+                        <p style={{ marginBottom: '4px' }}>
+                          <small className="hist-label"><b>Origem</b></small><br />
+                          <span className="hist-value">{r.beneficiaryMedicalReferral ? 'Encaminhamento' : 'Consulta avulsa'}</span>
                         </p>
 
                         {r.beneficiaryMedicalReferral?.referredByDoctor?.name ? (
-                          <p style={{ fontSize: '13px', marginBottom: '4px' }}>
-                            <small><b>Encaminhado por</b></small><br />
-                            Dr(a). {r.beneficiaryMedicalReferral.referredByDoctor.name}
+                          <p style={{ marginBottom: '4px' }}>
+                            <small className="hist-label"><b>Encaminhado por</b></small><br />
+                            <span className="hist-value">Dr(a). {r.beneficiaryMedicalReferral.referredByDoctor.name}</span>
                           </p>
                         ) : (
-                          <p style={{ fontSize: '13px', marginBottom: '4px' }}>
-                            <small><b>Adquirida por</b></small><br />
-                            <span style={{ color: '#4F68C7' }}>{USER.name} {USER.lastName}</span>
+                          <p style={{ marginBottom: '4px' }}>
+                            <small className="hist-label"><b>Adquirida por</b></small><br />
+                            <span className="hist-value" style={{ color: '#4F68C7' }}>{USER.name} {USER.lastName}</span>
                           </p>
                         )}
 
                         {r.createdAt && (
-                          <p style={{ fontSize: '13px', marginBottom: '4px', color: '#6e6b7b' }}>
-                            <small>Criado em: {formatHistDate(r.createdAt)}</small>
+                          <p style={{ marginBottom: '4px', color: '#6e6b7b' }}>
+                            <small className="hist-label">Criado em: {formatHistDate(r.createdAt)}</small>
                           </p>
                         )}
                         {r.updatedAt && (
-                          <p style={{ fontSize: '13px', marginBottom: '2px', color: '#6e6b7b' }}>
-                            <small>Atualizado em: {formatHistDate(r.updatedAt)}</small>
+                          <p style={{ marginBottom: '2px', color: '#6e6b7b' }}>
+                            <small className="hist-label">Atualizado em: {formatHistDate(r.updatedAt)}</small>
                           </p>
                         )}
 
@@ -456,36 +456,36 @@ export default function HistoricoPage() {
                       </>
                     ) : r.status === 'UNFINISHED' ? (
                       <>
-                        <p style={{ fontSize: '13px', marginBottom: '4px' }}>
-                          <small><b>Especialidade</b></small><br />
-                          {r.professional.specialties[0].name}
+                        <p style={{ marginBottom: '4px' }}>
+                          <small className="hist-label"><b>Especialidade</b></small><br />
+                          <span className="hist-value">{r.professional.specialties[0].name}</span>
                         </p>
 
-                        <p style={{ fontSize: '13px', marginBottom: '4px' }}>
-                          <small><b>Origem</b></small><br />
-                          {r.beneficiaryMedicalReferral ? 'Encaminhamento' : 'Consulta avulsa'}
+                        <p style={{ marginBottom: '4px' }}>
+                          <small className="hist-label"><b>Origem</b></small><br />
+                          <span className="hist-value">{r.beneficiaryMedicalReferral ? 'Encaminhamento' : 'Consulta avulsa'}</span>
                         </p>
 
                         {r.beneficiaryMedicalReferral?.referredByDoctor?.name ? (
-                          <p style={{ fontSize: '13px', marginBottom: '4px' }}>
-                            <small><b>Encaminhado por</b></small><br />
-                            Dr(a). {r.beneficiaryMedicalReferral.referredByDoctor.name}
+                          <p style={{ marginBottom: '4px' }}>
+                            <small className="hist-label"><b>Encaminhado por</b></small><br />
+                            <span className="hist-value">Dr(a). {r.beneficiaryMedicalReferral.referredByDoctor.name}</span>
                           </p>
                         ) : (
-                          <p style={{ fontSize: '13px', marginBottom: '4px' }}>
-                            <small><b>Adquirida por</b></small><br />
-                            <span style={{ color: '#4F68C7' }}>{USER.name} {USER.lastName}</span>
+                          <p style={{ marginBottom: '4px' }}>
+                            <small className="hist-label"><b>Adquirida por</b></small><br />
+                            <span className="hist-value" style={{ color: '#4F68C7' }}>{USER.name} {USER.lastName}</span>
                           </p>
                         )}
 
                         {r.createdAt && (
-                          <p style={{ fontSize: '13px', marginBottom: '4px', color: '#6e6b7b' }}>
-                            <small>Criado em: {formatHistDate(r.createdAt)}</small>
+                          <p style={{ marginBottom: '4px', color: '#6e6b7b' }}>
+                            <small className="hist-label">Criado em: {formatHistDate(r.createdAt)}</small>
                           </p>
                         )}
                         {r.updatedAt && (
-                          <p style={{ fontSize: '13px', marginBottom: '2px', color: '#6e6b7b' }}>
-                            <small>Atualizado em: {formatHistDate(r.updatedAt)}</small>
+                          <p style={{ marginBottom: '2px', color: '#6e6b7b' }}>
+                            <small className="hist-label">Atualizado em: {formatHistDate(r.updatedAt)}</small>
                           </p>
                         )}
 
@@ -502,23 +502,23 @@ export default function HistoricoPage() {
                     ) : (
                       <>
                         {/* Professional */}
-                        <p style={{ fontSize: '13px', marginBottom: '4px' }}>
-                          <small><b>Profissional</b></small><br />
-                          Dr(a) {r.professional.name}
+                        <p style={{ marginBottom: '4px' }}>
+                          <small className="hist-label"><b>Profissional</b></small><br />
+                          <span className="hist-value">Dr(a) {r.professional.name}</span>
                         </p>
 
                         {/* Specialty */}
-                        <p style={{ fontSize: '13px', marginBottom: '4px' }}>
-                          <small><b>Especialidade</b></small><br />
-                          {r.professional.specialties[0].name}
+                        <p style={{ marginBottom: '4px' }}>
+                          <small className="hist-label"><b>Especialidade</b></small><br />
+                          <span className="hist-value">{r.professional.specialties[0].name}</span>
                         </p>
 
                         {/* Referral origin */}
                         {r.type === 'scheduled' && (
-                          <p style={{ fontSize: '13px', marginBottom: '4px' }}>
-                            <small><b>Origem</b></small><br />
+                          <p style={{ marginBottom: '4px' }}>
+                            <small className="hist-label"><b>Origem</b></small><br />
                             {r.beneficiaryMedicalReferral ? (
-                              <>
+                              <span className="hist-value">
                                 Encaminhamento
                                 {r.status === 'FINISHED' && (
                                   <><br />
@@ -531,18 +531,18 @@ export default function HistoricoPage() {
                                     </a>
                                   </>
                                 )}
-                              </>
+                              </span>
                             ) : (
-                              'Consulta avulsa'
+                              <span className="hist-value">Consulta avulsa</span>
                             )}
                           </p>
                         )}
 
                         {/* Adquirida por — consulta avulsa cancelada */}
                         {(r.status === 'CANCELLED' || r.status === 'CANCELED') && r.type === 'scheduled' && !r.beneficiaryMedicalReferral && (
-                          <p style={{ fontSize: '13px', marginBottom: '4px' }}>
-                            <small><b>Adquirida por</b></small><br />
-                            <span style={{ color: '#4F68C7' }}>{USER.name} {USER.lastName}</span>
+                          <p style={{ marginBottom: '4px' }}>
+                            <small className="hist-label"><b>Adquirida por</b></small><br />
+                            <span className="hist-value" style={{ color: '#4F68C7' }}>{USER.name} {USER.lastName}</span>
                           </p>
                         )}
 
