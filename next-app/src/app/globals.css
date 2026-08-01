@@ -1382,6 +1382,10 @@ input._search-input:not([type="checkbox"]):not([type="radio"]):not([type="submit
   font-size: 12px !important;
 }
 
+.referral-card-body {
+  padding-bottom: 15px !important;
+}
+
 @media (max-width: 767.98px) {
   .referral-label {
     font-size: 13px !important;
@@ -1389,6 +1393,15 @@ input._search-input:not([type="checkbox"]):not([type="radio"]):not([type="submit
 
   .referral-value {
     font-size: 13px !important;
+  }
+
+  .referral-status-badge {
+    font-size: 12px !important;
+    margin-top: 6px !important;
+  }
+
+  .card .referral-card-body {
+    padding-bottom: 13px !important;
   }
 }
 

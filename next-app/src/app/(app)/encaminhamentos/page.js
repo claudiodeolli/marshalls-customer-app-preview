@@ -145,7 +145,7 @@ export default function EncaminhamentosPage() {
                 >
                   <div style={{ height: '4px', background: cfg.gradient, flexShrink: 0 }} />
 
-                  <div className="card-body" style={{ flexGrow: 1 }}>
+                  <div className="card-body referral-card-body" style={{ flexGrow: 1 }}>
                     {/* Beneficiary */}
                     <div className="d-flex align-items-center mb-50" style={{ color: 'var(--primary, #0052ff)' }}>
                       <span style={{ marginRight: '8px', flexShrink: 0 }}><IconPerson /></span>
@@ -188,12 +188,12 @@ export default function EncaminhamentosPage() {
                     )}
 
                     {cfg.label && (
-                      <span style={{
+                      <span className="referral-status-badge" style={{
                         display: 'inline-block', padding: '3px 10px',
                         border: `1px solid ${cfg.color}`, borderRadius: '20px',
                         color: cfg.color, fontSize: '11px', fontWeight: 700,
                         lineHeight: 1.4, background: `${cfg.color}1f`, whiteSpace: 'nowrap',
-                        marginTop: '14px',
+                        marginTop: '8px',
                       }}>
                         {cfg.label}
                       </span>
