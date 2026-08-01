@@ -156,12 +156,9 @@ export default function EncaminhamentosPage() {
                     </div>
 
                     {/* Specialty */}
-                    <div className="d-flex align-items-start mb-50" style={{ color: '#6e6b7b' }}>
-                      <span style={{ marginRight: '8px', flexShrink: 0, marginTop: '2px' }}><IconMedical /></span>
-                      <div>
-                        <div><small><strong>Especialidade</strong></small></div>
-                        <div style={{ fontSize: '13px', fontWeight: 500, color: '#5e5873' }}>{ref.specialty?.name || 'Não informada'}</div>
-                      </div>
+                    <div className="d-flex align-items-center mb-50" style={{ color: '#6e6b7b' }}>
+                      <span style={{ marginRight: '8px', flexShrink: 0 }}><IconMedical /></span>
+                      <span style={{ fontSize: '13px', color: '#5e5873' }}><strong>Especialidade:</strong> {ref.specialty?.name || 'Não informada'}</span>
                     </div>
 
                     {/* Created at */}
@@ -199,6 +196,7 @@ export default function EncaminhamentosPage() {
                         border: `1px solid ${cfg.color}`, borderRadius: '20px',
                         color: cfg.color, fontSize: '11px', fontWeight: 700,
                         lineHeight: 1.4, background: `${cfg.color}1f`, whiteSpace: 'nowrap',
+                        marginTop: '14px',
                       }}>
                         {cfg.label}
                       </span>
