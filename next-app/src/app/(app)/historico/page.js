@@ -394,12 +394,12 @@ export default function HistoricoPage() {
                       {r.status !== 'UNFINISHED' && (
                         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '2px' }}>
                           {r.appointmentBegin && (
-                            <div style={{ fontSize: 11, color: '#777' }}>
+                            <div style={{ fontSize: 12, color: '#777' }}>
                               <strong>Início: </strong>{r.appointmentBegin}
                             </div>
                           )}
                           {r.appointmentEnd && (
-                            <div style={{ fontSize: 11, color: '#777' }}>
+                            <div style={{ fontSize: 12, color: '#777' }}>
                               <strong>Término: </strong>{r.appointmentEnd}
                             </div>
                           )}
