@@ -149,13 +149,13 @@ export default function EncaminhamentosPage() {
                     {/* Beneficiary */}
                     <div className="d-flex align-items-center mb-50" style={{ color: 'var(--primary, #0052ff)' }}>
                       <span style={{ marginRight: '8px', flexShrink: 0 }}><IconPerson /></span>
-                      <span style={{ fontSize: '12px' }}><strong className="referral-label">Beneficiário:</strong> <span style={{ fontSize: '15px', fontWeight: 700 }}>{ref.beneficiary?.name || 'Não informado'}</span></span>
+                      <span style={{ fontSize: '12px' }}><strong className="referral-label">Beneficiário:</strong> <span className="referral-value" style={{ fontSize: '15px', fontWeight: 700 }}>{ref.beneficiary?.name || 'Não informado'}</span></span>
                     </div>
 
                     {/* Specialty */}
                     <div className="d-flex align-items-center mb-50" style={{ color: '#6e6b7b' }}>
                       <span style={{ marginRight: '8px', flexShrink: 0 }}><IconMedical /></span>
-                      <span style={{ fontSize: '12px', color: '#5e5873' }}><strong className="referral-label">Especialidade:</strong> {ref.specialty?.name || 'Não informada'}</span>
+                      <span style={{ fontSize: '12px', color: '#5e5873' }}><strong className="referral-label">Especialidade:</strong> <span className="referral-value">{ref.specialty?.name || 'Não informada'}</span></span>
                     </div>
 
                     {/* Created at */}
@@ -163,7 +163,7 @@ export default function EncaminhamentosPage() {
                       <span style={{ marginRight: '8px', flexShrink: 0, marginTop: '2px' }}><IconCalendar /></span>
                       <div>
                         <div><strong className="referral-label">Criado em</strong></div>
-                        <div style={{ fontSize: '12px' }}>{formatDate(ref.createdAt)}</div>
+                        <div className="referral-value" style={{ fontSize: '12px' }}>{formatDate(ref.createdAt)}</div>
                       </div>
                     </div>
 
@@ -172,7 +172,7 @@ export default function EncaminhamentosPage() {
                       <span style={{ marginRight: '8px', flexShrink: 0, marginTop: '2px' }}><IconRefresh /></span>
                       <div>
                         <div><strong className="referral-label">Atualizado em</strong></div>
-                        <div style={{ fontSize: '12px' }}>{formatDate(ref.updatedAt)}</div>
+                        <div className="referral-value" style={{ fontSize: '12px' }}>{formatDate(ref.updatedAt)}</div>
                       </div>
                     </div>
 
@@ -182,7 +182,7 @@ export default function EncaminhamentosPage() {
                         <span style={{ marginRight: '8px', flexShrink: 0, marginTop: '2px' }}><IconReferral /></span>
                         <div>
                           <div><strong className="referral-label">Encaminhado por</strong></div>
-                          <div style={{ fontSize: '12px' }}>Dr(a). {ref.referredByDoctor.name}</div>
+                          <div className="referral-value" style={{ fontSize: '12px' }}>Dr(a). {ref.referredByDoctor.name}</div>
                         </div>
                       </div>
                     )}
