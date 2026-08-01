@@ -1400,6 +1400,10 @@ input._search-input:not([type="checkbox"]):not([type="radio"]):not([type="submit
     margin-top: 6px !important;
   }
 
+  .btn-agendar-referral {
+    font-size: 13px !important;
+  }
+
   .card .referral-card-body {
     padding-bottom: 13px !important;
   }

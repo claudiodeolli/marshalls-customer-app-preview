@@ -207,7 +207,7 @@ export default function EncaminhamentosPage() {
                     >
                       {isScheduled && (
                         <button
-                          className="btn btn-primary btn-sm"
+                          className="btn btn-primary btn-sm btn-agendar-referral"
                           onClick={() => router.push('/agendamentos')}
                           style={{ display: 'flex', alignItems: 'center', gap: '5px' }}
                         >
