@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import api from '@/lib/api';
 import { useAuth } from '@/lib/AuthContext';
 import { mockReferrals } from '@/data/mockData';
-import { IconPerson, IconMedical, IconCalendar, IconRefresh, IconSchedule } from '@/components/features/encaminhamentos/icons';
+import { IconPerson, IconMedical, IconCalendar, IconRefresh, IconSchedule, IconReferral } from '@/components/features/encaminhamentos/icons';
 import FilterSelect from '@/components/features/encaminhamentos/FilterSelect';
 import EmptyState from '@/components/features/encaminhamentos/EmptyState';
 import SkeletonCard from '@/components/features/encaminhamentos/SkeletonCard';
@@ -15,11 +15,12 @@ const IS_MOCK = process.env.NEXT_PUBLIC_MOCK_MODE === '1';
 const STATUS_CONFIG = {
   PENDING:   { label: 'Pendente', color: '#ff9f43', gradient: 'linear-gradient(90deg, #ff9f43, #ffcd94)' },
   SCHEDULED: { label: 'Agendado', color: '#00cfe8', gradient: 'linear-gradient(90deg, #00cfe8, #84e0f0)' },
-  default:   { label: 'Pendente', color: '#82868b', gradient: 'linear-gradient(90deg, #757575, #bdbdbd)' },
 };
 
+const DEFAULT_STATUS = { color: '#82868b', gradient: 'linear-gradient(90deg, #757575, #bdbdbd)' };
+
 function getStatusConfig(status) {
-  return STATUS_CONFIG[status] || STATUS_CONFIG.default;
+  return STATUS_CONFIG[status] || DEFAULT_STATUS;
 }
 
 function formatDate(str) {
@@ -86,6 +87,7 @@ export default function EncaminhamentosPage() {
   }
 
   const visible = (filter ? referrals.filter(r => r.status === filter) : referrals)
+    .filter(r => STATUS_CONFIG[r.status])
     .slice()
     .sort((a, b) => parseCreatedAt(a.createdAt) - parseCreatedAt(b.createdAt));
 
@@ -175,19 +177,21 @@ export default function EncaminhamentosPage() {
                     {/* Referred by */}
                     {ref.referredByDoctor?.name && (
                       <div className="d-flex align-items-center mb-1" style={{ color: '#6e6b7b' }}>
-                        <span style={{ marginRight: '8px', flexShrink: 0 }}><IconPerson /></span>
+                        <span style={{ marginRight: '8px', flexShrink: 0 }}><IconReferral /></span>
                         <small>Encaminhado por: Dr(a). {ref.referredByDoctor.name}</small>
                       </div>
                     )}
 
-                    <span style={{
-                      display: 'inline-block', padding: '3px 10px',
-                      border: `1px solid ${cfg.color}`, borderRadius: '20px',
-                      color: cfg.color, fontSize: '11px', fontWeight: 700,
-                      lineHeight: 1.4, background: `${cfg.color}1f`, whiteSpace: 'nowrap',
-                    }}>
-                      {cfg.label}
-                    </span>
+                    {cfg.label && (
+                      <span style={{
+                        display: 'inline-block', padding: '3px 10px',
+                        border: `1px solid ${cfg.color}`, borderRadius: '20px',
+                        color: cfg.color, fontSize: '11px', fontWeight: 700,
+                        lineHeight: 1.4, background: `${cfg.color}1f`, whiteSpace: 'nowrap',
+                      }}>
+                        {cfg.label}
+                      </span>
+                    )}
                   </div>
 
                   {(isPending || isScheduled) && (
@@ -206,7 +210,7 @@ export default function EncaminhamentosPage() {
                       )}
                       {isPending && (
                         <button
-                          className="btn btn-primary btn-sm"
+                          className="btn btn-primary btn-sm btn-agendar-referral"
                           onClick={() => router.push(`/schedule/calendar?referral=${ref.uuid}`)}
                           style={{ display: 'flex', alignItems: 'center', gap: '5px' }}
                         >
