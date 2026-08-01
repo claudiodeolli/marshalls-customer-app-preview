@@ -400,10 +400,10 @@ export default function HistoricoPage() {
                     )}
 
                     {/* Badge row */}
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '3px', marginBottom: '6px' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '3px', marginBottom: '6px', alignItems: 'flex-end' }}>
                       <div><StatusBadge status={r.status} /></div>
                       {(r.status === 'CANCELLED' || r.status === 'CANCELED') && (
-                        <small style={{ fontSize: '11px', color: '#6e6b7b' }}>usuário cancelou a consulta</small>
+                        <small style={{ fontSize: '11px', color: '#6e6b7b', textAlign: 'right' }}>usuário cancelou a consulta</small>
                       )}
                     </div>
 
