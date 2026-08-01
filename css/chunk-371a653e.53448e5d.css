@@ -393,7 +393,8 @@ ul[data-v-0e8a7f4f] {
     }
 
     [dir=ltr] .vertical-layout.vertical-menu-modern .content,[dir=ltr] .vertical-layout.vertical-menu-modern .footer {
-        margin-left: 0
+        margin-left: 0;
+        padding: 0 24px;
     }
 
     [dir=rtl] .vertical-layout.vertical-menu-modern .content,[dir=rtl] .vertical-layout.vertical-menu-modern .footer {

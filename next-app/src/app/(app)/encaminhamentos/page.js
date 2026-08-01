@@ -147,38 +147,49 @@ export default function EncaminhamentosPage() {
 
                   <div className="card-body" style={{ flexGrow: 1 }}>
                     {/* Beneficiary */}
-                    <div className="d-flex align-items-center mb-75" style={{ color: 'var(--primary, #0052ff)' }}>
-                      <span style={{ marginRight: '8px', flexShrink: 0 }}><IconPerson /></span>
-                      <span style={{ fontWeight: 700, fontSize: '15px' }}>
-                        {ref.beneficiary?.name || 'Beneficiário'}
-                      </span>
+                    <div className="d-flex align-items-start mb-50" style={{ color: 'var(--primary, #0052ff)' }}>
+                      <span style={{ marginRight: '8px', flexShrink: 0, marginTop: '2px' }}><IconPerson /></span>
+                      <div>
+                        <div><small><strong>Beneficiário</strong></small></div>
+                        <div style={{ fontWeight: 700, fontSize: '15px' }}>{ref.beneficiary?.name || 'Beneficiário'}</div>
+                      </div>
                     </div>
 
                     {/* Specialty */}
-                    <div className="d-flex align-items-center mb-75" style={{ color: '#5e5873' }}>
-                      <span style={{ marginRight: '8px', flexShrink: 0, color: '#6e6b7b' }}><IconMedical /></span>
-                      <span style={{ fontSize: '13px', fontWeight: 500 }}>
-                        {ref.specialty?.name || 'Especialidade não informada'}
-                      </span>
+                    <div className="d-flex align-items-start mb-50" style={{ color: '#6e6b7b' }}>
+                      <span style={{ marginRight: '8px', flexShrink: 0, marginTop: '2px' }}><IconMedical /></span>
+                      <div>
+                        <div><small><strong>Especialidade</strong></small></div>
+                        <div style={{ fontSize: '13px', fontWeight: 500, color: '#5e5873' }}>{ref.specialty?.name || 'Não informada'}</div>
+                      </div>
                     </div>
 
                     {/* Created at */}
-                    <div className="d-flex align-items-center mb-50" style={{ color: '#6e6b7b' }}>
-                      <span style={{ marginRight: '8px', flexShrink: 0 }}><IconCalendar /></span>
-                      <small>Criado em: {formatDate(ref.createdAt)}</small>
+                    <div className="d-flex align-items-start mb-50" style={{ color: '#6e6b7b' }}>
+                      <span style={{ marginRight: '8px', flexShrink: 0, marginTop: '2px' }}><IconCalendar /></span>
+                      <div>
+                        <div><small><strong>Criado em</strong></small></div>
+                        <div><small>{formatDate(ref.createdAt)}</small></div>
+                      </div>
                     </div>
 
                     {/* Updated at */}
-                    <div className="d-flex align-items-center mb-1" style={{ color: '#6e6b7b' }}>
-                      <span style={{ marginRight: '8px', flexShrink: 0 }}><IconRefresh /></span>
-                      <small>Atualizado em: {formatDate(ref.updatedAt)}</small>
+                    <div className="d-flex align-items-start mb-50" style={{ color: '#6e6b7b' }}>
+                      <span style={{ marginRight: '8px', flexShrink: 0, marginTop: '2px' }}><IconRefresh /></span>
+                      <div>
+                        <div><small><strong>Atualizado em</strong></small></div>
+                        <div><small>{formatDate(ref.updatedAt)}</small></div>
+                      </div>
                     </div>
 
                     {/* Referred by */}
                     {ref.referredByDoctor?.name && (
-                      <div className="d-flex align-items-center mb-1" style={{ color: '#6e6b7b' }}>
-                        <span style={{ marginRight: '8px', flexShrink: 0 }}><IconReferral /></span>
-                        <small>Encaminhado por: Dr(a). {ref.referredByDoctor.name}</small>
+                      <div className="d-flex align-items-start mb-50" style={{ color: '#6e6b7b' }}>
+                        <span style={{ marginRight: '8px', flexShrink: 0, marginTop: '2px' }}><IconReferral /></span>
+                        <div>
+                          <div><small><strong>Encaminhado por</strong></small></div>
+                          <div><small>Dr(a). {ref.referredByDoctor.name}</small></div>
+                        </div>
                       </div>
                     )}
 
