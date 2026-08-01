@@ -429,15 +429,10 @@ export default function HistoricoPage() {
                           <span className="hist-value">{r.beneficiaryMedicalReferral ? 'Encaminhamento' : 'Consulta avulsa'}</span>
                         </p>
 
-                        {r.beneficiaryMedicalReferral?.referredByDoctor?.name ? (
+                        {r.beneficiaryMedicalReferral?.referredByDoctor?.name && (
                           <p style={{ marginBottom: '4px' }}>
                             <small className="hist-label"><b>Encaminhado por</b></small><br />
                             <span className="hist-value">Dr(a). {r.beneficiaryMedicalReferral.referredByDoctor.name}</span>
-                          </p>
-                        ) : (
-                          <p style={{ marginBottom: '4px' }}>
-                            <small className="hist-label"><b>Adquirida por</b></small><br />
-                            <span className="hist-value" style={{ color: '#4F68C7' }}>{USER.name} {USER.lastName}</span>
                           </p>
                         )}
 
@@ -474,15 +469,10 @@ export default function HistoricoPage() {
                           <span className="hist-value">{r.beneficiaryMedicalReferral ? 'Encaminhamento' : 'Consulta avulsa'}</span>
                         </p>
 
-                        {r.beneficiaryMedicalReferral?.referredByDoctor?.name ? (
+                        {r.beneficiaryMedicalReferral?.referredByDoctor?.name && (
                           <p style={{ marginBottom: '4px' }}>
                             <small className="hist-label"><b>Encaminhado por</b></small><br />
                             <span className="hist-value">Dr(a). {r.beneficiaryMedicalReferral.referredByDoctor.name}</span>
-                          </p>
-                        ) : (
-                          <p style={{ marginBottom: '4px' }}>
-                            <small className="hist-label"><b>Adquirida por</b></small><br />
-                            <span className="hist-value" style={{ color: '#4F68C7' }}>{USER.name} {USER.lastName}</span>
                           </p>
                         )}
 
@@ -546,12 +536,20 @@ export default function HistoricoPage() {
                           </p>
                         )}
 
-                        {/* Adquirida por — consulta avulsa cancelada */}
-                        {(r.status === 'CANCELLED' || r.status === 'CANCELED') && r.type === 'scheduled' && !r.beneficiaryMedicalReferral && (
-                          <p style={{ marginBottom: '4px' }}>
-                            <small className="hist-label"><b>Adquirida por</b></small><br />
-                            <span className="hist-value" style={{ color: '#4F68C7' }}>{USER.name} {USER.lastName}</span>
-                          </p>
+                        {/* Adquirida por + Data da compra — agendamento especialista, consulta avulsa, finalizada */}
+                        {r.status === 'FINISHED' && r.type === 'scheduled' && !r.beneficiaryMedicalReferral && (
+                          <>
+                            <p style={{ marginBottom: '4px' }}>
+                              <small className="hist-label"><b>Adquirida por</b></small><br />
+                              <span className="hist-value" style={{ color: '#4F68C7' }}>{USER.name} {USER.lastName}</span>
+                            </p>
+                            {r.purchasedAt && (
+                              <p style={{ marginBottom: '4px' }}>
+                                <small className="hist-label"><b>Data da compra</b></small><br />
+                                <span className="hist-value">{r.purchasedAt}</span>
+                              </p>
+                            )}
+                          </>
                         )}
 
                         {/* Documents accordion */}
