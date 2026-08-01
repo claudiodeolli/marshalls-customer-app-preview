@@ -1,17 +1,18 @@
 'use client';
 
 import { useState } from 'react';
-import { IconChevronDown, IconOpenInNew, IconExam, IconReferral, IconMedicine, IconNotes, IconReport } from './icons';
+import { IconChevronDown } from './icons';
 
-function getDocInfo(type) {
-  switch (type) {
-    case 'exam':      return { icon: <IconExam />,      title: 'Exame' };
-    case 'referral':  return { icon: <IconReferral />,  title: 'Encaminhamento' };
-    case 'medicines': return { icon: <IconMedicine />,  title: 'Medicamento' };
-    case 'notes':     return { icon: <IconNotes />,     title: 'Atestado' };
-    case 'report':    return { icon: <IconReport />,    title: 'Relatório' };
-    default:          return { icon: <IconReferral />,  title: 'Documento' };
-  }
+const DOC_CONFIG = {
+  notes:     { emoji: '📋', label: 'Atestado médico' },
+  medicines: { emoji: '💊', label: 'Receita médica' },
+  exam:      { emoji: '🔬', label: 'Solicitação de exames' },
+  referral:  { emoji: '📎', label: 'Encaminhamento' },
+  report:    { emoji: '📝', label: 'Laudo médico' },
+};
+
+function getDocConfig(type) {
+  return DOC_CONFIG[type] ?? { emoji: '📄', label: 'Documento' };
 }
 
 export default function DocumentsAccordion({ documents }) {
@@ -22,28 +23,29 @@ export default function DocumentsAccordion({ documents }) {
         style={{ padding: '10px 14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', userSelect: 'none' }}
         onClick={() => setOpen(o => !o)}
       >
-        <span style={{ fontSize: '13px', fontWeight: 500 }}>Documentos do atendimento</span>
+        <span style={{ fontSize: '13px', fontWeight: 600 }}>Documentos do atendimento</span>
         <IconChevronDown open={open} />
       </div>
       {open && (
-        <div style={{ padding: '0 14px 8px' }}>
-          {documents.map((doc, idx) => {
-            const { icon, title } = getDocInfo(doc.type);
-            return (
-              <div
-                key={idx}
-                style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 0', borderBottom: idx < documents.length - 1 ? '1px solid #ddd' : 'none' }}
-              >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  {icon}
-                  <span style={{ fontWeight: 500, fontSize: '13px' }}>{title}</span>
-                </div>
-                <a href={doc.url} target="_blank" rel="noopener noreferrer" style={{ color: '#007bff' }}>
-                  <IconOpenInNew />
-                </a>
-              </div>
-            );
-          })}
+        <div style={{ padding: '4px 14px 14px' }}>
+          <ul style={{ margin: 0, paddingLeft: '18px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            {documents.map((doc, idx) => {
+              const { emoji, label } = getDocConfig(doc.type);
+              return (
+                <li key={idx} style={{ fontSize: '13px', color: '#5e5873' }}>
+                  <a
+                    href={doc.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ color: '#5e5873', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px' }}
+                  >
+                    <span style={{ fontSize: '16px', lineHeight: 1 }}>{emoji}</span>
+                    {label}
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
         </div>
       )}
     </div>
