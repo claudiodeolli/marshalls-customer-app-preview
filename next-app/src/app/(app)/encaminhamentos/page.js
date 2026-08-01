@@ -149,7 +149,7 @@ export default function EncaminhamentosPage() {
                     {/* Beneficiary */}
                     <div className="d-flex align-items-center mb-50" style={{ color: 'var(--primary, #0052ff)' }}>
                       <span style={{ marginRight: '8px', flexShrink: 0 }}><IconPerson /></span>
-                      <span style={{ fontSize: '12px' }}><strong className="referral-label">Beneficiário:</strong> <span className="referral-value" style={{ fontSize: '15px', fontWeight: 700 }}>{ref.beneficiary?.name || 'Não informado'}</span></span>
+                      <span style={{ fontSize: '12px' }}><strong className="referral-label">Beneficiário:</strong> <span className="referral-value referral-beneficiary-name" style={{ fontSize: '15px', fontWeight: 700 }}>{ref.beneficiary?.name || 'Não informado'}</span></span>
                     </div>
 
                     {/* Specialty */}
