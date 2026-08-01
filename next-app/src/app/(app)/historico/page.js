@@ -379,7 +379,15 @@ export default function HistoricoPage() {
                     {/* Type row */}
                     <div style={{ marginBottom: '6px' }}>
                       <span style={{ color: '#5e5873' }}>
-                        <strong className="hist-label">Tipo: </strong><span className="hist-value">{typeLabel(r.type)}</span>
+                        <strong className="hist-label">Tipo: </strong>
+                        {r.type === 'scheduled' ? (
+                          <>
+                            <span className="hist-value _type-mobile">Agendamento com especialista</span>
+                            <span className="hist-value _type-desktop">Agendamento especialista</span>
+                          </>
+                        ) : (
+                          <span className="hist-value">{typeLabel(r.type)}</span>
+                        )}
                       </span>
                     </div>
 
@@ -387,12 +395,12 @@ export default function HistoricoPage() {
                     {r.status !== 'UNFINISHED' && (r.appointmentBegin || r.appointmentEnd) && (
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', marginBottom: '6px' }}>
                         {r.appointmentBegin && (
-                          <div style={{ fontSize: 12, color: '#777' }}>
+                          <div className="_hist-datetime" style={{ color: '#777' }}>
                             <strong>Início: </strong>{r.appointmentBegin}
                           </div>
                         )}
                         {r.appointmentEnd && (
-                          <div style={{ fontSize: 12, color: '#777' }}>
+                          <div className="_hist-datetime" style={{ color: '#777' }}>
                             <strong>Término: </strong>{r.appointmentEnd}
                           </div>
                         )}
@@ -401,7 +409,7 @@ export default function HistoricoPage() {
 
                     {/* Badge row */}
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '3px', marginBottom: '6px', alignItems: 'flex-end' }}>
-                      <div><StatusBadge status={r.status} /></div>
+                      <div style={{ marginTop: '6px', marginBottom: '6px' }}><StatusBadge status={r.status} /></div>
                       {(r.status === 'CANCELLED' || r.status === 'CANCELED') && (
                         <small style={{ fontSize: '11px', color: '#6e6b7b', textAlign: 'right' }}>usuário cancelou a consulta</small>
                       )}
@@ -446,8 +454,8 @@ export default function HistoricoPage() {
 
                         <div style={{ marginTop: '10px', paddingTop: '10px', borderTop: '1px solid rgba(0,0,0,0.08)', display: 'flex', justifyContent: 'flex-end' }}>
                           <button
-                            className="btn btn-primary btn-sm"
-                            style={{ fontSize: '12px', display: 'flex', alignItems: 'center', gap: '5px' }}
+                            className="btn btn-primary btn-sm btn-agendar-referral"
+                            style={{ display: 'flex', alignItems: 'center', gap: '5px' }}
                             onClick={() => router.push('/agendamentos')}
                           >
                             Ver agendamento
@@ -491,8 +499,8 @@ export default function HistoricoPage() {
 
                         <div style={{ marginTop: '10px', paddingTop: '10px', borderTop: '1px solid rgba(0,0,0,0.08)', display: 'flex', justifyContent: 'flex-end' }}>
                           <button
-                            className="btn btn-primary btn-sm"
-                            style={{ fontSize: '12px', display: 'flex', alignItems: 'center', gap: '5px' }}
+                            className="btn btn-primary btn-sm btn-agendar-referral"
+                            style={{ display: 'flex', alignItems: 'center', gap: '5px' }}
                             onClick={() => router.push('/schedule/calendar')}
                           >
                             Agendar
@@ -563,8 +571,7 @@ export default function HistoricoPage() {
                               </div>
                             ) : (
                               <button
-                                className="btn btn-outline-primary btn-sm"
-                                style={{ fontSize: '12px', padding: '3px 10px' }}
+                                className="btn btn-outline-primary btn-sm btn-agendar-referral"
                                 onClick={() => setEvalTarget(r)}
                               >
                                 ★ Avaliar consulta

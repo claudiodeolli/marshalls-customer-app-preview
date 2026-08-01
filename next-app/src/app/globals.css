@@ -608,6 +608,24 @@ img._logo-collapsed {
   }
 }
 
+._hist-datetime {
+  font-size: 12px;
+}
+
+@media (max-width: 1199.98px) {
+  ._hist-datetime {
+    font-size: 14px;
+  }
+}
+
+._type-mobile { display: inline; }
+._type-desktop { display: none; }
+
+@media (min-width: 1200px) {
+  ._type-mobile { display: none; }
+  ._type-desktop { display: inline; }
+}
+
 body._page-leaving .content-body {
   animation:
     zoom-fade-in-opacity .28s ease-in-out 350ms backwards,
