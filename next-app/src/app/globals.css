@@ -1378,6 +1378,10 @@ input._search-input:not([type="checkbox"]):not([type="radio"]):not([type="submit
   }
 }
 
+.referral-label {
+  font-size: 12px !important;
+}
+
 /* ── Plantão 24h: hint mobile acima do botão ── */
 ._plantao-mobile-hint {
   display: none;

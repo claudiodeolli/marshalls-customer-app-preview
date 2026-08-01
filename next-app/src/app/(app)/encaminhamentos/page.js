@@ -147,26 +147,23 @@ export default function EncaminhamentosPage() {
 
                   <div className="card-body" style={{ flexGrow: 1 }}>
                     {/* Beneficiary */}
-                    <div className="d-flex align-items-start mb-50" style={{ color: 'var(--primary, #0052ff)' }}>
-                      <span style={{ marginRight: '8px', flexShrink: 0, marginTop: '2px' }}><IconPerson /></span>
-                      <div>
-                        <div><small><strong>Beneficiário</strong></small></div>
-                        <div style={{ fontWeight: 700, fontSize: '15px' }}>{ref.beneficiary?.name || 'Beneficiário'}</div>
-                      </div>
+                    <div className="d-flex align-items-center mb-50" style={{ color: 'var(--primary, #0052ff)' }}>
+                      <span style={{ marginRight: '8px', flexShrink: 0 }}><IconPerson /></span>
+                      <span style={{ fontSize: '12px' }}><strong className="referral-label">Beneficiário:</strong> <span style={{ fontSize: '15px', fontWeight: 700 }}>{ref.beneficiary?.name || 'Não informado'}</span></span>
                     </div>
 
                     {/* Specialty */}
                     <div className="d-flex align-items-center mb-50" style={{ color: '#6e6b7b' }}>
                       <span style={{ marginRight: '8px', flexShrink: 0 }}><IconMedical /></span>
-                      <span style={{ fontSize: '13px', color: '#5e5873' }}><strong>Especialidade:</strong> {ref.specialty?.name || 'Não informada'}</span>
+                      <span style={{ fontSize: '12px', color: '#5e5873' }}><strong className="referral-label">Especialidade:</strong> {ref.specialty?.name || 'Não informada'}</span>
                     </div>
 
                     {/* Created at */}
                     <div className="d-flex align-items-start mb-50" style={{ color: '#6e6b7b' }}>
                       <span style={{ marginRight: '8px', flexShrink: 0, marginTop: '2px' }}><IconCalendar /></span>
                       <div>
-                        <div><small><strong>Criado em</strong></small></div>
-                        <div><small>{formatDate(ref.createdAt)}</small></div>
+                        <div><strong className="referral-label">Criado em</strong></div>
+                        <div style={{ fontSize: '12px' }}>{formatDate(ref.createdAt)}</div>
                       </div>
                     </div>
 
@@ -174,8 +171,8 @@ export default function EncaminhamentosPage() {
                     <div className="d-flex align-items-start mb-50" style={{ color: '#6e6b7b' }}>
                       <span style={{ marginRight: '8px', flexShrink: 0, marginTop: '2px' }}><IconRefresh /></span>
                       <div>
-                        <div><small><strong>Atualizado em</strong></small></div>
-                        <div><small>{formatDate(ref.updatedAt)}</small></div>
+                        <div><strong className="referral-label">Atualizado em</strong></div>
+                        <div style={{ fontSize: '12px' }}>{formatDate(ref.updatedAt)}</div>
                       </div>
                     </div>
 
@@ -184,8 +181,8 @@ export default function EncaminhamentosPage() {
                       <div className="d-flex align-items-start mb-50" style={{ color: '#6e6b7b' }}>
                         <span style={{ marginRight: '8px', flexShrink: 0, marginTop: '2px' }}><IconReferral /></span>
                         <div>
-                          <div><small><strong>Encaminhado por</strong></small></div>
-                          <div><small>Dr(a). {ref.referredByDoctor.name}</small></div>
+                          <div><strong className="referral-label">Encaminhado por</strong></div>
+                          <div style={{ fontSize: '12px' }}>Dr(a). {ref.referredByDoctor.name}</div>
                         </div>
                       </div>
                     )}
