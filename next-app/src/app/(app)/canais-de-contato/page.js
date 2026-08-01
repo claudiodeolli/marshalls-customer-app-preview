@@ -1,6 +1,8 @@
 export default function CanaisDeContatoPage() {
   return (
-    <div className="row">
+    <div>
+      <p className="text-muted mb-2">Entre em contato com nossa equipe pelos canais abaixo.</p>
+      <div className="row">
       <div className="col-12 col-md-8 col-lg-6">
         <div className="card">
           <div className="card-header">
@@ -8,7 +10,7 @@ export default function CanaisDeContatoPage() {
           </div>
           <div className="card-body">
             <p className="text-muted mb-2">
-              Entre em contato com nossa equipe pelos canais abaixo. Estamos prontos para te atender!
+              Estamos prontos para te atender!
             </p>
 
             {/* WhatsApp */}
@@ -59,6 +61,7 @@ export default function CanaisDeContatoPage() {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 }
