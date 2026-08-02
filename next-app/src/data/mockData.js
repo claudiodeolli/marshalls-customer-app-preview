@@ -225,6 +225,7 @@ export const mockHistory = [
     beneficiaryMedicalReferral: null,
     createdAt: '15/05/2026 08:30:00',
     updatedAt: '15/05/2026 09:00:00',
+    purchasedAt: '14/05/2026, às 17:20:05',
     documents: [],
   },
   // Agendamento com especialista — encaminhamento UNFINISHED

@@ -364,7 +364,14 @@ export default function HistoricoPage() {
           const displayRecords = [...records].sort((a, b) => {
             const da = parseRecordDate(a.appointmentBegin);
             const db = parseRecordDate(b.appointmentBegin);
-            if (!da && !db) return 0;
+            if (!da && !db) {
+              const ca = parseRecordDate(a.createdAt);
+              const cb = parseRecordDate(b.createdAt);
+              if (!ca && !cb) return 0;
+              if (!ca) return 1;
+              if (!cb) return -1;
+              return ca - cb;
+            }
             if (!da) return 1;
             if (!db) return -1;
             return da - db;
@@ -477,15 +484,32 @@ export default function HistoricoPage() {
                           </p>
                         )}
 
-                        {r.createdAt && (
-                          <p style={{ marginBottom: '4px', color: '#6e6b7b' }}>
-                            <small className="hist-label">Criado em: {formatHistDate(r.createdAt)}</small>
-                          </p>
-                        )}
-                        {r.updatedAt && (
-                          <p style={{ marginBottom: '2px', color: '#6e6b7b' }}>
-                            <small className="hist-label">Atualizado em: {formatHistDate(r.updatedAt)}</small>
-                          </p>
+                        {r.beneficiaryMedicalReferral ? (
+                          <>
+                            {r.createdAt && (
+                              <p style={{ marginBottom: '4px', color: '#6e6b7b' }}>
+                                <small className="hist-label">Criado em: {formatHistDate(r.createdAt)}</small>
+                              </p>
+                            )}
+                            {r.updatedAt && (
+                              <p style={{ marginBottom: '2px', color: '#6e6b7b' }}>
+                                <small className="hist-label">Atualizado em: {formatHistDate(r.updatedAt)}</small>
+                              </p>
+                            )}
+                          </>
+                        ) : (
+                          <>
+                            <p style={{ marginBottom: '4px' }}>
+                              <small className="hist-label"><b>Adquirida por</b></small><br />
+                              <span className="hist-value" style={{ color: '#4F68C7' }}>{USER.name} {USER.lastName}</span>
+                            </p>
+                            {r.purchasedAt && (
+                              <p style={{ marginBottom: '4px' }}>
+                                <small className="hist-label"><b>Data da compra</b></small><br />
+                                <span className="hist-value">{r.purchasedAt}</span>
+                              </p>
+                            )}
+                          </>
                         )}
 
                         <div style={{ marginTop: '10px', paddingTop: '10px', borderTop: '1px solid rgba(0,0,0,0.08)', display: 'flex', justifyContent: 'flex-end' }}>
