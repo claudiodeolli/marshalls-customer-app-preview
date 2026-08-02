@@ -1397,9 +1397,13 @@ input._search-input:not([type="checkbox"]):not([type="radio"]):not([type="submit
   }
 }
 
+.btn-agendar-referral {
+  height: 32px !important;
+}
+
 @media (max-width: 767.98px) {
   .btn-agendar-referral {
-    height: 34px;
+    height: 32px !important;
   }
 }
 

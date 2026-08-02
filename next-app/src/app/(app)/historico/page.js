@@ -509,7 +509,14 @@ export default function HistoricoPage() {
                                   ver encaminhamento
                                 </button>
                               </>
-                            ) : 'Consulta avulsa'}
+                            ) : (
+                              <>
+                                Consulta avulsa<br />
+                                <button style={{ background: 'none', border: 'none', padding: 0, color: '#4F68C7', cursor: 'pointer', fontSize: 'inherit', textDecoration: 'underline' }}>
+                                  Detalhes da compra
+                                </button>
+                              </>
+                            )}
                           </span>
                         </p>
 
@@ -573,7 +580,14 @@ export default function HistoricoPage() {
                                   ver encaminhamento
                                 </button>
                               </>
-                            ) : 'Consulta avulsa'}
+                            ) : (
+                              <>
+                                Consulta avulsa<br />
+                                <button style={{ background: 'none', border: 'none', padding: 0, color: '#4F68C7', cursor: 'pointer', fontSize: 'inherit', textDecoration: 'underline' }}>
+                                  Detalhes da compra
+                                </button>
+                              </>
+                            )}
                           </span>
                         </p>
 
@@ -635,7 +649,12 @@ export default function HistoricoPage() {
                                 )}
                               </span>
                             ) : (
-                              <span className="hist-value">Consulta avulsa</span>
+                              <span className="hist-value">
+                                Consulta avulsa<br />
+                                <button style={{ background: 'none', border: 'none', padding: 0, color: '#4F68C7', cursor: 'pointer', fontSize: 'inherit', textDecoration: 'underline' }}>
+                                  Detalhes da compra
+                                </button>
+                              </span>
                             )}
                           </p>
                         )}
