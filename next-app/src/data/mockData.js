@@ -282,6 +282,23 @@ export const mockHistory = [
     appointmentEnd: null,
     professional: { name: 'Carlos Mendes', specialties: [{ name: 'Cardiologia' }] },
     beneficiaryMedicalReferral: null,
+    purchasedAt: '10/05/2026, às 09:15:30',
+    documents: [],
+  },
+  // Agendamento com especialista — encaminhamento CANCELED
+  {
+    uuid: 'hist-009',
+    type: 'scheduled',
+    status: 'CANCELED',
+    appointmentBegin: '18/06/2026 14:00',
+    appointmentEnd: null,
+    professional: { name: 'Roberto Silva', specialties: [{ name: 'Ortopedia' }] },
+    beneficiaryMedicalReferral: {
+      urlPath: 'https://example.com/docs/encaminhamento-009.pdf',
+      referredByDoctor: { name: 'André Faria' },
+      createdAt: '10/06/2026 09:00:00',
+      updatedAt: '10/06/2026 09:00:00',
+    },
     documents: [],
   },
   // Pronto atendimento mais antigo — com avaliação preenchida

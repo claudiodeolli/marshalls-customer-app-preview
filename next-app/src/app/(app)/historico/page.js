@@ -623,7 +623,7 @@ export default function HistoricoPage() {
                             {r.beneficiaryMedicalReferral ? (
                               <span className="hist-value">
                                 Encaminhamento
-                                {r.status === 'FINISHED' && (
+                                {(r.status === 'FINISHED' || r.status === 'CANCELED' || r.status === 'CANCELLED') && (
                                   <><br />
                                     <button
                                       onClick={() => setReferralModal(r.beneficiaryMedicalReferral)}
@@ -640,8 +640,8 @@ export default function HistoricoPage() {
                           </p>
                         )}
 
-                        {/* Adquirida por + Data da compra — agendamento especialista, consulta avulsa, finalizada */}
-                        {r.status === 'FINISHED' && r.type === 'scheduled' && !r.beneficiaryMedicalReferral && (
+                        {/* Adquirida por + Data da compra — agendamento especialista, consulta avulsa, finalizada ou cancelada */}
+                        {(r.status === 'FINISHED' || r.status === 'CANCELED' || r.status === 'CANCELLED') && r.type === 'scheduled' && !r.beneficiaryMedicalReferral && (
                           <>
                             <p style={{ marginBottom: '4px' }}>
                               <small className="hist-label"><b>Adquirida por</b></small><br />
