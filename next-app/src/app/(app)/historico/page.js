@@ -493,26 +493,7 @@ export default function HistoricoPage() {
                           </span>
                         </p>
 
-                        {r.beneficiaryMedicalReferral ? (
-                          <>
-                            {r.createdAt && (
-                              <p style={{ marginBottom: '4px', color: '#6e6b7b' }}>
-                                <small className="hist-label" style={{ fontSize: '12px' }}>Criado em: {formatHistDate(r.createdAt)}</small>
-                              </p>
-                            )}
-                            {r.updatedAt && (
-                              <p style={{ marginBottom: '4px', color: '#6e6b7b' }}>
-                                <small className="hist-label" style={{ fontSize: '12px' }}>Atualizado em: {formatHistDate(r.updatedAt)}</small>
-                              </p>
-                            )}
-                            {r.beneficiaryMedicalReferral?.referredByDoctor?.name && (
-                              <p style={{ marginBottom: '4px' }}>
-                                <small className="hist-label"><b>Encaminhado por</b></small><br />
-                                <span className="hist-value">Dr(a). {r.beneficiaryMedicalReferral.referredByDoctor.name}</span>
-                              </p>
-                            )}
-                          </>
-                        ) : (
+                        {!r.beneficiaryMedicalReferral && (
                           <>
                             <p style={{ marginBottom: '4px' }}>
                               <small className="hist-label"><b>Adquirida por</b></small><br />
