@@ -96,7 +96,8 @@ export default function HistoricoPage() {
   const [pageLoading, setPageLoading]   = useState(true);
   const [allRecords, setAllRecords]     = useState([]);
   const [records, setRecords]           = useState([]);
-  const [evalTarget, setEvalTarget]     = useState(null);
+  const [evalTarget, setEvalTarget]         = useState(null);
+  const [referralModal, setReferralModal]   = useState(null);
   const [fetchError, setFetchError]     = useState(null);
 
   /* Busca histórico — usa mock em GitHub Pages, API real no Vercel */
@@ -520,13 +521,12 @@ export default function HistoricoPage() {
                                 Encaminhamento
                                 {r.status === 'FINISHED' && (
                                   <><br />
-                                    <a
-                                      href={r.beneficiaryMedicalReferral.urlPath}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
+                                    <button
+                                      onClick={() => setReferralModal(r.beneficiaryMedicalReferral)}
+                                      style={{ background: 'none', border: 'none', padding: 0, color: '#4F68C7', cursor: 'pointer', fontSize: 'inherit', textDecoration: 'underline' }}
                                     >
                                       ver encaminhamento
-                                    </a>
+                                    </button>
                                   </>
                                 )}
                               </span>
@@ -597,6 +597,43 @@ export default function HistoricoPage() {
             setRecords(prev => prev.map(r => r.uuid === uuid ? { ...r, evaluation: ev } : r));
           }}
         />
+      )}
+
+      {referralModal && (
+        <div
+          style={{ position: 'fixed', inset: 0, zIndex: 10000, background: 'rgba(34,41,47,0.55)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px' }}
+          onClick={e => { if (e.target === e.currentTarget) setReferralModal(null); }}
+        >
+          <div style={{ background: '#fff', borderRadius: '12px', width: '100%', maxWidth: 420, boxShadow: '0 12px 40px rgba(34,41,47,0.25)' }}>
+            <div style={{ padding: '18px 24px 16px', borderBottom: '1px solid #ebe9f1', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <h5 style={{ margin: 0, fontWeight: 700, color: '#5e5873', fontSize: '16px' }}>Encaminhamento</h5>
+              <button onClick={() => setReferralModal(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#aaa', fontSize: '24px', lineHeight: 1, padding: '0 4px' }}>×</button>
+            </div>
+            <div style={{ padding: '20px 24px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
+              {referralModal.referredByDoctor?.name && (
+                <div>
+                  <small style={{ fontSize: '11px', color: '#6e6b7b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Encaminhado por</small>
+                  <p style={{ margin: '4px 0 0', fontSize: '14px', color: '#5e5873' }}>Dr(a). {referralModal.referredByDoctor.name}</p>
+                </div>
+              )}
+              {referralModal.createdAt && (
+                <div>
+                  <small style={{ fontSize: '11px', color: '#6e6b7b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Criado em</small>
+                  <p style={{ margin: '4px 0 0', fontSize: '14px', color: '#5e5873' }}>{referralModal.createdAt}</p>
+                </div>
+              )}
+              {referralModal.updatedAt && (
+                <div>
+                  <small style={{ fontSize: '11px', color: '#6e6b7b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Atualizado em</small>
+                  <p style={{ margin: '4px 0 0', fontSize: '14px', color: '#5e5873' }}>{referralModal.updatedAt}</p>
+                </div>
+              )}
+            </div>
+            <div style={{ padding: '14px 24px 20px', borderTop: '1px solid #ebe9f1', display: 'flex', justifyContent: 'flex-end' }}>
+              <button className="btn btn-outline-secondary btn-sm" onClick={() => setReferralModal(null)}>Fechar</button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

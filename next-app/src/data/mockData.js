@@ -202,7 +202,12 @@ export const mockHistory = [
     appointmentBegin: '20/05/2026 10:00',
     appointmentEnd: '20/05/2026 10:48',
     professional: { name: 'Paulo Salave', specialties: [{ name: 'Neurologia' }] },
-    beneficiaryMedicalReferral: { urlPath: 'https://example.com/docs/encaminhamento-004.pdf' },
+    beneficiaryMedicalReferral: {
+      urlPath: 'https://example.com/docs/encaminhamento-004.pdf',
+      referredByDoctor: { name: 'Carlos Mendes' },
+      createdAt: '05/05/2026 08:00:00',
+      updatedAt: '20/05/2026 10:45:00',
+    },
     documents: [
       { type: 'report', url: 'https://example.com/docs/laudo-hist002.pdf' },
       { type: 'exam',   url: 'https://example.com/docs/exame-hist002.pdf' },
