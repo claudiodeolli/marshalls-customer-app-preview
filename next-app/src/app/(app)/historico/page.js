@@ -460,7 +460,7 @@ export default function HistoricoPage() {
                     </div>
 
                     {/* Início + Término */}
-                    {r.status !== 'UNFINISHED' && (r.appointmentBegin || r.appointmentEnd) && (
+                    {r.status !== 'SCHEDULED' && r.status !== 'UNFINISHED' && (r.appointmentBegin || r.appointmentEnd) && (
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', marginBottom: '6px' }}>
                         {r.appointmentBegin && (
                           <div className="_hist-datetime" style={{ color: '#777' }}>
@@ -520,9 +520,10 @@ export default function HistoricoPage() {
                           const dateChanged = converted && converted.date !== date;
                           return date && time ? (
                             <p style={{ marginBottom: '4px' }}>
-                              <small className="hist-label"><b>Data da consulta</b></small><br />
+                              <small className="hist-label"><b>Data e horário da consulta</b></small><br />
                               <span className="hist-value">
-                                {date} às {time} <span title="Horário de Brasília">🇧🇷</span> <span style={{ color: '#9a9a9a', fontSize: '12px' }}>Sao Paulo (GMT-3)</span>
+                                {date} às {time} <span title="Horário de Brasília">🇧🇷</span>{' '}
+                                <span style={{ color: '#9a9a9a', fontSize: '12px' }}>Sao Paulo<br />(GMT-3)</span>
                                 {converted && (
                                   <><br /><span style={{ fontSize: '12px', color: '#6e6b7b' }}>no seu horário:{dateChanged ? ` ${converted.date} às` : ''} {converted.time}</span></>
                                 )}
@@ -531,19 +532,11 @@ export default function HistoricoPage() {
                           ) : null;
                         })()}
 
-                        {!r.beneficiaryMedicalReferral && (
-                          <>
-                            {r.createdAt && (
-                              <p style={{ marginBottom: '4px', color: '#6e6b7b' }}>
-                                <small className="hist-label" style={{ fontSize: '12px' }}>Criado em: {formatHistDate(r.createdAt)}</small>
-                              </p>
-                            )}
-                            {r.updatedAt && (
-                              <p style={{ marginBottom: '2px', color: '#6e6b7b' }}>
-                                <small className="hist-label" style={{ fontSize: '12px' }}>Atualizado em: {formatHistDate(r.updatedAt)}</small>
-                              </p>
-                            )}
-                          </>
+                        {!r.beneficiaryMedicalReferral && r.purchasedAt && (
+                          <p style={{ marginBottom: '4px' }}>
+                            <small className="hist-label"><b>Adquirida em</b></small><br />
+                            <span className="hist-value">{r.purchasedAt.split(',')[0]}</span>
+                          </p>
                         )}
 
                         <div className="_hist-card-footer" style={{ marginTop: '10px', paddingTop: '10px', borderTop: '1px solid rgba(0,0,0,0.08)', display: 'flex', justifyContent: 'flex-end' }}>
