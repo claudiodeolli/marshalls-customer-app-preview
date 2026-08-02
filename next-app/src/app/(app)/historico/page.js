@@ -382,7 +382,7 @@ export default function HistoricoPage() {
             {displayRecords.map(r => (
               <div key={r.uuid} className="col-12 col-sm-6 col-md-4 mb-2">
                 <div className="card mb-0 h-100" style={{ backgroundColor: '#e9f2fa' }}>
-                  <div className="card-body" style={{ padding: '14px' }}>
+                  <div className="card-body" style={{ padding: '14px', display: 'flex', flexDirection: 'column' }}>
 
                     {/* Type row */}
                     <div style={{ marginBottom: '6px' }}>
@@ -426,7 +426,7 @@ export default function HistoricoPage() {
                     <hr style={{ margin: '8px 0', borderColor: 'rgba(0,0,0,0.1)' }} />
 
                     {r.status === 'SCHEDULED' ? (
-                      <>
+                      <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
                         <p style={{ marginBottom: '4px' }}>
                           <small className="hist-label"><b>Especialidade</b></small><br />
                           <span className="hist-value">{r.professional.specialties[0].name}</span>
@@ -455,7 +455,7 @@ export default function HistoricoPage() {
                           </p>
                         )}
 
-                        <div style={{ marginTop: '10px', paddingTop: '10px', borderTop: '1px solid rgba(0,0,0,0.08)', display: 'flex', justifyContent: 'flex-end' }}>
+                        <div className="_hist-card-footer" style={{ marginTop: '10px', paddingTop: '10px', borderTop: '1px solid rgba(0,0,0,0.08)', display: 'flex', justifyContent: 'flex-end' }}>
                           <button
                             className="btn btn-primary btn-sm btn-agendar-referral"
                             style={{ display: 'flex', alignItems: 'center', gap: '5px' }}
@@ -464,9 +464,9 @@ export default function HistoricoPage() {
                             Ver agendamento
                           </button>
                         </div>
-                      </>
+                      </div>
                     ) : r.status === 'UNFINISHED' ? (
-                      <>
+                      <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
                         <p style={{ marginBottom: '4px' }}>
                           <small className="hist-label"><b>Especialidade</b></small><br />
                           <span className="hist-value">{r.professional.specialties[0].name}</span>
@@ -508,7 +508,7 @@ export default function HistoricoPage() {
                           </>
                         )}
 
-                        <div style={{ marginTop: '10px', paddingTop: '10px', borderTop: '1px solid rgba(0,0,0,0.08)', display: 'flex', justifyContent: 'flex-end' }}>
+                        <div className="_hist-card-footer" style={{ marginTop: '10px', paddingTop: '10px', borderTop: '1px solid rgba(0,0,0,0.08)', display: 'flex', justifyContent: 'flex-end' }}>
                           <button
                             className="btn btn-primary btn-sm btn-agendar-referral"
                             style={{ display: 'flex', alignItems: 'center', gap: '5px' }}
@@ -517,9 +517,9 @@ export default function HistoricoPage() {
                             Agendar
                           </button>
                         </div>
-                      </>
+                      </div>
                     ) : (
-                      <>
+                      <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
                         {/* Professional */}
                         <p style={{ marginBottom: '4px' }}>
                           <small className="hist-label"><b>Profissional</b></small><br />
@@ -579,7 +579,7 @@ export default function HistoricoPage() {
 
                         {/* Evaluation */}
                         {r.status === 'FINISHED' && (
-                          <div style={{ marginTop: '10px', paddingTop: '10px', borderTop: '1px solid rgba(0,0,0,0.08)' }}>
+                          <div className="_hist-card-footer" style={{ marginTop: '10px', paddingTop: '10px', borderTop: '1px solid rgba(0,0,0,0.08)', display: 'flex', justifyContent: 'flex-end' }}>
                             {r.evaluation ? (
                               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                 <Stars value={r.evaluation.rating} size={16} />
@@ -597,7 +597,7 @@ export default function HistoricoPage() {
                             )}
                           </div>
                         )}
-                      </>
+                      </div>
                     )}
                   </div>
                 </div>

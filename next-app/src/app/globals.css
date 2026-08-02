@@ -626,6 +626,13 @@ img._logo-collapsed {
   ._type-desktop { display: inline; }
 }
 
+@media (min-width: 1200px) {
+  ._hist-card-footer {
+    flex: 1;
+    align-items: center;
+  }
+}
+
 body._page-leaving .content-body {
   animation:
     zoom-fade-in-opacity .28s ease-in-out 350ms backwards,
