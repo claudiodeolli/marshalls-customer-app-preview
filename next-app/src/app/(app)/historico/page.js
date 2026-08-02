@@ -52,6 +52,36 @@ function formatHistDate(str) {
   return str;
 }
 
+function getBrowserTz() {
+  return Intl.DateTimeFormat().resolvedOptions().timeZone;
+}
+
+function isSameAsBrazil(tz) {
+  const t = tz || getBrowserTz();
+  try {
+    const ref = new Date('2024-07-01T12:00:00Z');
+    const fmt = (zone) => parseInt(
+      new Intl.DateTimeFormat('en', { timeZone: zone, hour: 'numeric', hour12: false }).format(ref)
+    );
+    return fmt(t) === fmt('America/Sao_Paulo');
+  } catch { return true; }
+}
+
+function convertApptDateTime(date, time, tz) {
+  if (!date || !time) return null;
+  try {
+    const [d, m, y] = date.split('/');
+    const [h, min] = time.split(':');
+    const dt = new Date(`${y}-${m}-${d}T${h}:${min}:00-03:00`);
+    if (isNaN(dt.getTime())) return null;
+    const zone = tz || getBrowserTz();
+    return {
+      date: dt.toLocaleDateString('pt-BR', { timeZone: zone, day: '2-digit', month: '2-digit', year: 'numeric' }),
+      time: dt.toLocaleTimeString('pt-BR', { timeZone: zone, hour: '2-digit', minute: '2-digit', hour12: false }),
+    };
+  } catch { return null; }
+}
+
 function getLastRecord(records) {
   if (!records.length) return null;
   return records.reduce((latest, r) => {
@@ -98,22 +128,50 @@ export default function HistoricoPage() {
   const [records, setRecords]           = useState([]);
   const [evalTarget, setEvalTarget]         = useState(null);
   const [referralModal, setReferralModal]   = useState(null);
+  const [timezone, setTimezone]             = useState('');
   const [fetchError, setFetchError]     = useState(null);
 
-  /* Busca histórico — usa mock em GitHub Pages, API real no Vercel */
+  /* Busca histórico — mocks sempre incluídos; API real adicionada no Vercel */
+  function filterMocks({ typeFilter: type, statusFilter: status }) {
+    return mockHistory.filter(r => {
+      if (type && type !== 'all' && r.type !== type) return false;
+      if (status) {
+        const match = r.status === status ||
+          (status === 'CANCELLED' && r.status === 'CANCELED') ||
+          (status === 'CANCELED'  && r.status === 'CANCELLED');
+        if (!match) return false;
+      }
+      return true;
+    });
+  }
+
   async function fetchHistory(params) {
     if (IS_MOCK) {
-      const { typeFilter: type, statusFilter: status } = params;
-      return mockHistory.filter(r => {
-        if (type && type !== 'all' && r.type !== type) return false;
-        if (status) {
-          const match = r.status === status ||
-            (status === 'CANCELLED' && r.status === 'CANCELED') ||
-            (status === 'CANCELED'  && r.status === 'CANCELLED');
-          if (!match) return false;
+      const mocks = filterMocks(params);
+      const stored = [];
+      try {
+        const raw = localStorage.getItem('MOCK_HISTORY');
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed)) {
+            const mockUuids = new Set(mocks.map(m => m.uuid));
+            parsed
+              .filter(r => !mockUuids.has(r.uuid))
+              .filter(r => {
+                if (params.typeFilter && params.typeFilter !== 'all' && r.type !== params.typeFilter) return false;
+                if (params.statusFilter) {
+                  const match = r.status === params.statusFilter ||
+                    (params.statusFilter === 'CANCELLED' && r.status === 'CANCELED') ||
+                    (params.statusFilter === 'CANCELED'  && r.status === 'CANCELLED');
+                  if (!match) return false;
+                }
+                return true;
+              })
+              .forEach(r => stored.push(r));
+          }
         }
-        return true;
-      });
+      } catch {}
+      return [...mocks, ...stored];
     }
 
     const { dateInitial: di, dateFinal: df, typeFilter: type, statusFilter: status } = params;
@@ -135,6 +193,8 @@ export default function HistoricoPage() {
     const res = await api.get(`/api/history?${qs.toString()}`);
     return Array.isArray(res.data) ? res.data : [];
   }
+
+  useEffect(() => { setTimezone(getBrowserTz()); }, []);
 
   useEffect(() => {
     const defaults = { dateInitial: sevenAgo, dateFinal: today, typeFilter: 'all', statusFilter: '' };
@@ -434,25 +494,56 @@ export default function HistoricoPage() {
 
                         <p style={{ marginBottom: '4px' }}>
                           <small className="hist-label"><b>Origem</b></small><br />
-                          <span className="hist-value">{r.beneficiaryMedicalReferral ? 'Encaminhamento' : 'Consulta avulsa'}</span>
+                          <span className="hist-value">
+                            {r.beneficiaryMedicalReferral ? (
+                              <>
+                                Encaminhamento<br />
+                                <button
+                                  onClick={() => setReferralModal({
+                                    referredByDoctor: r.beneficiaryMedicalReferral.referredByDoctor,
+                                    createdAt: r.createdAt,
+                                    updatedAt: r.updatedAt,
+                                  })}
+                                  style={{ background: 'none', border: 'none', padding: 0, color: '#4F68C7', cursor: 'pointer', fontSize: 'inherit', textDecoration: 'underline' }}
+                                >
+                                  ver encaminhamento
+                                </button>
+                              </>
+                            ) : 'Consulta avulsa'}
+                          </span>
                         </p>
 
-                        {r.beneficiaryMedicalReferral?.referredByDoctor?.name && (
-                          <p style={{ marginBottom: '4px' }}>
-                            <small className="hist-label"><b>Encaminhado por</b></small><br />
-                            <span className="hist-value">Dr(a). {r.beneficiaryMedicalReferral.referredByDoctor.name}</span>
-                          </p>
-                        )}
+                        {(() => {
+                          const [date, time] = (r.appointmentBegin || '').split(' ');
+                          const tz = timezone || getBrowserTz();
+                          const converted = date && time && !isSameAsBrazil(tz) ? convertApptDateTime(date, time, tz) : null;
+                          const dateChanged = converted && converted.date !== date;
+                          return date && time ? (
+                            <p style={{ marginBottom: '4px' }}>
+                              <small className="hist-label"><b>Data da consulta</b></small><br />
+                              <span className="hist-value">
+                                {date} às {time} <span title="Horário de Brasília">🇧🇷</span> <span style={{ color: '#9a9a9a', fontSize: '12px' }}>Sao Paulo (GMT-3)</span>
+                                {converted && (
+                                  <><br /><span style={{ fontSize: '12px', color: '#6e6b7b' }}>no seu horário:{dateChanged ? ` ${converted.date} às` : ''} {converted.time}</span></>
+                                )}
+                              </span>
+                            </p>
+                          ) : null;
+                        })()}
 
-                        {r.createdAt && (
-                          <p style={{ marginBottom: '4px', color: '#6e6b7b' }}>
-                            <small className="hist-label" style={{ fontSize: '12px' }}>Criado em: {formatHistDate(r.createdAt)}</small>
-                          </p>
-                        )}
-                        {r.updatedAt && (
-                          <p style={{ marginBottom: '2px', color: '#6e6b7b' }}>
-                            <small className="hist-label" style={{ fontSize: '12px' }}>Atualizado em: {formatHistDate(r.updatedAt)}</small>
-                          </p>
+                        {!r.beneficiaryMedicalReferral && (
+                          <>
+                            {r.createdAt && (
+                              <p style={{ marginBottom: '4px', color: '#6e6b7b' }}>
+                                <small className="hist-label" style={{ fontSize: '12px' }}>Criado em: {formatHistDate(r.createdAt)}</small>
+                              </p>
+                            )}
+                            {r.updatedAt && (
+                              <p style={{ marginBottom: '2px', color: '#6e6b7b' }}>
+                                <small className="hist-label" style={{ fontSize: '12px' }}>Atualizado em: {formatHistDate(r.updatedAt)}</small>
+                              </p>
+                            )}
+                          </>
                         )}
 
                         <div className="_hist-card-footer" style={{ marginTop: '10px', paddingTop: '10px', borderTop: '1px solid rgba(0,0,0,0.08)', display: 'flex', justifyContent: 'flex-end' }}>

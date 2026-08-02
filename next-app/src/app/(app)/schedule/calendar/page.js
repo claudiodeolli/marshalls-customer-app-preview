@@ -316,6 +316,33 @@ function ScheduleContent() {
     try {
       if (IS_MOCK) {
         await new Promise(r => setTimeout(r, 1000));
+        const pad = n => String(n).padStart(2, '0');
+        const now = new Date();
+        const nowStr = `${pad(now.getDate())}/${pad(now.getMonth() + 1)}/${now.getFullYear()} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+        const purchasedAtStr = `${pad(now.getDate())}/${pad(now.getMonth() + 1)}/${now.getFullYear()}, às ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+        const referral = referralId ? mockReferrals.find(r => r.uuid === referralId) : null;
+        const record = {
+          uuid: `ls-hist-${now.getTime()}`,
+          type: 'scheduled',
+          status: 'SCHEDULED',
+          appointmentBegin: `${selectedSlot.date} ${selectedSlot.from}`,
+          appointmentEnd: null,
+          professional: { name: 'A confirmar', specialties: [{ name: selectedSpecialty.name }] },
+          beneficiaryMedicalReferral: referral ? {
+            referredByDoctor: referral.referredByDoctor,
+            createdAt: nowStr,
+            updatedAt: nowStr,
+          } : null,
+          purchasedAt: avulsaConfirmed ? purchasedAtStr : null,
+          documents: [],
+          evaluation: null,
+          createdAt: nowStr,
+          updatedAt: nowStr,
+        };
+        try {
+          const existing = JSON.parse(localStorage.getItem('MOCK_HISTORY') || '[]');
+          localStorage.setItem('MOCK_HISTORY', JSON.stringify([...existing, record]));
+        } catch {}
         setConfirmed(true);
         return;
       }
