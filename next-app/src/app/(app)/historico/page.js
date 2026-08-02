@@ -446,12 +446,12 @@ export default function HistoricoPage() {
 
                         {r.createdAt && (
                           <p style={{ marginBottom: '4px', color: '#6e6b7b' }}>
-                            <small className="hist-label">Criado em: {formatHistDate(r.createdAt)}</small>
+                            <small className="hist-label" style={{ fontSize: '12px' }}>Criado em: {formatHistDate(r.createdAt)}</small>
                           </p>
                         )}
                         {r.updatedAt && (
                           <p style={{ marginBottom: '2px', color: '#6e6b7b' }}>
-                            <small className="hist-label">Atualizado em: {formatHistDate(r.updatedAt)}</small>
+                            <small className="hist-label" style={{ fontSize: '12px' }}>Atualizado em: {formatHistDate(r.updatedAt)}</small>
                           </p>
                         )}
 
@@ -474,19 +474,35 @@ export default function HistoricoPage() {
 
                         <p style={{ marginBottom: '4px' }}>
                           <small className="hist-label"><b>Origem</b></small><br />
-                          <span className="hist-value">{r.beneficiaryMedicalReferral ? 'Encaminhamento' : 'Consulta avulsa'}</span>
+                          <span className="hist-value">
+                            {r.beneficiaryMedicalReferral ? (
+                              <>
+                                Encaminhamento<br />
+                                <button
+                                  onClick={() => setReferralModal({
+                                    referredByDoctor: r.beneficiaryMedicalReferral.referredByDoctor,
+                                    createdAt: r.createdAt,
+                                    updatedAt: r.updatedAt,
+                                  })}
+                                  style={{ background: 'none', border: 'none', padding: 0, color: '#4F68C7', cursor: 'pointer', fontSize: 'inherit', textDecoration: 'underline' }}
+                                >
+                                  ver encaminhamento
+                                </button>
+                              </>
+                            ) : 'Consulta avulsa'}
+                          </span>
                         </p>
 
                         {r.beneficiaryMedicalReferral ? (
                           <>
                             {r.createdAt && (
                               <p style={{ marginBottom: '4px', color: '#6e6b7b' }}>
-                                <small className="hist-label">Criado em: {formatHistDate(r.createdAt)}</small>
+                                <small className="hist-label" style={{ fontSize: '12px' }}>Criado em: {formatHistDate(r.createdAt)}</small>
                               </p>
                             )}
                             {r.updatedAt && (
                               <p style={{ marginBottom: '4px', color: '#6e6b7b' }}>
-                                <small className="hist-label">Atualizado em: {formatHistDate(r.updatedAt)}</small>
+                                <small className="hist-label" style={{ fontSize: '12px' }}>Atualizado em: {formatHistDate(r.updatedAt)}</small>
                               </p>
                             )}
                             {r.beneficiaryMedicalReferral?.referredByDoctor?.name && (
