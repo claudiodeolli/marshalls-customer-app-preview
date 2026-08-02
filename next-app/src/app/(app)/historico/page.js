@@ -6,7 +6,7 @@ import api from '@/lib/api';
 import { useAuth } from '@/lib/AuthContext';
 import { USER } from '@/data/user';
 import { mockHistory } from '@/data/mockData';
-import { IconEvent, IconChevronDown, IconSchedule } from '@/components/features/historico/icons';
+import { IconEvent, IconChevronDown } from '@/components/features/historico/icons';
 import StatusBadge from '@/components/features/historico/StatusBadge';
 import StatusSelect from '@/components/features/historico/StatusSelect';
 import Stars from '@/components/features/historico/Stars';
@@ -545,7 +545,7 @@ export default function HistoricoPage() {
                             style={{ display: 'flex', alignItems: 'center', gap: '5px' }}
                             onClick={() => router.push('/agendamentos')}
                           >
-                            <IconSchedule /> Ver agendamento
+                            Ver agendamento
                           </button>
                         </div>
                       </div>
@@ -598,7 +598,7 @@ export default function HistoricoPage() {
                             style={{ display: 'flex', alignItems: 'center', gap: '5px' }}
                             onClick={() => router.push('/schedule/calendar')}
                           >
-                            <IconSchedule /> Agendar
+                            Agendar
                           </button>
                         </div>
                       </div>
