@@ -187,7 +187,7 @@ export const mockHistory = [
     appointmentEnd: '08/06/2026 19:42',
     professional: { name: 'Mariana Costa', specialties: [{ name: 'Clínica Geral' }] },
     beneficiaryMedicalReferral: null,
-    purchasedAt: '05/06/2026',
+    purchasedAt: '05/06/2026, às 14:32:18',
     documents: [
       { type: 'notes',    url: 'https://example.com/docs/atestado-hist001.pdf' },
       { type: 'medicines', url: 'https://example.com/docs/receita-hist001.pdf' },
