@@ -477,13 +477,6 @@ export default function HistoricoPage() {
                           <span className="hist-value">{r.beneficiaryMedicalReferral ? 'Encaminhamento' : 'Consulta avulsa'}</span>
                         </p>
 
-                        {r.beneficiaryMedicalReferral?.referredByDoctor?.name && (
-                          <p style={{ marginBottom: '4px' }}>
-                            <small className="hist-label"><b>Encaminhado por</b></small><br />
-                            <span className="hist-value">Dr(a). {r.beneficiaryMedicalReferral.referredByDoctor.name}</span>
-                          </p>
-                        )}
-
                         {r.beneficiaryMedicalReferral ? (
                           <>
                             {r.createdAt && (
@@ -492,8 +485,14 @@ export default function HistoricoPage() {
                               </p>
                             )}
                             {r.updatedAt && (
-                              <p style={{ marginBottom: '2px', color: '#6e6b7b' }}>
+                              <p style={{ marginBottom: '4px', color: '#6e6b7b' }}>
                                 <small className="hist-label">Atualizado em: {formatHistDate(r.updatedAt)}</small>
+                              </p>
+                            )}
+                            {r.beneficiaryMedicalReferral?.referredByDoctor?.name && (
+                              <p style={{ marginBottom: '4px' }}>
+                                <small className="hist-label"><b>Encaminhado por</b></small><br />
+                                <span className="hist-value">Dr(a). {r.beneficiaryMedicalReferral.referredByDoctor.name}</span>
                               </p>
                             )}
                           </>
