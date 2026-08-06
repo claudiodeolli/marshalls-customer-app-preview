@@ -29,8 +29,9 @@ export default function StatusSelect({ value, onChange, disabled = false }) {
       <button
         type="button"
         onClick={() => { if (!disabled) setOpen(o => !o); }}
+        className="_status-select-btn"
         style={{
-          width: '100%', height: '38px',
+          width: '100%',
           border: '1px solid #d8d6de', borderRadius: '12px',
           background: disabled ? '#f8f8f8' : '#fff',
           cursor: disabled ? 'not-allowed' : 'pointer',
@@ -40,7 +41,7 @@ export default function StatusSelect({ value, onChange, disabled = false }) {
         }}
       >
         <span style={{ overflow: 'hidden', minWidth: 0 }}>
-          <StatusChip label={selected.label} color={selected.color} large={selected.value === ''} />
+          <StatusChip label={selected.label} color={selected.color} large={true} />
         </span>
         <svg width="10" height="6" viewBox="0 0 10 6" fill="none" style={{ flexShrink: 0, marginLeft: 6 }}>
           <path d="M1 1l4 4 4-4" stroke="#6e6b7b" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
@@ -61,7 +62,7 @@ export default function StatusSelect({ value, onChange, disabled = false }) {
               onMouseEnter={e => { e.currentTarget.style.background = '#f3f2f7'; }}
               onMouseLeave={e => { e.currentTarget.style.background = value === opt.value ? '#f3f2f7' : '#fff'; }}
             >
-              <StatusChip label={opt.label} color={opt.color} large={opt.value === ''} />
+              <StatusChip label={opt.label} color={opt.color} large={true} />
             </div>
           ))}
         </div>

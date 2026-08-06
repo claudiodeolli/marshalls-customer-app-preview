@@ -321,7 +321,7 @@ const [showAlterarCartao, setShowAlterarCartao] = useState(false);
                   borderRadius: '8px', padding: '12px 14px', marginBottom: '16px', fontSize: '13px', color: '#7a5c00',
                 }}>
                   <AlertTriangle color="#d4a017" size={18} />
-                  Uma vez cadastrado um dependente e confirmado, não será possível alterar — apenas mediante contato com o suporte.
+                  Após a confirmação do cadastro, o dependente não poderá ser alterado. Para realizar alterações, entre em contato com o suporte.
                 </div>
 
                 {dependents.map((dep, i) => (
@@ -359,13 +359,13 @@ const [showAlterarCartao, setShowAlterarCartao] = useState(false);
                 ))}
 
                 {addingDep && (
+                  <>
                   <div style={{
                     border: '1px dashed #7367f0', borderRadius: '12px',
                     padding: '16px', marginBottom: '12px', background: '#f9f8ff',
                   }}>
                     <h6 style={{ fontWeight: 600, color: '#5e5873', marginBottom: '14px' }}>Novo dependente</h6>
 
-                    {/* Identificação */}
                     <div className="row">
                       <div className="col-md-6">
                         <div className="form-group">
@@ -381,26 +381,23 @@ const [showAlterarCartao, setShowAlterarCartao] = useState(false);
                             value={newDep.dataNasc} onChange={e => setNewDep(d => ({ ...d, dataNasc: maskDate(e.target.value) }))} />
                         </div>
                       </div>
-                      <div className="col-md-6">
-                        <div className="form-group">
-                          <label className="form-label">CPF <strong style={{ color: '#ea5455' }}>*</strong></label>
-                          <input className="form-control" type="text" placeholder="000.000.000-00" inputMode="numeric"
-                            value={newDep.cpf} onChange={e => setNewDep(d => ({ ...d, cpf: maskCPF(e.target.value) }))} />
-                        </div>
-                      </div>
-                      <div className="col-md-6">
-                        <div className="form-group">
-                          <label className="form-label">Parentesco <strong style={{ color: '#ea5455' }}>*</strong></label>
-                          <select className="form-control" value={newDep.parentesco}
-                            onChange={e => setNewDep(d => ({ ...d, parentesco: e.target.value }))}>
-                            <option value="">Selecione...</option>
-                            {PARENTESCO_OPTIONS.map(p => <option key={p} value={p}>{p}</option>)}
-                          </select>
-                        </div>
-                      </div>
                     </div>
 
-                    {/* Gênero */}
+                    <div className="form-group">
+                      <label className="form-label">CPF <strong style={{ color: '#ea5455' }}>*</strong></label>
+                      <input className="form-control" type="text" placeholder="000.000.000-00" inputMode="numeric"
+                        value={newDep.cpf} onChange={e => setNewDep(d => ({ ...d, cpf: maskCPF(e.target.value) }))} />
+                    </div>
+
+                    <div className="form-group">
+                      <label className="form-label">Parentesco <strong style={{ color: '#ea5455' }}>*</strong></label>
+                      <select className="form-control" value={newDep.parentesco}
+                        onChange={e => setNewDep(d => ({ ...d, parentesco: e.target.value }))}>
+                        <option value="">Selecione...</option>
+                        {PARENTESCO_OPTIONS.map(p => <option key={p} value={p}>{p}</option>)}
+                      </select>
+                    </div>
+
                     <div className="form-group">
                       <label className="form-label">Gênero <strong style={{ color: '#ea5455' }}>*</strong></label>
                       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', marginTop: '6px' }}>
@@ -413,7 +410,6 @@ const [showAlterarCartao, setShowAlterarCartao] = useState(false);
                       </div>
                     </div>
 
-                    {/* Contato */}
                     <div className="row">
                       <div className="col-md-6">
                         <div className="form-group">
@@ -435,64 +431,71 @@ const [showAlterarCartao, setShowAlterarCartao] = useState(false);
                         </div>
                       </div>
                     </div>
+                  </div>
 
-                    {/* Endereço */}
-                    <div className="row">
-                      <div className="col-md-4">
-                        <div className="form-group">
-                          <label className="form-label">CEP <strong style={{ color: '#ea5455' }}>*</strong></label>
-                          <input className="form-control" type="text" placeholder="00000-000" inputMode="numeric"
-                            value={newDep.cep} onChange={e => setNewDep(d => ({ ...d, cep: maskCEP(e.target.value) }))} />
-                        </div>
-                      </div>
-                      <div className="col-md-8">
-                        <div className="form-group">
-                          <label className="form-label">Rua <strong style={{ color: '#ea5455' }}>*</strong></label>
-                          <input className="form-control" type="text" placeholder="Nome da rua" maxLength={150}
-                            value={newDep.rua} onChange={e => setNewDep(d => ({ ...d, rua: e.target.value }))} />
-                        </div>
-                      </div>
-                      <div className="col-4 col-md-3">
-                        <div className="form-group">
-                          <label className="form-label">Número <strong style={{ color: '#ea5455' }}>*</strong></label>
-                          <input className="form-control" type="text" placeholder="Nº" inputMode="numeric"
-                            value={newDep.numero} onChange={e => setNewDep(d => ({ ...d, numero: e.target.value.replace(/\D/g, '') }))} />
-                        </div>
-                      </div>
-                      <div className="col-8 col-md-9">
-                        <div className="form-group">
-                          <label className="form-label">Complemento</label>
-                          <input className="form-control" type="text" placeholder="Apto, sala..." maxLength={60}
-                            value={newDep.compl} onChange={e => setNewDep(d => ({ ...d, compl: e.target.value }))} />
-                        </div>
-                      </div>
-                      <div className="col-md-8">
-                        <div className="form-group">
-                          <label className="form-label">Cidade <strong style={{ color: '#ea5455' }}>*</strong></label>
-                          <input className="form-control" type="text" placeholder="Sua cidade" maxLength={80}
-                            value={newDep.cidade} onChange={e => setNewDep(d => ({ ...d, cidade: e.target.value }))} />
-                        </div>
-                      </div>
-                      <div className="col-md-4">
-                        <div className="form-group">
-                          <label className="form-label">Estado <strong style={{ color: '#ea5455' }}>*</strong></label>
-                          <input className="form-control" type="text" placeholder="UF" maxLength={2}
-                            value={newDep.estado} onChange={e => setNewDep(d => ({ ...d, estado: e.target.value.toUpperCase().replace(/[^A-Z]/g, '') }))} />
-                        </div>
-                      </div>
+                  <div className="card mb-2">
+                    <div className="card-header">
+                      <h4 className="card-title mb-0">Endereço</h4>
                     </div>
-
-                    {depError && <p style={{ color: '#ea5455', fontSize: '12px', margin: '0 0 10px' }}>{depError}</p>}
-                    <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
-                      <button className="btn btn-flat-secondary btn-sm"
-                        onClick={() => { setAddingDep(false); setNewDep(EMPTY_DEP); setDepError(''); }}>
-                        Cancelar
-                      </button>
-                      <button className="btn btn-primary btn-sm" onClick={handleConfirmDep}>
-                        Confirmar dependente
-                      </button>
+                    <div className="card-body">
+                      <div className="row">
+                        <div className="col-md-4">
+                          <div className="form-group">
+                            <label className="form-label">CEP <strong style={{ color: '#ea5455' }}>*</strong></label>
+                            <input className="form-control" type="text" placeholder="00000-000" inputMode="numeric"
+                              value={newDep.cep} onChange={e => setNewDep(d => ({ ...d, cep: maskCEP(e.target.value) }))} />
+                          </div>
+                        </div>
+                        <div className="col-md-8">
+                          <div className="form-group">
+                            <label className="form-label">Rua <strong style={{ color: '#ea5455' }}>*</strong></label>
+                            <input className="form-control" type="text" placeholder="Nome da rua" maxLength={150}
+                              value={newDep.rua} onChange={e => setNewDep(d => ({ ...d, rua: e.target.value }))} />
+                          </div>
+                        </div>
+                        <div className="col-4 col-md-3">
+                          <div className="form-group">
+                            <label className="form-label">Número <strong style={{ color: '#ea5455' }}>*</strong></label>
+                            <input className="form-control" type="text" placeholder="Nº" inputMode="numeric"
+                              value={newDep.numero} onChange={e => setNewDep(d => ({ ...d, numero: e.target.value.replace(/\D/g, '') }))} />
+                          </div>
+                        </div>
+                        <div className="col-8 col-md-9">
+                          <div className="form-group">
+                            <label className="form-label">Complemento</label>
+                            <input className="form-control" type="text" placeholder="Apto, sala..." maxLength={60}
+                              value={newDep.compl} onChange={e => setNewDep(d => ({ ...d, compl: e.target.value }))} />
+                          </div>
+                        </div>
+                        <div className="col-md-8">
+                          <div className="form-group">
+                            <label className="form-label">Cidade <strong style={{ color: '#ea5455' }}>*</strong></label>
+                            <input className="form-control" type="text" placeholder="Sua cidade" maxLength={80}
+                              value={newDep.cidade} onChange={e => setNewDep(d => ({ ...d, cidade: e.target.value }))} />
+                          </div>
+                        </div>
+                        <div className="col-md-4">
+                          <div className="form-group">
+                            <label className="form-label">Estado <strong style={{ color: '#ea5455' }}>*</strong></label>
+                            <input className="form-control" type="text" placeholder="UF" maxLength={2}
+                              value={newDep.estado} onChange={e => setNewDep(d => ({ ...d, estado: e.target.value.toUpperCase().replace(/[^A-Z]/g, '') }))} />
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
+
+                  {depError && <p style={{ color: '#ea5455', fontSize: '12px', margin: '0 0 10px' }}>{depError}</p>}
+                  <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', marginBottom: '12px' }}>
+                    <button className="btn btn-flat-secondary btn-sm"
+                      onClick={() => { setAddingDep(false); setNewDep(EMPTY_DEP); setDepError(''); }}>
+                      Cancelar
+                    </button>
+                    <button className="btn btn-primary btn-sm" onClick={handleConfirmDep}>
+                      Confirmar dependente
+                    </button>
+                  </div>
+                  </>
                 )}
 
                 {!addingDep && dependents.length < 3 && (

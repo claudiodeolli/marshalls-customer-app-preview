@@ -128,6 +128,7 @@ export default function HistoricoPage() {
   const [records, setRecords]           = useState([]);
   const [evalTarget, setEvalTarget]         = useState(null);
   const [referralModal, setReferralModal]   = useState(null);
+  const [purchaseModal, setPurchaseModal]   = useState(null);
   const [timezone, setTimezone]             = useState('');
   const [fetchError, setFetchError]     = useState(null);
 
@@ -286,7 +287,7 @@ export default function HistoricoPage() {
 
           {filterOpen && <div style={{ padding: '0 16px 16px' }}><div className="row" style={{ rowGap: '12px', alignItems: 'flex-end' }}>
             {/* Date initial */}
-            <div className="col-12 col-sm-6 col-md-2">
+            <div className="col-12 col-sm-6 col-md-3">
               <label className="form-label" style={{ fontSize: '13px', color: 'var(--primary,#0052ff)', marginBottom: '4px' }}>
                 Data inicial
               </label>
@@ -295,12 +296,12 @@ export default function HistoricoPage() {
                 className="form-control"
                 value={dateInitial}
                 onChange={e => setDateInitial(e.target.value)}
-                style={{ borderRadius: '8px', minWidth: '140px' }}
+                style={{ borderRadius: '8px' }}
               />
             </div>
 
             {/* Date final */}
-            <div className="col-12 col-sm-6 col-md-2">
+            <div className="col-12 col-sm-6 col-md-3">
               <label className="form-label" style={{ fontSize: '13px', color: 'var(--primary,#0052ff)', marginBottom: '4px' }}>
                 Data final
               </label>
@@ -309,12 +310,12 @@ export default function HistoricoPage() {
                 className="form-control"
                 value={dateFinal}
                 onChange={e => setDateFinal(e.target.value)}
-                style={{ borderRadius: '8px', minWidth: '140px' }}
+                style={{ borderRadius: '8px' }}
               />
             </div>
 
             {/* Type */}
-            <div className="col-12 col-sm-6 col-md-2">
+            <div className="col-12 col-sm-6 col-md-4">
               <label className="form-label" style={{ fontSize: '13px', color: 'var(--primary,#0052ff)', marginBottom: '4px' }}>
                 Tipo de consulta
               </label>
@@ -335,7 +336,7 @@ export default function HistoricoPage() {
             </div>
 
             {/* Status */}
-            <div className="col-12 col-sm-6 col-md-4">
+            <div className="col-12 col-sm-6 col-md-2">
               <label className="form-label" style={{ fontSize: '13px', color: 'var(--primary,#0052ff)', marginBottom: '4px' }}>
                 Status
               </label>
@@ -347,10 +348,9 @@ export default function HistoricoPage() {
               <button
                 disabled={loading}
                 onClick={applyFilter}
-                className={loading ? '' : '_ct-gradient'}
+                className={`_hist-filter-btn${loading ? '' : ' _ct-gradient'}`}
                 style={{
                   width: '100%',
-                  height: '38px',
                   borderRadius: '8px',
                   border: 'none',
                   cursor: loading ? 'default' : 'pointer',
@@ -506,13 +506,13 @@ export default function HistoricoPage() {
                                   })}
                                   style={{ background: 'none', border: 'none', padding: 0, color: '#4F68C7', cursor: 'pointer', fontSize: 'inherit', textDecoration: 'underline' }}
                                 >
-                                  ver encaminhamento
+                                  Ver encaminhamento
                                 </button>
                               </>
                             ) : (
                               <>
                                 Consulta avulsa<br />
-                                <button style={{ background: 'none', border: 'none', padding: 0, color: '#4F68C7', cursor: 'pointer', fontSize: 'inherit', textDecoration: 'underline' }}>
+                                <button onClick={() => setPurchaseModal(r)} style={{ background: 'none', border: 'none', padding: 0, color: '#4F68C7', cursor: 'pointer', fontSize: 'inherit', textDecoration: 'underline' }}>
                                   Detalhes da compra
                                 </button>
                               </>
@@ -530,7 +530,7 @@ export default function HistoricoPage() {
                               <small className="hist-label"><b>Data e horário da consulta</b></small><br />
                               <span className="hist-value">
                                 {date} às {time} <span title="Horário de Brasília">🇧🇷</span>{' '}
-                                <span style={{ color: '#9a9a9a', fontSize: '12px' }}>Sao Paulo<br />(GMT-3)</span>
+                                <span style={{ color: '#9a9a9a', fontSize: '12px' }}>Sao Paulo (GMT-3)</span>
                                 {converted && (
                                   <><br /><span style={{ fontSize: '12px', color: '#6e6b7b' }}>no seu horário:{dateChanged ? ` ${converted.date} às` : ''} {converted.time}</span></>
                                 )}
@@ -538,13 +538,6 @@ export default function HistoricoPage() {
                             </p>
                           ) : null;
                         })()}
-
-                        {!r.beneficiaryMedicalReferral && r.purchasedAt && (
-                          <p style={{ marginBottom: '4px' }}>
-                            <small className="hist-label"><b>Adquirida em</b></small><br />
-                            <span className="hist-value">{r.purchasedAt.split(',')[0]}</span>
-                          </p>
-                        )}
 
                         <div className="_hist-card-footer" style={{ marginTop: '10px', paddingTop: '10px', borderTop: '1px solid rgba(0,0,0,0.08)', display: 'flex', justifyContent: 'flex-end' }}>
                           <button
@@ -577,34 +570,19 @@ export default function HistoricoPage() {
                                   })}
                                   style={{ background: 'none', border: 'none', padding: 0, color: '#4F68C7', cursor: 'pointer', fontSize: 'inherit', textDecoration: 'underline' }}
                                 >
-                                  ver encaminhamento
+                                  Ver encaminhamento
                                 </button>
                               </>
                             ) : (
                               <>
                                 Consulta avulsa<br />
-                                <button style={{ background: 'none', border: 'none', padding: 0, color: '#4F68C7', cursor: 'pointer', fontSize: 'inherit', textDecoration: 'underline' }}>
+                                <button onClick={() => setPurchaseModal(r)} style={{ background: 'none', border: 'none', padding: 0, color: '#4F68C7', cursor: 'pointer', fontSize: 'inherit', textDecoration: 'underline' }}>
                                   Detalhes da compra
                                 </button>
                               </>
                             )}
                           </span>
                         </p>
-
-                        {!r.beneficiaryMedicalReferral && (
-                          <>
-                            <p style={{ marginBottom: '4px' }}>
-                              <small className="hist-label"><b>Adquirida por</b></small><br />
-                              <span className="hist-value" style={{ color: '#4F68C7' }}>{USER.name} {USER.lastName}</span>
-                            </p>
-                            {r.purchasedAt && (
-                              <p style={{ marginBottom: '4px' }}>
-                                <small className="hist-label"><b>Data da compra</b></small><br />
-                                <span className="hist-value">{r.purchasedAt}</span>
-                              </p>
-                            )}
-                          </>
-                        )}
 
                         <div className="_hist-card-footer" style={{ marginTop: '10px', paddingTop: '10px', borderTop: '1px solid rgba(0,0,0,0.08)', display: 'flex', justifyContent: 'flex-end' }}>
                           <button
@@ -643,7 +621,7 @@ export default function HistoricoPage() {
                                       onClick={() => setReferralModal(r.beneficiaryMedicalReferral)}
                                       style={{ background: 'none', border: 'none', padding: 0, color: '#4F68C7', cursor: 'pointer', fontSize: 'inherit', textDecoration: 'underline' }}
                                     >
-                                      ver encaminhamento
+                                      Ver encaminhamento
                                     </button>
                                   </>
                                 )}
@@ -651,28 +629,12 @@ export default function HistoricoPage() {
                             ) : (
                               <span className="hist-value">
                                 Consulta avulsa<br />
-                                <button style={{ background: 'none', border: 'none', padding: 0, color: '#4F68C7', cursor: 'pointer', fontSize: 'inherit', textDecoration: 'underline' }}>
+                                <button onClick={() => setPurchaseModal(r)} style={{ background: 'none', border: 'none', padding: 0, color: '#4F68C7', cursor: 'pointer', fontSize: 'inherit', textDecoration: 'underline' }}>
                                   Detalhes da compra
                                 </button>
                               </span>
                             )}
                           </p>
-                        )}
-
-                        {/* Adquirida por + Data da compra — agendamento especialista, consulta avulsa, finalizada ou cancelada */}
-                        {(r.status === 'FINISHED' || r.status === 'CANCELED' || r.status === 'CANCELLED') && r.type === 'scheduled' && !r.beneficiaryMedicalReferral && (
-                          <>
-                            <p style={{ marginBottom: '4px' }}>
-                              <small className="hist-label"><b>Adquirida por</b></small><br />
-                              <span className="hist-value" style={{ color: '#4F68C7' }}>{USER.name} {USER.lastName}</span>
-                            </p>
-                            {r.purchasedAt && (
-                              <p style={{ marginBottom: '4px' }}>
-                                <small className="hist-label"><b>Data da compra</b></small><br />
-                                <span className="hist-value">{r.purchasedAt}</span>
-                              </p>
-                            )}
-                          </>
                         )}
 
                         {/* Documents accordion */}
@@ -754,6 +716,76 @@ export default function HistoricoPage() {
             </div>
             <div style={{ padding: '14px 24px 20px', borderTop: '1px solid #ebe9f1', display: 'flex', justifyContent: 'flex-end' }}>
               <button className="btn btn-outline-secondary btn-sm" onClick={() => setReferralModal(null)}>Fechar</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {purchaseModal && (
+        <div
+          style={{ position: 'fixed', inset: 0, zIndex: 10000, background: 'rgba(34,41,47,0.55)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px' }}
+          onClick={e => { if (e.target === e.currentTarget) setPurchaseModal(null); }}
+        >
+          <div style={{ background: '#fff', borderRadius: '12px', width: '100%', maxWidth: 420, boxShadow: '0 12px 40px rgba(34,41,47,0.25)' }}>
+            <div style={{ padding: '18px 24px 16px', borderBottom: '1px solid #ebe9f1', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <h5 style={{ margin: 0, fontWeight: 700, color: '#5e5873', fontSize: '16px' }}>Detalhes da compra</h5>
+              <button onClick={() => setPurchaseModal(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#aaa', fontSize: '24px', lineHeight: 1, padding: '0 4px' }}>×</button>
+            </div>
+            <div style={{ padding: '20px 24px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
+              <div>
+                <small style={{ fontSize: '11px', color: '#6e6b7b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Consulta</small>
+                <p style={{ margin: '4px 0 0', fontSize: '14px', color: '#5e5873' }}>
+                  Consulta avulsa — {purchaseModal.professional.specialties[0].name}
+                </p>
+              </div>
+              <div>
+                <small style={{ fontSize: '11px', color: '#6e6b7b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Adquirida por</small>
+                <p style={{ margin: '4px 0 0', fontSize: '14px', color: '#5e5873' }}>{USER.name} {USER.lastName}</p>
+              </div>
+              {purchaseModal.purchasedAt && (
+                <div>
+                  <small style={{ fontSize: '11px', color: '#6e6b7b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Data da compra</small>
+                  <p style={{ margin: '4px 0 0', fontSize: '14px', color: '#5e5873' }}>{purchaseModal.purchasedAt}</p>
+                </div>
+              )}
+              {purchaseModal.purchaseDetails?.amount && (
+                <div>
+                  <small style={{ fontSize: '11px', color: '#6e6b7b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Valor pago</small>
+                  <p style={{ margin: '4px 0 0', fontSize: '14px', color: '#5e5873' }}>{purchaseModal.purchaseDetails.amount}</p>
+                </div>
+              )}
+              {purchaseModal.purchaseDetails?.paymentMethod === 'card' ? (
+                <>
+                  <div>
+                    <small style={{ fontSize: '11px', color: '#6e6b7b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Forma de pagamento</small>
+                    <p style={{ margin: '4px 0 0', fontSize: '14px', color: '#5e5873' }}>Cartão de crédito</p>
+                  </div>
+                  <div>
+                    <small style={{ fontSize: '11px', color: '#6e6b7b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Cartão utilizado</small>
+                    <p style={{ margin: '4px 0 0', fontSize: '14px', color: '#5e5873' }}>
+                      {purchaseModal.purchaseDetails.card.brand} •••• {purchaseModal.purchaseDetails.card.last4}
+                    </p>
+                  </div>
+                  <div>
+                    <small style={{ fontSize: '11px', color: '#6e6b7b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Parcelamento</small>
+                    <p style={{ margin: '4px 0 0', fontSize: '14px', color: '#5e5873' }}>{purchaseModal.purchaseDetails.card.installments}</p>
+                  </div>
+                </>
+              ) : purchaseModal.purchaseDetails?.paymentMethod === 'pix' ? (
+                <div>
+                  <small style={{ fontSize: '11px', color: '#6e6b7b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Forma de pagamento</small>
+                  <p style={{ margin: '4px 0 0', fontSize: '14px', color: '#5e5873' }}>Pix</p>
+                </div>
+              ) : null}
+              {purchaseModal.purchaseDetails?.status && (
+                <div>
+                  <small style={{ fontSize: '11px', color: '#6e6b7b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Status do pagamento</small>
+                  <p style={{ margin: '4px 0 0', fontSize: '14px', color: '#28c76f', fontWeight: 600 }}>{purchaseModal.purchaseDetails.status}</p>
+                </div>
+              )}
+            </div>
+            <div style={{ padding: '14px 24px 20px', borderTop: '1px solid #ebe9f1', display: 'flex', justifyContent: 'flex-end' }}>
+              <button className="btn btn-outline-secondary btn-sm" onClick={() => setPurchaseModal(null)}>Fechar</button>
             </div>
           </div>
         </div>

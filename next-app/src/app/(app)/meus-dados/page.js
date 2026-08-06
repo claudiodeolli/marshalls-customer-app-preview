@@ -7,6 +7,7 @@ import { useAuth } from '@/lib/AuthContext';
 import PhoneInput from '@/components/features/meus-dados/PhoneInput';
 import ProfilePhotoUpload from '@/components/features/meus-dados/ProfilePhotoUpload';
 import LGPDSection from '@/components/features/meus-dados/LGPDSection';
+import EmailInput from '@/components/features/meus-dados/EmailInput';
 import LockedBadge from '@/components/features/meus-dados/LockedBadge';
 import Snackbar from '@/components/features/meus-dados/Snackbar';
 
@@ -181,7 +182,7 @@ export default function MeusDadosPage() {
 
               <div className="form-group">
                 <label className="form-label">E-mail <strong style={{ color: '#ea5455' }}>*</strong></label>
-                <input className="form-control" type="email" placeholder="seu@email.com" value={email} onChange={e => setEmail(e.target.value)} />
+                <EmailInput value={email} onChange={setEmail} />
               </div>
 
               <div className="form-group">
@@ -231,13 +232,13 @@ export default function MeusDadosPage() {
                 <div className="col-8">
                   <div className="form-group">
                     <label className="form-label">Cidade <strong style={{ color: '#ea5455' }}>*</strong></label>
-                    <input className="form-control" type="text" placeholder="Sua cidade" value={cidade} onChange={e => setCidade(e.target.value)} />
+                    <input className="form-control" type="text" placeholder="Sua cidade" value={cidade} onChange={e => setCidade(e.target.value.replace(/[^a-zA-ZÀ-ÿ\s]/g, ''))} />
                   </div>
                 </div>
                 <div className="col-4">
                   <div className="form-group">
                     <label className="form-label">Estado <strong style={{ color: '#ea5455' }}>*</strong></label>
-                    <input className="form-control" type="text" placeholder="UF" value={estado} onChange={e => setEstado(e.target.value)} />
+                    <input className="form-control" type="text" placeholder="UF" value={estado} onChange={e => setEstado(e.target.value.replace(/[^a-zA-ZÀ-ÿ]/g, ''))} />
                   </div>
                 </div>
               </div>
@@ -261,7 +262,7 @@ export default function MeusDadosPage() {
                 <div className="col-md-6">
                   <div className="form-group">
                     <label className="form-label">Nome do contato</label>
-                    <input className="form-control" type="text" placeholder="Nome completo" value={emergName} onChange={e => setEmergName(e.target.value)} />
+                    <input className="form-control" type="text" placeholder="Nome completo" value={emergName} onChange={e => setEmergName(e.target.value.replace(/[^a-zA-ZÀ-ÿ\s]/g, ''))} />
                   </div>
                 </div>
                 <div className="col-md-6">
@@ -308,10 +309,10 @@ export default function MeusDadosPage() {
                 </svg>
               </span>
               <div style={{ flex: 1 }}>
-                <p style={{ margin: 0, fontWeight: 700, color: BRAND_COLOR, fontSize: '14px' }}>
+                <p style={{ margin: 0, fontWeight: 700, color: '#5B5A78', fontSize: '20px' }}>
                   Encerrar conta
                 </p>
-                <p style={{ margin: '6px 0 4px', fontSize: '13px', color: '#6e6b7b' }}>
+                <p style={{ margin: '6px 0 4px', fontSize: '14px', color: '#6e6b7b' }}>
                   Solicite o encerramento da conta.
                 </p>
                 <p style={{ margin: 0, fontSize: '13px', color: '#6e6b7b', lineHeight: 1.6 }}>
@@ -320,7 +321,7 @@ export default function MeusDadosPage() {
                     style={{
                       background: 'none', border: 'none', padding: 0,
                       cursor: 'pointer', color: BRAND_COLOR, fontWeight: 600,
-                      fontSize: '13px', textDecoration: 'underline', textAlign: 'left',
+                      fontSize: '14px', textDecoration: 'underline', textAlign: 'left',
                       lineHeight: 1.6,
                     }}
                   >

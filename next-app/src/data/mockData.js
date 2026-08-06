@@ -178,6 +178,27 @@ export const mockReferrals = [
 ];
 
 export const mockHistory = [
+  // Todos os tipos de documento — vitrine completa do DocumentsAccordion
+  {
+    uuid: 'hist-010',
+    type: 'scheduled',
+    status: 'FINISHED',
+    appointmentBegin: '15/07/2026 10:00',
+    appointmentEnd: '15/07/2026 10:45',
+    professional: { name: 'Ana Lima', specialties: [{ name: 'Clínica Geral' }] },
+    beneficiaryMedicalReferral: null,
+    purchasedAt: '12/07/2026, às 09:30:00',
+    purchaseDetails: { paymentMethod: 'card', amount: 'R$ 95,00', card: { brand: 'Visa', last4: '4242', installments: '1x de R$ 95,00' }, status: 'Pago' },
+    documents: [
+      { type: 'notes',          url: 'https://example.com/docs/atestado-hist010.pdf' },
+      { type: 'medicines',      url: 'https://example.com/docs/receita-hist010.pdf' },
+      { type: 'exam',           url: 'https://example.com/docs/exame-hist010.pdf' },
+      { type: 'referral',       url: 'https://example.com/docs/encaminhamento-hist010.pdf' },
+      { type: 'report',         url: 'https://example.com/docs/laudo-hist010.pdf' },
+      { type: 'medical_report', url: 'https://example.com/docs/relatorio-hist010.pdf' },
+    ],
+    evaluation: null,
+  },
   // Agendamento com especialista — consulta avulsa FINISHED
   {
     uuid: 'hist-001',
@@ -188,6 +209,7 @@ export const mockHistory = [
     professional: { name: 'Mariana Costa', specialties: [{ name: 'Clínica Geral' }] },
     beneficiaryMedicalReferral: null,
     purchasedAt: '05/06/2026, às 14:32:18',
+    purchaseDetails: { paymentMethod: 'card', amount: 'R$ 95,00', card: { brand: 'Mastercard', last4: '3511', installments: '1x de R$ 95,00' }, status: 'Pago' },
     documents: [
       { type: 'notes',    url: 'https://example.com/docs/atestado-hist001.pdf' },
       { type: 'medicines', url: 'https://example.com/docs/receita-hist001.pdf' },
@@ -226,6 +248,7 @@ export const mockHistory = [
     createdAt: '15/05/2026 08:30:00',
     updatedAt: '15/05/2026 09:00:00',
     purchasedAt: '14/05/2026, às 17:20:05',
+    purchaseDetails: { paymentMethod: 'card', amount: 'R$ 95,00', card: { brand: 'Mastercard', last4: '3511', installments: '1x de R$ 95,00' }, status: 'Pago' },
     documents: [],
   },
   // Agendamento com especialista — encaminhamento UNFINISHED
@@ -269,6 +292,8 @@ export const mockHistory = [
     appointmentEnd: null,
     professional: { name: 'Carla Borges', specialties: [{ name: 'Psicologia' }] },
     beneficiaryMedicalReferral: null,
+    purchasedAt: '25/07/2026, às 10:00:00',
+    purchaseDetails: { paymentMethod: 'card', amount: 'R$ 70,00', card: { brand: 'Mastercard', last4: '3511', installments: '1x de R$ 70,00' }, status: 'Pago' },
     createdAt: '25/07/2026 10:00:00',
     updatedAt: '25/07/2026 10:00:00',
     documents: [],
@@ -283,6 +308,7 @@ export const mockHistory = [
     professional: { name: 'Carlos Mendes', specialties: [{ name: 'Cardiologia' }] },
     beneficiaryMedicalReferral: null,
     purchasedAt: '10/05/2026, às 09:15:30',
+    purchaseDetails: { paymentMethod: 'pix', amount: 'R$ 95,00', status: 'Pago' },
     documents: [],
   },
   // Agendamento com especialista — encaminhamento CANCELED
@@ -290,7 +316,7 @@ export const mockHistory = [
     uuid: 'hist-009',
     type: 'scheduled',
     status: 'CANCELED',
-    appointmentBegin: '18/06/2026 14:00',
+    appointmentBegin: '08/05/2026 09:00',
     appointmentEnd: null,
     professional: { name: 'Roberto Silva', specialties: [{ name: 'Ortopedia' }] },
     beneficiaryMedicalReferral: {

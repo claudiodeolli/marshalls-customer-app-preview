@@ -31,7 +31,7 @@ export default function LGPDSection() {
               </svg>
             </span>
             <div style={{ flex: 1 }}>
-              <p style={{ margin: 0, fontWeight: 700, color: BRAND_COLOR, fontSize: '14px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
+              <p style={{ margin: 0, fontWeight: 700, color: BRAND_COLOR, fontSize: '20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
                 <span>Privacidade e proteção dos seus dados</span>
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
                   fill="none" stroke={BRAND_COLOR} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
@@ -39,7 +39,7 @@ export default function LGPDSection() {
                   <polyline points="9 18 15 12 9 6"/>
                 </svg>
               </p>
-              <p style={{ margin: '6px 0 0', fontSize: '13px', color: '#6e6b7b', lineHeight: 1.6 }}>
+              <p style={{ margin: '6px 0 0', fontSize: '14px', color: '#6e6b7b', lineHeight: 1.6 }}>
                 Sua privacidade é importante para nós. Revise como tratamos e protegemos seus dados
                 pessoais, em conformidade com a Lei Geral de Proteção de Dados (LGPD – Lei nº 13.709/2018).
               </p>

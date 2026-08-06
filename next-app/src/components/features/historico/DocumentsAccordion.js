@@ -8,7 +8,8 @@ const DOC_CONFIG = {
   medicines: { emoji: '💊', label: 'Receita médica' },
   exam:      { emoji: '🔬', label: 'Solicitação de exames' },
   referral:  { emoji: '📎', label: 'Encaminhamento' },
-  report:    { emoji: '📝', label: 'Laudo médico' },
+  report:         { emoji: '📝', label: 'Laudo médico' },
+  medical_report: { emoji: '📄', label: 'Relatório médico' },
 };
 
 function getDocConfig(type) {
@@ -37,7 +38,7 @@ export default function DocumentsAccordion({ documents }) {
                     href={doc.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    style={{ color: '#5e5873', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px' }}
+                    style={{ color: '#4F68C7', fontWeight: 600, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px' }}
                   >
                     <span style={{ fontSize: '16px', lineHeight: 1 }}>{emoji}</span>
                     {label}

@@ -5,12 +5,6 @@ import { useRouter } from 'next/navigation';
 
 const BRAND_COLOR = '#4F68C7';
 
-const REASONS = [
-  { value: 'financial', label: 'Financeiro' },
-  { value: 'quality',   label: 'Qualidade dos atendimentos' },
-  { value: 'other',     label: 'Outros' },
-];
-
 const BULLETS = [
   'Sua conta será imediatamente encerrada tanto para os atendimentos médicos quanto no Clube de Vantagens e na Marshalls Academy;',
   'Você perderá o acesso a todas as plataformas, benefícios, serviços e recursos vinculados à sua conta;',
@@ -21,19 +15,11 @@ const BULLETS = [
 
 export default function EncerrarContaPage() {
   const router = useRouter();
-  const [confirmed, setConfirmed] = useState(false);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [reason, setReason]       = useState('');
-  const [otherText, setOtherText] = useState('');
-  const [submitted, setSubmitted] = useState(false);
+  const [password, setPassword]       = useState('');
+  const [confirmWord, setConfirmWord] = useState('');
+  const [submitted, setSubmitted]     = useState(false);
 
-  const canConfirm = reason && (reason !== 'other' || otherText.trim());
-
-  function handleModalConfirm() {
-    if (!canConfirm) return;
-    setSubmitted(true);
-    setModalOpen(false);
-  }
+  const canClose = password.trim() !== '' && confirmWord.trim().toLowerCase() === 'encerrar';
 
   if (submitted) {
     return (
@@ -59,7 +45,7 @@ export default function EncerrarContaPage() {
   }
 
   return (
-    <div style={{ maxWidth: 680, margin: '0 auto', paddingBottom: '2rem' }}>
+    <div style={{ maxWidth: 680, margin: '0 auto', paddingBottom: '3rem' }}>
 
       {/* Parágrafo introdutório */}
       <p style={{ fontSize: '14px', color: '#5e5873', fontWeight: 600, lineHeight: 1.7, marginBottom: '20px' }}>
@@ -69,7 +55,7 @@ export default function EncerrarContaPage() {
       {/* Bloco de atenção */}
       <div style={{
         background: '#fff8f8', border: '1.5px solid #fca5a5', borderRadius: '10px',
-        padding: '16px 20px', marginBottom: '20px',
+        padding: '16px 20px', marginBottom: '24px',
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
@@ -99,24 +85,30 @@ export default function EncerrarContaPage() {
         </div>
       </div>
 
-      {/* Checkbox */}
-      <div
-        className="card mb-3"
-        style={{ border: confirmed ? `1.5px solid ${BRAND_COLOR}` : '1px solid #e0e0e0', transition: 'border-color 0.2s' }}
-      >
-        <div className="card-body" style={{ padding: '16px 20px' }}>
-          <label style={{ display: 'flex', gap: '12px', alignItems: 'flex-start', cursor: 'pointer' }}>
-            <input
-              type="checkbox"
-              checked={confirmed}
-              onChange={e => setConfirmed(e.target.checked)}
-              style={{ marginTop: '3px', width: '16px', height: '16px', flexShrink: 0, accentColor: BRAND_COLOR }}
-            />
-            <span style={{ fontSize: '13px', color: '#5e5873', lineHeight: 1.7 }}>
-              Confirmo que compreendo as consequências do encerramento da minha conta e da solicitação de exclusão dos meus dados pessoais. Concordo e reconheço, portanto, que não mais terei acesso aos pedidos, serviços, benefícios, créditos, funcionalidades e demais recursos vinculados à minha conta, inclusive aqueles ainda pendentes de utilização, conclusão, resgate ou disponibilização.
-            </span>
-          </label>
-        </div>
+      {/* Senha atual */}
+      <div className="form-group" style={{ marginBottom: '16px' }}>
+        <label className="form-label" style={{ fontWeight: 600, color: '#5e5873' }}>Senha atual</label>
+        <input
+          type="password"
+          className="form-control"
+          placeholder="Digite sua senha atual"
+          value={password}
+          onChange={e => setPassword(e.target.value)}
+        />
+      </div>
+
+      {/* Confirmação por palavra */}
+      <div className="form-group" style={{ marginBottom: '28px' }}>
+        <label className="form-label" style={{ fontWeight: 600, color: '#5e5873' }}>
+          Digite a palavra <em>encerrar</em> para confirmar
+        </label>
+        <input
+          type="text"
+          className="form-control"
+          placeholder="encerrar"
+          value={confirmWord}
+          onChange={e => setConfirmWord(e.target.value)}
+        />
       </div>
 
       {/* Botões */}
@@ -126,97 +118,13 @@ export default function EncerrarContaPage() {
         </button>
         <button
           className="btn btn-primary"
-          disabled={!confirmed}
-          onClick={() => setModalOpen(true)}
-          style={{ opacity: confirmed ? 1 : 0.5 }}
+          disabled={!canClose}
+          onClick={() => setSubmitted(true)}
+          style={{ opacity: canClose ? 1 : 0.5, textAlign: 'center', lineHeight: 1.4 }}
         >
-          Solicitar encerramento
+          Encerrar Conta<br />e Excluir meus Dados
         </button>
       </div>
-
-      {/* Modal — motivo */}
-      {modalOpen && (
-        <div
-          style={{
-            position: 'fixed', inset: 0, zIndex: 10000,
-            background: 'rgba(34,41,47,0.55)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px',
-          }}
-          onClick={e => { if (e.target === e.currentTarget) setModalOpen(false); }}
-        >
-          <div className="_modal-enter" style={{
-            background: '#fff', borderRadius: '12px',
-            width: '100%', maxWidth: 460,
-            boxShadow: '0 12px 40px rgba(34,41,47,0.25)',
-          }}>
-            <div style={{
-              padding: '18px 24px 16px', borderBottom: '1px solid #ebe9f1',
-              display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-            }}>
-              <h5 style={{ margin: 0, fontWeight: 700, color: '#5e5873', fontSize: '16px' }}>
-                Motivo do encerramento
-              </h5>
-              <button
-                onClick={() => setModalOpen(false)}
-                style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#aaa', fontSize: '24px', lineHeight: 1, padding: '0 4px' }}
-              >×</button>
-            </div>
-
-            <div style={{ padding: '20px 24px' }}>
-              <p style={{ fontSize: '13px', color: '#6e6b7b', marginBottom: '16px' }}>
-                Para nos ajudar a melhorar, informe o principal motivo do encerramento:
-              </p>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-                {REASONS.map(r => (
-                  <label key={r.value} style={{ display: 'flex', gap: '10px', alignItems: 'flex-start', cursor: 'pointer', fontSize: '14px', color: '#5e5873' }}>
-                    <input
-                      type="radio"
-                      name="closeReason"
-                      value={r.value}
-                      checked={reason === r.value}
-                      onChange={() => setReason(r.value)}
-                      style={{ marginTop: '3px', accentColor: BRAND_COLOR }}
-                    />
-                    {r.label}
-                  </label>
-                ))}
-              </div>
-
-              {reason === 'other' && (
-                <textarea
-                  placeholder="Descreva o motivo..."
-                  value={otherText}
-                  onChange={e => setOtherText(e.target.value)}
-                  rows={3}
-                  style={{
-                    marginTop: '14px', width: '100%', resize: 'vertical',
-                    border: '1px solid #d8d6de', borderRadius: '8px',
-                    padding: '10px 12px', fontSize: '13px', color: '#5e5873',
-                    outline: 'none', boxSizing: 'border-box',
-                  }}
-                />
-              )}
-            </div>
-
-            <div style={{
-              padding: '16px 24px 20px', borderTop: '1px solid #ebe9f1',
-              display: 'flex', gap: '10px', justifyContent: 'flex-end',
-            }}>
-              <button className="btn btn-outline-secondary" onClick={() => setModalOpen(false)}>
-                Cancelar
-              </button>
-              <button
-                className="btn btn-primary"
-                disabled={!canConfirm}
-                onClick={handleModalConfirm}
-                style={{ opacity: canConfirm ? 1 : 0.5 }}
-              >
-                Confirmar encerramento
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

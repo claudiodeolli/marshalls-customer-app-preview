@@ -59,6 +59,15 @@ const COUNTRIES = [
   { code: 'SG', name: 'Singapura',           dial: '+65',  flag: '🇸🇬' },
 ];
 
+function applyPhoneMask(digits, countryCode) {
+  if (countryCode !== 'BR') return digits;
+  const d = digits.slice(0, 11);
+  if (d.length <= 2) return d.length ? `(${d}` : '';
+  if (d.length <= 6) return `(${d.slice(0, 2)}) ${d.slice(2)}`;
+  if (d.length <= 10) return `(${d.slice(0, 2)}) ${d.slice(2, 6)}-${d.slice(6)}`;
+  return `(${d.slice(0, 2)}) ${d.slice(2, 7)}-${d.slice(7)}`;
+}
+
 export default function PhoneInput({ countryCode, onCountryChange, value, onChange, placeholder }) {
   const [open, setOpen] = useState(false);
   const wrapperRef = useRef(null);
@@ -138,8 +147,8 @@ export default function PhoneInput({ countryCode, onCountryChange, value, onChan
         type="text"
         className="form-control"
         placeholder={placeholder}
-        value={value}
-        onChange={e => onChange(e.target.value)}
+        value={applyPhoneMask(value, countryCode)}
+        onChange={e => onChange(e.target.value.replace(/\D/g, ''))}
         style={{ border: 'none', borderRadius: '0 11px 11px 0', flex: 1, boxShadow: 'none' }}
         onClick={() => open && setOpen(false)}
       />
