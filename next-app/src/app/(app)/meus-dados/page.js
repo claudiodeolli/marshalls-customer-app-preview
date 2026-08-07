@@ -1,15 +1,15 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
-import { useRouter } from 'next/navigation';
-import { USER } from '@/data/user';
-import { useAuth } from '@/lib/AuthContext';
+import EmailInput from '@/components/features/meus-dados/EmailInput';
+import LGPDSection from '@/components/features/meus-dados/LGPDSection';
+import LockedBadge from '@/components/features/meus-dados/LockedBadge';
 import PhoneInput from '@/components/features/meus-dados/PhoneInput';
 import ProfilePhotoUpload from '@/components/features/meus-dados/ProfilePhotoUpload';
-import LGPDSection from '@/components/features/meus-dados/LGPDSection';
-import EmailInput from '@/components/features/meus-dados/EmailInput';
-import LockedBadge from '@/components/features/meus-dados/LockedBadge';
 import Snackbar from '@/components/features/meus-dados/Snackbar';
+import { USER } from '@/data/user';
+import { useAuth } from '@/lib/AuthContext';
+import { useRouter } from 'next/navigation';
+import { useEffect, useRef, useState } from 'react';
 
 const BRAND_COLOR = '#4F68C7';
 
@@ -298,18 +298,8 @@ export default function MeusDadosPage() {
         <div className="card _encerrar-conta-section" style={{ border: `1px solid ${BRAND_COLOR}33` }}>
           <div className="card-body" style={{ padding: '16px 20px' }}>
             <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-              <span style={{ color: BRAND_COLOR, flexShrink: 0, marginTop: '2px' }}>
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-                  fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="3 6 5 6 21 6"/>
-                  <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
-                  <path d="M10 11v6"/>
-                  <path d="M14 11v6"/>
-                  <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
-                </svg>
-              </span>
               <div style={{ flex: 1 }}>
-                <p style={{ margin: 0, fontWeight: 700, color: '#5B5A78', fontSize: '20px' }}>
+                <p style={{ margin: 0, fontWeight: 700, color: '#5B5A78', fontSize: '18px' }}>
                   Encerrar conta
                 </p>
                 <p style={{ margin: '6px 0 4px', fontSize: '14px', color: '#6e6b7b' }}>
