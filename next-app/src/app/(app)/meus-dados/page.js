@@ -310,7 +310,7 @@ export default function MeusDadosPage() {
                     onClick={() => router.push('/encerrar-conta')}
                     style={{
                       background: 'none', border: 'none', padding: 0,
-                      cursor: 'pointer', color: '#5B5A78', fontWeight: 600,
+                      cursor: 'pointer', color: '#5B5A78', fontWeight: 500,
                       fontSize: '14px', textDecoration: 'underline', textAlign: 'left',
                       lineHeight: 1.6,
                     }}

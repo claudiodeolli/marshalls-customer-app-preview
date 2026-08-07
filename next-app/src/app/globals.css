@@ -604,7 +604,7 @@ img._logo-collapsed {
 
 @media (min-width: 1200px) {
   ._encerrar-conta-section {
-    margin-top: 30vh;
+    margin-top: 3rem;
   }
 }
 
@@ -1529,4 +1529,9 @@ input._search-input:not([type="checkbox"]):not([type="radio"]):not([type="submit
 
 ._hist-results .row>[class*="col-"] {
   margin-bottom: 0 !important;
+}
+
+._lgpd-desc:hover {
+  text-decoration: underline;
+  cursor: pointer;
 }
