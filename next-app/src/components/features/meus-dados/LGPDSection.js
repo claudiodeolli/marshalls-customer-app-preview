@@ -24,7 +24,7 @@ export default function LGPDSection() {
       >
         <div className="card-body" style={{ padding: '16px 20px' }}>
           <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-            <span style={{ color: BRAND_COLOR, flexShrink: 0, marginTop: '2px' }}>
+            <span style={{ color: '#4F68C7', flexShrink: 0, marginTop: '2px' }}>
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
                 fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
@@ -34,12 +34,12 @@ export default function LGPDSection() {
               <p style={{ margin: 0, fontWeight: 700, color: '#4F68C7', fontSize: '18px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
                 <span>Privacidade e proteção dos seus dados</span>
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
-                  fill="none" stroke={BRAND_COLOR} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
+                  fill="none" stroke='#4F68C7' strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
                   style={{ flexShrink: 0 }}>
                   <polyline points="9 18 15 12 9 6"/>
                 </svg>
               </p>
-              <p style={{ margin: '6px 0 0', fontSize: '14px', color: '#6e6b7b', lineHeight: 1.6 }}>
+              <p style={{ margin: '6px 0 0', fontSize: '14px', color: '#4F68C7', lineHeight: 1.6 }}>
                 Sua privacidade é importante para nós. Revise como tratamos e protegemos seus dados
                 pessoais, em conformidade com a Lei Geral de Proteção de Dados (LGPD – Lei nº 13.709/2018).
               </p>

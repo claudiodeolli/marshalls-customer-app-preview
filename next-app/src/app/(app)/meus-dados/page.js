@@ -302,15 +302,15 @@ export default function MeusDadosPage() {
                 <p style={{ margin: 0, fontWeight: 700, color: '#5B5A78', fontSize: '18px' }}>
                   Encerrar conta
                 </p>
-                <p style={{ margin: '6px 0 4px', fontSize: '14px', color: '#6e6b7b' }}>
+                <p style={{ margin: '6px 0 4px', fontSize: '14px', color: '#5B5A78' }}>
                   Solicite o encerramento da conta.
                 </p>
-                <p style={{ margin: 0, fontSize: '13px', color: '#6e6b7b', lineHeight: 1.6 }}>
+                <p style={{ margin: 0, fontSize: '13px', color: '#5B5A78', lineHeight: 1.6 }}>
                   <button
                     onClick={() => router.push('/encerrar-conta')}
                     style={{
                       background: 'none', border: 'none', padding: 0,
-                      cursor: 'pointer', color: BRAND_COLOR, fontWeight: 600,
+                      cursor: 'pointer', color: '#5B5A78', fontWeight: 600,
                       fontSize: '14px', textDecoration: 'underline', textAlign: 'left',
                       lineHeight: 1.6,
                     }}
