@@ -1392,7 +1392,8 @@ input._search-input:not([type="checkbox"]):not([type="radio"]):not([type="submit
   }
 
   ._contact-btn {
-    padding: 0.5rem 1.1rem !important;
+    padding-left: 1.1rem !important;
+    padding-right: 1.1rem !important;
     font-size: 0.9rem !important;
   }
 }
@@ -1508,6 +1509,12 @@ input._search-input:not([type="checkbox"]):not([type="radio"]):not([type="submit
 ._contact-btn {
   flex-shrink: 0;
   white-space: nowrap;
+  height: 32px;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
 }
 
 @media (max-width: 480px) {

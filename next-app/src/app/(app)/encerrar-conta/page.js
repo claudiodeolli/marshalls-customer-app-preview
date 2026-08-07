@@ -45,7 +45,7 @@ export default function EncerrarContaPage() {
   }
 
   return (
-    <div style={{ maxWidth: 680, margin: '0 auto', paddingBottom: '3rem' }}>
+    <div style={{ paddingBottom: '3rem' }}>
 
       {/* Parágrafo introdutório */}
       <p style={{ fontSize: '14px', color: '#5e5873', fontWeight: 600, lineHeight: 1.7, marginBottom: '20px' }}>
@@ -64,20 +64,20 @@ export default function EncerrarContaPage() {
             <line x1="12" y1="9" x2="12" y2="13"/>
             <line x1="12" y1="17" x2="12.01" y2="17"/>
           </svg>
-          <span style={{ fontWeight: 700, color: '#ea5455', fontSize: '14px' }}>Atenção</span>
+          <span style={{ fontWeight: 700, color: '#ea5455', fontSize: '14px', textAlign: 'justify' }}>Atenção</span>
         </div>
 
-        <p style={{ margin: '0 0 4px', fontSize: '13px', color: '#ea5455', fontWeight: 600 }}>
+        <p style={{ margin: '0 0 4px', fontSize: '13px', color: '#ea5455', fontWeight: 600, textAlign: 'justify' }}>
           Esta solicitação é irreversível.
         </p>
-        <p style={{ margin: '0 0 12px', fontSize: '13px', color: '#6e6b7b' }}>
+        <p style={{ margin: '0 0 12px', fontSize: '13px', color: '#6e6b7b', textAlign: 'justify' }}>
           Ao confirmar:
         </p>
 
         <div style={{ background: '#fff', border: '1px solid #fca5a5', borderRadius: '8px', padding: '14px 16px' }}>
           <ul style={{ margin: 0, paddingLeft: '18px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {BULLETS.map((text, i) => (
-              <li key={i} style={{ fontSize: '13px', color: '#ea5455', lineHeight: 1.6 }}>
+              <li key={i} style={{ fontSize: '13px', color: '#ea5455', lineHeight: 1.6, textAlign: 'justify' }}>
                 {text}
               </li>
             ))}

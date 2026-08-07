@@ -10,7 +10,7 @@ export default function LGPDSection() {
   return (
     <>
       <div
-        className="card mt-2 _lgpd-card mb-1 mb-sm-3"
+        className="card mt-2 _lgpd-card mb-2 mb-sm-3"
         style={{ border: `1px solid ${BRAND_COLOR}33`, cursor: 'pointer', transition: 'box-shadow 0.2s, border-color 0.2s' }}
         onClick={() => setModalOpen(true)}
         onMouseEnter={e => {
@@ -39,12 +39,12 @@ export default function LGPDSection() {
                   <polyline points="9 18 15 12 9 6"/>
                 </svg>
               </p>
-              <p className="_lgpd-desc" style={{ margin: '6px 0 0', fontWeight: 700, fontSize: '14px', color: '#4F68C7', lineHeight: 1.6 }}>
-                Sua privacidade é importante para nós. Revise como tratamos e protegemos seus dados
-                pessoais, em conformidade com a Lei Geral de Proteção de Dados (LGPD – Lei nº 13.709/2018).
-              </p>
             </div>
           </div>
+          <p className="_lgpd-desc" style={{ margin: '6px 0 0', fontWeight: 700, fontSize: '14px', color: '#4F68C7', lineHeight: 1.6, textAlign: 'justify' }}>
+            Sua privacidade é importante para nós. Revise como tratamos e protegemos seus dados
+            pessoais, em conformidade com a Lei Geral de Proteção de Dados (LGPD – Lei nº 13.709/2018).
+          </p>
         </div>
       </div>
 

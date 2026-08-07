@@ -312,7 +312,7 @@ export default function MeusDadosPage() {
                     style={{
                       background: 'none', border: 'none', padding: 0,
                       cursor: 'pointer', color: '#5B5A78', fontWeight: 500,
-                      fontSize: '14px', textAlign: 'left',
+                      fontSize: '14px', textAlign: 'justify',
                       lineHeight: 1.6,
                     }}
                   >
