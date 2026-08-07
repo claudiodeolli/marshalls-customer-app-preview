@@ -10,7 +10,7 @@ export default function LGPDSection() {
   return (
     <>
       <div
-        className="card mt-2 _lgpd-card mb-3"
+        className="card mt-2 _lgpd-card mb-1 mb-sm-3"
         style={{ border: `1px solid ${BRAND_COLOR}33`, cursor: 'pointer', transition: 'box-shadow 0.2s, border-color 0.2s' }}
         onClick={() => setModalOpen(true)}
         onMouseEnter={e => {
