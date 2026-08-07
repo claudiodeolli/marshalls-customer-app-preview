@@ -308,10 +308,11 @@ export default function MeusDadosPage() {
                 <p style={{ margin: 0, fontSize: '13px', color: '#5B5A78', lineHeight: 1.6 }}>
                   <button
                     onClick={() => router.push('/encerrar-conta')}
+                    className="_encerrar-desc"
                     style={{
                       background: 'none', border: 'none', padding: 0,
                       cursor: 'pointer', color: '#5B5A78', fontWeight: 500,
-                      fontSize: '14px', textDecoration: 'underline', textAlign: 'left',
+                      fontSize: '14px', textAlign: 'left',
                       lineHeight: 1.6,
                     }}
                   >

@@ -1531,7 +1531,8 @@ input._search-input:not([type="checkbox"]):not([type="radio"]):not([type="submit
   margin-bottom: 0 !important;
 }
 
-._lgpd-desc:hover {
+._lgpd-desc:hover,
+._encerrar-desc:hover {
   text-decoration: underline;
   cursor: pointer;
 }
