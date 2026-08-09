@@ -4,7 +4,9 @@ import { useState, Fragment } from 'react';
 import Modal from '@/components/ui/Modal';
 import { MastercardIcon, AlertTriangle } from '@/components/features/minha-conta/icons';
 import SituacaoBadge from '@/components/features/minha-conta/SituacaoBadge';
+import EmailInput from '@/components/features/meus-dados/EmailInput';
 import PhoneInput from '@/components/features/meus-dados/PhoneInput';
+import { fetchViaCEP } from '@/lib/viaCep';
 
 function maskCPF(v) {
   const d = v.replace(/\D/g, '').slice(0, 11);
@@ -148,6 +150,15 @@ const [showAlterarCartao, setShowAlterarCartao] = useState(false);
     setNewDep(EMPTY_DEP);
     setAddingDep(false);
     setDepError('');
+  }
+
+  async function handleDepCepChange(raw) {
+    setNewDep(d => ({ ...d, cep: maskCEP(raw) }));
+    const digits = raw.replace(/\D/g, '');
+    if (digits.length === 8) {
+      const addr = await fetchViaCEP(digits);
+      if (addr) setNewDep(d => ({ ...d, rua: addr.logradouro, cidade: addr.cidade, estado: addr.estado }));
+    }
   }
 
   const targetPlan = PLAN_INFO[planoDir === 'toFamiliar' ? 'familiar' : 'individual'];
@@ -414,8 +425,10 @@ const [showAlterarCartao, setShowAlterarCartao] = useState(false);
                       <div className="col-md-6">
                         <div className="form-group">
                           <label className="form-label">E-mail <strong style={{ color: '#ea5455' }}>*</strong></label>
-                          <input className="form-control" type="email" placeholder="email@exemplo.com" maxLength={100}
-                            value={newDep.email} onChange={e => setNewDep(d => ({ ...d, email: e.target.value }))} />
+                          <EmailInput
+                            placeholder="email@exemplo.com"
+                            value={newDep.email}
+                            onChange={v => setNewDep(d => ({ ...d, email: v }))} />
                         </div>
                       </div>
                       <div className="col-md-6">
@@ -443,7 +456,7 @@ const [showAlterarCartao, setShowAlterarCartao] = useState(false);
                           <div className="form-group">
                             <label className="form-label">CEP <strong style={{ color: '#ea5455' }}>*</strong></label>
                             <input className="form-control" type="text" placeholder="00000-000" inputMode="numeric"
-                              value={newDep.cep} onChange={e => setNewDep(d => ({ ...d, cep: maskCEP(e.target.value) }))} />
+                              value={newDep.cep} onChange={e => handleDepCepChange(e.target.value)} />
                           </div>
                         </div>
                         <div className="col-md-8">

@@ -8,6 +8,7 @@ import ProfilePhotoUpload from '@/components/features/meus-dados/ProfilePhotoUpl
 import Snackbar from '@/components/features/meus-dados/Snackbar';
 import { USER } from '@/data/user';
 import { useAuth } from '@/lib/AuthContext';
+import { fetchViaCEP } from '@/lib/viaCep';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
@@ -46,6 +47,19 @@ export default function MeusDadosPage() {
   function applyMaskCEP(v) {
     const d = v.replace(/\D/g, '').slice(0, 8);
     return d.length > 5 ? `${d.slice(0, 5)}-${d.slice(5)}` : d;
+  }
+
+  async function handleCepChange(raw) {
+    setCep(applyMaskCEP(raw));
+    const digits = raw.replace(/\D/g, '');
+    if (digits.length === 8) {
+      const addr = await fetchViaCEP(digits);
+      if (addr) {
+        setRua(addr.logradouro);
+        setCidade(addr.cidade);
+        setEstado(addr.estado);
+      }
+    }
   }
   const [compl, setCompl]   = useState('');
   const [cidade, setCidade] = useState('');
@@ -208,7 +222,7 @@ export default function MeusDadosPage() {
             <div className="card-body">
               <div className="form-group">
                 <label className="form-label">CEP <strong style={{ color: '#ea5455' }}>*</strong></label>
-                <input className="form-control" type="text" placeholder="00000-000" inputMode="numeric" value={cep} onChange={e => setCep(applyMaskCEP(e.target.value))} />
+                <input className="form-control" type="text" placeholder="00000-000" inputMode="numeric" value={cep} onChange={e => handleCepChange(e.target.value)} />
               </div>
               <div className="form-group">
                 <label className="form-label">Rua <strong style={{ color: '#ea5455' }}>*</strong></label>

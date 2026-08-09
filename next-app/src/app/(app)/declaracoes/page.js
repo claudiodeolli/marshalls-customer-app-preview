@@ -1,6 +1,34 @@
 'use client';
 
+import { fetchViaCEP } from '@/lib/viaCep';
+import { useState } from 'react';
+
+function maskCEP(v) {
+  const d = v.replace(/\D/g, '').slice(0, 8);
+  return d.length > 5 ? `${d.slice(0, 5)}-${d.slice(5)}` : d;
+}
+
 export default function MeusDadosPage() {
+  const [cep, setCep]       = useState('');
+  const [rua, setRua]       = useState('');
+  const [numero, setNumero] = useState('');
+  const [compl, setCompl]   = useState('');
+  const [cidade, setCidade] = useState('');
+  const [estado, setEstado] = useState('');
+
+  async function handleCepChange(raw) {
+    setCep(maskCEP(raw));
+    const digits = raw.replace(/\D/g, '');
+    if (digits.length === 8) {
+      const addr = await fetchViaCEP(digits);
+      if (addr) {
+        setRua(addr.logradouro);
+        setCidade(addr.cidade);
+        setEstado(addr.estado);
+      }
+    }
+  }
+
   return (
     <div style={{ padding: '1.5rem' }}>
       <div className="row">
@@ -37,23 +65,27 @@ export default function MeusDadosPage() {
             <div className="card-body">
               <div className="form-group">
                 <label className="form-label">CEP</label>
-                <input className="form-control" type="text" placeholder="00000-000" />
+                <input className="form-control" type="text" placeholder="00000-000" inputMode="numeric"
+                  value={cep} onChange={e => handleCepChange(e.target.value)} />
               </div>
               <div className="form-group">
                 <label className="form-label">Rua</label>
-                <input className="form-control" type="text" placeholder="Nome da rua" />
+                <input className="form-control" type="text" placeholder="Nome da rua"
+                  value={rua} onChange={e => setRua(e.target.value)} />
               </div>
               <div className="row">
                 <div className="col-5">
                   <div className="form-group">
                     <label className="form-label">Número</label>
-                    <input className="form-control" type="text" placeholder="Nº" />
+                    <input className="form-control" type="text" placeholder="Nº" inputMode="numeric"
+                      value={numero} onChange={e => setNumero(e.target.value.replace(/\D/g, ''))} />
                   </div>
                 </div>
                 <div className="col-7">
                   <div className="form-group">
                     <label className="form-label">Complemento</label>
-                    <input className="form-control" type="text" placeholder="Apto, sala..." />
+                    <input className="form-control" type="text" placeholder="Apto, sala..."
+                      value={compl} onChange={e => setCompl(e.target.value)} />
                   </div>
                 </div>
               </div>
@@ -61,13 +93,15 @@ export default function MeusDadosPage() {
                 <div className="col-8">
                   <div className="form-group">
                     <label className="form-label">Cidade</label>
-                    <input className="form-control" type="text" placeholder="Sua cidade" />
+                    <input className="form-control" type="text" placeholder="Sua cidade"
+                      value={cidade} onChange={e => setCidade(e.target.value)} />
                   </div>
                 </div>
                 <div className="col-4">
                   <div className="form-group">
                     <label className="form-label">Estado</label>
-                    <input className="form-control" type="text" placeholder="UF" />
+                    <input className="form-control" type="text" placeholder="UF"
+                      value={estado} onChange={e => setEstado(e.target.value)} />
                   </div>
                 </div>
               </div>

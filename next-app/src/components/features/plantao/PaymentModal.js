@@ -1,6 +1,8 @@
 'use client';
 
 import { useState } from 'react';
+import EmailInput from '@/components/features/meus-dados/EmailInput';
+import { fetchViaCEP } from '@/lib/viaCep';
 
 function maskCPF(v) {
   const d = v.replace(/\D/g, '').slice(0, 11);
@@ -60,6 +62,20 @@ export default function PaymentModal({ open, onClose, onSuccess, alertMessage, p
   const [cardholder, setCardholder] = useState('');
   const [expiry, setExpiry] = useState('');
   const [cvv, setCvv] = useState('');
+
+  async function handleCepChange(raw) {
+    setCep(maskCEP(raw));
+    const digits = raw.replace(/\D/g, '');
+    if (digits.length === 8) {
+      const addr = await fetchViaCEP(digits);
+      if (addr) {
+        setEndereco(addr.logradouro);
+        setBairro(addr.bairro);
+        setCidade(addr.cidade);
+        setEstado(addr.estado);
+      }
+    }
+  }
 
   async function handleSubmit() {
     if (loading) return;
@@ -133,7 +149,7 @@ export default function PaymentModal({ open, onClose, onSuccess, alertMessage, p
                 </div>
                 <div>
                   <label className="form-label" style={{ fontSize: '13px' }}>Email</label>
-                  <input type="email" className="form-control" placeholder="Digite seu email..." value={email} onChange={e => setEmail(e.target.value)} />
+                  <EmailInput placeholder="Digite seu email..." value={email} onChange={setEmail} />
                 </div>
                 <div>
                   <label className="form-label" style={{ fontSize: '13px' }}>Telefone</label>
@@ -173,7 +189,7 @@ export default function PaymentModal({ open, onClose, onSuccess, alertMessage, p
                   </div>
                   <div style={{ flex: 1 }}>
                     <label className="form-label" style={{ fontSize: '13px' }}>CEP</label>
-                    <input className="form-control" placeholder="Digite somente números" value={cep} onChange={e => setCep(maskCEP(e.target.value))} />
+                    <input className="form-control" placeholder="Digite somente números" value={cep} onChange={e => handleCepChange(e.target.value)} />
                   </div>
                 </div>
               </div>

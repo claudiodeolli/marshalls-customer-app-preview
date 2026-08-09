@@ -1,15 +1,21 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 const DOMAINS = [
   'gmail.com',
   'outlook.com',
   'hotmail.com',
   'yahoo.com.br',
+  'yahoo.com',
+  'icloud.com',
+  'live.com',
   'uol.com.br',
   'bol.com.br',
-  'icloud.com',
+  'terra.com.br',
+  'ig.com.br',
+  'msn.com',
+  'protonmail.com',
 ];
 
 export default function EmailInput({
@@ -20,81 +26,80 @@ export default function EmailInput({
   placeholder = 'seu@email.com',
   className = 'form-control',
 }) {
-  const [suggestion, setSuggestion] = useState('');
+  const [focused, setFocused] = useState(false);
+  const [highlightedIndex, setHighlightedIndex] = useState(0);
+  const ref = useRef(null);
 
-  function computeSuggestion(val) {
-    if (!val.includes('@')) return '';
-    const [, domainPart] = val.split('@');
-    if (!domainPart) return DOMAINS[0];
-    const match = DOMAINS.find(d => d.startsWith(domainPart.toLowerCase()));
-    return match ? match.slice(domainPart.length) : '';
-  }
+  const atIndex = value.indexOf('@');
+  const domainPart = atIndex >= 0 ? value.slice(atIndex + 1).toLowerCase() : null;
+  const suggestions = domainPart !== null
+    ? DOMAINS.filter(d => d.startsWith(domainPart))
+    : [];
+  const isOpen = focused && suggestions.length > 0;
 
-  function handleChange(e) {
-    const val = e.target.value;
-    onChange?.(val);
-    setSuggestion(computeSuggestion(val));
-  }
-
-  function applySuggestion() {
-    if (!suggestion) return;
-    const completed = value + suggestion;
-    onChange?.(completed);
-    setSuggestion('');
+  function selectDomain(domain) {
+    const local = atIndex >= 0 ? value.slice(0, atIndex) : value;
+    onChange?.(`${local}@${domain}`);
+    setFocused(false);
   }
 
   function handleKeyDown(e) {
-    if (suggestion && (e.key === 'Tab' || e.key === 'ArrowRight' || e.key === 'Enter')) {
+    if (!isOpen) return;
+    if (e.key === 'ArrowDown') {
       e.preventDefault();
-      applySuggestion();
+      setHighlightedIndex(i => Math.min(i + 1, suggestions.length - 1));
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setHighlightedIndex(i => Math.max(i - 1, 0));
+    } else if (e.key === 'Enter' || e.key === 'Tab') {
+      if (suggestions[highlightedIndex]) {
+        e.preventDefault();
+        selectDomain(suggestions[highlightedIndex]);
+      }
+    } else if (e.key === 'Escape') {
+      setFocused(false);
     }
   }
 
+  const localPart = atIndex >= 0 ? value.slice(0, atIndex) : value;
+
   return (
-    <div style={{ position: 'relative', width: '100%' }}>
-      {suggestion && (
-        <input
-          type="text"
-          value={value + suggestion}
-          disabled
-          tabIndex={-1}
-          aria-hidden="true"
-          style={{
-            position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
-            padding: '0.438rem 1rem', border: '1px solid transparent',
-            background: 'transparent', color: '#b0b0b0',
-            borderRadius: '0.357rem', fontSize: '1rem',
-            boxSizing: 'border-box', pointerEvents: 'none',
-          }}
-        />
-      )}
+    <div ref={ref} style={{ position: 'relative', width: '100%' }}>
       <input
         type="email"
         name={name}
         required={required}
         value={value}
-        onChange={handleChange}
+        onChange={e => { onChange?.(e.target.value); setHighlightedIndex(0); }}
         onKeyDown={handleKeyDown}
+        onFocus={() => setFocused(true)}
+        onBlur={() => setFocused(false)}
         placeholder={placeholder}
         className={className}
-        autoComplete="email"
-        style={{ position: 'relative', background: suggestion ? 'transparent' : undefined }}
+        autoComplete="off"
       />
-      {suggestion && (
-        <div
-          role="button"
-          tabIndex={0}
-          onClick={applySuggestion}
-          onKeyDown={e => e.key === 'Enter' && applySuggestion()}
-          style={{
-            position: 'absolute', zIndex: 10, left: 0, right: 0, top: 'calc(100% + 2px)',
-            padding: '8px 12px', background: '#f8f8f8',
-            border: '1px solid #d8d6de', borderRadius: '6px',
-            fontSize: '13px', color: '#5e5873', cursor: 'pointer',
-            boxShadow: '0 2px 6px rgba(0,0,0,0.08)',
-          }}
-        >
-          Completar: <strong>{value + suggestion}</strong>
+      {isOpen && (
+        <div className="_dropdown-enter" style={{
+          position: 'absolute', zIndex: 9999, left: 0, right: 0, top: 'calc(100% + 4px)',
+          background: '#fff', border: '1px solid #d8d6de', borderRadius: '12px',
+          boxShadow: '0 4px 24px rgba(34,41,47,0.12)', overflow: 'hidden',
+        }}>
+          {suggestions.map((domain, i) => (
+            <div
+              key={domain}
+              onMouseDown={e => { e.preventDefault(); selectDomain(domain); }}
+              onMouseEnter={() => setHighlightedIndex(i)}
+              style={{
+                padding: '9px 14px',
+                cursor: 'pointer',
+                fontSize: '14px',
+                color: '#5e5873',
+                background: i === highlightedIndex ? '#f3f2f7' : '#fff',
+              }}
+            >
+              {localPart}<strong>@{domain}</strong>
+            </div>
+          ))}
         </div>
       )}
     </div>
