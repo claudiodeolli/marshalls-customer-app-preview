@@ -1420,6 +1420,25 @@ input._search-input:not([type="checkbox"]):not([type="radio"]):not([type="submit
   }
 }
 
+._hist-filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: flex-end;
+}
+
+._hist-filter-date               { flex: 0 0 auto; }
+._hist-filter-date .form-control  { width: auto; }
+._hist-filter-type               { flex: 1 1 auto; min-width: 260px; }
+._hist-filter-status             { flex: 1 1 auto; min-width: 236px; }
+
+@media (max-width: 575.98px) {
+  ._hist-filter-date,
+  ._hist-filter-type,
+  ._hist-filter-status             { flex: 1 1 100%; min-width: 0; }
+  ._hist-filter-date .form-control { width: 100%; }
+}
+
 .referral-label {
   font-size: 12px !important;
 }

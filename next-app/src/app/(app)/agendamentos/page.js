@@ -478,7 +478,16 @@ export default function AgendamentosPage() {
               const dateChanged = converted && converted.date !== apt.detail?.date;
               const mins = apt.status === 'SCHEDULED' ? getMinutesUntil(apt.detail?.date, apt.detail?.from) : -1;
               const canEnter = mins <= 10;
-              const canReschedule = mins > 1440;
+              const isToday = (() => {
+                try {
+                  const [d, m, y] = (apt.detail?.date ?? '').split('/');
+                  const appt = new Date(`${y}-${m}-${d}T00:00:00`);
+                  const now = new Date();
+                  return appt.getFullYear() === now.getFullYear() &&
+                         appt.getMonth() === now.getMonth() &&
+                         appt.getDate() === now.getDate();
+                } catch { return false; }
+              })();
 
               return (
                 <div
@@ -566,56 +575,62 @@ export default function AgendamentosPage() {
                         {/* Mobile: cronômetro + botões */}
                         {apt.status === 'SCHEDULED' && (
                           <div className="d-xl-none" style={{ marginTop: '10px' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
-                              <span style={{ fontSize: '13px', color: '#5e5873', display: 'flex', alignItems: 'center', gap: '5px' }}>
-                                {getCountdownIcon(mins)} {getCountdownTextMobile(mins)}
-                              </span>
-                              {apt.cancel && (
-                                <button className="btn btn-danger btn-sm" style={{ whiteSpace: 'nowrap' }} onClick={() => setCancelTarget(apt)}>
-                                  Cancelar
+                            <span style={{ fontSize: '13px', color: '#5e5873', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                              {getCountdownIcon(mins)} {getCountdownTextMobile(mins)}
+                            </span>
+                            {isToday ? (
+                              <>
+                                <button
+                                  className="btn btn-success btn-sm"
+                                  disabled={!canEnter}
+                                  onClick={() => handleEnterAppointment(apt)}
+                                  style={{ width: '100%', marginTop: '8px' }}
+                                >
+                                  Entrar no atendimento
                                 </button>
-                              )}
-                            </div>
-                            {canReschedule && (
+                                {apt.cancel && (
+                                  <button
+                                    className="btn btn-danger btn-sm"
+                                    style={{ width: '100%', marginTop: '8px' }}
+                                    onClick={() => setCancelTarget(apt)}
+                                  >
+                                    Cancelar
+                                  </button>
+                                )}
+                              </>
+                            ) : (
                               <button className="btn btn-success btn-sm" style={{ width: '100%', marginTop: '8px' }}>
                                 Reagendar
                               </button>
                             )}
-                            <button
-                              className="btn btn-success btn-sm"
-                              disabled={!canEnter}
-                              onClick={() => handleEnterAppointment(apt)}
-                              style={{ width: '100%', marginTop: '8px' }}
-                            >
-                              Entrar no atendimento
-                            </button>
                           </div>
                         )}
                       </div>
 
                       {/* Desktop: cronômetro + botões */}
                       {apt.status === 'SCHEDULED' && (
-                        <div className="d-none d-xl-flex flex-column _appt-card-actions" style={{ gap: '8px', marginLeft: '16px', flexShrink: 0, minWidth: '200px' }}>
-                          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
-                            <span style={{ fontSize: '13px', color: '#5e5873', display: 'flex', alignItems: 'center', gap: '5px', flex: 1 }}>
-                              {getCountdownIcon(mins)} {getCountdownText(mins)}
-                            </span>
-                            {canReschedule && (
-                              <button className="btn btn-success btn-sm _contact-btn" style={{ whiteSpace: 'nowrap', flexShrink: 0 }}>
-                                Reagendar
+                        <div className="d-none d-xl-flex flex-column _appt-card-actions" style={{ gap: '8px', marginLeft: '16px', flexShrink: 0, minWidth: '200px', alignItems: 'stretch' }}>
+                          <span style={{ fontSize: '13px', color: '#5e5873', display: 'flex', alignItems: 'center', gap: '5px', justifyContent: 'flex-end' }}>
+                            {getCountdownIcon(mins)} {getCountdownText(mins)}
+                          </span>
+                          {isToday ? (
+                            <>
+                              <button
+                                className="btn btn-success _contact-btn"
+                                disabled={!canEnter}
+                                onClick={() => handleEnterAppointment(apt)}
+                              >
+                                Entrar no atendimento
                               </button>
-                            )}
-                          </div>
-                          <button
-                            className="btn btn-success _contact-btn"
-                            disabled={!canEnter}
-                            onClick={() => handleEnterAppointment(apt)}
-                          >
-                            Entrar no atendimento
-                          </button>
-                          {apt.cancel && (
-                            <button className="btn btn-outline-danger _contact-btn" onClick={() => setCancelTarget(apt)}>
-                              Cancelar
+                              {apt.cancel && (
+                                <button className="btn btn-outline-danger _contact-btn" onClick={() => setCancelTarget(apt)}>
+                                  Cancelar
+                                </button>
+                              )}
+                            </>
+                          ) : (
+                            <button className="btn btn-success _contact-btn">
+                              Reagendar
                             </button>
                           )}
                         </div>

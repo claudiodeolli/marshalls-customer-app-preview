@@ -311,7 +311,7 @@ export default function MeusDadosPage() {
                     className="_encerrar-desc"
                     style={{
                       background: 'none', border: 'none', padding: 0,
-                      cursor: 'pointer', color: '#5B5A78', fontWeight: 500,
+                      cursor: 'pointer', color: '#5B5A78', fontWeight: 600,
                       fontSize: '14px', textAlign: 'justify',
                       lineHeight: 1.6,
                     }}

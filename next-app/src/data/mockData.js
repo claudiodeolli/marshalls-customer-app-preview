@@ -298,19 +298,6 @@ export const mockHistory = [
     updatedAt: '25/07/2026 10:00:00',
     documents: [],
   },
-  // Consulta avulsa cancelada — sem encaminhamento = apt-005
-  {
-    uuid: 'hist-004',
-    type: 'scheduled',
-    status: 'CANCELED',
-    appointmentBegin: '12/05/2026 11:00',
-    appointmentEnd: null,
-    professional: { name: 'Carlos Mendes', specialties: [{ name: 'Cardiologia' }] },
-    beneficiaryMedicalReferral: null,
-    purchasedAt: '10/05/2026, às 09:15:30',
-    purchaseDetails: { paymentMethod: 'pix', amount: 'R$ 95,00', status: 'Pago' },
-    documents: [],
-  },
   // Agendamento com especialista — encaminhamento CANCELED
   {
     uuid: 'hist-009',
@@ -325,6 +312,19 @@ export const mockHistory = [
       createdAt: '10/06/2026 09:00:00',
       updatedAt: '10/06/2026 09:00:00',
     },
+    documents: [],
+  },
+  // Consulta avulsa cancelada — sem encaminhamento = apt-005
+  {
+    uuid: 'hist-004',
+    type: 'scheduled',
+    status: 'CANCELED',
+    appointmentBegin: '12/05/2026 11:00',
+    appointmentEnd: null,
+    professional: { name: 'Carlos Mendes', specialties: [{ name: 'Cardiologia' }] },
+    beneficiaryMedicalReferral: null,
+    purchasedAt: '10/05/2026, às 09:15:30',
+    purchaseDetails: { paymentMethod: 'pix', amount: 'R$ 95,00', status: 'Pago' },
     documents: [],
   },
   // Pronto atendimento mais antigo — com avaliação preenchida

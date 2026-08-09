@@ -9,6 +9,7 @@ import { mockHistory } from '@/data/mockData';
 import { IconEvent, IconChevronDown } from '@/components/features/historico/icons';
 import StatusBadge from '@/components/features/historico/StatusBadge';
 import StatusSelect from '@/components/features/historico/StatusSelect';
+import TypeSelect from '@/components/features/historico/TypeSelect';
 import Stars from '@/components/features/historico/Stars';
 import EvaluationModal from '@/components/features/historico/EvaluationModal';
 import DocumentsAccordion from '@/components/features/historico/DocumentsAccordion';
@@ -285,125 +286,124 @@ export default function HistoricoPage() {
             </span>
           </div>
 
-          {filterOpen && <div style={{ padding: '0 16px 16px' }}><div className="row" style={{ rowGap: '12px', alignItems: 'flex-end' }}>
-            {/* Date initial */}
-            <div className="col-12 col-sm-6 col-md-3">
-              <label className="form-label" style={{ fontSize: '13px', color: 'var(--primary,#0052ff)', marginBottom: '4px' }}>
-                Data inicial
-              </label>
-              <input
-                type="date"
-                className="form-control"
-                value={dateInitial}
-                onChange={e => setDateInitial(e.target.value)}
-                style={{ borderRadius: '8px' }}
-              />
-            </div>
+          {filterOpen && (
+            <div style={{ padding: '0 16px 16px' }}>
+              <div className="_hist-filter-row">
+                {/* Data inicial */}
+                <div className="_hist-filter-date">
+                  <label className="form-label" style={{ fontSize: '13px', color: 'var(--primary,#0052ff)', marginBottom: '4px', display: 'block' }}>
+                    Data inicial
+                  </label>
+                  <input
+                    type="date"
+                    className="form-control"
+                    value={dateInitial}
+                    onChange={e => setDateInitial(e.target.value)}
+                    style={{ borderRadius: '8px' }}
+                  />
+                </div>
 
-            {/* Date final */}
-            <div className="col-12 col-sm-6 col-md-3">
-              <label className="form-label" style={{ fontSize: '13px', color: 'var(--primary,#0052ff)', marginBottom: '4px' }}>
-                Data final
-              </label>
-              <input
-                type="date"
-                className="form-control"
-                value={dateFinal}
-                onChange={e => setDateFinal(e.target.value)}
-                style={{ borderRadius: '8px' }}
-              />
-            </div>
+                {/* Data final */}
+                <div className="_hist-filter-date">
+                  <label className="form-label" style={{ fontSize: '13px', color: 'var(--primary,#0052ff)', marginBottom: '4px', display: 'block' }}>
+                    Data final
+                  </label>
+                  <input
+                    type="date"
+                    className="form-control"
+                    value={dateFinal}
+                    onChange={e => setDateFinal(e.target.value)}
+                    style={{ borderRadius: '8px' }}
+                  />
+                </div>
 
-            {/* Type */}
-            <div className="col-12 col-sm-6 col-md-4">
-              <label className="form-label" style={{ fontSize: '13px', color: 'var(--primary,#0052ff)', marginBottom: '4px' }}>
-                Tipo de consulta
-              </label>
-              <select
-                className="custom-select"
-                style={{ borderRadius: '8px' }}
-                value={typeFilter}
-                onChange={e => {
-                  const val = e.target.value;
-                  setTypeFilter(val);
-                  if (val === 'emergency') setStatus('FINISHED');
-                }}
-              >
-                <option value="all">Todos</option>
-                <option value="scheduled">Agendamento com especialista</option>
-                <option value="emergency">Pronto Atendimento</option>
-              </select>
-            </div>
+                {/* Tipo de consulta */}
+                <div className="_hist-filter-type">
+                  <label className="form-label" style={{ fontSize: '13px', color: 'var(--primary,#0052ff)', marginBottom: '4px', display: 'block' }}>
+                    Tipo de consulta
+                  </label>
+                  <TypeSelect
+                    value={typeFilter}
+                    onChange={val => {
+                      setTypeFilter(val);
+                      if (val === 'emergency') setStatus('FINISHED');
+                    }}
+                  />
+                </div>
 
-            {/* Status */}
-            <div className="col-12 col-sm-6 col-md-2">
-              <label className="form-label" style={{ fontSize: '13px', color: 'var(--primary,#0052ff)', marginBottom: '4px' }}>
-                Status
-              </label>
-              <StatusSelect value={statusFilter} onChange={setStatus} disabled={typeFilter === 'emergency'} />
-            </div>
+                {/* Status */}
+                <div className="_hist-filter-status">
+                  <label className="form-label" style={{ fontSize: '13px', color: 'var(--primary,#0052ff)', marginBottom: '4px', display: 'block' }}>
+                    Status
+                  </label>
+                  <StatusSelect value={statusFilter} onChange={setStatus} disabled={typeFilter === 'emergency'} />
+                </div>
 
-            {/* Filter + Limpar buttons */}
-            <div className="col-12 col-sm-12 col-md-2" style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-              <button
-                disabled={loading}
-                onClick={applyFilter}
-                className={`_hist-filter-btn${loading ? '' : ' _ct-gradient'}`}
-                style={{
-                  width: '100%',
-                  borderRadius: '8px',
-                  border: 'none',
-                  cursor: loading ? 'default' : 'pointer',
-                  fontSize: '1rem',
-                  fontWeight: 600,
-                  color: '#fff',
-                  background: loading
-                    ? '#e0e0e0'
-                    : 'linear-gradient(135deg, #0052ff 0%, #00b7ff 100%)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '6px',
-                }}
-              >
-                {loading ? (
-                  <>
-                    <span className="spinner-border spinner-border-sm" style={{ width: '14px', height: '14px', borderWidth: '2px' }} />
-                    Buscando...
-                  </>
-                ) : (
-                  <><IconEvent /> Filtrar</>
-                )}
-              </button>
-              {isFilterModified && (
-                <button
-                  onClick={() => {
-                    setDateInitial(sevenAgo);
-                    setDateFinal(today);
-                    setTypeFilter('all');
-                    setStatus('');
-                    const defaults = { dateInitial: sevenAgo, dateFinal: today, typeFilter: 'all', statusFilter: '' };
-                    saveFilter(defaults);
-                    (async () => {
-                      setLoading(true);
-                      try {
-                        const data = await fetchHistory(defaults);
-                        setAllRecords(data);
-                        setRecords(data);
-                      } catch { /* ignore */ } finally { setLoading(false); }
-                    })();
-                  }}
-                  style={{
-                    width: '100%', height: '32px', borderRadius: '8px',
-                    border: '1px solid #d8d6de', background: '#fff',
-                    cursor: 'pointer', fontSize: '13px', fontWeight: 500, color: '#6e6b7b',
-                  }}
-                >
-                  Limpar filtro
-                </button>
-              )}
+                {/* Filtrar + Limpar */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', alignSelf: 'flex-end', flexShrink: 0 }}>
+                  <button
+                    disabled={loading}
+                    onClick={applyFilter}
+                    className={`_hist-filter-btn${loading ? '' : ' _ct-gradient'}`}
+                    style={{
+                      padding: '0 20px',
+                      borderRadius: '8px',
+                      border: 'none',
+                      cursor: loading ? 'default' : 'pointer',
+                      fontSize: '1rem',
+                      fontWeight: 600,
+                      color: '#fff',
+                      background: loading
+                        ? '#e0e0e0'
+                        : 'linear-gradient(135deg, #0052ff 0%, #00b7ff 100%)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '6px',
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                    {loading ? (
+                      <>
+                        <span className="spinner-border spinner-border-sm" style={{ width: '14px', height: '14px', borderWidth: '2px' }} />
+                        Buscando...
+                      </>
+                    ) : (
+                      <><IconEvent /> Filtrar</>
+                    )}
+                  </button>
+                  {isFilterModified && (
+                    <button
+                      onClick={() => {
+                        setDateInitial(sevenAgo);
+                        setDateFinal(today);
+                        setTypeFilter('all');
+                        setStatus('');
+                        const defaults = { dateInitial: sevenAgo, dateFinal: today, typeFilter: 'all', statusFilter: '' };
+                        saveFilter(defaults);
+                        (async () => {
+                          setLoading(true);
+                          try {
+                            const data = await fetchHistory(defaults);
+                            setAllRecords(data);
+                            setRecords(data);
+                          } catch { /* ignore */ } finally { setLoading(false); }
+                        })();
+                      }}
+                      style={{
+                        height: '32px', borderRadius: '8px', whiteSpace: 'nowrap',
+                        border: '1px solid #d8d6de', background: '#fff',
+                        cursor: 'pointer', fontSize: '13px', fontWeight: 500, color: '#6e6b7b',
+                        padding: '0 16px',
+                      }}
+                    >
+                      Limpar filtro
+                    </button>
+                  )}
+                </div>
+              </div>
             </div>
-          </div></div>}
+          )}
         </div>
       </div>
 
