@@ -6,6 +6,7 @@ import { MastercardIcon, AlertTriangle } from '@/components/features/minha-conta
 import SituacaoBadge from '@/components/features/minha-conta/SituacaoBadge';
 import EmailInput from '@/components/features/meus-dados/EmailInput';
 import PhoneInput from '@/components/features/meus-dados/PhoneInput';
+import { isValidCpf } from '@/lib/cpf';
 import { fetchViaCEP } from '@/lib/viaCep';
 
 function maskCPF(v) {
@@ -102,6 +103,7 @@ const [showAlterarCartao, setShowAlterarCartao] = useState(false);
   const [addingDep, setAddingDep] = useState(false);
   const [newDep, setNewDep] = useState(EMPTY_DEP);
   const [depError, setDepError] = useState('');
+  const [depCpfError, setDepCpfError] = useState('');
 
   const plan = PLAN_INFO[planType];
 
@@ -146,10 +148,15 @@ const [showAlterarCartao, setShowAlterarCartao] = useState(false);
       setDepError('Preencha todos os campos obrigatórios.');
       return;
     }
+    if (!isValidCpf(newDep.cpf)) {
+      setDepCpfError('CPF inválido.');
+      return;
+    }
     setDependents(prev => [...prev, { ...newDep }]);
     setNewDep(EMPTY_DEP);
     setAddingDep(false);
     setDepError('');
+    setDepCpfError('');
   }
 
   async function handleDepCepChange(raw) {
@@ -396,8 +403,16 @@ const [showAlterarCartao, setShowAlterarCartao] = useState(false);
 
                     <div className="form-group">
                       <label className="form-label">CPF <strong style={{ color: '#ea5455' }}>*</strong></label>
-                      <input className="form-control" type="text" placeholder="000.000.000-00" inputMode="numeric"
-                        value={newDep.cpf} onChange={e => setNewDep(d => ({ ...d, cpf: maskCPF(e.target.value) }))} />
+                      <input
+                        className={`form-control${depCpfError ? ' is-invalid' : ''}`}
+                        type="text" placeholder="000.000.000-00" inputMode="numeric"
+                        value={newDep.cpf}
+                        onChange={e => { setNewDep(d => ({ ...d, cpf: maskCPF(e.target.value) })); setDepCpfError(''); }}
+                        onBlur={() => {
+                          if (newDep.cpf && !isValidCpf(newDep.cpf)) setDepCpfError('CPF inválido.');
+                        }}
+                      />
+                      {depCpfError && <div className="invalid-feedback">{depCpfError}</div>}
                     </div>
 
                     <div className="form-group">

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import EmailInput from '@/components/features/meus-dados/EmailInput';
+import { isValidCpf } from '@/lib/cpf';
 import { fetchViaCEP } from '@/lib/viaCep';
 
 function maskCPF(v) {
@@ -58,6 +59,7 @@ export default function PaymentModal({ open, onClose, onSuccess, alertMessage, p
   const [numero, setNumero] = useState('');
   const [bairro, setBairro] = useState('');
   const [cep, setCep] = useState('');
+  const [cpfError, setCpfError] = useState('');
   const [cardNumber, setCardNumber] = useState('');
   const [cardholder, setCardholder] = useState('');
   const [expiry, setExpiry] = useState('');
@@ -79,6 +81,10 @@ export default function PaymentModal({ open, onClose, onSuccess, alertMessage, p
 
   async function handleSubmit() {
     if (loading) return;
+    if (!isValidCpf(cpf)) {
+      setCpfError('CPF inválido.');
+      return;
+    }
     setLoading(true);
     await new Promise(r => setTimeout(r, 1500));
     setLoading(false);
@@ -140,7 +146,14 @@ export default function PaymentModal({ open, onClose, onSuccess, alertMessage, p
                   </div>
                   <div style={{ flex: 1 }}>
                     <label className="form-label" style={{ fontSize: '13px' }}>CPF</label>
-                    <input className="form-control" placeholder="Digite somente números" value={cpf} onChange={e => setCpf(maskCPF(e.target.value))} />
+                    <input
+                      className={`form-control${cpfError ? ' is-invalid' : ''}`}
+                      placeholder="Digite somente números"
+                      value={cpf}
+                      onChange={e => { setCpf(maskCPF(e.target.value)); setCpfError(''); }}
+                      onBlur={() => { if (cpf && !isValidCpf(cpf)) setCpfError('CPF inválido.'); }}
+                    />
+                    {cpfError && <div className="invalid-feedback">{cpfError}</div>}
                   </div>
                 </div>
                 <div>
