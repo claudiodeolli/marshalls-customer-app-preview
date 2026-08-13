@@ -3,9 +3,9 @@
 import { useState, useEffect, useRef } from 'react';
 
 const TYPE_OPTIONS = [
-  { value: 'all',       label: 'Todos' },
-  { value: 'scheduled', label: 'Agendamento com especialista' },
-  { value: 'emergency', label: 'Pronto Atendimento' },
+  { value: 'all',       label: 'Todos',                        shortLabel: 'Todos' },
+  { value: 'scheduled', label: 'Agendamento com especialista', shortLabel: 'Agendamento' },
+  { value: 'emergency', label: 'Pronto Atendimento',           shortLabel: 'Pronto Atendimento' },
 ];
 
 export default function TypeSelect({ value, onChange }) {
@@ -37,12 +37,12 @@ export default function TypeSelect({ value, onChange }) {
           alignItems: 'center',
           justifyContent: 'space-between',
           padding: '0 12px',
-          fontSize: '14px',
+          fontSize: '1rem',
           color: '#6e6b7b',
         }}
       >
         <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', minWidth: 0 }}>
-          {selected.label}
+          {selected.shortLabel}
         </span>
         <svg
           width="10" height="6" viewBox="0 0 10 6" fill="none"
@@ -57,7 +57,7 @@ export default function TypeSelect({ value, onChange }) {
           position: 'absolute',
           top: 'calc(100% + 4px)',
           left: 0,
-          right: 0,
+          minWidth: '100%',
           background: '#fff',
           border: '1px solid #d8d6de',
           borderRadius: '12px',

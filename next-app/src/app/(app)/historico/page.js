@@ -7,6 +7,7 @@ import { useAuth } from '@/lib/AuthContext';
 import { USER } from '@/data/user';
 import { mockHistory } from '@/data/mockData';
 import { IconEvent, IconChevronDown } from '@/components/features/historico/icons';
+import { ShoppingBag, Stethoscope, User, Calendar, CircleDollarSign, CreditCard, FileText, CircleCheck, Zap, X } from 'lucide-react';
 import StatusBadge from '@/components/features/historico/StatusBadge';
 import StatusSelect from '@/components/features/historico/StatusSelect';
 import TypeSelect from '@/components/features/historico/TypeSelect';
@@ -340,7 +341,7 @@ export default function HistoricoPage() {
                 </div>
 
                 {/* Filtrar + Limpar */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', alignSelf: 'flex-end', flexShrink: 0 }}>
+                <div className="_hist-filter-actions" style={{ display: 'flex', flexDirection: 'column', gap: '6px', alignSelf: 'flex-end', flexShrink: 0 }}>
                   <button
                     disabled={loading}
                     onClick={applyFilter}
@@ -728,58 +729,90 @@ export default function HistoricoPage() {
         >
           <div style={{ background: '#fff', borderRadius: '12px', width: '100%', maxWidth: 420, boxShadow: '0 12px 40px rgba(34,41,47,0.25)' }}>
             <div style={{ padding: '18px 24px 16px', borderBottom: '1px solid #ebe9f1', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <h5 style={{ margin: 0, fontWeight: 700, color: '#5e5873', fontSize: '16px' }}>Detalhes da compra</h5>
-              <button onClick={() => setPurchaseModal(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#aaa', fontSize: '24px', lineHeight: 1, padding: '0 4px' }}>×</button>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <ShoppingBag size={18} color="#5e5873" />
+                <h5 style={{ margin: 0, fontWeight: 700, color: '#5e5873', fontSize: '16px' }}>Detalhes da compra</h5>
+              </div>
+              <button onClick={() => setPurchaseModal(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#aaa', padding: '0 4px', display: 'flex', alignItems: 'center' }}>
+                <X size={20} />
+              </button>
             </div>
             <div style={{ padding: '20px 24px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
               <div>
-                <small style={{ fontSize: '11px', color: '#6e6b7b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Consulta</small>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                  <Stethoscope size={12} color="#6e6b7b" />
+                  <small style={{ fontSize: '11px', color: '#6e6b7b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Consulta</small>
+                </div>
                 <p style={{ margin: '4px 0 0', fontSize: '14px', color: '#5e5873' }}>
                   Consulta avulsa — {purchaseModal.professional.specialties[0].name}
                 </p>
               </div>
               <div>
-                <small style={{ fontSize: '11px', color: '#6e6b7b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Adquirida por</small>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                  <User size={12} color="#6e6b7b" />
+                  <small style={{ fontSize: '11px', color: '#6e6b7b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Adquirida por</small>
+                </div>
                 <p style={{ margin: '4px 0 0', fontSize: '14px', color: '#5e5873' }}>{USER.name} {USER.lastName}</p>
               </div>
               {purchaseModal.purchasedAt && (
                 <div>
-                  <small style={{ fontSize: '11px', color: '#6e6b7b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Data da compra</small>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                    <Calendar size={12} color="#6e6b7b" />
+                    <small style={{ fontSize: '11px', color: '#6e6b7b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Data da compra</small>
+                  </div>
                   <p style={{ margin: '4px 0 0', fontSize: '14px', color: '#5e5873' }}>{purchaseModal.purchasedAt}</p>
                 </div>
               )}
               {purchaseModal.purchaseDetails?.amount && (
                 <div>
-                  <small style={{ fontSize: '11px', color: '#6e6b7b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Valor pago</small>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                    <CircleDollarSign size={12} color="#6e6b7b" />
+                    <small style={{ fontSize: '11px', color: '#6e6b7b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Valor pago</small>
+                  </div>
                   <p style={{ margin: '4px 0 0', fontSize: '14px', color: '#5e5873' }}>{purchaseModal.purchaseDetails.amount}</p>
                 </div>
               )}
               {purchaseModal.purchaseDetails?.paymentMethod === 'card' ? (
                 <>
                   <div>
-                    <small style={{ fontSize: '11px', color: '#6e6b7b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Forma de pagamento</small>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                      <CreditCard size={12} color="#6e6b7b" />
+                      <small style={{ fontSize: '11px', color: '#6e6b7b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Forma de pagamento</small>
+                    </div>
                     <p style={{ margin: '4px 0 0', fontSize: '14px', color: '#5e5873' }}>Cartão de crédito</p>
                   </div>
                   <div>
-                    <small style={{ fontSize: '11px', color: '#6e6b7b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Cartão utilizado</small>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                      <CreditCard size={12} color="#6e6b7b" />
+                      <small style={{ fontSize: '11px', color: '#6e6b7b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Cartão utilizado</small>
+                    </div>
                     <p style={{ margin: '4px 0 0', fontSize: '14px', color: '#5e5873' }}>
                       {purchaseModal.purchaseDetails.card.brand} •••• {purchaseModal.purchaseDetails.card.last4}
                     </p>
                   </div>
                   <div>
-                    <small style={{ fontSize: '11px', color: '#6e6b7b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Parcelamento</small>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                      <FileText size={12} color="#6e6b7b" />
+                      <small style={{ fontSize: '11px', color: '#6e6b7b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Parcelamento</small>
+                    </div>
                     <p style={{ margin: '4px 0 0', fontSize: '14px', color: '#5e5873' }}>{purchaseModal.purchaseDetails.card.installments}</p>
                   </div>
                 </>
               ) : purchaseModal.purchaseDetails?.paymentMethod === 'pix' ? (
                 <div>
-                  <small style={{ fontSize: '11px', color: '#6e6b7b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Forma de pagamento</small>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                    <Zap size={12} color="#6e6b7b" />
+                    <small style={{ fontSize: '11px', color: '#6e6b7b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Forma de pagamento</small>
+                  </div>
                   <p style={{ margin: '4px 0 0', fontSize: '14px', color: '#5e5873' }}>Pix</p>
                 </div>
               ) : null}
               {purchaseModal.purchaseDetails?.status && (
                 <div>
-                  <small style={{ fontSize: '11px', color: '#6e6b7b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Status do pagamento</small>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                    <CircleCheck size={12} color="#6e6b7b" />
+                    <small style={{ fontSize: '11px', color: '#6e6b7b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Status do pagamento</small>
+                  </div>
                   <p style={{ margin: '4px 0 0', fontSize: '14px', color: '#28c76f', fontWeight: 600 }}>{purchaseModal.purchaseDetails.status}</p>
                 </div>
               )}
