@@ -43,6 +43,7 @@ export default function MeusDadosPage() {
   const [cep, setCep]       = useState('');
   const [rua, setRua]       = useState('');
   const [numero, setNumero] = useState('');
+  const [bairro, setBairro] = useState('');
 
   function applyMaskCEP(v) {
     const d = v.replace(/\D/g, '').slice(0, 8);
@@ -56,6 +57,7 @@ export default function MeusDadosPage() {
       const addr = await fetchViaCEP(digits);
       if (addr) {
         setRua(addr.logradouro);
+        setBairro(addr.bairro);
         setCidade(addr.cidade);
         setEstado(addr.estado);
       }
@@ -241,6 +243,10 @@ export default function MeusDadosPage() {
                     <input className="form-control" type="text" placeholder="Apto, sala..." value={compl} onChange={e => setCompl(e.target.value)} />
                   </div>
                 </div>
+              </div>
+              <div className="form-group">
+                <label className="form-label">Bairro <strong style={{ color: '#ea5455' }}>*</strong></label>
+                <input className="form-control" type="text" placeholder="Nome do bairro" value={bairro} onChange={e => setBairro(e.target.value)} />
               </div>
               <div className="row">
                 <div className="col-8">

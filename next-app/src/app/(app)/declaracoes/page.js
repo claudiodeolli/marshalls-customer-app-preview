@@ -13,6 +13,7 @@ export default function MeusDadosPage() {
   const [rua, setRua]       = useState('');
   const [numero, setNumero] = useState('');
   const [compl, setCompl]   = useState('');
+  const [bairro, setBairro] = useState('');
   const [cidade, setCidade] = useState('');
   const [estado, setEstado] = useState('');
 
@@ -23,6 +24,7 @@ export default function MeusDadosPage() {
       const addr = await fetchViaCEP(digits);
       if (addr) {
         setRua(addr.logradouro);
+        setBairro(addr.bairro);
         setCidade(addr.cidade);
         setEstado(addr.estado);
       }
@@ -88,6 +90,11 @@ export default function MeusDadosPage() {
                       value={compl} onChange={e => setCompl(e.target.value)} />
                   </div>
                 </div>
+              </div>
+              <div className="form-group">
+                <label className="form-label">Bairro</label>
+                <input className="form-control" type="text" placeholder="Nome do bairro"
+                  value={bairro} onChange={e => setBairro(e.target.value)} />
               </div>
               <div className="row">
                 <div className="col-8">

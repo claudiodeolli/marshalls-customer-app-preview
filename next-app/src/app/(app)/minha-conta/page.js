@@ -82,7 +82,7 @@ const PARENTESCO_OPTIONS = ['Cônjuge', 'Filho(a)', 'Pai', 'Mãe', 'Irmão(ã)']
 const EMPTY_DEP = {
   nome: '', dataNasc: '', cpf: '', parentesco: '', genero: '',
   email: '', telefone: '', phoneCountry: 'BR',
-  cep: '', rua: '', numero: '', compl: '', cidade: '', estado: '',
+  cep: '', rua: '', numero: '', compl: '', bairro: '', cidade: '', estado: '',
 };
 
 export default function MinhaContaPage() {
@@ -144,7 +144,7 @@ const [showAlterarCartao, setShowAlterarCartao] = useState(false);
   function handleConfirmDep() {
     if (!newDep.nome || !newDep.dataNasc || !newDep.cpf || !newDep.parentesco ||
         !newDep.genero || !newDep.email || !newDep.telefone ||
-        !newDep.cep || !newDep.rua || !newDep.numero || !newDep.cidade || !newDep.estado) {
+        !newDep.cep || !newDep.rua || !newDep.numero || !newDep.bairro || !newDep.cidade || !newDep.estado) {
       setDepError('Preencha todos os campos obrigatórios.');
       return;
     }
@@ -164,7 +164,7 @@ const [showAlterarCartao, setShowAlterarCartao] = useState(false);
     const digits = raw.replace(/\D/g, '');
     if (digits.length === 8) {
       const addr = await fetchViaCEP(digits);
-      if (addr) setNewDep(d => ({ ...d, rua: addr.logradouro, cidade: addr.cidade, estado: addr.estado }));
+      if (addr) setNewDep(d => ({ ...d, rua: addr.logradouro, bairro: addr.bairro, cidade: addr.cidade, estado: addr.estado }));
     }
   }
 
@@ -493,6 +493,13 @@ const [showAlterarCartao, setShowAlterarCartao] = useState(false);
                             <label className="form-label">Complemento</label>
                             <input className="form-control" type="text" placeholder="Apto, sala..." maxLength={60}
                               value={newDep.compl} onChange={e => setNewDep(d => ({ ...d, compl: e.target.value }))} />
+                          </div>
+                        </div>
+                        <div className="col-12">
+                          <div className="form-group">
+                            <label className="form-label">Bairro <strong style={{ color: '#ea5455' }}>*</strong></label>
+                            <input className="form-control" type="text" placeholder="Nome do bairro" maxLength={80}
+                              value={newDep.bairro} onChange={e => setNewDep(d => ({ ...d, bairro: e.target.value }))} />
                           </div>
                         </div>
                         <div className="col-md-8">

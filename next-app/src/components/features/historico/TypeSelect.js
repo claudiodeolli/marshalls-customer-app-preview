@@ -37,7 +37,7 @@ export default function TypeSelect({ value, onChange }) {
           alignItems: 'center',
           justifyContent: 'space-between',
           padding: '0 12px',
-          fontSize: '1rem',
+          fontSize: '16px',
           color: '#6e6b7b',
         }}
       >
@@ -72,7 +72,7 @@ export default function TypeSelect({ value, onChange }) {
               style={{
                 padding: '10px 14px',
                 cursor: 'pointer',
-                fontSize: '14px',
+                fontSize: '16px',
                 color: '#6e6b7b',
                 background: value === opt.value ? '#f3f2f7' : '#fff',
               }}
