@@ -1554,10 +1554,24 @@ input._search-input:not([type="checkbox"]):not([type="radio"]):not([type="submit
 /* ── _hist-results: row-gap substitui mb-2; last row não tem espaço extra ── */
 ._hist-results .row {
   row-gap: 1.5rem;
+  margin-left: -10px;
+  margin-right: -10px;
 }
 
 ._hist-results .row>[class*="col-"] {
   margin-bottom: 0 !important;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+._hist-link {
+  color: #4F68C7;
+  cursor: pointer;
+  font-weight: 600;
+  text-decoration: none;
+}
+._hist-link:hover {
+  text-decoration: underline;
 }
 
 ._lgpd-desc:hover,

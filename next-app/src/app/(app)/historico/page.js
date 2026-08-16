@@ -505,7 +505,7 @@ export default function HistoricoPage() {
                                     createdAt: r.createdAt,
                                     updatedAt: r.updatedAt,
                                   })}
-                                  style={{ background: 'none', border: 'none', padding: 0, color: '#4F68C7', cursor: 'pointer', fontSize: 'inherit', textDecoration: 'underline' }}
+                                  className="_hist-link" style={{ background: 'none', border: 'none', padding: 0, fontSize: 'inherit' }}
                                 >
                                   Ver encaminhamento
                                 </button>
@@ -513,7 +513,7 @@ export default function HistoricoPage() {
                             ) : (
                               <>
                                 Consulta avulsa<br />
-                                <button onClick={() => setPurchaseModal(r)} style={{ background: 'none', border: 'none', padding: 0, color: '#4F68C7', cursor: 'pointer', fontSize: 'inherit', textDecoration: 'underline' }}>
+                                <button onClick={() => setPurchaseModal(r)} className="_hist-link" style={{ background: 'none', border: 'none', padding: 0, fontSize: 'inherit' }}>
                                   Detalhes da compra
                                 </button>
                               </>
@@ -530,8 +530,10 @@ export default function HistoricoPage() {
                             <p style={{ marginBottom: '4px' }}>
                               <small className="hist-label"><b>Data e horário da consulta</b></small><br />
                               <span className="hist-value">
-                                {date} às {time} <span title="Horário de Brasília">🇧🇷</span>{' '}
-                                <span style={{ color: '#9a9a9a', fontSize: '12px' }}>Sao Paulo (GMT-3)</span>
+                                <span style={{ whiteSpace: 'nowrap' }}>
+                                  {date} às {time} <span title="Horário de Brasília">🇧🇷</span>{' '}
+                                  <span style={{ color: '#9a9a9a', fontSize: '12px' }}>Sao Paulo (GMT-3)</span>
+                                </span>
                                 {converted && (
                                   <><br /><span style={{ fontSize: '12px', color: '#6e6b7b' }}>no seu horário:{dateChanged ? ` ${converted.date} às` : ''} {converted.time}</span></>
                                 )}
@@ -569,7 +571,7 @@ export default function HistoricoPage() {
                                     createdAt: r.createdAt,
                                     updatedAt: r.updatedAt,
                                   })}
-                                  style={{ background: 'none', border: 'none', padding: 0, color: '#4F68C7', cursor: 'pointer', fontSize: 'inherit', textDecoration: 'underline' }}
+                                  className="_hist-link" style={{ background: 'none', border: 'none', padding: 0, fontSize: 'inherit' }}
                                 >
                                   Ver encaminhamento
                                 </button>
@@ -577,7 +579,7 @@ export default function HistoricoPage() {
                             ) : (
                               <>
                                 Consulta avulsa<br />
-                                <button onClick={() => setPurchaseModal(r)} style={{ background: 'none', border: 'none', padding: 0, color: '#4F68C7', cursor: 'pointer', fontSize: 'inherit', textDecoration: 'underline' }}>
+                                <button onClick={() => setPurchaseModal(r)} className="_hist-link" style={{ background: 'none', border: 'none', padding: 0, fontSize: 'inherit' }}>
                                   Detalhes da compra
                                 </button>
                               </>
@@ -620,7 +622,7 @@ export default function HistoricoPage() {
                                   <><br />
                                     <button
                                       onClick={() => setReferralModal(r.beneficiaryMedicalReferral)}
-                                      style={{ background: 'none', border: 'none', padding: 0, color: '#4F68C7', cursor: 'pointer', fontSize: 'inherit', textDecoration: 'underline' }}
+                                      className="_hist-link" style={{ background: 'none', border: 'none', padding: 0, fontSize: 'inherit' }}
                                     >
                                       Ver encaminhamento
                                     </button>
@@ -630,7 +632,7 @@ export default function HistoricoPage() {
                             ) : (
                               <span className="hist-value">
                                 Consulta avulsa<br />
-                                <button onClick={() => setPurchaseModal(r)} style={{ background: 'none', border: 'none', padding: 0, color: '#4F68C7', cursor: 'pointer', fontSize: 'inherit', textDecoration: 'underline' }}>
+                                <button onClick={() => setPurchaseModal(r)} className="_hist-link" style={{ background: 'none', border: 'none', padding: 0, fontSize: 'inherit' }}>
                                   Detalhes da compra
                                 </button>
                               </span>
