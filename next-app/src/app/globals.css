@@ -1564,6 +1564,10 @@ input._search-input:not([type="checkbox"]):not([type="radio"]):not([type="submit
   padding-right: 10px;
 }
 
+._assinaturas-card {
+  box-shadow: none !important;
+}
+
 ._hist-link {
   color: #4F68C7;
   cursor: pointer;

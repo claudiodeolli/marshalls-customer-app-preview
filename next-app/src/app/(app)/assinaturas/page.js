@@ -37,7 +37,7 @@ export default function AssinaturasPage() {
           </div>
 
           {/* MarshallsMed card */}
-          <div className="card">
+          <div className="card _assinaturas-card" style={{ border: '1px solid rgb(216, 214, 222)' }}>
             <div className="card-body d-flex align-items-center" style={{ gap: '12px' }}>
               <div style={{ background: '#e8f0ff', borderRadius: '8px', padding: '10px', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0052ff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -67,7 +67,7 @@ export default function AssinaturasPage() {
           </div>
 
           {/* Billing history card */}
-          <div className="card">
+          <div className="card _assinaturas-card" style={{ border: '1px solid rgb(216, 214, 222)' }}>
             <div className="card-header">
               <h5 className="card-title mb-0">Histórico de cobranças</h5>
             </div>

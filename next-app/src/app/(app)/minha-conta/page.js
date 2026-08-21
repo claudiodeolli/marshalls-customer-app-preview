@@ -208,7 +208,7 @@ const [showAlterarCartao, setShowAlterarCartao] = useState(false);
       </div>
 
       {/* ── Card do plano ── */}
-      <div className="card mb-2">
+      <div className="card mb-2 _assinaturas-card" style={{ border: '1px solid rgb(216, 214, 222)' }}>
         <div className="card-body">
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', alignItems: 'flex-start', justifyContent: 'space-between' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flex: 1, minWidth: '220px' }}>
