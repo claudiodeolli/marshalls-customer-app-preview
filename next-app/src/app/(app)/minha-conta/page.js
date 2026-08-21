@@ -474,7 +474,7 @@ const [showAlterarCartao, setShowAlterarCartao] = useState(false);
 
       {/* ══ Aba: Histórico de pagamentos ══ */}
       {activeTab === 'historico' && (
-        <div className="card">
+        <div className="card _assinaturas-card" style={{ border: '1px solid rgb(216, 214, 222)' }}>
           <div className="table-responsive">
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, minmax(max-content, 1fr))', columnGap: '24px', padding: '0 16px', minWidth: 'max-content', width: '100%' }}>
               {HEADERS.map(h => (
@@ -507,7 +507,7 @@ const [showAlterarCartao, setShowAlterarCartao] = useState(false);
       {/* ══ Aba: Gerenciar Assinatura ══ */}
       {activeTab === 'gerenciar' && (
         <div>
-          <div className="card mb-2">
+          <div className="card mb-2 _assinaturas-card" style={{ border: '1px solid rgb(216, 214, 222)' }}>
             <div className="card-body">
               <h6 style={{ fontWeight: 600, color: '#5e5873', marginBottom: '14px' }}>Opções da Assinatura</h6>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
