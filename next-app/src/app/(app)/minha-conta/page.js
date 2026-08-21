@@ -200,7 +200,7 @@ const [showAlterarCartao, setShowAlterarCartao] = useState(false);
         CPF: <strong style={{ color: '#5e5873' }}>{SUBSCRIPTION.cpf}</strong>
       </p>
       <div style={{
-        display: 'inline-block', border: '1px solid #d8d6de', borderRadius: '12px',
+        display: 'inline-block', border: '1px solid rgb(232, 232, 232)', borderRadius: '12px',
         padding: '8px 16px', marginTop: '8px', marginBottom: '1.5rem', background: '#fff',
       }}>
         <small style={{ display: 'block', fontSize: '11px', color: '#aaa', marginBottom: '2px' }}>Número da Assinatura</small>
@@ -208,7 +208,7 @@ const [showAlterarCartao, setShowAlterarCartao] = useState(false);
       </div>
 
       {/* ── Card do plano ── */}
-      <div className="card mb-2 _assinaturas-card" style={{ border: '1px solid rgb(216, 214, 222)' }}>
+      <div className="card mb-2 _assinaturas-card" style={{ border: '1px solid rgb(232, 232, 232)' }}>
         <div className="card-body">
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', alignItems: 'flex-start', justifyContent: 'space-between' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flex: 1, minWidth: '220px' }}>
@@ -474,7 +474,7 @@ const [showAlterarCartao, setShowAlterarCartao] = useState(false);
 
       {/* ══ Aba: Histórico de pagamentos ══ */}
       {activeTab === 'historico' && (
-        <div className="card _assinaturas-card" style={{ border: '1px solid rgb(216, 214, 222)' }}>
+        <div className="card _assinaturas-card" style={{ border: '1px solid rgb(232, 232, 232)' }}>
           <div className="table-responsive">
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, minmax(max-content, 1fr))', columnGap: '24px', padding: '0 16px', minWidth: 'max-content', width: '100%' }}>
               {HEADERS.map(h => (
@@ -507,7 +507,7 @@ const [showAlterarCartao, setShowAlterarCartao] = useState(false);
       {/* ══ Aba: Gerenciar Assinatura ══ */}
       {activeTab === 'gerenciar' && (
         <div>
-          <div className="card mb-2 _assinaturas-card" style={{ border: '1px solid rgb(216, 214, 222)' }}>
+          <div className="card mb-2 _assinaturas-card" style={{ border: '1px solid rgb(232, 232, 232)' }}>
             <div className="card-body">
               <h6 style={{ fontWeight: 600, color: '#5e5873', marginBottom: '14px' }}>Opções da Assinatura</h6>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
