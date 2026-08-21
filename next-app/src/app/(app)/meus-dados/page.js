@@ -319,7 +319,7 @@ export default function MeusDadosPage() {
           <div className="card-body" style={{ padding: '16px 20px' }}>
             <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
               <div style={{ flex: 1 }}>
-                <p style={{ margin: 0, fontWeight: 700, color: '#5B5A78', fontSize: '18px' }}>
+                <p style={{ margin: 0, fontWeight: 500, color: '#5B5A78', fontSize: '17.99px' }}>
                   Encerrar conta
                 </p>
                 <p style={{ margin: '12px 0 4px', fontSize: '14px', color: '#5B5A78' }}>

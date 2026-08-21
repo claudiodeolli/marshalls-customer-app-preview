@@ -31,7 +31,7 @@ export default function LGPDSection() {
               </svg>
             </span>
             <div style={{ flex: 1 }}>
-              <p style={{ margin: 0, fontWeight: 700, color: '#4F68C7', fontSize: '18px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
+              <p style={{ margin: 0, fontWeight: 500, color: '#4F68C7', fontSize: '17.99px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
                 <span>Privacidade e proteção dos seus dados</span>
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
                   fill="none" stroke='#4F68C7' strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
