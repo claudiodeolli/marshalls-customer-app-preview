@@ -225,7 +225,7 @@ export default function AppLayout({ children }) {
                 <div className="row breadcrumbs-top">
                   <div className="col-12">
                     <h2 className="content-header-title float-left pr-1 mb-0"
-                      style={['/meus-dados', '/plantao'].includes(pathname.replace(/\/$/, '')) ? { fontWeight: 600 } : undefined}>
+                      style={pathname.replace(/\/$/, '') === '/meus-dados' ? { fontWeight: 600 } : pathname.replace(/\/$/, '') === '/plantao' ? { fontWeight: 500 } : undefined}>
                       {routeCfg.pageTitle}
                     </h2>
                     <div className="breadcrumb-wrapper">

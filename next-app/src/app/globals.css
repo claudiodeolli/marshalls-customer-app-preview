@@ -60,6 +60,7 @@ html::-webkit-scrollbar-thumb:hover {
   width: 100% !important;
   margin: 0 !important;
   z-index: 1030 !important;
+  border-radius: 12px !important;
 }
 
 /* O padding-top do app-content empurrava o conteúdo abaixo do header fixo (7.75rem).
