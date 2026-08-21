@@ -17,7 +17,7 @@ export default function RootLayout({ children }) {
         <link rel="icon" href={`${base}/favicon.ico`} />
         {/* Google Fonts - Montserrat (mesma família do projeto original) */}
         <link
-          href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
           rel="stylesheet"
         />
         {/* CSS do Vuexy (copiados do projeto original) */}
