@@ -322,7 +322,7 @@ export default function MeusDadosPage() {
                 <p style={{ margin: 0, fontWeight: 700, color: '#5B5A78', fontSize: '18px' }}>
                   Encerrar conta
                 </p>
-                <p style={{ margin: '6px 0 4px', fontSize: '14px', color: '#5B5A78' }}>
+                <p style={{ margin: '12px 0 4px', fontSize: '14px', color: '#5B5A78' }}>
                   Solicite o encerramento da conta.
                 </p>
                 <p style={{ margin: 0, fontSize: '13px', color: '#5B5A78', lineHeight: 1.6 }}>

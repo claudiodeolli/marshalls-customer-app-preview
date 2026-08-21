@@ -41,7 +41,7 @@ export default function LGPDSection() {
               </p>
             </div>
           </div>
-          <p className="_lgpd-desc" style={{ margin: '6px 0 0', fontWeight: 700, fontSize: '14px', color: '#4F68C7', lineHeight: 1.6, textAlign: 'justify' }}>
+          <p className="_lgpd-desc" style={{ margin: '12px 0 0', fontWeight: 700, fontSize: '14px', color: '#4F68C7', lineHeight: 1.6, textAlign: 'justify' }}>
             Sua privacidade é importante para nós. Revise como tratamos e protegemos seus dados
             pessoais, em conformidade com a Lei Geral de Proteção de Dados (LGPD – Lei nº 13.709/2018).
           </p>
