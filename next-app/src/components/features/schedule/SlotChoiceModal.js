@@ -29,7 +29,7 @@ export default function SlotChoiceModal({ show, onClose, onAgendarAgora, onAgend
             className="btn btn-primary"
             style={{ width: '100%', borderRadius: 24, fontWeight: 700, padding: '10px', lineHeight: 1.5, border: '1.5px solid transparent' }}
           >
-            Agendar agora
+            Escolher agora
           </button>
           <button
             onClick={onAgendarDepois}
@@ -39,7 +39,7 @@ export default function SlotChoiceModal({ show, onClose, onAgendarAgora, onAgend
               cursor: 'pointer', padding: '10px', lineHeight: 1.5,
             }}
           >
-            Agendar depois,<br />continuar para o pagamento
+            Escolher depois, continuar para o pagamento
           </button>
         </div>
       </div>

@@ -550,77 +550,109 @@ function ScheduleContent() {
         </div>
       )}
 
-      {/* Specialty list */}
+      {/* Specialty list / selected specialty */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
         <h6 style={{ fontSize: 17, fontWeight: 700, margin: 0, color: '#5e5873' }}>
-          {specialtyLocked ? 'Especialidade do Encaminhamento' : 'Nossas especialidades'}
+          {selectedSpecialty && !specialtyLocked
+            ? 'Consulta avulsa'
+            : specialtyLocked
+              ? 'Especialidade do Encaminhamento'
+              : 'Nossas especialidades'}
         </h6>
-        {showPrices && (
-          <span style={{
-            fontSize: 12, color: '#4daab6', fontWeight: 600,
-            background: '#f0f9ff', border: '1px solid #b3e0ea',
-            borderRadius: 12, padding: '2px 10px',
-          }}>
-            Consulta avulsa
-          </span>
-        )}
       </div>
 
-      <div className="card mb-3">
-        <div className="card-body p-0">
-          {filteredSpecialties.length === 0 ? (
-            <div style={{ padding: '1.5rem', textAlign: 'center', color: '#6e6b7b', fontSize: 14 }}>
-              Nenhuma especialidade encontrada para &ldquo;{specSearch}&rdquo;
-            </div>
-          ) : (
-            filteredSpecialties.map((s, idx) => {
-              const active = selectedSpecialty?.uuid === s.uuid || selectedSpecialty?.name === s.name;
-              const isLast = idx === filteredSpecialties.length - 1;
-              const clickable = !loadingAvailability && !specialtyLocked;
-              return (
-                <div
-                  key={s.uuid || s.name}
-                  onClick={() => handleSpecialtyClick(s)}
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    padding: '14px 16px',
-                    borderBottom: isLast ? 'none' : '1px solid #ebe9f1',
-                    cursor: clickable ? 'pointer' : 'default',
-                    background: active ? '#f2f8fc' : 'transparent',
-                    borderLeft: active ? '3px solid #4daab6' : '3px solid transparent',
-                    transition: 'background 0.15s',
-                  }}
-                  onMouseEnter={e => { if (!active && clickable) e.currentTarget.style.background = '#f8f8f8'; }}
-                  onMouseLeave={e => { if (!active) e.currentTarget.style.background = 'transparent'; }}
+      {selectedSpecialty && !specialtyLocked ? (
+        <div className="card mb-3">
+          <div className="card-body p-0">
+            <div style={{
+              display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+              padding: '14px 16px',
+              borderLeft: '3px solid #4daab6',
+              background: '#f2f8fc',
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <span style={{ fontWeight: 600, color: '#5e5873', fontSize: 15 }}>
+                  {selectedSpecialty.name}
+                </span>
+                {loadingAvailability && (
+                  <div className="spinner-border spinner-border-sm"
+                    style={{ width: 16, height: 16, borderWidth: 2, color: '#4daab6' }} />
+                )}
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                {showPrices && selectedSpecialty.price != null && (
+                  <span style={{
+                    fontSize: 13, fontWeight: 600, color: '#28c76f',
+                    background: '#e6f9ee', borderRadius: 10, padding: '2px 10px', flexShrink: 0,
+                  }}>
+                    R$ {selectedSpecialty.price.toFixed(2).replace('.', ',')}
+                  </span>
+                )}
+                <button
+                  onClick={() => setSelectedSpecialty(null)}
+                  style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#aaa', fontSize: 12, padding: 0, flexShrink: 0 }}
+                  title="Trocar especialidade"
                 >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <span style={{ fontWeight: active ? 600 : 400, color: '#5e5873', fontSize: 15 }}>
-                      {s.name}
-                    </span>
-                    {loadingAvailability && active && (
-                      <div
-                        className="spinner-border spinner-border-sm"
-                        style={{ width: 16, height: 16, borderWidth: 2, color: '#4daab6' }}
-                      />
+                  Trocar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="card mb-3">
+          <div className="card-body p-0">
+            {filteredSpecialties.length === 0 ? (
+              <div style={{ padding: '1.5rem', textAlign: 'center', color: '#6e6b7b', fontSize: 14 }}>
+                Nenhuma especialidade encontrada para &ldquo;{specSearch}&rdquo;
+              </div>
+            ) : (
+              filteredSpecialties.map((s, idx) => {
+                const active = selectedSpecialty?.uuid === s.uuid || selectedSpecialty?.name === s.name;
+                const isLast = idx === filteredSpecialties.length - 1;
+                const clickable = !loadingAvailability && !specialtyLocked;
+                return (
+                  <div
+                    key={s.uuid || s.name}
+                    onClick={() => handleSpecialtyClick(s)}
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      padding: '14px 16px',
+                      borderBottom: isLast ? 'none' : '1px solid #ebe9f1',
+                      cursor: clickable ? 'pointer' : 'default',
+                      background: active ? '#f2f8fc' : 'transparent',
+                      borderLeft: active ? '3px solid #4daab6' : '3px solid transparent',
+                      transition: 'background 0.15s',
+                    }}
+                    onMouseEnter={e => { if (!active && clickable) e.currentTarget.style.background = '#f8f8f8'; }}
+                    onMouseLeave={e => { if (!active) e.currentTarget.style.background = 'transparent'; }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <span style={{ fontWeight: active ? 600 : 400, color: '#5e5873', fontSize: 15 }}>
+                        {s.name}
+                      </span>
+                      {loadingAvailability && active && (
+                        <div className="spinner-border spinner-border-sm"
+                          style={{ width: 16, height: 16, borderWidth: 2, color: '#4daab6' }} />
+                      )}
+                    </div>
+                    {showPrices && s.price != null && (
+                      <span style={{
+                        fontSize: 13, fontWeight: 600, color: '#28c76f',
+                        background: '#e6f9ee', borderRadius: 10, padding: '2px 10px', flexShrink: 0,
+                      }}>
+                        R$ {s.price.toFixed(2).replace('.', ',')}
+                      </span>
                     )}
                   </div>
-                  {showPrices && s.price != null && (
-                    <span style={{
-                      fontSize: 13, fontWeight: 600, color: '#28c76f',
-                      background: '#e6f9ee', borderRadius: 10, padding: '2px 10px',
-                      flexShrink: 0,
-                    }}>
-                      R$ {s.price.toFixed(2).replace('.', ',')}
-                    </span>
-                  )}
-                </div>
-              );
-            })
-          )}
+                );
+              })
+            )}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Calendar — shown after specialty is selected and availability loaded */}
       {selectedSpecialty && !loadingAvailability && (
