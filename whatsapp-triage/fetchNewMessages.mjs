@@ -212,7 +212,12 @@ async function main() {
     });
 
     sock.ev.on("messages.upsert", async (upsert) => {
-      if (upsert.type !== "notify") return;
+      // "notify" é mensagem que chega com o dispositivo já conectado;
+      // "append" é como o WhatsApp entrega o que ficou na fila enquanto ele
+      // esteve offline. Como este script conecta sob demanda, quase tudo que
+      // interessa chega como "append" — filtrar só por "notify" fazia o
+      // comando não ver nenhuma mensagem do cliente.
+      if (upsert.type !== "notify" && upsert.type !== "append") return;
       for (const msg of upsert.messages) await processMessage(sock, msg);
     });
 
