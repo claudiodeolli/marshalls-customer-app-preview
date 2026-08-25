@@ -19,11 +19,22 @@ Você traduz o pedido do cliente (informal, às vezes confuso, sem termos técni
 
 - **Leia as imagens** (`filePath` de mensagens `image`) com a ferramenta Read. Prints podem ter marcações à mão (círculo, seta, sublinhado, X, risco...), normalmente vermelhas, apontando pra um elemento da tela. Toda marcação visível vira uma anotação, mesmo que só dê pra arriscar um palpite sobre o que ela aponta — nesse caso diga isso explicitamente em vez de inventar.
 - **Leia os PDFs** (`filePath` de mensagens `document` — a ferramenta Read também lê PDF direto, use o parâmetro `pages` se vier grande). O cliente já manda PDFs assim quando quer detalhar bastante uma tela ou regra de negócio — trate o conteúdo do PDF como parte do pedido, com o mesmo peso do texto da mensagem, não como um anexo secundário. Se vier uma sequência ("Primeiro", "Segundo"...) numerada explicitamente pelo cliente, respeite essa ordem ao juntar tudo num pedido só.
+
+**Documento detalhado = checklist completo, nunca resumo.** Quando o pedido vem num documento longo e minucioso (o caso normal deste cliente), a issue precisa carregar *todos* os requisitos verificáveis, não uma síntese. Cada um destes é um item separado do checklist, mesmo parecendo pequeno:
+  - valores exatos (tamanhos de botão, prazos em horas, quantidades);
+  - textos literais de UI (rótulos, avisos, títulos e corpos de modal) — copie o texto, não parafraseie;
+  - espaçamento e layout pedidos explicitamente ("inserir espaço", "manter o espaço que estava");
+  - ícones e cores especificados;
+  - estados e transições ("ao cancelar, o card volta para X", "ao clicar, abre modal Y");
+  - comportamento de elementos bloqueados/desabilitados e seus tooltips.
+
+Se o documento tem 19 páginas, é esperado que a issue tenha dezenas de itens. Uma issue curta para um documento longo é um bug deste comando.
 - **Investigue o código de verdade** em `next-app/src` (Glob/Grep) antes de listar arquivos prováveis — o repositório está bem aqui, não é preciso só chutar como antes.
 - Escreva:
   - **title** — até 80 caracteres, direto ao ponto.
   - **rephrase** — como um dev formularia o requisito: elemento + tela + comportamento + condição. Não é tradução literal, é o que o cliente realmente quer, em até 3 frases.
-  - **plan** — passos curtos e imperativos (até 5), cada um com os arquivos prováveis reais.
+  - **requisitos** — o checklist completo descrito acima, em `- [ ]`, um item por requisito verificável, agrupado por tela/tópico. Este é o contrato que o `/resolve-issue` vai seguir: o que não estiver aqui não vai ser implementado. Prefira errar por excesso de itens.
+  - **plan** — passos curtos e imperativos, cada um com os arquivos prováveis reais. O plano é uma sugestão de ordem de ataque; quem manda no escopo é o checklist de requisitos.
   - **openQuestions** — SOMENTE ambiguidade genuína de produto/requisito que só o Cláudio pode resolver (ex: "aumenta o botão" mas há dois botões na tela). NUNCA inclua dúvida técnica de implementação (qual hook, qual seletor CSS, nome de arquivo) — isso você decide sozinho e segue.
   - **confidence** — alta, média ou baixa.
 
@@ -60,6 +71,9 @@ Corpo da issue (markdown; omita as seções vazias):
 
 ### Marcações detectadas nos prints
 - **<cor> (<forma>)** em <local> → aponta para: <o quê> — provável intenção: <intenção>
+
+### Requisitos
+<checklist completo, um `- [ ]` por requisito verificável, agrupado por tela/tópico>
 
 ### Plano sugerido
 1. <passo> (`<arquivos prováveis>`)

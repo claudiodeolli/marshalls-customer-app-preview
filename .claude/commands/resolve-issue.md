@@ -12,7 +12,11 @@ Leia o corpo inteiro, incluindo os documentos/imagens anexados (baixe e leia com
 
 Depois de ler, investigue o código de verdade (`next-app/src`) pra confirmar/refinar o plano da issue — o plano escrito na issue foi um palpite; o código real manda.
 
-**Escopo pragmático**: se o pedido da issue tocar em telas ou fluxos que você não conseguir localizar com confiança, implemente a parte que você localizou e for capaz de validar de verdade, e diga claramente no relatório final o que ficou de fora e por quê. Nunca reporte como "concluído" algo que não foi de fato implementado e validado.
+**Sempre releia o documento de origem.** Se a issue referencia um PDF/print anexado, baixe e leia o documento inteiro antes de implementar — o corpo da issue é um resumo e pode ter perdido requisitos. O contrato é a seção "Requisitos" da issue **mais** tudo que o documento original especifica; se o documento pedir algo que não está no checklist da issue, adicione o item ao checklist (editando a issue) em vez de ignorar.
+
+Preste atenção especial aos requisitos que é fácil ler e não registrar: valores numéricos exatos (prazos, tamanhos), textos literais de UI, espaçamento pedido explicitamente, ícones/cores, tooltips de elementos bloqueados, e transições de estado depois de uma ação. Ao encontrar um número no documento (ex: "15 minutos"), procure o valor correspondente no código e confirme se batem — divergência silenciosa aqui é o erro mais comum.
+
+**Escopo**: implemente todos os itens do checklist. Se algum for genuinamente impossível de localizar ou depender de decisão que só o usuário pode tomar, deixe o item desmarcado, explique no relatório, e **não feche a issue** — issue com item desmarcado permanece aberta. Nunca reporte como "concluído" algo que não foi implementado e validado.
 
 ## Passo 2 — Screenshot "antes"
 
@@ -26,7 +30,11 @@ Edite `next-app/src` seguindo o plano da issue (refinado no Passo 1). Sem introd
 
 ## Passo 4 — Testes e2e + screenshot "depois"
 
-Escreva um spec Playwright em `next-app/tests/e2e/issue-$ARGUMENTS-<descrição-curta>.spec.js` cobrindo especificamente o que a issue pedia — assertions reais (`expect(locator).toBeVisible()`, `toHaveText()`, etc.), não só um screenshot. Cubra os cenários relevantes (ex: exatamente no limiar das 48h, um pouco antes, um pouco depois). Dentro do próprio teste (ou logo depois, num script separado), tire o screenshot "depois" nas mesmas condições do Passo 2, mesmo viewport, mesma tela.
+Escreva um spec Playwright em `next-app/tests/e2e/issue-$ARGUMENTS-<descrição-curta>.spec.js` — assertions reais (`expect(locator).toBeVisible()`, `toHaveText()`, etc.), não só um screenshot. Cubra os cenários de limiar (ex: exatamente nas 48h, um pouco antes, um pouco depois).
+
+**Derive os testes do checklist de requisitos, nunca da sua implementação.** Escrever o teste olhando pro código que você acabou de escrever só prova que o código faz o que faz — passa 100% e não detecta requisito esquecido. Percorra o checklist item por item e escreva a assertion a partir do texto do requisito. Itens sobre texto literal viram `toHaveText` com o texto exato do documento; itens sobre valores viram assertion no valor; itens sobre espaçamento preservado viram assertion de que o elemento/espaço continua lá.
+
+Dentro do próprio teste (ou logo depois, num script separado), tire o screenshot "depois" nas mesmas condições do Passo 2, mesmo viewport, mesma tela.
 
 Rode `npm run test:e2e` (dentro de `next-app`). Se algo falhar, corrija o código (não o teste) até passar — a menos que o teste esteja genuinamente errado, o que deve ser raro. Não prossiga pro commit com testes falhando.
 
@@ -58,8 +66,10 @@ Rode `npm run test:e2e` (dentro de `next-app`). Se algo falhar, corrija o códig
 <o que não foi implementado e por quê>
 ```
 
+Inclua no relatório o checklist de requisitos da issue com o estado real de cada item (`- [x]` / `- [ ]`), para o usuário conferir a cobertura sem abrir o projeto.
+
 4. Poste como comentário na issue: `gh issue comment $ARGUMENTS --repo claudiodeolli/marshalls-customer-app-preview --body-file <arquivo>`.
-5. Feche a issue: `gh issue close $ARGUMENTS --repo claudiodeolli/marshalls-customer-app-preview`.
+5. Feche a issue **somente se todos os itens do checklist estiverem marcados**: `gh issue close $ARGUMENTS --repo claudiodeolli/marshalls-customer-app-preview`. Se sobrou item, atualize o corpo da issue com o checklist parcial e deixe aberta.
 
 ## Passo 6 — Commit da correção
 
