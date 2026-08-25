@@ -130,9 +130,13 @@ test.describe('Agendamentos', () => {
   });
 });
 
+// A posição destes banners mudou na #5: eles saíram do primeiro passo do
+// "Novo Agendamento" e passaram para a tela de marcação, acima da data e
+// horário. As rotas abaixo entram direto nesse passo; o posicionamento em si
+// é coberto por issue-5-posicao-texto-orientativo.spec.js.
 test.describe('Telas de agendamento — banners de regra (R8/R9/R10)', () => {
   test('R9 — banner "Lembre-se!" na tela de consulta avulsa', async ({ page }) => {
-    await page.goto('/schedule/calendar');
+    await page.goto('/schedule/calendar?avulsaSpec=spec-003');
     const alert = page.getByTestId('booking-rules-alert-avulsa');
     await expect(alert).toBeVisible();
     await expect(alert).toContainText('Lembre-se!');
