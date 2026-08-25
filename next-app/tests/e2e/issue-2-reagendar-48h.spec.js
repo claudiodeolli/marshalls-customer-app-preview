@@ -87,6 +87,36 @@ test.describe('Agendamentos', () => {
     await expect(page.getByText('disponível na tela Histórico', { exact: false })).toBeVisible();
   });
 
+  test('R20 — consulta futura mostra Entrar (bloqueado), Reagendar e Cancelar juntos', async ({ page }) => {
+    // PDF pág. 2 (card "faltando 12 dias") e pág. 4 ("faltando 47:59h"):
+    // os botões coexistem, não são exclusivos do dia da consulta.
+    const card = page.locator('.card', { hasText: 'apt-4-dias' }).or(
+      page.locator('.card', { hasText: 'Marcos Teixeira' }).filter({ hasText: '4 dias' })
+    );
+    await expect(card.getByRole('button', { name: 'Entrar no atendimento' }).first()).toBeDisabled();
+    await expect(card.getByRole('button', { name: 'Reagendar' }).first()).toBeVisible();
+    await expect(card.getByRole('button', { name: 'Cancelar', exact: true }).first()).toBeVisible();
+  });
+
+  test('R12 — cancelar Avulsa com mais de 48h promete novo agendamento sem custo', async ({ page }) => {
+    const card = page.locator('.card', { hasText: 'Marcos Teixeira' }).filter({ hasText: '4 dias' });
+    await card.getByRole('button', { name: 'Cancelar', exact: true }).first().click();
+
+    await expect(page.getByText('mais de 48 horas de antecedência', { exact: false })).toBeVisible();
+    await expect(page.getByText('sem custo adicional', { exact: false })).toBeVisible();
+    await expect(page.getByText('não será reembolsado', { exact: false })).toHaveCount(0);
+  });
+
+  test('R15 — cancelar Avulsa dentro do prazo devolve o card ao estado Pendente', async ({ page }) => {
+    const card = page.locator('.card', { hasText: 'Marcos Teixeira' }).filter({ hasText: '4 dias' });
+    await card.getByRole('button', { name: 'Cancelar', exact: true }).first().click();
+    await page.getByRole('button', { name: 'Cancelar consulta' }).click();
+
+    await expect(page.getByText('sem custo adicional', { exact: false }).first()).toBeVisible();
+    // O card permanece na lista, agora como "Consulta pendente".
+    await expect(page.locator('.card', { hasText: 'Marcos Teixeira' }).filter({ hasText: 'Consulta pendente' }).first()).toBeVisible();
+  });
+
   test('R17 — botões seguem os tamanhos definidos no PDF', async ({ page }) => {
     const card = page.locator('.card', { hasText: 'Carla Borges' });
     const enterBox = await card.getByRole('button', { name: 'Entrar no atendimento' }).first().boundingBox();

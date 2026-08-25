@@ -66,7 +66,14 @@ Rode `npm run test:e2e` (dentro de `next-app`). Se algo falhar, corrija o códig
 <o que não foi implementado e por quê>
 ```
 
-Inclua no relatório o checklist de requisitos da issue com o estado real de cada item (`- [x]` / `- [ ]`), para o usuário conferir a cobertura sem abrir o projeto.
+**O relatório precisa ser conferível sem rodar o projeto.** Um resumo em prosa não serve: para cada requisito, mostre lado a lado **o que foi pedido** e **o que ficou**.
+
+- **Citação do pedido** — o trecho literal do documento de origem, em blockquote, com a página. Quando o requisito depende de um mockup ou de setas/anotações, renderize a página do PDF como imagem com `node whatsapp-triage/renderPdfPages.mjs <pdf> <pastaDeSaida> <paginas>` e embuta junto.
+- **Screenshot do resultado** — em **desktop e mobile** quando o requisito aparece nos dois (o cliente especifica ambos); use viewport de 1440px para desktop.
+- **Estados intermediários** — se o requisito é sobre um tooltip, modal ou botão bloqueado, capture com aquele estado **aberto**. Um screenshot da tela em repouso não prova nada sobre eles.
+- **Medição, para requisito numérico** — tamanhos, espaçamentos e prazos não são verificáveis a olho: meça com `boundingBox()` no Playwright, grave um `medicoes.json` junto dos screenshots e apresente numa tabela "pedido no PDF × medido".
+
+Inclua também o checklist de requisitos com o estado real de cada item (`- [x]` / `- [ ]`), e uma tabela ligando cada teste e2e aos requisitos que ele cobre.
 
 4. Poste como comentário na issue: `gh issue comment $ARGUMENTS --repo claudiodeolli/marshalls-customer-app-preview --body-file <arquivo>`.
 5. Feche a issue **somente se todos os itens do checklist estiverem marcados**: `gh issue close $ARGUMENTS --repo claudiodeolli/marshalls-customer-app-preview`. Se sobrou item, atualize o corpo da issue com o checklist parcial e deixe aberta.

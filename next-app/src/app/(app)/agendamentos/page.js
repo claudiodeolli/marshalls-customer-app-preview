@@ -547,16 +547,6 @@ export default function AgendamentosPage() {
               const dateChanged = converted && converted.date !== apt.detail?.date;
               const mins = apt.status === 'SCHEDULED' ? getMinutesUntil(apt.detail?.date, apt.detail?.from) : -1;
               const canEnter = mins <= UNLOCK_MINUTES;
-              const isToday = (() => {
-                try {
-                  const [d, m, y] = (apt.detail?.date ?? '').split('/');
-                  const appt = new Date(`${y}-${m}-${d}T00:00:00`);
-                  const now = new Date();
-                  return appt.getFullYear() === now.getFullYear() &&
-                         appt.getMonth() === now.getMonth() &&
-                         appt.getDate() === now.getDate();
-                } catch { return false; }
-              })();
 
               return (
                 <div
@@ -656,40 +646,39 @@ export default function AgendamentosPage() {
                                 Você já pode entrar!
                               </div>
                             )}
-                            {isToday ? (
-                              <>
-                                <span
-                                  title={canEnter ? undefined : BLOCKED_ENTER_TOOLTIP}
-                                  onClick={() => { if (!canEnter) setBlockedEnterTooltip(true); }}
-                                  style={{ display: 'block', marginTop: '16px' }}
-                                >
-                                  <button
-                                    className="btn btn-success btn-sm"
-                                    disabled={!canEnter}
-                                    onClick={() => handleEnterAppointment(apt)}
-                                    style={{ width: '100%', height: ENTER_BUTTON_SIZE.height, padding: '0 12px', pointerEvents: canEnter ? 'auto' : 'none' }}
-                                  >
-                                    Entrar no atendimento
-                                  </button>
-                                </span>
-                                {/* Espaço do "Reagendar" preservado mesmo quando ele some (regra do PDF) */}
-                                {!canReschedule(mins) && <div aria-hidden="true" data-testid="reagendar-placeholder" style={{ height: SECONDARY_BUTTON_SIZE.height, marginTop: '8px' }} />}
-                                {apt.cancel && (
-                                  <button
-                                    className="btn btn-danger btn-sm"
-                                    style={{ width: '100%', marginTop: '8px', height: SECONDARY_BUTTON_SIZE.height, padding: '0 12px' }}
-                                    onClick={() => setCancelTarget(apt)}
-                                  >
-                                    Cancelar
-                                  </button>
-                                )}
-                              </>
-                            ) : canReschedule(mins) ? (
-                              <button className="btn btn-success btn-sm" style={{ width: '100%', marginTop: '16px', height: SECONDARY_BUTTON_SIZE.height, padding: '0 12px' }}>
+                            {/* O PDF mostra os três botões juntos mesmo em consultas
+                                futuras (ex: card "faltando 12 dias" e "faltando
+                                47:59h") — só o Reagendar depende do prazo. */}
+                            <span
+                              title={canEnter ? undefined : BLOCKED_ENTER_TOOLTIP}
+                              onClick={() => { if (!canEnter) setBlockedEnterTooltip(true); }}
+                              style={{ display: 'block', marginTop: '16px' }}
+                            >
+                              <button
+                                className="btn btn-success btn-sm"
+                                disabled={!canEnter}
+                                onClick={() => handleEnterAppointment(apt)}
+                                style={{ width: '100%', height: ENTER_BUTTON_SIZE.height, padding: '0 12px', pointerEvents: canEnter ? 'auto' : 'none' }}
+                              >
+                                Entrar no atendimento
+                              </button>
+                            </span>
+                            {canReschedule(mins) ? (
+                              <button className="btn btn-success btn-sm" style={{ width: '100%', marginTop: '8px', height: SECONDARY_BUTTON_SIZE.height, padding: '0 12px' }}>
                                 Reagendar
                               </button>
                             ) : (
-                              <div aria-hidden="true" data-testid="reagendar-placeholder" style={{ height: SECONDARY_BUTTON_SIZE.height, marginTop: '16px' }} />
+                              /* Espaço do "Reagendar" preservado mesmo quando ele some (regra do PDF) */
+                              <div aria-hidden="true" data-testid="reagendar-placeholder" style={{ height: SECONDARY_BUTTON_SIZE.height, marginTop: '8px' }} />
+                            )}
+                            {apt.cancel && (
+                              <button
+                                className="btn btn-danger btn-sm"
+                                style={{ width: '100%', marginTop: '8px', height: SECONDARY_BUTTON_SIZE.height, padding: '0 12px' }}
+                                onClick={() => setCancelTarget(apt)}
+                              >
+                                Cancelar
+                              </button>
                             )}
                           </div>
                         )}
@@ -710,35 +699,23 @@ export default function AgendamentosPage() {
                               Você já pode entrar!
                             </div>
                           )}
-                          {isToday ? (
-                            <>
-                              <span
-                                title={canEnter ? undefined : BLOCKED_ENTER_TOOLTIP}
-                                onClick={() => { if (!canEnter) setBlockedEnterTooltip(true); }}
-                                style={{ display: 'block' }}
-                              >
-                                <button
-                                  className="btn btn-success _contact-btn"
-                                  disabled={!canEnter}
-                                  onClick={() => handleEnterAppointment(apt)}
-                                  style={{ width: '100%', height: ENTER_BUTTON_SIZE.height, padding: '0 12px', pointerEvents: canEnter ? 'auto' : 'none' }}
-                                >
-                                  Entrar no atendimento
-                                </button>
-                              </span>
-                              {/* Espaço do "Reagendar" preservado mesmo quando ele some (regra do PDF) */}
-                              {!canReschedule(mins) && <div aria-hidden="true" data-testid="reagendar-placeholder" style={{ height: SECONDARY_BUTTON_SIZE.height }} />}
-                              {apt.cancel && (
-                                <button
-                                  className="btn btn-outline-danger _contact-btn"
-                                  onClick={() => setCancelTarget(apt)}
-                                  style={{ height: SECONDARY_BUTTON_SIZE.height, padding: '0 12px', alignSelf: 'center', width: SECONDARY_BUTTON_SIZE.width, maxWidth: '100%' }}
-                                >
-                                  Cancelar
-                                </button>
-                              )}
-                            </>
-                          ) : canReschedule(mins) ? (
+                          {/* Ver comentário no bloco mobile: os três botões coexistem
+                              mesmo em consultas futuras, conforme os cards do PDF. */}
+                          <span
+                            title={canEnter ? undefined : BLOCKED_ENTER_TOOLTIP}
+                            onClick={() => { if (!canEnter) setBlockedEnterTooltip(true); }}
+                            style={{ display: 'block' }}
+                          >
+                            <button
+                              className="btn btn-success _contact-btn"
+                              disabled={!canEnter}
+                              onClick={() => handleEnterAppointment(apt)}
+                              style={{ width: '100%', height: ENTER_BUTTON_SIZE.height, padding: '0 12px', pointerEvents: canEnter ? 'auto' : 'none' }}
+                            >
+                              Entrar no atendimento
+                            </button>
+                          </span>
+                          {canReschedule(mins) ? (
                             <button
                               className="btn btn-success _contact-btn"
                               style={{ height: SECONDARY_BUTTON_SIZE.height, padding: '0 12px', alignSelf: 'center', width: SECONDARY_BUTTON_SIZE.width, maxWidth: '100%' }}
@@ -746,7 +723,17 @@ export default function AgendamentosPage() {
                               Reagendar
                             </button>
                           ) : (
+                            /* Espaço do "Reagendar" preservado mesmo quando ele some (regra do PDF) */
                             <div aria-hidden="true" data-testid="reagendar-placeholder" style={{ height: SECONDARY_BUTTON_SIZE.height }} />
+                          )}
+                          {apt.cancel && (
+                            <button
+                              className="btn btn-outline-danger _contact-btn"
+                              onClick={() => setCancelTarget(apt)}
+                              style={{ height: SECONDARY_BUTTON_SIZE.height, padding: '0 12px', alignSelf: 'center', width: SECONDARY_BUTTON_SIZE.width, maxWidth: '100%' }}
+                            >
+                              Cancelar
+                            </button>
                           )}
                         </div>
                       )}

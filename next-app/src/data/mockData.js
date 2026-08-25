@@ -461,6 +461,19 @@ export function generateMockAppointments() {
       beneficiaryMedicalReferral: { createdAt: '20/05/2026' },
       cancel: true,
     },
+    // 🗓 Em 4 dias, Avulsa cancelável — cobre o cancelamento DENTRO do prazo
+    // de 48h, único caso em que o valor pago é preservado (card volta a
+    // "Pendente"). Sem ele nenhum card do mock alcança esse cenário.
+    {
+      uuid: 'apt-dyn-4days-avulsa',
+      status: 'SCHEDULED',
+      professional: { name: 'Marcos Teixeira', specialties: [{ name: 'Cardiologia' }] },
+      specialty: { name: 'Cardiologia' },
+      detail: offsetDetail(4 * 1440),
+      beneficiaryMedicalReferral: null,
+      createdAt: todayDate,
+      cancel: true,
+    },
     // 🗓 Amanhã (~26h)
     {
       uuid: 'apt-dyn-tomorrow',
