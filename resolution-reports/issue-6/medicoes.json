@@ -1,0 +1,47 @@
+{
+  "modal de cancelamento": {
+    "corpoDeTexto": "16px",
+    "botoes": [
+      {
+        "rotulo": "Voltar",
+        "altura": 44,
+        "fonte": "16px"
+      },
+      {
+        "rotulo": "Cancelar consulta",
+        "altura": 44,
+        "fonte": "16px"
+      }
+    ]
+  },
+  "modal de anexar documentos": {
+    "corpoDeTexto": "16px",
+    "botoes": [
+      {
+        "rotulo": "Escolher arquivos",
+        "altura": 44,
+        "fonte": "16px"
+      },
+      {
+        "rotulo": "Voltar",
+        "altura": 44,
+        "fonte": "16px"
+      },
+      {
+        "rotulo": "Entrar sem anexar",
+        "altura": 44,
+        "fonte": "16px"
+      }
+    ]
+  },
+  "dialogo do botao bloqueado": {
+    "corpoDeTexto": "16px",
+    "botoes": [
+      {
+        "rotulo": "Entendi",
+        "altura": 44,
+        "fonte": "16px"
+      }
+    ]
+  }
+}
