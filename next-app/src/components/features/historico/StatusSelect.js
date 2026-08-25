@@ -3,12 +3,16 @@
 import { useState, useEffect, useRef } from 'react';
 import StatusChip from './StatusChip';
 
+// Ordem dos filtros = ordem em que os grupos aparecem no filtro "Todos",
+// conforme o PDF (issue #4). "Em andamento" é PENDING; UNFINISHED é
+// "não realizadas" (usuário não compareceu), alinhado com Agendamentos.
 const STATUS_OPTIONS = [
-  { value: '',          label: 'Todos os status',       color: '#82868b' },
-  { value: 'FINISHED',  label: 'Consultas finalizadas', color: '#28c76f' },
-  { value: 'UNFINISHED',label: 'Consultas em andamento', color: '#ff9f43' },
-  { value: 'SCHEDULED', label: 'Consultas agendadas',   color: '#00cfe8' },
-  { value: 'CANCELLED', label: 'Consultas canceladas',  color: '#ea5455' },
+  { value: '',           label: 'Todos os status',           color: '#82868b' },
+  { value: 'FINISHED',   label: 'Consultas finalizadas',     color: '#28c76f' },
+  { value: 'PENDING',    label: 'Consultas em andamento',    color: '#ff9f43' },
+  { value: 'SCHEDULED',  label: 'Consultas agendadas',       color: '#00cfe8' },
+  { value: 'CANCELLED',  label: 'Consultas canceladas',      color: '#ea5455' },
+  { value: 'UNFINISHED', label: 'Consultas não realizadas',  color: '#82868b' },
 ];
 
 export default function StatusSelect({ value, onChange, disabled = false }) {

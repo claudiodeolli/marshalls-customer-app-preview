@@ -20,6 +20,30 @@ import EmptyState from '@/components/features/historico/EmptyState';
 const IS_MOCK = process.env.NEXT_PUBLIC_MOCK_MODE === '1';
 
 /* ── Helpers ──────────────────────────────────────────── */
+
+// Ordem dos grupos no filtro "Todos os status", definida pelo cliente
+// (issue #4): finalizadas → em andamento → agendadas → canceladas →
+// não realizadas. CANCELLED e CANCELED convivem nos dados, então ambos
+// mapeiam para a mesma posição.
+const STATUS_DISPLAY_ORDER = ['FINISHED', 'PENDING', 'SCHEDULED', 'CANCELLED', 'CANCELED', 'UNFINISHED'];
+const STATUS_RANK = {
+  FINISHED: 0, PENDING: 1, SCHEDULED: 2, CANCELLED: 3, CANCELED: 3, UNFINISHED: 4,
+};
+
+// Dentro de cada status: Pronto Atendimento, depois Encaminhamento, depois
+// consulta avulsa.
+function originRank(record) {
+  if (record.type === 'emergency') return 0;
+  return record.beneficiaryMedicalReferral ? 1 : 2;
+}
+
+/** Comparador de grupo: status primeiro, origem depois. */
+function compareForDisplay(a, b) {
+  const rankA = STATUS_RANK[a.status] ?? STATUS_DISPLAY_ORDER.length;
+  const rankB = STATUS_RANK[b.status] ?? STATUS_DISPLAY_ORDER.length;
+  return rankA !== rankB ? rankA - rankB : originRank(a) - originRank(b);
+}
+
 function todayStr() {
   return new Date().toISOString().slice(0, 10);
 }
@@ -422,7 +446,12 @@ export default function HistoricoPage() {
             <div className="spinner-border text-primary" />
           </div>
         ) : (() => {
+          // Ordem principal é status → origem (issue #4). A data, que antes
+          // ordenava tudo, virou desempate entre cards do mesmo grupo.
           const displayRecords = [...records].sort((a, b) => {
+            const byGroup = compareForDisplay(a, b);
+            if (byGroup !== 0) return byGroup;
+
             const da = parseRecordDate(a.appointmentBegin);
             const db = parseRecordDate(b.appointmentBegin);
             if (!da && !db) {
@@ -481,6 +510,9 @@ export default function HistoricoPage() {
                       <div style={{ marginTop: '6px', marginBottom: '6px' }}><StatusBadge status={r.status} /></div>
                       {(r.status === 'CANCELLED' || r.status === 'CANCELED') && (
                         <small style={{ fontSize: '11px', color: '#6e6b7b', textAlign: 'right' }}>Usuário cancelou a consulta</small>
+                      )}
+                      {r.status === 'UNFINISHED' && (
+                        <small style={{ fontSize: '11px', color: '#6e6b7b', textAlign: 'right' }}>Usuário não compareceu à consulta</small>
                       )}
                     </div>
 
@@ -552,7 +584,11 @@ export default function HistoricoPage() {
                           </button>
                         </div>
                       </div>
-                    ) : r.status === 'UNFINISHED' ? (
+                    ) : r.status === 'PENDING' ? (
+                      /* Consulta em andamento: ainda falta escolher data, então
+                         o card oferece "Agendar". A não realizada segue pelo
+                         caminho genérico, igual à cancelada — o PDF pede que
+                         ela seja "semelhante ao de cancelamento". */
                       <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
                         <p style={{ marginBottom: '4px' }}>
                           <small className="hist-label"><b>Especialidade</b></small><br />

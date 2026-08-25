@@ -34,8 +34,11 @@ test.describe('Agendamentos', () => {
     // primeiro é o mobile, visível neste viewport.
     const placeholder = card.getByTestId('reagendar-placeholder').first();
     await expect(placeholder).toBeVisible();
-    const box = await placeholder.boundingBox();
-    expect(Math.round(box.height)).toBe(32);
+    // toPass: a medição pode cair no meio de um re-layout (fontes, hidratação).
+    await expect(async () => {
+      const box = await placeholder.boundingBox();
+      expect(Math.round(box.height)).toBe(32);
+    }).toPass({ timeout: 5000 });
   });
 
   test('R4/R5 — botão de entrar bloqueado fora dos 15min, com a explicação do PDF', async ({ page }) => {
@@ -119,8 +122,11 @@ test.describe('Agendamentos', () => {
 
   test('R17 — botões seguem os tamanhos definidos no PDF', async ({ page }) => {
     const card = page.locator('.card', { hasText: 'Carla Borges' });
-    const enterBox = await card.getByRole('button', { name: 'Entrar no atendimento' }).first().boundingBox();
-    expect(Math.round(enterBox.height)).toBe(32);
+    const enterButton = card.getByRole('button', { name: 'Entrar no atendimento' }).first();
+    await expect(async () => {
+      const box = await enterButton.boundingBox();
+      expect(Math.round(box.height)).toBe(32);
+    }).toPass({ timeout: 5000 });
   });
 });
 

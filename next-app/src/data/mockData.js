@@ -199,21 +199,30 @@ export const mockHistory = [
     ],
     evaluation: null,
   },
-  // Agendamento com especialista — consulta avulsa FINISHED
+  // Consulta em andamento (pendente) — Encaminhamento
   {
-    uuid: 'hist-001',
+    uuid: 'hist-011',
     type: 'scheduled',
-    status: 'FINISHED',
-    appointmentBegin: '08/06/2026 19:15',
-    appointmentEnd: '08/06/2026 19:42',
-    professional: { name: 'Mariana Costa', specialties: [{ name: 'Clínica Geral' }] },
+    status: 'PENDING',
+    appointmentBegin: null,
+    appointmentEnd: null,
+    professional: { name: 'Paulo Salave', specialties: [{ name: 'Neurologia' }] },
+    beneficiaryMedicalReferral: { createdAt: '05/05/2026', referredByDoctor: 'Ana Lima' },
+    documents: [],
+    evaluation: null,
+  },
+  // Consulta em andamento (pendente) — consulta avulsa
+  {
+    uuid: 'hist-012',
+    type: 'scheduled',
+    status: 'PENDING',
+    appointmentBegin: null,
+    appointmentEnd: null,
+    professional: { name: 'Marcos Teixeira', specialties: [{ name: 'Cardiologia' }] },
     beneficiaryMedicalReferral: null,
-    purchasedAt: '05/06/2026, às 14:32:18',
-    purchaseDetails: { paymentMethod: 'card', amount: 'R$ 95,00', card: { brand: 'Mastercard', last4: '3511', installments: '1x de R$ 95,00' }, status: 'Pago' },
-    documents: [
-      { type: 'notes',    url: 'https://example.com/docs/atestado-hist001.pdf' },
-      { type: 'medicines', url: 'https://example.com/docs/receita-hist001.pdf' },
-    ],
+    purchasedAt: '20/08/2026, às 10:12:00',
+    purchaseDetails: { paymentMethod: 'pix', amount: 'R$ 95,00', status: 'Pago' },
+    documents: [],
     evaluation: null,
   },
   // Agendamento com especialista — de ref-004 (Neurologia FINISHED) = apt-003
