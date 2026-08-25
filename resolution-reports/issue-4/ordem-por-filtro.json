@@ -1,0 +1,36 @@
+{
+  "Todos os status": [
+    "Consulta finalizada — Pronto Atendimento",
+    "Consulta finalizada — Encaminhamento",
+    "Consulta finalizada — Consulta avulsa",
+    "Consulta pendente — Encaminhamento",
+    "Consulta pendente — Consulta avulsa",
+    "Consulta agendada — Encaminhamento",
+    "Consulta agendada — Consulta avulsa",
+    "Consulta cancelada — Encaminhamento",
+    "Consulta cancelada — Consulta avulsa",
+    "Consulta não realizada — Encaminhamento",
+    "Consulta não realizada — Consulta avulsa"
+  ],
+  "Consultas não realizadas": [
+    "Consulta não realizada — Encaminhamento",
+    "Consulta não realizada — Consulta avulsa"
+  ],
+  "Consultas em andamento": [
+    "Consulta pendente — Encaminhamento",
+    "Consulta pendente — Consulta avulsa"
+  ],
+  "Consultas finalizadas": [
+    "Consulta finalizada — Pronto Atendimento",
+    "Consulta finalizada — Encaminhamento",
+    "Consulta finalizada — Consulta avulsa"
+  ],
+  "Consultas agendadas": [
+    "Consulta agendada — Encaminhamento",
+    "Consulta agendada — Consulta avulsa"
+  ],
+  "Consultas canceladas": [
+    "Consulta cancelada — Encaminhamento",
+    "Consulta cancelada — Consulta avulsa"
+  ]
+}
