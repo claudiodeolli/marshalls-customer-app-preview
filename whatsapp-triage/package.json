@@ -1,0 +1,18 @@
+{
+  "name": "whatsapp-triage",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Ferramenta local, sob demanda, para o comando /whatsapp-issues: puxa mensagens novas do WhatsApp do cliente e devolve um JSON pronto pra virar issue no GitHub. Não é parte do app Next.js — não roda em produção, não é implantada em lugar nenhum.",
+  "scripts": {
+    "fetch": "node fetchNewMessages.mjs"
+  },
+  "dependencies": {
+    "@hapi/boom": "^10.0.1",
+    "baileys": "^7.0.0-rc.0",
+    "dotenv": "^16.4.5",
+    "pino": "^9.5.0",
+    "qrcode": "^1.5.4",
+    "qrcode-terminal": "^0.12.0"
+  }
+}

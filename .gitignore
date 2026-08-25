@@ -42,3 +42,10 @@ desktop.ini
 
 .vercel
 .env*
+
+# ── whatsapp-triage (comando /whatsapp-issues) ──
+whatsapp-triage/.auth/
+whatsapp-triage/.state/
+whatsapp-triage/tmp/
+whatsapp-triage/qr.png
+!whatsapp-triage/.env.example
