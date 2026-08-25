@@ -32,9 +32,11 @@ if (!TRACKED_WA_JID) {
 }
 
 // Silêncio após a última mensagem relevante pra considerar "a rajada acabou".
-const SETTLE_MS = 20_000;
+const SETTLE_MS = 25_000;
 // Teto absoluto, mesmo com mensagens ainda chegando — nunca fica esperando pra sempre.
-const MAX_WAIT_MS = 90_000;
+// Mais alto que o normal porque um sync de histórico (após reescanear o QR)
+// pode vir em vários lotes com pausas entre eles.
+const MAX_WAIT_MS = 120_000;
 // Baileys costuma fechar a conexão uma vez logo após o QR ser escaneado
 // ("restart required") antes da sessão ficar de fato utilizável — sem
 // reconectar automaticamente aqui, o script morreria bem no meio do pareamento.
@@ -60,18 +62,34 @@ async function saveCheckpoint(seenIds) {
 
 function extractKindAndBody(msg) {
   const content = msg.message;
-  if (!content) return { kind: "other", body: null, hasMedia: false };
-  if (content.conversation) return { kind: "text", body: content.conversation, hasMedia: false };
+  if (!content) return { kind: "other", body: null, hasMedia: false, fileName: null };
+  if (content.conversation) {
+    return { kind: "text", body: content.conversation, hasMedia: false, fileName: null };
+  }
   if (content.extendedTextMessage) {
-    return { kind: "text", body: content.extendedTextMessage.text ?? null, hasMedia: false };
+    return { kind: "text", body: content.extendedTextMessage.text ?? null, hasMedia: false, fileName: null };
   }
-  if (content.imageMessage) return { kind: "image", body: content.imageMessage.caption ?? null, hasMedia: true };
-  if (content.videoMessage) return { kind: "video", body: content.videoMessage.caption ?? null, hasMedia: true };
+  if (content.imageMessage) {
+    return { kind: "image", body: content.imageMessage.caption ?? null, hasMedia: true, fileName: null };
+  }
+  if (content.videoMessage) {
+    return { kind: "video", body: content.videoMessage.caption ?? null, hasMedia: true, fileName: null };
+  }
   if (content.documentMessage) {
-    return { kind: "document", body: content.documentMessage.caption ?? null, hasMedia: true };
+    return {
+      kind: "document",
+      body: content.documentMessage.caption ?? null,
+      hasMedia: true,
+      fileName: content.documentMessage.fileName ?? null,
+    };
   }
-  if (content.audioMessage) return { kind: "audio", body: null, hasMedia: true };
-  return { kind: "other", body: null, hasMedia: false };
+  if (content.audioMessage) return { kind: "audio", body: null, hasMedia: true, fileName: null };
+  return { kind: "other", body: null, hasMedia: false, fileName: null };
+}
+
+function extensionFor(kind, fileName) {
+  if (fileName && fileName.includes(".")) return fileName.slice(fileName.lastIndexOf("."));
+  return kind === "image" ? ".jpg" : ".bin";
 }
 
 async function main() {
@@ -112,8 +130,46 @@ async function main() {
     process.exit(0);
   }
 
+  async function processMessage(sock, msg) {
+    if (msg.key.fromMe) return;
+    if (msg.key.remoteJid !== TRACKED_WA_JID) return;
+    if (!msg.message) return;
+
+    const id = msg.key.id;
+    if (!id || seenIds.has(id)) return;
+    if (collected.some((m) => m.id === id)) return; // já veio num sync anterior nesta mesma execução
+
+    const { kind, body, hasMedia, fileName } = extractKindAndBody(msg);
+    const waTimestamp = new Date(Number(msg.messageTimestamp ?? Math.floor(Date.now() / 1000)) * 1000);
+
+    let filePath = null;
+    if (hasMedia && (kind === "image" || kind === "document")) {
+      try {
+        const buffer = await downloadMediaMessage(msg, "buffer", {}, { reuploadRequest: sock.updateMediaMessage });
+        filePath = join(TMP_DIR, `${id}${extensionFor(kind, fileName)}`);
+        await writeFile(filePath, buffer);
+      } catch (err) {
+        console.error(`Falha ao baixar anexo ${id}:`, err.message);
+      }
+    }
+
+    collected.push({ id, timestamp: waTimestamp.toISOString(), kind, body, fileName, filePath });
+    console.log(`+ [${waTimestamp.toTimeString().slice(0, 5)}] ${kind}${body ? `: ${body.slice(0, 60)}` : ""}${fileName ? ` (${fileName})` : ""}`);
+    scheduleSettle();
+  }
+
   function connect() {
-    const sock = makeWASocket({ version, auth: state, logger: waLogger });
+    const sock = makeWASocket({
+      version,
+      auth: state,
+      logger: waLogger,
+      // Sem isso, uma sessão já pareada só recebe atualizações incrementais —
+      // o pareamento inicial é a única chance de puxar o histórico recente
+      // (é por isso que /whatsapp-issues pede pra reescanear o QR quando
+      // precisa pegar mensagens de antes da última vez que isso rodou).
+      syncFullHistory: true,
+      shouldSyncHistoryMessage: () => true,
+    });
 
     sock.ev.on("creds.update", saveCreds);
 
@@ -157,33 +213,15 @@ async function main() {
 
     sock.ev.on("messages.upsert", async (upsert) => {
       if (upsert.type !== "notify") return;
+      for (const msg of upsert.messages) await processMessage(sock, msg);
+    });
 
-      for (const msg of upsert.messages) {
-        if (msg.key.fromMe) continue;
-        if (msg.key.remoteJid !== TRACKED_WA_JID) continue;
-        if (!msg.message) continue;
-
-        const id = msg.key.id;
-        if (!id || seenIds.has(id)) continue;
-
-        const { kind, body, hasMedia } = extractKindAndBody(msg);
-        const waTimestamp = new Date(Number(msg.messageTimestamp ?? Math.floor(Date.now() / 1000)) * 1000);
-
-        let imagePath = null;
-        if (hasMedia && kind === "image") {
-          try {
-            const buffer = await downloadMediaMessage(msg, "buffer", {}, { reuploadRequest: sock.updateMediaMessage });
-            imagePath = join(TMP_DIR, `${id}.jpg`);
-            await writeFile(imagePath, buffer);
-          } catch (err) {
-            console.error(`Falha ao baixar imagem ${id}:`, err.message);
-          }
-        }
-
-        collected.push({ id, timestamp: waTimestamp.toISOString(), kind, body, imagePath });
-        console.log(`+ [${waTimestamp.toTimeString().slice(0, 5)}] ${kind}${body ? `: ${body.slice(0, 60)}` : ""}`);
-        scheduleSettle();
-      }
+    // Só chega uma vez por pareamento (device novo) — WhatsApp entrega um
+    // lote do histórico recente da conversa nessa hora. É a única forma de
+    // pegar mensagens que já estavam no chat antes deste script rodar pela
+    // primeira vez.
+    sock.ev.on("messaging-history.set", async ({ messages }) => {
+      for (const msg of messages ?? []) await processMessage(sock, msg);
     });
   }
 
