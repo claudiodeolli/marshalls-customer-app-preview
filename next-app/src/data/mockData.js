@@ -483,6 +483,18 @@ export function generateMockAppointments() {
       createdAt: todayDate,
       cancel: false,
     },
+    // ⏱ Em 2 horas, Encaminhamento — só existe pra dar cobertura de teste ao
+    // texto do modal de cancelamento por origem (issue #2); sem isso nenhum
+    // agendamento "hoje" da lista mock é de Encaminhamento.
+    {
+      uuid: 'apt-dyn-2h-referral',
+      status: 'SCHEDULED',
+      professional: { name: 'Roberto Silva', specialties: [{ name: 'Ortopedia' }] },
+      specialty: { name: 'Ortopedia' },
+      detail: offsetDetail(2 * 60),
+      beneficiaryMedicalReferral: { createdAt: '20/05/2026' },
+      cancel: true,
+    },
     // ⏱ Em 30 minutos
     {
       uuid: 'apt-dyn-30min',

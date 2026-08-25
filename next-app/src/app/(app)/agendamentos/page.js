@@ -95,30 +95,52 @@ function getMinutesUntil(dateStr, timeStr) {
   } catch { return -1; }
 }
 
+// Estágios (cliente pediu granularidade específica, ver issue #2 no GitHub):
+// dias (>24h) -> "amanhã" (exatamente 24h) -> horas (23h-1h) -> minutos (<60min) -> liberado (<=15min).
+// Isso é o que também decide o rótulo "N dias" para hora >24h: usa Math.ceil,
+// não Math.floor, porque faltando 47h ainda deve mostrar "2 dias" (e não "1 dia").
+function getCountdownStage(minutes) {
+  if (minutes <= 15) return 'unlocked';
+  if (minutes < 60) return 'minutes';
+  const hours = Math.floor(minutes / 60);
+  if (hours <= 23) return 'hours';
+  if (hours === 24) return 'tomorrow';
+  return 'days';
+}
+
 function getCountdownIcon(minutes) {
-  if (minutes <= 15) return '🟢';
-  if (minutes < 1440) return '⏱';
-  return '🗓';
+  const stage = getCountdownStage(minutes);
+  if (stage === 'unlocked') return '🟢';
+  if (stage === 'days' || stage === 'tomorrow') return '🗓';
+  return '⏱';
 }
 
 function getCountdownText(minutes) {
-  if (minutes <= 15) return 'Você já pode entrar';
-  if (minutes < 60) return `Sua consulta começará em ${minutes} minutos`;
-  const hours = Math.floor(minutes / 60);
-  if (hours < 24) return `Sua consulta começará em ${hours} hora${hours > 1 ? 's' : ''}`;
-  if (hours < 48) return 'Sua consulta será amanhã';
-  const days = Math.floor(minutes / 1440);
+  const stage = getCountdownStage(minutes);
+  if (stage === 'unlocked') return 'Você já pode entrar';
+  if (stage === 'minutes') return `Sua consulta começa em ${minutes} minutos`;
+  if (stage === 'hours') {
+    const hours = Math.floor(minutes / 60);
+    return `Sua consulta será daqui a ${hours} hora${hours > 1 ? 's' : ''}`;
+  }
+  if (stage === 'tomorrow') return 'Sua consulta é amanhã!';
+  const days = Math.ceil(minutes / 1440);
   return `Sua consulta será em ${days} dias`;
 }
 
 function getCountdownTextMobile(minutes) {
-  if (minutes <= 15) return 'Pode entrar';
-  if (minutes < 60) return `${minutes} min`;
-  const hours = Math.floor(minutes / 60);
-  if (hours < 24) return `${hours} h`;
-  if (hours < 48) return 'É amanhã';
-  const days = Math.floor(minutes / 1440);
-  return `${days} dias`;
+  const stage = getCountdownStage(minutes);
+  if (stage === 'unlocked') return 'Pode entrar';
+  if (stage === 'minutes') return `${minutes} min`;
+  if (stage === 'hours') return `${Math.floor(minutes / 60)} h`;
+  if (stage === 'tomorrow') return 'É amanhã';
+  return `${Math.ceil(minutes / 1440)} dias`;
+}
+
+// Regra do cliente: reagendar só é permitido até 48h antes do horário exato
+// da consulta — independente da origem (Encaminhamento ou Avulsa).
+function canReschedule(minutes) {
+  return minutes >= 48 * 60;
 }
 
 function AgendFilterSelect({ value, onChange, minWidth = '200px' }) {
@@ -598,11 +620,11 @@ export default function AgendamentosPage() {
                                   </button>
                                 )}
                               </>
-                            ) : (
+                            ) : canReschedule(mins) ? (
                               <button className="btn btn-success btn-sm" style={{ width: '100%', marginTop: '8px' }}>
                                 Reagendar
                               </button>
-                            )}
+                            ) : null}
                           </div>
                         )}
                       </div>
@@ -628,11 +650,11 @@ export default function AgendamentosPage() {
                                 </button>
                               )}
                             </>
-                          ) : (
+                          ) : canReschedule(mins) ? (
                             <button className="btn btn-success _contact-btn">
                               Reagendar
                             </button>
-                          )}
+                          ) : null}
                         </div>
                       )}
                     </div>

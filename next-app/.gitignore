@@ -33,3 +33,9 @@ Thumbs.db
 *.tsbuildinfo
 
 .vercel
+
+# Playwright (comando /resolve-issue)
+/test-results/
+/playwright-report/
+/blob-report/
+tests/e2e/.tmp-screenshots/
