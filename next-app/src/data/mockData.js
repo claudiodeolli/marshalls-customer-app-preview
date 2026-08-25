@@ -541,17 +541,54 @@ export function generateMockAppointments() {
       createdAt: todayDate,
       cancel: false,
     },
-    // FINISHED
+    // A partir daqui: um exemplo de cada combinação status × origem que o
+    // cliente pediu para a tela Agendamentos (issue #3). Consultas
+    // finalizadas não entram aqui de propósito — a tela não tem esse filtro
+    // e a sequência do filtro "Todos" no PDF não as inclui; elas vivem na
+    // tela Histórico.
+
+    // PENDING — Encaminhamento
     {
-      uuid: 'apt-003',
-      status: 'FINISHED',
+      uuid: 'apt-pending-referral',
+      status: 'PENDING',
       professional: { name: 'Paulo Salave', specialties: [{ name: 'Neurologia' }] },
-      specialty: { name: 'Neurologia' },
-      detail: { date: '20/05/2026', from: '10:00' },
-      beneficiaryMedicalReferral: { createdAt: '05/05/2026' },
+      specialty: { name: 'Neurologia', uuid: 'spec-004' },
+      detail: { date: '', from: '' },
+      beneficiaryMedicalReferral: { createdAt: '05/05/2026', uuid: 'ref-004' },
       cancel: false,
     },
-    // UNFINISHED
+    // PENDING — Avulsa
+    {
+      uuid: 'apt-pending-avulsa',
+      status: 'PENDING',
+      professional: { name: 'Marcos Teixeira', specialties: [{ name: 'Cardiologia' }] },
+      specialty: { name: 'Cardiologia', uuid: 'spec-001' },
+      detail: { date: '', from: '' },
+      beneficiaryMedicalReferral: null,
+      createdAt: todayDate,
+      cancel: false,
+    },
+    // CANCELED — Encaminhamento
+    {
+      uuid: 'apt-canceled-referral',
+      status: 'CANCELED',
+      professional: { name: 'Roberto Silva', specialties: [{ name: 'Ortopedia' }] },
+      specialty: { name: 'Ortopedia' },
+      detail: { date: '12/05/2026', from: '14:00' },
+      beneficiaryMedicalReferral: { createdAt: '01/05/2026' },
+      cancel: false,
+    },
+    // CANCELED — Avulsa
+    {
+      uuid: 'apt-005',
+      status: 'CANCELED',
+      professional: { name: 'Carlos Mendes', specialties: [{ name: 'Cardiologia' }] },
+      specialty: { name: 'Cardiologia' },
+      detail: { date: '12/05/2026', from: '11:00' },
+      beneficiaryMedicalReferral: null,
+      cancel: false,
+    },
+    // UNFINISHED — Encaminhamento
     {
       uuid: 'apt-004',
       status: 'UNFINISHED',
@@ -561,13 +598,13 @@ export function generateMockAppointments() {
       beneficiaryMedicalReferral: { createdAt: '10/05/2026' },
       cancel: false,
     },
-    // CANCELED
+    // UNFINISHED — Avulsa
     {
-      uuid: 'apt-005',
-      status: 'CANCELED',
-      professional: { name: 'Carlos Mendes', specialties: [{ name: 'Cardiologia' }] },
-      specialty: { name: 'Cardiologia' },
-      detail: { date: '12/05/2026', from: '11:00' },
+      uuid: 'apt-unfinished-avulsa',
+      status: 'UNFINISHED',
+      professional: { name: 'Carla Borges', specialties: [{ name: 'Psicologia' }] },
+      specialty: { name: 'Psicologia' },
+      detail: { date: '14/05/2026', from: '16:00' },
       beneficiaryMedicalReferral: null,
       cancel: false,
     },

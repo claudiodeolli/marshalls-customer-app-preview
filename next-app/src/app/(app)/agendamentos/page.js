@@ -57,6 +57,34 @@ function getAppointmentOrigin(apt) {
   return 'Consulta avulsa';
 }
 
+// Ordem dos grupos no filtro "Todos", definida pelo cliente (issue #3):
+// agendadas → pendentes → canceladas → não realizadas. Status fora desta
+// lista (ex: FINISHED, que pertence à tela Histórico) vai para o fim.
+const STATUS_DISPLAY_ORDER = ['SCHEDULED', 'PENDING', 'CANCELED', 'UNFINISHED'];
+
+function statusRank(status) {
+  const index = STATUS_DISPLAY_ORDER.indexOf(status);
+  return index === -1 ? STATUS_DISPLAY_ORDER.length : index;
+}
+
+// Dentro de cada status, Encaminhamento vem antes de Consulta avulsa.
+function originRank(apt) {
+  return apt.beneficiaryMedicalReferral ? 0 : 1;
+}
+
+/**
+ * Ordena para exibição: primeiro por status (na ordem pedida pelo cliente),
+ * depois por origem. Vale tanto para o filtro "Todos" — onde os grupos
+ * precisam aparecer nessa sequência — quanto para um filtro específico, em
+ * que só a ordenação por origem tem efeito.
+ */
+function sortForDisplay(appointments) {
+  return [...appointments].sort((a, b) => {
+    const byStatus = statusRank(a.status) - statusRank(b.status);
+    return byStatus !== 0 ? byStatus : originRank(a) - originRank(b);
+  });
+}
+
 function getBrowserTz() {
   return Intl.DateTimeFormat().resolvedOptions().timeZone;
 }
@@ -261,7 +289,7 @@ export default function AgendamentosPage() {
         const filtered = statusFilter
           ? allMock.filter(a => a.status === statusFilter)
           : allMock;
-        setAppointments(filtered);
+        setAppointments(sortForDisplay(filtered));
         return;
       }
       const beneficiaryUuid = typeof window !== 'undefined' ? localStorage.getItem('BENEFICIARY_UUID') : '';
@@ -269,7 +297,7 @@ export default function AgendamentosPage() {
         headers: { beneficiaryUuid },
       });
       if (!('success' in (res.data ?? {}))) {
-        setAppointments(Array.isArray(res.data) ? res.data : []);
+        setAppointments(sortForDisplay(Array.isArray(res.data) ? res.data : []));
       }
     } catch (err) {
       console.error(err);
@@ -332,6 +360,19 @@ export default function AgendamentosPage() {
   // a navegação em si acontece em goToAppointment, após essa escolha.
   function handleEnterAppointment(apt) {
     setAttachTarget(apt);
+  }
+
+  // Card pendente ainda não tem data escolhida — o PDF (regra de
+  // cancelamento dentro do prazo, issue #2) pede que ele volte para o
+  // estado "Agendar", levando ao calendário da mesma especialidade.
+  function handleScheduleAppointment(apt) {
+    const referralUuid = apt.beneficiaryMedicalReferral?.uuid;
+    if (referralUuid) {
+      router.push(`/schedule/calendar?referral=${referralUuid}`);
+      return;
+    }
+    const specialtyUuid = apt.specialty?.uuid;
+    router.push(specialtyUuid ? `/schedule/calendar?avulsaSpec=${specialtyUuid}` : '/schedule/calendar');
   }
 
   function goToAppointment(apt, attachments = []) {
@@ -582,13 +623,20 @@ export default function AgendamentosPage() {
                           <strong>Origem: </strong>{getAppointmentOrigin(apt)}
                         </div>
 
+                        {/* Consulta pendente ainda não tem data escolhida. */}
                         <div className="d-flex align-items-start mb-50" style={{ color: '#6e6b7b' }}>
                           <span style={{ marginRight: '8px', flexShrink: 0, marginTop: '2px' }}><IconClock /></span>
                           <div>
                             <div style={{ fontSize: '14px', display: 'flex', alignItems: 'center', gap: '4px', flexWrap: 'wrap', color: '#5e5873' }}>
-                              {apt.detail?.date} às <strong>{apt.detail?.from}</strong>
-                              <span title="Horário de Brasília">🇧🇷</span>
-                              <span style={{ color: '#9a9a9a', fontSize: '13px' }}>Sao Paulo (GMT-3)</span>
+                              {apt.detail?.date ? (
+                                <>
+                                  {apt.detail.date} às <strong>{apt.detail.from}</strong>
+                                  <span title="Horário de Brasília">🇧🇷</span>
+                                  <span style={{ color: '#9a9a9a', fontSize: '13px' }}>Sao Paulo (GMT-3)</span>
+                                </>
+                              ) : (
+                                <span style={{ color: '#9a9a9a' }}>Data e horário ainda não escolhidos</span>
+                              )}
                             </div>
                             {converted && (
                               <div style={{ fontSize: '13px', marginTop: '2px', color: '#5e5873' }}>
@@ -682,6 +730,18 @@ export default function AgendamentosPage() {
                             )}
                           </div>
                         )}
+
+                        {apt.status === 'PENDING' && (
+                          <div className="d-xl-none" style={{ marginTop: '16px' }}>
+                            <button
+                              className="btn btn-success btn-sm"
+                              style={{ width: '100%', height: SECONDARY_BUTTON_SIZE.height, padding: '0 12px' }}
+                              onClick={() => handleScheduleAppointment(apt)}
+                            >
+                              Agendar
+                            </button>
+                          </div>
+                        )}
                       </div>
 
                       {/* Desktop: cronômetro + botões */}
@@ -735,6 +795,18 @@ export default function AgendamentosPage() {
                               Cancelar
                             </button>
                           )}
+                        </div>
+                      )}
+
+                      {apt.status === 'PENDING' && (
+                        <div className="d-none d-xl-flex flex-column _appt-card-actions" style={{ gap: '8px', marginLeft: '16px', flexShrink: 0, minWidth: ENTER_BUTTON_SIZE.width, alignItems: 'stretch' }}>
+                          <button
+                            className="btn btn-success _contact-btn"
+                            onClick={() => handleScheduleAppointment(apt)}
+                            style={{ height: SECONDARY_BUTTON_SIZE.height, padding: '0 12px', alignSelf: 'center', width: SECONDARY_BUTTON_SIZE.width, maxWidth: '100%' }}
+                          >
+                            Agendar
+                          </button>
                         </div>
                       )}
                     </div>
