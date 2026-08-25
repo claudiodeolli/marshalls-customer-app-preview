@@ -1,0 +1,34 @@
+{
+  "desktop_entrar": {
+    "width": 272.72,
+    "height": 32
+  },
+  "desktop_reagendar": {
+    "width": 200,
+    "height": 32
+  },
+  "desktop_cancelar": {
+    "width": 200,
+    "height": 32
+  },
+  "desktop_placeholder_reagendar": {
+    "width": 272.72,
+    "height": 32
+  },
+  "mobile_entrar": {
+    "width": 306.39,
+    "height": 32
+  },
+  "mobile_reagendar": {
+    "width": 306.39,
+    "height": 32
+  },
+  "mobile_cancelar": {
+    "width": 306.39,
+    "height": 32
+  },
+  "mobile_placeholder_reagendar": {
+    "width": 306.84,
+    "height": 32
+  }
+}
