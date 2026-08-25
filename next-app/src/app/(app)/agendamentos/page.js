@@ -5,6 +5,8 @@ import EmptyState from '@/components/features/agendamentos/EmptyState';
 import { IconAdd, IconArticle, IconClock, IconDoctor, IconHospital } from '@/components/features/agendamentos/icons';
 import SkeletonRow from '@/components/features/agendamentos/SkeletonRow';
 import FilterChip from '@/components/features/encaminhamentos/FilterChip';
+import AttachDocumentsModal from '@/components/features/agendamentos/AttachDocumentsModal';
+import { CalendarDays, Clock } from 'lucide-react';
 import Toast from '@/components/ui/Toast';
 import { generateMockAppointments } from '@/data/mockData';
 import api from '@/lib/api';
@@ -108,12 +110,27 @@ function getCountdownStage(minutes) {
   return 'days';
 }
 
-function getCountdownIcon(minutes) {
+// O PDF pede ícone de calendário enquanto a contagem é em dias e relógio a
+// partir das 23h, ambos coloridos — não o emoji monocromático de antes.
+function CountdownIcon({ minutes }) {
   const stage = getCountdownStage(minutes);
-  if (stage === 'unlocked') return '🟢';
-  if (stage === 'days' || stage === 'tomorrow') return '🗓';
-  return '⏱';
+  if (stage === 'days' || stage === 'tomorrow') {
+    return <CalendarDays color="#0052ff" size={16} />;
+  }
+  return <Clock color="#0052ff" size={16} />;
 }
+
+// Prazo em que o "Entrar no atendimento" destrava, conforme o PDF. O mesmo
+// número aparece no texto do tooltip do botão bloqueado — manter em sincronia.
+const UNLOCK_MINUTES = 15;
+
+const BLOCKED_ENTER_TOOLTIP =
+  `Este botão será liberado faltando ${UNLOCK_MINUTES} minutos para o atendimento ` +
+  'e você poderá anexar documentos para avaliação médica caso desejar.';
+
+// Tamanhos definidos pelo cliente no PDF (altura x largura, em px).
+const ENTER_BUTTON_SIZE = { height: '32px', width: '272.72px' };
+const SECONDARY_BUTTON_SIZE = { height: '32px', width: '200px' };
 
 function getCountdownText(minutes) {
   const stage = getCountdownStage(minutes);
@@ -141,6 +158,13 @@ function getCountdownTextMobile(minutes) {
 // da consulta — independente da origem (Encaminhamento ou Avulsa).
 function canReschedule(minutes) {
   return minutes >= 48 * 60;
+}
+
+// Só a consulta Avulsa cancelada com 48h+ de antecedência preserva o valor
+// pago; Encaminhamento sempre perde o encaminhamento ao cancelar.
+function keepsPaidCredit(appointment) {
+  if (appointment.beneficiaryMedicalReferral) return false;
+  return canReschedule(getMinutesUntil(appointment.detail?.date, appointment.detail?.from));
 }
 
 function AgendFilterSelect({ value, onChange, minWidth = '200px' }) {
@@ -211,6 +235,8 @@ export default function AgendamentosPage() {
   const [pendingAvulsa, setPendingAvulsa] = useState(null);
   const [isMobile, setIsMobile]           = useState(false);
   const [tooltipOpen, setTooltipOpen]     = useState(false);
+  const [blockedEnterTooltip, setBlockedEnterTooltip] = useState(false);
+  const [attachTarget, setAttachTarget]   = useState(null);
   const [tick, setTick]                   = useState(0);
 
   useEffect(() => {
@@ -268,9 +294,21 @@ export default function AgendamentosPage() {
     setCanceling(true);
     try {
       if (IS_MOCK) {
+        // Regra do PDF (issue #2): cancelamento de Avulsa DENTRO do prazo de 48h
+        // devolve o card ao estado "Pendente" (o valor pago é preservado para
+        // um novo agendamento). Encaminhamento — e Avulsa fora do prazo —
+        // destroem o agendamento, que passa a viver na tela Histórico.
+        if (keepsPaidCredit(cancelTarget)) {
+          setAppointments(prev => prev.map(a => (
+            a.uuid === cancelTarget.uuid ? { ...a, status: 'PENDING', cancel: false } : a
+          )));
+          setCancelTarget(null);
+          showToast('Consulta cancelada. Você pode agendar uma nova data sem custo adicional.');
+          return;
+        }
         setAppointments(prev => prev.filter(a => a.uuid !== cancelTarget.uuid));
         setCancelTarget(null);
-        showToast('Agendamento deletado com sucesso.');
+        showToast('Consulta cancelada. Ela ficará disponível na tela Histórico.');
         return;
       }
       const beneficiaryUuid = typeof window !== 'undefined' ? localStorage.getItem('BENEFICIARY_UUID') : '';
@@ -290,8 +328,17 @@ export default function AgendamentosPage() {
     }
   }
 
+  // O PDF pede que o clique no botão liberado abra antes o modal de anexos —
+  // a navegação em si acontece em goToAppointment, após essa escolha.
   function handleEnterAppointment(apt) {
-    if (typeof window !== 'undefined') localStorage.setItem('APPOINTMENT', JSON.stringify(apt));
+    setAttachTarget(apt);
+  }
+
+  function goToAppointment(apt, attachments = []) {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('APPOINTMENT', JSON.stringify(apt));
+      localStorage.setItem('APPOINTMENT_ATTACHMENTS', JSON.stringify(attachments.map(f => f.name)));
+    }
     router.push('/schedule/appointment');
   }
 
@@ -499,7 +546,7 @@ export default function AgendamentosPage() {
               const converted = !isSameAsBrazil(tz) ? convertDateTime(apt.detail?.date, apt.detail?.from, tz) : null;
               const dateChanged = converted && converted.date !== apt.detail?.date;
               const mins = apt.status === 'SCHEDULED' ? getMinutesUntil(apt.detail?.date, apt.detail?.from) : -1;
-              const canEnter = mins <= 10;
+              const canEnter = mins <= UNLOCK_MINUTES;
               const isToday = (() => {
                 try {
                   const [d, m, y] = (apt.detail?.date ?? '').split('/');
@@ -596,24 +643,41 @@ export default function AgendamentosPage() {
 
                         {/* Mobile: cronômetro + botões */}
                         {apt.status === 'SCHEDULED' && (
-                          <div className="d-xl-none" style={{ marginTop: '10px' }}>
+                          <div className="d-xl-none" style={{ marginTop: '16px' }}>
                             <span style={{ fontSize: '13px', color: '#5e5873', display: 'flex', alignItems: 'center', gap: '5px' }}>
-                              {getCountdownIcon(mins)} {getCountdownTextMobile(mins)}
+                              <CountdownIcon minutes={mins} /> {getCountdownTextMobile(mins)}
                             </span>
+                            {canEnter && (
+                              <div data-testid="ready-to-enter" style={{
+                                display: 'flex', alignItems: 'center', gap: '6px',
+                                marginTop: '8px', fontSize: '13px', color: '#28c76f', fontWeight: 600,
+                              }}>
+                                <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#28c76f', flexShrink: 0 }} />
+                                Você já pode entrar!
+                              </div>
+                            )}
                             {isToday ? (
                               <>
-                                <button
-                                  className="btn btn-success btn-sm"
-                                  disabled={!canEnter}
-                                  onClick={() => handleEnterAppointment(apt)}
-                                  style={{ width: '100%', marginTop: '8px' }}
+                                <span
+                                  title={canEnter ? undefined : BLOCKED_ENTER_TOOLTIP}
+                                  onClick={() => { if (!canEnter) setBlockedEnterTooltip(true); }}
+                                  style={{ display: 'block', marginTop: '16px' }}
                                 >
-                                  Entrar no atendimento
-                                </button>
+                                  <button
+                                    className="btn btn-success btn-sm"
+                                    disabled={!canEnter}
+                                    onClick={() => handleEnterAppointment(apt)}
+                                    style={{ width: '100%', height: ENTER_BUTTON_SIZE.height, padding: '0 12px', pointerEvents: canEnter ? 'auto' : 'none' }}
+                                  >
+                                    Entrar no atendimento
+                                  </button>
+                                </span>
+                                {/* Espaço do "Reagendar" preservado mesmo quando ele some (regra do PDF) */}
+                                {!canReschedule(mins) && <div aria-hidden="true" data-testid="reagendar-placeholder" style={{ height: SECONDARY_BUTTON_SIZE.height, marginTop: '8px' }} />}
                                 {apt.cancel && (
                                   <button
                                     className="btn btn-danger btn-sm"
-                                    style={{ width: '100%', marginTop: '8px' }}
+                                    style={{ width: '100%', marginTop: '8px', height: SECONDARY_BUTTON_SIZE.height, padding: '0 12px' }}
                                     onClick={() => setCancelTarget(apt)}
                                   >
                                     Cancelar
@@ -621,40 +685,69 @@ export default function AgendamentosPage() {
                                 )}
                               </>
                             ) : canReschedule(mins) ? (
-                              <button className="btn btn-success btn-sm" style={{ width: '100%', marginTop: '8px' }}>
+                              <button className="btn btn-success btn-sm" style={{ width: '100%', marginTop: '16px', height: SECONDARY_BUTTON_SIZE.height, padding: '0 12px' }}>
                                 Reagendar
                               </button>
-                            ) : null}
+                            ) : (
+                              <div aria-hidden="true" data-testid="reagendar-placeholder" style={{ height: SECONDARY_BUTTON_SIZE.height, marginTop: '16px' }} />
+                            )}
                           </div>
                         )}
                       </div>
 
                       {/* Desktop: cronômetro + botões */}
                       {apt.status === 'SCHEDULED' && (
-                        <div className="d-none d-xl-flex flex-column _appt-card-actions" style={{ gap: '8px', marginLeft: '16px', flexShrink: 0, minWidth: '200px', alignItems: 'stretch' }}>
+                        <div className="d-none d-xl-flex flex-column _appt-card-actions" style={{ gap: '8px', marginLeft: '16px', flexShrink: 0, minWidth: ENTER_BUTTON_SIZE.width, alignItems: 'stretch' }}>
                           <span style={{ fontSize: '13px', color: '#5e5873', display: 'flex', alignItems: 'center', gap: '5px', justifyContent: 'flex-end' }}>
-                            {getCountdownIcon(mins)} {getCountdownText(mins)}
+                            <CountdownIcon minutes={mins} /> {getCountdownText(mins)}
                           </span>
+                          {canEnter && (
+                            <div data-testid="ready-to-enter" style={{
+                              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
+                              fontSize: '13px', color: '#28c76f', fontWeight: 600,
+                            }}>
+                              <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#28c76f', flexShrink: 0 }} />
+                              Você já pode entrar!
+                            </div>
+                          )}
                           {isToday ? (
                             <>
-                              <button
-                                className="btn btn-success _contact-btn"
-                                disabled={!canEnter}
-                                onClick={() => handleEnterAppointment(apt)}
+                              <span
+                                title={canEnter ? undefined : BLOCKED_ENTER_TOOLTIP}
+                                onClick={() => { if (!canEnter) setBlockedEnterTooltip(true); }}
+                                style={{ display: 'block' }}
                               >
-                                Entrar no atendimento
-                              </button>
+                                <button
+                                  className="btn btn-success _contact-btn"
+                                  disabled={!canEnter}
+                                  onClick={() => handleEnterAppointment(apt)}
+                                  style={{ width: '100%', height: ENTER_BUTTON_SIZE.height, padding: '0 12px', pointerEvents: canEnter ? 'auto' : 'none' }}
+                                >
+                                  Entrar no atendimento
+                                </button>
+                              </span>
+                              {/* Espaço do "Reagendar" preservado mesmo quando ele some (regra do PDF) */}
+                              {!canReschedule(mins) && <div aria-hidden="true" data-testid="reagendar-placeholder" style={{ height: SECONDARY_BUTTON_SIZE.height }} />}
                               {apt.cancel && (
-                                <button className="btn btn-outline-danger _contact-btn" onClick={() => setCancelTarget(apt)}>
+                                <button
+                                  className="btn btn-outline-danger _contact-btn"
+                                  onClick={() => setCancelTarget(apt)}
+                                  style={{ height: SECONDARY_BUTTON_SIZE.height, padding: '0 12px', alignSelf: 'center', width: SECONDARY_BUTTON_SIZE.width, maxWidth: '100%' }}
+                                >
                                   Cancelar
                                 </button>
                               )}
                             </>
                           ) : canReschedule(mins) ? (
-                            <button className="btn btn-success _contact-btn">
+                            <button
+                              className="btn btn-success _contact-btn"
+                              style={{ height: SECONDARY_BUTTON_SIZE.height, padding: '0 12px', alignSelf: 'center', width: SECONDARY_BUTTON_SIZE.width, maxWidth: '100%' }}
+                            >
                               Reagendar
                             </button>
-                          ) : null}
+                          ) : (
+                            <div aria-hidden="true" data-testid="reagendar-placeholder" style={{ height: SECONDARY_BUTTON_SIZE.height }} />
+                          )}
                         </div>
                       )}
                     </div>
@@ -673,6 +766,38 @@ export default function AgendamentosPage() {
         onClose={() => setCancelTarget(null)}
         onConfirm={handleCancelConfirm}
       />
+
+      <AttachDocumentsModal
+        open={!!attachTarget}
+        onClose={() => setAttachTarget(null)}
+        onContinue={files => {
+          const apt = attachTarget;
+          setAttachTarget(null);
+          goToAppointment(apt, files);
+        }}
+      />
+
+      {/* Explicação do botão bloqueado — em telas de toque não há hover pro title */}
+      {blockedEnterTooltip && (
+        <div
+          onClick={() => setBlockedEnterTooltip(false)}
+          style={{
+            position: 'fixed', inset: 0, zIndex: 9998, background: 'rgba(0,0,0,0.5)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24,
+          }}
+        >
+          <div className="card mb-0 _modal-enter" style={{ width: 360, maxWidth: '100%', borderRadius: 12 }}>
+            <div className="card-body" style={{ padding: '1.5rem' }}>
+              <p style={{ margin: '0 0 1rem', fontSize: 14, color: '#5e5873' }}>{BLOCKED_ENTER_TOOLTIP}</p>
+              <div className="d-flex justify-content-end">
+                <button className="btn btn-outline-secondary btn-sm" onClick={() => setBlockedEnterTooltip(false)}>
+                  Entendi
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       <Toast {...toast} />
 
