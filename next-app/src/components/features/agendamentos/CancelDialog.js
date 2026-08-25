@@ -1,3 +1,8 @@
+import {
+  MODAL_CARD, MODAL_BODY, MODAL_TITLE, MODAL_TEXT, MODAL_TEXT_MUTED,
+  MODAL_ACTIONS, MODAL_BUTTON,
+} from '@/components/ui/modalScale';
+
 // Duplicado de agendamentos/page.js de propósito — é uma função pura de 4
 // linhas e criar um módulo compartilhado só pra isso não paga o esforço.
 function getMinutesUntil(dateStr, timeStr) {
@@ -39,21 +44,21 @@ export default function CancelDialog({ open, appointment, loading, onClose, onCo
       background: 'rgba(0,0,0,0.5)',
       display: 'flex', alignItems: 'center', justifyContent: 'center',
     }}>
-      <div className="card mb-0 _modal-enter" style={{ width: '400px', maxWidth: '90vw', borderRadius: '12px' }}>
-        <div className="card-body" style={{ padding: '1.5rem' }}>
-          <h5 style={{ fontWeight: 700, marginBottom: '0.75rem' }}>Cancelar consulta?</h5>
-          <p style={{ color: '#333', marginBottom: '0.75rem', fontSize: '14px' }}>
+      <div className="card mb-0 _modal-enter" style={MODAL_CARD}>
+        <div className="card-body" style={MODAL_BODY}>
+          <h5 style={MODAL_TITLE}>Cancelar consulta?</h5>
+          <p style={{ ...MODAL_TEXT, marginBottom: '0.75rem' }}>
             Você está prestes a cancelar o agendamento de <strong>{specialtyName}</strong> com o(a) Dr(a). <strong>{doctorName}</strong>.
           </p>
-          <p style={{ color: '#5e5873', marginBottom: '1.5rem', fontSize: '13px' }}>
+          <p style={{ ...MODAL_TEXT_MUTED, marginBottom: '1.25rem' }}>
             {warning}
           </p>
-          <p style={{ color: '#333', marginBottom: '1rem', fontSize: '14px', fontWeight: 600 }}>
+          <p style={{ ...MODAL_TEXT, fontWeight: 600, margin: 0 }}>
             Deseja continuar com o cancelamento?
           </p>
-          <div className="d-flex justify-content-end" style={{ gap: '8px' }}>
-            <button className="btn btn-outline-secondary btn-sm" onClick={onClose}>Voltar</button>
-            <button className="btn btn-danger btn-sm" disabled={loading} onClick={onConfirm}>
+          <div style={MODAL_ACTIONS}>
+            <button className="btn btn-outline-secondary" style={MODAL_BUTTON} onClick={onClose}>Voltar</button>
+            <button className="btn btn-danger" style={MODAL_BUTTON} disabled={loading} onClick={onConfirm}>
               {loading ? 'Aguarde...' : 'Cancelar consulta'}
             </button>
           </div>

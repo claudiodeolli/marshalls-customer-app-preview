@@ -6,6 +6,7 @@ import { IconAdd, IconArticle, IconClock, IconDoctor, IconHospital } from '@/com
 import SkeletonRow from '@/components/features/agendamentos/SkeletonRow';
 import FilterChip from '@/components/features/encaminhamentos/FilterChip';
 import AttachDocumentsModal from '@/components/features/agendamentos/AttachDocumentsModal';
+import { MODAL_CARD, MODAL_BODY, MODAL_TEXT_MUTED, MODAL_ACTIONS, MODAL_BUTTON } from '@/components/ui/modalScale';
 import { CalendarDays, Clock } from 'lucide-react';
 import Toast from '@/components/ui/Toast';
 import { generateMockAppointments } from '@/data/mockData';
@@ -845,11 +846,11 @@ export default function AgendamentosPage() {
             display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24,
           }}
         >
-          <div className="card mb-0 _modal-enter" style={{ width: 360, maxWidth: '100%', borderRadius: 12 }}>
-            <div className="card-body" style={{ padding: '1.5rem' }}>
-              <p style={{ margin: '0 0 1rem', fontSize: 14, color: '#5e5873' }}>{BLOCKED_ENTER_TOOLTIP}</p>
-              <div className="d-flex justify-content-end">
-                <button className="btn btn-outline-secondary btn-sm" onClick={() => setBlockedEnterTooltip(false)}>
+          <div className="card mb-0 _modal-enter" style={MODAL_CARD}>
+            <div className="card-body" style={MODAL_BODY}>
+              <p style={{ ...MODAL_TEXT_MUTED, margin: 0 }}>{BLOCKED_ENTER_TOOLTIP}</p>
+              <div style={MODAL_ACTIONS}>
+                <button className="btn btn-outline-secondary" style={MODAL_BUTTON} onClick={() => setBlockedEnterTooltip(false)}>
                   Entendi
                 </button>
               </div>
