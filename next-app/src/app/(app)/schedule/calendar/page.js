@@ -658,6 +658,26 @@ function ScheduleContent() {
         </div>
       )}
 
+      {/* Informational text — shown after specialty is selected and availability loaded */}
+      {selectedSpecialty && !loadingAvailability && (
+        <div style={{
+          display: 'flex', gap: 10, alignItems: 'flex-start',
+          background: specialtyLocked ? '#f0f9ff' : '#f6f4ff',
+          border: `1px solid ${specialtyLocked ? '#b3e0ea' : '#d0c8f8'}`,
+          borderRadius: 10, padding: '12px 14px', marginBottom: 16,
+          fontSize: 13, color: '#5e5873', lineHeight: 1.6,
+        }}>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+            fill="none" stroke={specialtyLocked ? '#4daab6' : '#7367f0'}
+            strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: 2 }}>
+            <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+          {specialtyLocked
+            ? 'Esta consulta é gratuita e está coberta pelo seu encaminhamento médico. Selecione a data e o horário de sua preferência para confirmar o agendamento.'
+            : 'Você optou por uma consulta avulsa. Selecione a data e o horário desejados. O pagamento será realizado na próxima etapa.'}
+        </div>
+      )}
+
       {/* Calendar — shown after specialty is selected and availability loaded */}
       {selectedSpecialty && !loadingAvailability && (
         <div ref={calendarRef}>

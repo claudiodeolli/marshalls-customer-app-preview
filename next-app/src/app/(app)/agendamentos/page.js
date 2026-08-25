@@ -673,10 +673,10 @@ export default function AgendamentosPage() {
                           {translateStatus(apt.status)}
                         </span>
                         {apt.status === 'CANCELED' && (
-                          <div style={{ fontSize: '11px', color: '#6e6b7b', marginTop: '3px' }}>usuário cancelou a consulta</div>
+                          <div style={{ fontSize: '11px', color: '#6e6b7b', marginTop: '3px' }}>Usuário cancelou a consulta.</div>
                         )}
                         {apt.status === 'UNFINISHED' && (
-                          <div style={{ fontSize: '11px', color: '#6e6b7b', marginTop: '3px' }}>usuário não compareceu a consulta</div>
+                          <div style={{ fontSize: '11px', color: '#6e6b7b', marginTop: '3px' }}>Usuário não compareceu à consulta.</div>
                         )}
 
                         {/* Mobile: cronômetro + botões */}
