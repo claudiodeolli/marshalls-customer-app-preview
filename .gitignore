@@ -48,4 +48,7 @@ whatsapp-triage/.auth/
 whatsapp-triage/.state/
 whatsapp-triage/tmp/
 whatsapp-triage/qr.png
+# Pacotes de sessão gerados por sessionBackup.mjs — são credenciais da conta
+# do WhatsApp, nunca podem entrar no repositório.
+*session*.json
 !whatsapp-triage/.env.example
