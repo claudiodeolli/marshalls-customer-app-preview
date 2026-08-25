@@ -1,0 +1,40 @@
+{
+  "Agendadas (filtro padrao)": [
+    "Consulta agendada — Encaminhamento",
+    "Consulta agendada — Encaminhamento",
+    "Consulta agendada — Consulta avulsa",
+    "Consulta agendada — Consulta avulsa",
+    "Consulta agendada — Consulta avulsa",
+    "Consulta agendada — Consulta avulsa",
+    "Consulta agendada — Consulta avulsa",
+    "Consulta agendada — Consulta avulsa"
+  ],
+  "Todos": [
+    "Consulta agendada — Encaminhamento",
+    "Consulta agendada — Encaminhamento",
+    "Consulta agendada — Consulta avulsa",
+    "Consulta agendada — Consulta avulsa",
+    "Consulta agendada — Consulta avulsa",
+    "Consulta agendada — Consulta avulsa",
+    "Consulta agendada — Consulta avulsa",
+    "Consulta agendada — Consulta avulsa",
+    "Consulta pendente — Encaminhamento",
+    "Consulta pendente — Consulta avulsa",
+    "Consulta cancelada — Encaminhamento",
+    "Consulta cancelada — Consulta avulsa",
+    "Consulta não realizada — Encaminhamento",
+    "Consulta não realizada — Consulta avulsa"
+  ],
+  "Pendentes": [
+    "Consulta pendente — Encaminhamento",
+    "Consulta pendente — Consulta avulsa"
+  ],
+  "Canceladas": [
+    "Consulta cancelada — Encaminhamento",
+    "Consulta cancelada — Consulta avulsa"
+  ],
+  "Não realizadas": [
+    "Consulta não realizada — Encaminhamento",
+    "Consulta não realizada — Consulta avulsa"
+  ]
+}
