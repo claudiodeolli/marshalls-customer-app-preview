@@ -82,7 +82,15 @@ function originRank(apt) {
 function sortForDisplay(appointments) {
   return [...appointments].sort((a, b) => {
     const byStatus = statusRank(a.status) - statusRank(b.status);
-    return byStatus !== 0 ? byStatus : originRank(a) - originRank(b);
+    if (byStatus !== 0) return byStatus;
+
+    const byOrigin = originRank(a) - originRank(b);
+    if (byOrigin !== 0) return byOrigin;
+
+    // Dentro da mesma origem, do prazo mais distante para o mais próximo —
+    // é a sequência em que o PDF percorre os estágios da contagem (issue #8).
+    return getMinutesUntil(b.detail?.date, b.detail?.from)
+      - getMinutesUntil(a.detail?.date, a.detail?.from);
   });
 }
 
@@ -161,26 +169,35 @@ const BLOCKED_ENTER_TOOLTIP =
 const ENTER_BUTTON_SIZE = { height: '32px', width: '272.72px' };
 const SECONDARY_BUTTON_SIZE = { height: '32px', width: '200px' };
 
+// Conta em horas cheias antes de dividir por 24. Dividir os minutos direto
+// faria 48h05 virar "3 dias", quebrando o par que o PDF usa para ensinar a
+// regra: 48h e 47:59 mostram os dois "2 dias", e só o botão Reagendar muda.
+function daysUntil(minutes) {
+  return Math.ceil(Math.floor(minutes / 60) / 24);
+}
+
+// No estágio liberado o contador segue mostrando os minutos; quem anuncia a
+// liberação é o indicador verde ao lado ("Você já pode entrar!"), como na
+// pág. 8 do PDF. Antes os dois diziam a mesma coisa.
 function getCountdownText(minutes) {
   const stage = getCountdownStage(minutes);
-  if (stage === 'unlocked') return 'Você já pode entrar';
-  if (stage === 'minutes') return `Sua consulta começa em ${minutes} minutos`;
+  if (stage === 'unlocked' || stage === 'minutes') {
+    return `Sua consulta começa em ${Math.max(minutes, 0)} minutos`;
+  }
   if (stage === 'hours') {
     const hours = Math.floor(minutes / 60);
     return `Sua consulta será daqui a ${hours} hora${hours > 1 ? 's' : ''}`;
   }
   if (stage === 'tomorrow') return 'Sua consulta é amanhã!';
-  const days = Math.ceil(minutes / 1440);
-  return `Sua consulta será em ${days} dias`;
+  return `Sua consulta será em ${daysUntil(minutes)} dias`;
 }
 
 function getCountdownTextMobile(minutes) {
   const stage = getCountdownStage(minutes);
-  if (stage === 'unlocked') return 'Pode entrar';
-  if (stage === 'minutes') return `${minutes} min`;
+  if (stage === 'unlocked' || stage === 'minutes') return `${Math.max(minutes, 0)} min`;
   if (stage === 'hours') return `${Math.floor(minutes / 60)} h`;
   if (stage === 'tomorrow') return 'É amanhã';
-  return `${Math.ceil(minutes / 1440)} dias`;
+  return `${daysUntil(minutes)} dias`;
 }
 
 // Regra do cliente: reagendar só é permitido até 48h antes do horário exato

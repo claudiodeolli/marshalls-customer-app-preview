@@ -55,7 +55,7 @@ test.beforeEach(async ({ page }) => {
 });
 
 test('M1/M2 — modal de cancelamento tem texto e botões ampliados', async ({ page }) => {
-  const card = page.locator('.card', { hasText: 'Carlos Mendes' });
+  const card = page.locator('.card', { hasText: 'Gustavo Pinto' });
   await card.getByRole('button', { name: 'Cancelar', exact: true }).first().click();
 
   const modal = page.locator('.card', { has: page.getByRole('button', { name: 'Cancelar consulta' }) }).last();
@@ -66,7 +66,7 @@ test('M1/M2 — modal de cancelamento tem texto e botões ampliados', async ({ p
 });
 
 test('M1/M2 — modal de anexar documentos tem texto e botões ampliados', async ({ page }) => {
-  const card = page.locator('.card', { hasText: 'Carla Borges' });
+  const card = page.locator('.card', { hasText: 'Lucia Ramos' });
   await card.getByRole('button', { name: 'Entrar no atendimento' }).first().click();
 
   const modal = page.locator('.card', { has: page.getByRole('button', { name: 'Escolher arquivos' }) }).last();
@@ -77,7 +77,7 @@ test('M1/M2 — modal de anexar documentos tem texto e botões ampliados', async
 });
 
 test('M1/M2 — diálogo do botão bloqueado tem texto e botão ampliados', async ({ page }) => {
-  const card = page.locator('.card', { hasText: 'Ana Lima' });
+  const card = page.locator('.card', { hasText: 'Sofia Marques' });
   await card.getByText('Entrar no atendimento').first().locator('..').click();
 
   const modal = page.locator('.card', { has: page.getByRole('button', { name: 'Entendi' }) }).last();
@@ -90,7 +90,7 @@ test('M1/M2 — diálogo do botão bloqueado tem texto e botão ampliados', asyn
 test('M4 — as modais cabem no viewport mobile sem estourar a largura', async ({ page }) => {
   const larguraViewport = page.viewportSize().width;
 
-  const card = page.locator('.card', { hasText: 'Carlos Mendes' });
+  const card = page.locator('.card', { hasText: 'Gustavo Pinto' });
   await card.getByRole('button', { name: 'Cancelar', exact: true }).first().click();
 
   const modal = page.locator('.card', { has: page.getByRole('button', { name: 'Cancelar consulta' }) }).last();

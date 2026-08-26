@@ -460,95 +460,162 @@ export function generateMockAppointments() {
   const todayDate = offsetDetail(0).date;
 
   return [
-    // 🗓 Em 3 dias
+    // Filtro "Agendadas": a serie completa de estagios da contagem por
+    // Encaminhamento e, em seguida, a mesma serie por Avulsa (issue #8).
+    // O cliente revisa aqui cada estado que o PDF de regras descreve.
+    //
+    // Os offsets ficam alguns minutos acima de cada limite para o card nao
+    // escorregar para o estagio de baixo enquanto o preview fica aberto.
+
+    // ---- Encaminhamento ----
+    // faltando dias
     {
-      uuid: 'apt-dyn-3days',
+      uuid: 'apt-referral-12dias',
       status: 'SCHEDULED',
-      professional: { name: 'Roberto Silva', specialties: [{ name: 'Ortopedia' }] },
+      professional: { name: 'Renata Alves', specialties: [{ name: 'Ortopedia' }] },
       specialty: { name: 'Ortopedia' },
-      detail: offsetDetail(3 * 1440),
-      beneficiaryMedicalReferral: { createdAt: '20/05/2026' },
+      detail: offsetDetail(17290),
+      beneficiaryMedicalReferral: { createdAt: '20/05/2026', uuid: 'ref-003' },
       cancel: true,
     },
-    // 🗓 Em 4 dias, Avulsa cancelável — cobre o cancelamento DENTRO do prazo
-    // de 48h, único caso em que o valor pago é preservado (card volta a
-    // "Pendente"). Sem ele nenhum card do mock alcança esse cenário.
+    // faltando 48 horas: ultimo momento com Reagendar
     {
-      uuid: 'apt-dyn-4days-avulsa',
+      uuid: 'apt-referral-48h',
       status: 'SCHEDULED',
-      professional: { name: 'Marcos Teixeira', specialties: [{ name: 'Cardiologia' }] },
-      specialty: { name: 'Cardiologia' },
-      detail: offsetDetail(4 * 1440),
-      beneficiaryMedicalReferral: null,
-      createdAt: todayDate,
-      cancel: true,
-    },
-    // 🗓 Amanhã (~26h)
-    {
-      uuid: 'apt-dyn-tomorrow',
-      status: 'SCHEDULED',
-      professional: { name: 'Ana Lima', specialties: [{ name: 'Clínica Geral' }] },
-      specialty: { name: 'Clínica Geral' },
-      detail: offsetDetail(26 * 60),
-      beneficiaryMedicalReferral: null,
-      createdAt: todayDate,
-      cancel: true,
-    },
-    // ⏱ Em 5 horas
-    {
-      uuid: 'apt-dyn-5h',
-      status: 'SCHEDULED',
-      professional: { name: 'Marcos Teixeira', specialties: [{ name: 'Cardiologia' }] },
-      specialty: { name: 'Cardiologia' },
-      detail: offsetDetail(5 * 60),
-      beneficiaryMedicalReferral: null,
-      createdAt: todayDate,
-      cancel: false,
-    },
-    // ⏱ Em 2 horas, Encaminhamento — só existe pra dar cobertura de teste ao
-    // texto do modal de cancelamento por origem (issue #2); sem isso nenhum
-    // agendamento "hoje" da lista mock é de Encaminhamento.
-    {
-      uuid: 'apt-dyn-2h-referral',
-      status: 'SCHEDULED',
-      professional: { name: 'Roberto Silva', specialties: [{ name: 'Ortopedia' }] },
-      specialty: { name: 'Ortopedia' },
-      detail: offsetDetail(2 * 60),
-      beneficiaryMedicalReferral: { createdAt: '20/05/2026' },
-      cancel: true,
-    },
-    // ⏱ Em 30 minutos
-    {
-      uuid: 'apt-dyn-30min',
-      status: 'SCHEDULED',
-      professional: { name: 'Carlos Mendes', specialties: [{ name: 'Neurologia' }] },
+      professional: { name: 'Bruno Tavares', specialties: [{ name: 'Neurologia' }] },
       specialty: { name: 'Neurologia' },
-      detail: offsetDetail(30),
+      detail: offsetDetail(2890),
+      beneficiaryMedicalReferral: { createdAt: '20/05/2026', uuid: 'ref-003' },
+      cancel: true,
+    },
+    // faltando 47:59: Reagendar some, espaco preservado
+    {
+      uuid: 'apt-referral-47h59',
+      status: 'SCHEDULED',
+      professional: { name: 'Sofia Marques', specialties: [{ name: 'Clinica Geral' }] },
+      specialty: { name: 'Clinica Geral' },
+      detail: offsetDetail(2879),
+      beneficiaryMedicalReferral: { createdAt: '20/05/2026', uuid: 'ref-003' },
+      cancel: true,
+    },
+    // faltando 24 horas: passa a dizer "e amanha"
+    {
+      uuid: 'apt-referral-24h',
+      status: 'SCHEDULED',
+      professional: { name: 'Otavio Lins', specialties: [{ name: 'Dermatologia' }] },
+      specialty: { name: 'Dermatologia' },
+      detail: offsetDetail(1450),
+      beneficiaryMedicalReferral: { createdAt: '20/05/2026', uuid: 'ref-003' },
+      cancel: true,
+    },
+    // faltando 23 horas: passa a contar horas
+    {
+      uuid: 'apt-referral-23h',
+      status: 'SCHEDULED',
+      professional: { name: 'Clara Bento', specialties: [{ name: 'Psicologia' }] },
+      specialty: { name: 'Psicologia' },
+      detail: offsetDetail(1390),
+      beneficiaryMedicalReferral: { createdAt: '20/05/2026', uuid: 'ref-003' },
+      cancel: true,
+    },
+    // menos de uma hora: passa a contar minutos
+    {
+      uuid: 'apt-referral-55min',
+      status: 'SCHEDULED',
+      professional: { name: 'Ivan Moreira', specialties: [{ name: 'Cardiologia' }] },
+      specialty: { name: 'Cardiologia' },
+      detail: offsetDetail(55),
+      beneficiaryMedicalReferral: { createdAt: '20/05/2026', uuid: 'ref-003' },
+      cancel: true,
+    },
+    // dentro dos 15 min: botao liberado
+    {
+      uuid: 'apt-referral-10min',
+      status: 'SCHEDULED',
+      professional: { name: 'Lucia Ramos', specialties: [{ name: 'Ortopedia' }] },
+      specialty: { name: 'Ortopedia' },
+      detail: offsetDetail(10),
+      beneficiaryMedicalReferral: { createdAt: '20/05/2026', uuid: 'ref-003' },
+      cancel: true,
+    },
+
+    // ---- Consulta avulsa ----
+    // faltando dias
+    {
+      uuid: 'apt-avulsa-12dias',
+      status: 'SCHEDULED',
+      professional: { name: 'Gustavo Pinto', specialties: [{ name: 'Cardiologia' }] },
+      specialty: { name: 'Cardiologia' },
+      detail: offsetDetail(17290),
       beneficiaryMedicalReferral: null,
       createdAt: todayDate,
       cancel: true,
     },
-    // 🟢 Em 8 minutos (Você já pode entrar)
+    // faltando 48 horas: ultimo momento com Reagendar
     {
-      uuid: 'apt-dyn-8min',
+      uuid: 'apt-avulsa-48h',
       status: 'SCHEDULED',
-      professional: { name: 'Carla Borges', specialties: [{ name: 'Psicologia' }] },
-      specialty: { name: 'Psicologia' },
-      detail: offsetDetail(8),
-      beneficiaryMedicalReferral: null,
-      createdAt: todayDate,
-      cancel: false,
-    },
-    // 🟢 Em instantes (passado)
-    {
-      uuid: 'apt-dyn-now',
-      status: 'SCHEDULED',
-      professional: { name: 'Fernanda Rocha', specialties: [{ name: 'Dermatologia' }] },
+      professional: { name: 'Helena Duarte', specialties: [{ name: 'Dermatologia' }] },
       specialty: { name: 'Dermatologia' },
-      detail: offsetDetail(-5),
+      detail: offsetDetail(2890),
       beneficiaryMedicalReferral: null,
       createdAt: todayDate,
-      cancel: false,
+      cancel: true,
+    },
+    // faltando 47:59: Reagendar some, espaco preservado
+    {
+      uuid: 'apt-avulsa-47h59',
+      status: 'SCHEDULED',
+      professional: { name: 'Rafael Antunes', specialties: [{ name: 'Clinica Geral' }] },
+      specialty: { name: 'Clinica Geral' },
+      detail: offsetDetail(2879),
+      beneficiaryMedicalReferral: null,
+      createdAt: todayDate,
+      cancel: true,
+    },
+    // faltando 24 horas: passa a dizer "e amanha"
+    {
+      uuid: 'apt-avulsa-24h',
+      status: 'SCHEDULED',
+      professional: { name: 'Camila Ferraz', specialties: [{ name: 'Nutricao' }] },
+      specialty: { name: 'Nutricao' },
+      detail: offsetDetail(1450),
+      beneficiaryMedicalReferral: null,
+      createdAt: todayDate,
+      cancel: true,
+    },
+    // faltando 23 horas: passa a contar horas
+    {
+      uuid: 'apt-avulsa-23h',
+      status: 'SCHEDULED',
+      professional: { name: 'Diego Moraes', specialties: [{ name: 'Psicologia' }] },
+      specialty: { name: 'Psicologia' },
+      detail: offsetDetail(1390),
+      beneficiaryMedicalReferral: null,
+      createdAt: todayDate,
+      cancel: true,
+    },
+    // menos de uma hora: passa a contar minutos
+    {
+      uuid: 'apt-avulsa-55min',
+      status: 'SCHEDULED',
+      professional: { name: 'Beatriz Nunes', specialties: [{ name: 'Neurologia' }] },
+      specialty: { name: 'Neurologia' },
+      detail: offsetDetail(55),
+      beneficiaryMedicalReferral: null,
+      createdAt: todayDate,
+      cancel: true,
+    },
+    // dentro dos 15 min: botao liberado
+    {
+      uuid: 'apt-avulsa-10min',
+      status: 'SCHEDULED',
+      professional: { name: 'Tiago Menezes', specialties: [{ name: 'Ortopedia' }] },
+      specialty: { name: 'Ortopedia' },
+      detail: offsetDetail(10),
+      beneficiaryMedicalReferral: null,
+      createdAt: todayDate,
+      cancel: true,
     },
     // A partir daqui: um exemplo de cada combinação status × origem que o
     // cliente pediu para a tela Agendamentos (issue #3). Consultas
