@@ -7,6 +7,22 @@ const { test, expect } = require('@playwright/test');
 const ROTA_ENCAMINHAMENTO = '/schedule/calendar?referral=ref-003';
 const ROTA_AVULSA = '/schedule/calendar?avulsaSpec=spec-003';
 
+/**
+ * Compara banner e calendário num único snapshot de layout. Duas chamadas
+ * separadas a boundingBox() podem cair em posições de scroll diferentes: ao
+ * carregar a disponibilidade a página faz scrollIntoView com behavior smooth.
+ */
+async function esperarBannerAcimaDoCalendario(page, alerta) {
+  const acima = await alerta.evaluate(el => {
+    const cards = [...document.querySelectorAll('.card')];
+    const calendario = cards.find(c => c.innerText.includes('Agosto'));
+    if (!calendario) return null;
+    const a = el.getBoundingClientRect();
+    return a.bottom <= calendario.getBoundingClientRect().top + 1;
+  });
+  expect(acima, 'o banner precisa ficar acima do calendário').toBe(true);
+}
+
 /** Espera o calendário da fase 2 aparecer. */
 async function esperarCalendario(page) {
   await expect(page.locator('.card').filter({ hasText: 'Agosto' }).first()).toBeVisible({ timeout: 15000 });
@@ -28,10 +44,7 @@ test('N2 — banner "Importante!" aparece acima da data e horário no encaminham
   await expect(alerta).toBeVisible();
   await expect(alerta).toContainText('Importante!');
 
-  const calendario = page.locator('.card').filter({ hasText: 'Agosto' }).first();
-  const caixaAlerta = await alerta.boundingBox();
-  const caixaCalendario = await calendario.boundingBox();
-  expect(caixaAlerta.y + caixaAlerta.height).toBeLessThanOrEqual(caixaCalendario.y);
+  await esperarBannerAcimaDoCalendario(page, alerta);
 });
 
 test('N3 — banner "Lembre-se!" aparece acima da data e horário na avulsa', async ({ page }) => {
@@ -42,10 +55,7 @@ test('N3 — banner "Lembre-se!" aparece acima da data e horário na avulsa', as
   await expect(alerta).toBeVisible();
   await expect(alerta).toContainText('Lembre-se!');
 
-  const calendario = page.locator('.card').filter({ hasText: 'Agosto' }).first();
-  const caixaAlerta = await alerta.boundingBox();
-  const caixaCalendario = await calendario.boundingBox();
-  expect(caixaAlerta.y + caixaAlerta.height).toBeLessThanOrEqual(caixaCalendario.y);
+  await esperarBannerAcimaDoCalendario(page, alerta);
 });
 
 test('N4 — cada fluxo mostra só o banner da sua origem', async ({ page }) => {

@@ -409,18 +409,20 @@ export default function MeusArquivosPage() {
         Envie e acompanhe seus arquivos para análise médica, como resultados de exames, laudos e outros documentos de saúde.
       </p>
 
-      {/* Security banner */}
+      {/* Security banner — ícone junto do título, corpo sem recuo (issue #7) */}
       <div style={{
         background: '#fff8f0', border: '1px solid #ffe0b2', borderRadius: 10,
         padding: '14px 16px', marginBottom: '1.25rem',
-        display: 'flex', gap: 12, alignItems: 'flex-start',
+        fontSize: 13, color: '#5e5873', lineHeight: 1.75,
       }}>
-        <span style={{ color: '#ff9f43', flexShrink: 0, marginTop: 1 }}><IconLock /></span>
-        <div style={{ fontSize: 13, color: '#5e5873', lineHeight: 1.75 }}>
-          <strong>Seus arquivos são protegidos por criptografia.</strong><br />
-          Somente você e os médicos autorizados poderão acessá-los.<br />
-          Os arquivos enviados nesta área poderão ser excluídos por você a qualquer momento ou removidos automaticamente após <strong>40 dias</strong>, preservados os registros necessários ao atendimento médico.
-        </div>
+        {/* flex-start em vez de center: o título quebra em duas linhas no
+            mobile, e centralizado o cadeado flutuava no meio do bloco. */}
+        <strong style={{ display: 'flex', alignItems: 'flex-start', gap: 10, marginBottom: 4 }}>
+          <span style={{ color: '#ff9f43', flexShrink: 0, display: 'flex', marginTop: 2 }}><IconLock /></span>
+          Seus arquivos são protegidos por criptografia.
+        </strong>
+        Somente você e os médicos autorizados poderão acessá-los.<br />
+        Os arquivos enviados nesta área poderão ser excluídos por você a qualquer momento ou removidos automaticamente após <strong>40 dias</strong>, preservados os registros necessários ao atendimento médico.
       </div>
 
       {/* Upload button */}

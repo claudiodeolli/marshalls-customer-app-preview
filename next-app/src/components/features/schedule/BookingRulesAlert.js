@@ -39,25 +39,26 @@ export default function BookingRulesAlert({ origin }) {
   if (!content) return null;
 
   return (
+    /* O ícone acompanha o título na primeira linha, e o corpo começa na
+       borda do box. Antes o container era um flex de duas colunas, o que
+       recuava todas as linhas para debaixo do título — o cliente pediu o
+       texto "sem recuo, como nas outras modais normais" (issue #7). */
     <div
       data-testid={`booking-rules-alert-${origin}`}
       style={{
-        display: 'flex', gap: '10px', alignItems: 'flex-start',
         background: '#fff8e1', border: '1px solid #ffe082',
         borderRadius: '8px', padding: '12px 14px', marginBottom: '16px',
         fontSize: '13px', color: '#7a5c00', lineHeight: 1.6,
       }}
     >
-      <span style={{ flexShrink: 0, marginTop: '1px' }}>
-        <TriangleAlert color="#d4a017" size={18} />
-      </span>
-      <div>
-        <strong style={{ display: 'block', marginBottom: '6px' }}>{content.title}</strong>
-        {content.paragraphs.map((text, index) => (
-          <p key={index} style={{ margin: '0 0 6px' }}>{withEmphasis(text)}</p>
-        ))}
-        <p style={{ margin: 0 }}>{withEmphasis(RECOMMENDATION)}</p>
-      </div>
+      <strong style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+        <TriangleAlert color="#d4a017" size={18} style={{ flexShrink: 0 }} />
+        {content.title}
+      </strong>
+      {content.paragraphs.map((text, index) => (
+        <p key={index} style={{ margin: '0 0 6px' }}>{withEmphasis(text)}</p>
+      ))}
+      <p style={{ margin: 0 }}>{withEmphasis(RECOMMENDATION)}</p>
     </div>
   );
 }
