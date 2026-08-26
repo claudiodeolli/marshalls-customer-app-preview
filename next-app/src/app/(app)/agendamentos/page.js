@@ -7,7 +7,6 @@ import SkeletonRow from '@/components/features/agendamentos/SkeletonRow';
 import FilterChip from '@/components/features/encaminhamentos/FilterChip';
 import AttachDocumentsModal from '@/components/features/agendamentos/AttachDocumentsModal';
 import { MODAL_OVERLAY, MODAL_CARD, MODAL_BODY, MODAL_TEXT_MUTED, MODAL_ACTIONS, MODAL_BUTTON } from '@/components/ui/modalScale';
-import { CalendarDays, Clock } from 'lucide-react';
 import Toast from '@/components/ui/Toast';
 import { generateMockAppointments } from '@/data/mockData';
 import api from '@/lib/api';
@@ -147,14 +146,14 @@ function getCountdownStage(minutes) {
   return 'days';
 }
 
-// O PDF pede ícone de calendário enquanto a contagem é em dias e relógio a
-// partir das 23h, ambos coloridos — não o emoji monocromático de antes.
+// Ícones unicode coloridos, não uma biblioteca de traço: o PDF diz
+// "continuar usando esse mesmo ícone, nessa cor" apontando para os emojis
+// que a tela já usava. Calendário enquanto a contagem é em dias, relógio a
+// partir das 23h.
 function CountdownIcon({ minutes }) {
   const stage = getCountdownStage(minutes);
-  if (stage === 'days' || stage === 'tomorrow') {
-    return <CalendarDays color="#0052ff" size={16} />;
-  }
-  return <Clock color="#0052ff" size={16} />;
+  const icone = stage === 'days' || stage === 'tomorrow' ? '🗓️' : '⏱️';
+  return <span aria-hidden="true">{icone}</span>;
 }
 
 // Prazo em que o "Entrar no atendimento" destrava, conforme o PDF. O mesmo
@@ -708,7 +707,7 @@ export default function AgendamentosPage() {
                                 display: 'flex', alignItems: 'center', gap: '6px',
                                 marginTop: '8px', fontSize: '13px', color: '#28c76f', fontWeight: 600,
                               }}>
-                                <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#28c76f', flexShrink: 0 }} />
+                                <span aria-hidden="true">🟢</span>
                                 Você já pode entrar!
                               </div>
                             )}
@@ -773,7 +772,7 @@ export default function AgendamentosPage() {
                               display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
                               fontSize: '13px', color: '#28c76f', fontWeight: 600,
                             }}>
-                              <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#28c76f', flexShrink: 0 }} />
+                              <span aria-hidden="true">🟢</span>
                               Você já pode entrar!
                             </div>
                           )}

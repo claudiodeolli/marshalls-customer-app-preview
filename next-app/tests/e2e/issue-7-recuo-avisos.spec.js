@@ -54,7 +54,7 @@ test('R1/R2 — banner de regras: corpo sem recuo, ícone junto do título', asy
   // R2: o ícone continua na primeira linha, dentro do título.
   const titulo = alerta.locator('strong').first();
   await expect(titulo).toContainText('Importante!');
-  await expect(titulo.locator('svg')).toBeVisible();
+  await expect(titulo).toContainText('⚠️');
 });
 
 test('R1 — banner da avulsa também sem recuo', async ({ page }) => {

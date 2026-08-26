@@ -1,6 +1,5 @@
 'use client';
 
-import { TriangleAlert } from 'lucide-react';
 import { withEmphasis } from '@/components/ui/emphasis';
 
 // Textos definidos pelo cliente no PDF de regras (issue #2), com os mesmos
@@ -46,7 +45,7 @@ export default function BookingRulesAlert({ origin }) {
       }}
     >
       <strong style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-        <TriangleAlert color="#d4a017" size={18} style={{ flexShrink: 0 }} />
+        <span aria-hidden="true">⚠️</span>
         {content.title}
       </strong>
       {content.paragraphs.map((text, index) => (
