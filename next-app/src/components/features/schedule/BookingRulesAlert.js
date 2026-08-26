@@ -1,6 +1,7 @@
 'use client';
 
 import { TriangleAlert } from 'lucide-react';
+import { withEmphasis } from '@/components/ui/emphasis';
 
 // Textos definidos pelo cliente no PDF de regras (issue #2), com os mesmos
 // destaques em negrito do documento — ele pediu explicitamente para manter
@@ -25,13 +26,6 @@ const CONTENT = {
 
 const RECOMMENDATION =
   '**Recomendação:** Escolha uma data e horário em que **realmente tenha disponibilidade** para realizar a consulta, especialmente se o atendimento ocorrer nas próximas 48 horas.';
-
-/** Renderiza os trechos entre ** em negrito, preservando o resto do texto. */
-function withEmphasis(text) {
-  return text.split('**').map((part, index) => (
-    index % 2 === 1 ? <strong key={index}>{part}</strong> : part
-  ));
-}
 
 /** origin: 'referral' (Encaminhamento, grátis) | 'avulsa' (consulta paga). */
 export default function BookingRulesAlert({ origin }) {

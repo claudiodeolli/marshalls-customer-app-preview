@@ -2,6 +2,7 @@ import {
   MODAL_CARD, MODAL_BODY, MODAL_TITLE, MODAL_TEXT, MODAL_TEXT_MUTED,
   MODAL_ACTIONS, MODAL_BUTTON,
 } from '@/components/ui/modalScale';
+import { withEmphasis } from '@/components/ui/emphasis';
 
 // Duplicado de agendamentos/page.js de propósito — é uma função pura de 4
 // linhas e criar um módulo compartilhado só pra isso não paga o esforço.
@@ -19,18 +20,29 @@ function getMinutesUntil(dateStr, timeStr) {
 // origem da consulta — Encaminhamento sempre encerra o encaminhamento ao
 // cancelar; Avulsa preserva o valor pago só se cancelada com 48h+ de
 // antecedência, senão a consulta é considerada utilizada.
+//
+// Cada cenário devolve uma lista de parágrafos, não um bloco corrido: o
+// cliente mandou os três prints com o texto "separadinho" e com os negritos
+// marcados (issue #9). Os trechos entre ** viram negrito na renderização.
 function getCancelWarning(appointment) {
   const isEncaminhamento = Boolean(appointment.beneficiaryMedicalReferral);
   if (isEncaminhamento) {
-    return 'Ao cancelar esta consulta, o encaminhamento utilizado será encerrado e não poderá ser reutilizado. Para agendar novamente uma consulta com esta especialidade, será necessário passar pelo Plantão 24h e obter um novo encaminhamento, caso ainda haja indicação médica.';
+    return [
+      'Ao cancelar esta consulta, **o encaminhamento utilizado será encerrado e não poderá ser reutilizado**.',
+      'Para agendar novamente uma consulta com esta especialidade, será necessário passar pelo **Plantão 24h** e obter um novo encaminhamento, caso ainda haja indicação médica.',
+    ];
   }
 
   const minutesUntil = getMinutesUntil(appointment.detail?.date, appointment.detail?.from);
   const within48h = minutesUntil >= 0 && minutesUntil < 48 * 60;
   if (within48h) {
-    return 'Esta consulta está a menos de 48 horas do horário agendado. Conforme informado antes da compra, se optar pelo cancelamento, a consulta será considerada utilizada e o valor pago não será reembolsado. Também não será possível escolher uma nova data e horário sem custo adicional.';
+    return [
+      'Esta consulta está a menos de **48 horas do horário agendado**. Conforme informado antes da compra, se optar pelo cancelamento, **a consulta será considerada utilizada e o valor pago não será reembolsado**. Também não será possível escolher uma nova data e horário sem custo adicional.',
+    ];
   }
-  return 'Ao cancelar esta consulta com mais de 48 horas de antecedência, você poderá escolher depois uma nova data e horário para essa especialidade, sem custo adicional.';
+  return [
+    'Ao cancelar esta consulta com mais de **48 horas de antecedência**, você poderá **escolher depois uma nova data e horário para essa especialidade, sem custo adicional**.',
+  ];
 }
 
 export default function CancelDialog({ open, appointment, loading, onClose, onConfirm }) {
@@ -50,10 +62,12 @@ export default function CancelDialog({ open, appointment, loading, onClose, onCo
           <p style={{ ...MODAL_TEXT, marginBottom: '0.75rem' }}>
             Você está prestes a cancelar o agendamento de <strong>{specialtyName}</strong> com o(a) Dr(a). <strong>{doctorName}</strong>.
           </p>
-          <p style={{ ...MODAL_TEXT_MUTED, marginBottom: '1.25rem' }}>
-            {warning}
-          </p>
-          <p style={{ ...MODAL_TEXT, fontWeight: 600, margin: 0 }}>
+          {warning.map((paragrafo, index) => (
+            <p key={index} style={{ ...MODAL_TEXT_MUTED, marginBottom: '1rem' }}>
+              {withEmphasis(paragrafo)}
+            </p>
+          ))}
+          <p style={{ ...MODAL_TEXT, fontWeight: 700, margin: 0 }}>
             Deseja continuar com o cancelamento?
           </p>
           <div style={MODAL_ACTIONS}>
