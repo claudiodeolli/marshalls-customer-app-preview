@@ -1,0 +1,100 @@
+[
+  {
+    "medico": "Renata Alves",
+    "origem": "Encaminhamento",
+    "contador": "12 dias",
+    "reagendar": true,
+    "liberado": false
+  },
+  {
+    "medico": "Bruno Tavares",
+    "origem": "Encaminhamento",
+    "contador": "2 dias",
+    "reagendar": true,
+    "liberado": false
+  },
+  {
+    "medico": "Sofia Marques",
+    "origem": "Encaminhamento",
+    "contador": "2 dias",
+    "reagendar": false,
+    "liberado": false
+  },
+  {
+    "medico": "Otavio Lins",
+    "origem": "Encaminhamento",
+    "contador": "É amanhã",
+    "reagendar": false,
+    "liberado": false
+  },
+  {
+    "medico": "Clara Bento",
+    "origem": "Encaminhamento",
+    "contador": "23 h",
+    "reagendar": false,
+    "liberado": false
+  },
+  {
+    "medico": "Ivan Moreira",
+    "origem": "Encaminhamento",
+    "contador": "54 min",
+    "reagendar": false,
+    "liberado": false
+  },
+  {
+    "medico": "Lucia Ramos",
+    "origem": "Encaminhamento",
+    "contador": "9 min",
+    "reagendar": false,
+    "liberado": true
+  },
+  {
+    "medico": "Gustavo Pinto",
+    "origem": "Consulta avulsa",
+    "contador": "12 dias",
+    "reagendar": true,
+    "liberado": false
+  },
+  {
+    "medico": "Helena Duarte",
+    "origem": "Consulta avulsa",
+    "contador": "2 dias",
+    "reagendar": true,
+    "liberado": false
+  },
+  {
+    "medico": "Rafael Antunes",
+    "origem": "Consulta avulsa",
+    "contador": "2 dias",
+    "reagendar": false,
+    "liberado": false
+  },
+  {
+    "medico": "Camila Ferraz",
+    "origem": "Consulta avulsa",
+    "contador": "É amanhã",
+    "reagendar": false,
+    "liberado": false
+  },
+  {
+    "medico": "Diego Moraes",
+    "origem": "Consulta avulsa",
+    "contador": "23 h",
+    "reagendar": false,
+    "liberado": false
+  },
+  {
+    "medico": "Beatriz Nunes",
+    "origem": "Consulta avulsa",
+    "contador": "54 min",
+    "reagendar": false,
+    "liberado": false
+  },
+  {
+    "medico": "Tiago Menezes",
+    "origem": "Consulta avulsa",
+    "contador": "9 min",
+    "reagendar": false,
+    "liberado": true
+  }
+]
