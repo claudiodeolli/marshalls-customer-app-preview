@@ -13,7 +13,7 @@ import { Boom } from "@hapi/boom";
 import pino from "pino";
 import qrcodeTerminal from "qrcode-terminal";
 import QRCode from "qrcode";
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { appendFile, mkdir, readFile, writeFile } from "node:fs/promises";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -22,6 +22,11 @@ const AUTH_DIR = join(__dirname, ".auth");
 const STATE_DIR = join(__dirname, ".state");
 const TMP_DIR = join(__dirname, "tmp");
 const CHECKPOINT_PATH = join(STATE_DIR, "checkpoint.json");
+// Log append-only de tudo que chega do contato, gravado ANTES de qualquer
+// filtro. A fila de mensagens offline do WhatsApp é entregue uma única vez:
+// se um erro acontecer depois de recebê-la, o conteúdo se perde e só volta
+// reescaneando o QR. Este arquivo é a rede de segurança.
+const RAW_LOG_PATH = join(STATE_DIR, "recebidas.jsonl");
 const OUTPUT_PATH = join(TMP_DIR, "output.json");
 const QR_IMAGE_PATH = join(__dirname, "qr.png");
 
@@ -33,10 +38,18 @@ if (!TRACKED_WA_JID) {
 
 // Silêncio após a última mensagem relevante pra considerar "a rajada acabou".
 const SETTLE_MS = 25_000;
+// Tempo mínimo de escuta depois de conectar, mesmo sem nada chegando. O
+// WhatsApp leva um tempo variável para começar a despejar a fila de quem
+// esteve offline, e sem essa carência o script encerrava por "silêncio"
+// antes da primeira mensagem aparecer — reportando zero com a caixa cheia.
+const GRACE_MS = Number(process.env.FETCH_GRACE_MS ?? 60_000);
 // Teto absoluto, mesmo com mensagens ainda chegando — nunca fica esperando pra sempre.
 // Mais alto que o normal porque um sync de histórico (após reescanear o QR)
 // pode vir em vários lotes com pausas entre eles.
-const MAX_WAIT_MS = 120_000;
+// Um pareamento novo dispara sync de histórico, que pode passar de dois
+// minutos. FETCH_MAX_WAIT_MS permite esticar a janela nessas horas sem
+// mexer no código.
+const MAX_WAIT_MS = Number(process.env.FETCH_MAX_WAIT_MS ?? 120_000);
 // Baileys costuma fechar a conexão uma vez logo após o QR ser escaneado
 // ("restart required") antes da sessão ficar de fato utilizável — sem
 // reconectar automaticamente aqui, o script morreria bem no meio do pareamento.
@@ -106,9 +119,13 @@ async function main() {
   let finished = false;
   let reconnectAttempts = 0;
 
+  // Enquanto a carência não vence, o silêncio não encerra a coleta.
+  let escutarAoMenosAte = 0;
+
   function scheduleSettle() {
     if (settleTimer) clearTimeout(settleTimer);
-    settleTimer = setTimeout(finish, SETTLE_MS);
+    const restante = escutarAoMenosAte - Date.now();
+    settleTimer = setTimeout(finish, Math.max(SETTLE_MS, restante));
   }
 
   async function finish(sock) {
@@ -130,9 +147,27 @@ async function main() {
     process.exit(0);
   }
 
+  /** Grava o cru antes de filtrar — ver comentário em RAW_LOG_PATH. */
+  async function registrarCru(msg) {
+    try {
+      await mkdir(STATE_DIR, { recursive: true });
+      await appendFile(RAW_LOG_PATH, JSON.stringify({
+        recebidoEm: new Date().toISOString(),
+        id: msg.key?.id,
+        fromMe: !!msg.key?.fromMe,
+        messageTimestamp: Number(msg.messageTimestamp ?? 0),
+        message: msg.message ?? null,
+      }) + '\n', 'utf-8');
+    } catch (err) {
+      console.error("Falha ao gravar log cru:", err.message);
+    }
+  }
+
   async function processMessage(sock, msg) {
-    if (msg.key.fromMe) return;
     if (msg.key.remoteJid !== TRACKED_WA_JID) return;
+    await registrarCru(msg);
+
+    if (msg.key.fromMe) return;
     if (!msg.message) return;
 
     const id = msg.key.id;
@@ -185,6 +220,7 @@ async function main() {
       if (connection === "open") {
         console.log("Conectado ao WhatsApp. Aguardando mensagens pendentes...");
         reconnectAttempts = 0;
+        escutarAoMenosAte = Date.now() + GRACE_MS;
         scheduleSettle();
         if (!hardTimer) hardTimer = setTimeout(() => finish(sock), MAX_WAIT_MS);
       }
