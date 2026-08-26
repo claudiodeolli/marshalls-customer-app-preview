@@ -2,7 +2,7 @@
 
 import { useRef, useState } from 'react';
 import {
-  MODAL_CARD, MODAL_BODY, MODAL_TITLE, MODAL_TEXT_MUTED,
+  MODAL_OVERLAY, MODAL_CARD, MODAL_BODY, MODAL_TITLE, MODAL_TEXT_MUTED,
   MODAL_ACTIONS, MODAL_BUTTON,
 } from '@/components/ui/modalScale';
 
@@ -26,11 +26,7 @@ export default function AttachDocumentsModal({ open, onClose, onContinue }) {
   }
 
   return (
-    <div style={{
-      position: 'fixed', inset: 0, zIndex: 9998,
-      background: 'rgba(0,0,0,0.5)',
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
-    }}>
+    <div style={{ ...MODAL_OVERLAY, zIndex: 9998 }}>
       <div className="card mb-0 _modal-enter" style={MODAL_CARD}>
         <div className="card-body" style={MODAL_BODY}>
           <h5 style={MODAL_TITLE}>Anexar documentos?</h5>

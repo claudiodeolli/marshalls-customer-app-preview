@@ -6,7 +6,7 @@ import { IconAdd, IconArticle, IconClock, IconDoctor, IconHospital } from '@/com
 import SkeletonRow from '@/components/features/agendamentos/SkeletonRow';
 import FilterChip from '@/components/features/encaminhamentos/FilterChip';
 import AttachDocumentsModal from '@/components/features/agendamentos/AttachDocumentsModal';
-import { MODAL_CARD, MODAL_BODY, MODAL_TEXT_MUTED, MODAL_ACTIONS, MODAL_BUTTON } from '@/components/ui/modalScale';
+import { MODAL_OVERLAY, MODAL_CARD, MODAL_BODY, MODAL_TEXT_MUTED, MODAL_ACTIONS, MODAL_BUTTON } from '@/components/ui/modalScale';
 import { CalendarDays, Clock } from 'lucide-react';
 import Toast from '@/components/ui/Toast';
 import { generateMockAppointments } from '@/data/mockData';
@@ -859,8 +859,7 @@ export default function AgendamentosPage() {
         <div
           onClick={() => setBlockedEnterTooltip(false)}
           style={{
-            position: 'fixed', inset: 0, zIndex: 9998, background: 'rgba(0,0,0,0.5)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24,
+            ...MODAL_OVERLAY, zIndex: 9998, padding: 24,
           }}
         >
           <div className="card mb-0 _modal-enter" style={MODAL_CARD}>
@@ -883,9 +882,10 @@ export default function AgendamentosPage() {
         <div
           onClick={() => setTooltipOpen(false)}
           style={{
-            position: 'fixed', inset: 0, zIndex: 10000,
+            ...MODAL_OVERLAY, zIndex: 10000,
+            // Escurecimento proprio desta modal, mais frio.
             background: 'rgba(34,41,47,0.55)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px',
+            padding: '16px',
           }}
         >
           <div

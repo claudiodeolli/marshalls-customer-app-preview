@@ -1,4 +1,5 @@
 'use client';
+import { MODAL_OVERLAY } from '@/components/ui/modalScale';
 
 import EmailInput from '@/components/features/meus-dados/EmailInput';
 import LGPDSection from '@/components/features/meus-dados/LGPDSection';
@@ -348,9 +349,10 @@ export default function MeusDadosPage() {
       {/* Modal de confirmação: remover foto */}
       {showConfirmRemove && (
         <div style={{
-          position: 'fixed', inset: 0, zIndex: 10000,
+          ...MODAL_OVERLAY, zIndex: 10000,
+          // Escurecimento proprio desta modal, mais frio.
           background: 'rgba(34,41,47,0.55)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px',
+          padding: '16px',
         }}>
           <div className="_modal-enter" style={{ background: '#fff', borderRadius: '12px', width: '100%', maxWidth: 400, boxShadow: '0 12px 40px rgba(34,41,47,0.25)' }}>
             <div style={{ padding: '18px 24px 16px', borderBottom: '1px solid #ebe9f1', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>

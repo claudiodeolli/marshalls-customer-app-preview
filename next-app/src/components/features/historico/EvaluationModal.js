@@ -1,4 +1,5 @@
 'use client';
+import { MODAL_OVERLAY } from '@/components/ui/modalScale';
 
 import { useState } from 'react';
 import Stars from './Stars';
@@ -20,7 +21,7 @@ export default function EvaluationModal({ record, onClose, onSave }) {
 
   return (
     <div
-      style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 1060, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px' }}
+      style={{ ...MODAL_OVERLAY, zIndex: 1060, padding: '16px' }}
       onClick={onClose}
     >
       <div

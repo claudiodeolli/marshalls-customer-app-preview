@@ -1,4 +1,5 @@
 'use client';
+import { MODAL_OVERLAY } from '@/components/ui/modalScale';
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -725,7 +726,7 @@ export default function HistoricoPage() {
 
       {referralModal && (
         <div
-          style={{ position: 'fixed', inset: 0, zIndex: 10000, background: 'rgba(34,41,47,0.55)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px' }}
+          style={{ ...MODAL_OVERLAY, zIndex: 10000, background: 'rgba(34,41,47,0.55)', padding: '16px' }}
           onClick={e => { if (e.target === e.currentTarget) setReferralModal(null); }}
         >
           <div style={{ background: '#fff', borderRadius: '12px', width: '100%', maxWidth: 420, boxShadow: '0 12px 40px rgba(34,41,47,0.25)' }}>
@@ -762,7 +763,7 @@ export default function HistoricoPage() {
 
       {purchaseModal && (
         <div
-          style={{ position: 'fixed', inset: 0, zIndex: 10000, background: 'rgba(34,41,47,0.55)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px' }}
+          style={{ ...MODAL_OVERLAY, zIndex: 10000, background: 'rgba(34,41,47,0.55)', padding: '16px' }}
           onClick={e => { if (e.target === e.currentTarget) setPurchaseModal(null); }}
         >
           <div style={{ background: '#fff', borderRadius: '12px', width: '100%', maxWidth: 420, boxShadow: '0 12px 40px rgba(34,41,47,0.25)' }}>

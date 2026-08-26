@@ -1,4 +1,5 @@
 'use client';
+import { MODAL_OVERLAY } from '@/components/ui/modalScale';
 
 import { useState } from 'react';
 
@@ -50,9 +51,11 @@ export default function LGPDSection() {
 
       {modalOpen && (
         <div style={{
-          position: 'fixed', inset: 0, zIndex: 10000,
+          ...MODAL_OVERLAY,
+          zIndex: 10000,
+          // Esta modal sempre teve um escurecimento proprio, mais frio.
           background: 'rgba(34,41,47,0.55)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px',
+          padding: '16px',
         }}
           onClick={e => { if (e.target === e.currentTarget) setModalOpen(false); }}
         >

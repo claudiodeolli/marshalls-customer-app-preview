@@ -6,6 +6,26 @@
 // Se ele achar pouco ao revisar, subir aqui — as modais que usam estes
 // tokens acompanham juntas, em vez de irem divergindo uma a uma.
 
+// Desfoque do fundo enquanto uma modal está aberta (issue #10). O cliente
+// pediu "um blurry bem levinho" — sem número, entao 3px: suaviza sem deixar
+// a tela irreconhecível. Se ele quiser mais ou menos, é aqui, e as oito
+// modais acompanham.
+//
+// Onde `backdrop-filter` não existir, o escurecimento de cada overlay
+// continua valendo sozinho e nada quebra.
+export const MODAL_BLUR = '3px';
+
+export const MODAL_OVERLAY = {
+  position: 'fixed',
+  inset: 0,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  background: 'rgba(0,0,0,0.5)',
+  backdropFilter: `blur(${MODAL_BLUR})`,
+  WebkitBackdropFilter: `blur(${MODAL_BLUR})`,
+};
+
 export const MODAL_CARD = { width: '460px', maxWidth: '92vw', borderRadius: '12px' };
 export const MODAL_BODY = { padding: '1.75rem' };
 

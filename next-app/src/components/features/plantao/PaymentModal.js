@@ -1,4 +1,5 @@
 'use client';
+import { MODAL_OVERLAY } from '@/components/ui/modalScale';
 
 import { useState } from 'react';
 import EmailInput from '@/components/features/meus-dados/EmailInput';
@@ -98,7 +99,7 @@ export default function PaymentModal({ open, onClose, onSuccess, alertMessage, p
 
   return (
     <div
-      style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 1050, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px' }}
+      style={{ ...MODAL_OVERLAY, zIndex: 1050, padding: '16px' }}
       onClick={onClose}
     >
       <div

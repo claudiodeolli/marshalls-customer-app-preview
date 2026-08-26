@@ -1,9 +1,10 @@
+import { MODAL_OVERLAY } from '@/components/ui/modalScale';
 export default function Modal({ title, onClose, children, footer }) {
   return (
     <div style={{
-      position: 'fixed', inset: 0, zIndex: 10000,
+      ...MODAL_OVERLAY, zIndex: 10000,
+      // Escurecimento proprio deste componente, mais frio.
       background: 'rgba(34,41,47,0.55)',
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
       padding: '16px',
     }}>
       <div className="_modal-enter" style={{

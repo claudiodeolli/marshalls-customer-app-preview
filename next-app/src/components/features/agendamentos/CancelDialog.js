@@ -1,5 +1,5 @@
 import {
-  MODAL_CARD, MODAL_BODY, MODAL_TITLE, MODAL_TEXT, MODAL_TEXT_MUTED,
+  MODAL_OVERLAY, MODAL_CARD, MODAL_BODY, MODAL_TITLE, MODAL_TEXT, MODAL_TEXT_MUTED,
   MODAL_ACTIONS, MODAL_BUTTON,
 } from '@/components/ui/modalScale';
 import { withEmphasis } from '@/components/ui/emphasis';
@@ -51,11 +51,7 @@ export default function CancelDialog({ open, appointment, loading, onClose, onCo
   const doctorName = appointment.professional?.name || '';
   const warning = getCancelWarning(appointment);
   return (
-    <div style={{
-      position: 'fixed', inset: 0, zIndex: 9998,
-      background: 'rgba(0,0,0,0.5)',
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
-    }}>
+    <div style={{ ...MODAL_OVERLAY, zIndex: 9998 }}>
       <div className="card mb-0 _modal-enter" style={MODAL_CARD}>
         <div className="card-body" style={MODAL_BODY}>
           <h5 style={MODAL_TITLE}>Cancelar consulta?</h5>

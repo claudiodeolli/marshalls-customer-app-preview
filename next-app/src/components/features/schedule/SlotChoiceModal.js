@@ -1,11 +1,12 @@
+import { MODAL_OVERLAY } from '@/components/ui/modalScale';
 export default function SlotChoiceModal({ show, onClose, onAgendarAgora, onAgendarDepois }) {
   if (!show) return null;
   return (
     <div
       onClick={onClose}
       style={{
-        position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.45)',
-        zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center',
+        ...MODAL_OVERLAY, zIndex: 9999,
+        background: 'rgba(0,0,0,0.45)',
         padding: '1rem',
       }}
     >
