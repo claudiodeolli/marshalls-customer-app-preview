@@ -13,6 +13,7 @@ import api from '@/lib/api';
 import { useAuth } from '@/lib/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
+import Image from 'next/image';
 
 const IS_MOCK = process.env.NEXT_PUBLIC_MOCK_MODE === '1';
 
@@ -146,14 +147,31 @@ function getCountdownStage(minutes) {
   return 'days';
 }
 
-// Ícones unicode coloridos, não uma biblioteca de traço: o PDF diz
-// "continuar usando esse mesmo ícone, nessa cor" apontando para os emojis
-// que a tela já usava. Calendário enquanto a contagem é em dias, relógio a
-// partir das 23h.
+// Assets do Microsoft Fluent Emoji 3D servidos pelo próprio projeto, e não
+// caracteres unicode (issue #11): o emoji do sistema muda de desenho entre
+// Windows, macOS, iOS e Android, e o cliente quer o mesmo em todos. Os
+// codepoints que ele especificou são U+1F4C5 (Calendar) e U+1F552 (Three
+// o'clock) — não os que a tela usava antes.
+//
+// alt vazio de propósito: são decorativos, o texto ao lado já informa.
+const ICON_SIZE = 24;
+const ICONS = {
+  calendario: '/icons/fluent-emoji/calendar_3d.png',
+  relogio: '/icons/fluent-emoji/three_oclock_3d.png',
+  circuloVerde: '/icons/fluent-emoji/green_circle_3d.png',
+};
+
 function CountdownIcon({ minutes }) {
   const stage = getCountdownStage(minutes);
-  const icone = stage === 'days' || stage === 'tomorrow' ? '🗓️' : '⏱️';
-  return <span aria-hidden="true">{icone}</span>;
+  const emDias = stage === 'days' || stage === 'tomorrow';
+  return (
+    <Image
+      src={emDias ? ICONS.calendario : ICONS.relogio}
+      alt=""
+      width={ICON_SIZE}
+      height={ICON_SIZE}
+    />
+  );
 }
 
 // Prazo em que o "Entrar no atendimento" destrava, conforme o PDF. O mesmo
@@ -768,7 +786,7 @@ export default function AgendamentosPage() {
                                 display: 'flex', alignItems: 'center', gap: '6px', alignSelf: 'flex-start',
                                 marginTop: '8px', fontSize: COUNTDOWN_FONT_SIZE, color: '#28c76f', fontWeight: 600,
                               }}>
-                                <span aria-hidden="true">🟢</span>
+                                <Image src={ICONS.circuloVerde} alt="" width={ICON_SIZE} height={ICON_SIZE} />
                                 Você já pode entrar!
                               </div>
                             )}
@@ -835,7 +853,7 @@ export default function AgendamentosPage() {
                               display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
                               fontSize: COUNTDOWN_FONT_SIZE, color: '#28c76f', fontWeight: 600,
                             }}>
-                              <span aria-hidden="true">🟢</span>
+                              <Image src={ICONS.circuloVerde} alt="" width={ICON_SIZE} height={ICON_SIZE} />
                               Você já pode entrar!
                             </div>
                           )}

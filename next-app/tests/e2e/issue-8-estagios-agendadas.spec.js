@@ -104,33 +104,29 @@ test('S7 — o último estágio de cada série está liberado para entrar', asyn
   }
 });
 
-test('Os ícones da contagem são unicode coloridos, não de biblioteca', async ({ page }) => {
-  // O PDF diz "continuar usando esse mesmo ícone, nessa cor" apontando para
-  // os emojis que a tela já usava. A menção a "Lucide TriangleAlert" no
-  // documento foi um palpite do cliente sobre o nome — o que ele quer é o
-  // ícone colorido, e um ícone de traço monocromático não atende.
+test('Cada estágio traz o ícone que lhe corresponde', async ({ page }) => {
+  // O mapeamento é o mesmo desde o PDF — calendário enquanto conta dias,
+  // relógio de 23h para baixo. O que mudou na #11 foi o veículo: os ícones
+  // deixaram de ser caracteres unicode e viraram assets locais do Fluent
+  // Emoji 3D, para não mudarem de desenho conforme o sistema.
   const icones = await page.locator('.card').evaluateAll(cards => cards.map(card => {
     const texto = card.innerText;
     if (!/Consulta agendada/.test(texto)) return null;
-    const emDias = /\d+ dias|É amanhã/.test(texto);
-    return { emDias, temCalendario: texto.includes('🗓️'), temRelogio: texto.includes('⏱️') };
+    const img = [...card.querySelectorAll('img')].find(i => i.getClientRects().length > 0);
+    return { emDias: /\d+ dias|É amanhã/.test(texto), src: img?.getAttribute('src') };
   }).filter(Boolean));
 
   expect(icones.length).toBeGreaterThan(0);
-  for (const { emDias, temCalendario, temRelogio } of icones) {
-    if (emDias) expect(temCalendario, 'calendário na contagem em dias').toBe(true);
-    else expect(temRelogio, 'relógio na contagem em horas/minutos').toBe(true);
+  for (const { emDias, src } of icones) {
+    expect(src, emDias ? 'contagem em dias' : 'contagem em horas/minutos')
+      .toBe(emDias ? '/icons/fluent-emoji/calendar_3d.png' : '/icons/fluent-emoji/three_oclock_3d.png');
   }
-
-  // Nenhum ícone de biblioteca sobrou no lugar deles.
-  const svgsNaContagem = await page.locator('.card ._appt-card-actions svg, .card .d-xl-none svg').count();
-  expect(svgsNaContagem).toBe(0);
 });
 
-test('O aviso de liberação usa o círculo verde unicode', async ({ page }) => {
+test('O aviso de liberação vem acompanhado do círculo verde', async ({ page }) => {
   const indicador = page.getByTestId('ready-to-enter').first();
-  await expect(indicador).toContainText('🟢');
   await expect(indicador).toContainText('Você já pode entrar!');
+  await expect(indicador.locator('img[src*="green_circle"]')).toBeVisible();
 });
 
 test('S7 — no estágio liberado o contador segue marcando os minutos', async ({ page }) => {
