@@ -31,9 +31,28 @@ const LIBERADO = 'Lucia Ramos';    // 10 minutos — botão liberado
  * A especificação do cliente está em pixels CSS, que é o que
  * `getBoundingClientRect()` dentro da página informa.
  */
+/**
+ * Espera as fontes e o próximo quadro antes de medir.
+ *
+ * O botão tem largura fixa com `maxWidth: 100%`, então ele acompanha a
+ * coluna. Enquanto as fontes carregam, a coluna muda de largura — e uma
+ * medição tirada nesse meio tempo lê alguns pixels a menos do que a
+ * especificação, sem que nada esteja errado no código.
+ *
+ * Não dá para esperar as imagens: o next/image carrega sob demanda, e as
+ * que ficam fora da tela nunca completam.
+ */
+async function aguardarLayoutEstavel(page) {
+  await page.evaluate(async () => {
+    await document.fonts.ready;
+    await new Promise(requestAnimationFrame);
+  });
+}
+
 async function medirBotao(page, medico, rotulo) {
   const botao = page.locator(`.card:has-text('${medico}') button:text-is('${rotulo}') >> visible=true`).first();
   await expect(botao).toBeVisible();
+  await aguardarLayoutEstavel(page);
   return botao.evaluate(el => {
     const s = getComputedStyle(el);
     const r = el.getBoundingClientRect();
@@ -59,18 +78,25 @@ for (const [nome, viewport] of [
       await expect(page.locator(`.card:has-text('${BLOQUEADO}')`).first()).toBeVisible({ timeout: 15000 });
     });
 
+    // toPass: a coluna ainda pode estar se ajustando quando a primeira
+    // medição sai. Reconsultar é o certo aqui; afrouxar a FOLGA_PX
+    // esconderia um desvio real da especificação.
     test('P1 — "Entrar no atendimento" mede 32 × 272.72', async ({ page }) => {
-      const b = await medirBotao(page, BLOQUEADO, 'Entrar no atendimento');
-      esperarMedida(b.altura, 32, 'altura do Entrar');
-      esperarMedida(b.largura, 272.72, 'largura do Entrar');
+      await expect(async () => {
+        const b = await medirBotao(page, BLOQUEADO, 'Entrar no atendimento');
+        esperarMedida(b.altura, 32, 'altura do Entrar');
+        esperarMedida(b.largura, 272.72, 'largura do Entrar');
+      }).toPass({ timeout: 10_000 });
     });
 
     test('P2 — "Reagendar" e "Cancelar" medem 32 × 200', async ({ page }) => {
-      for (const rotulo of ['Reagendar', 'Cancelar']) {
-        const b = await medirBotao(page, BLOQUEADO, rotulo);
-        esperarMedida(b.altura, 32, `altura do ${rotulo}`);
-        esperarMedida(b.largura, 200, `largura do ${rotulo}`);
-      }
+      await expect(async () => {
+        for (const rotulo of ['Reagendar', 'Cancelar']) {
+          const b = await medirBotao(page, BLOQUEADO, rotulo);
+          esperarMedida(b.altura, 32, `altura do ${rotulo}`);
+          esperarMedida(b.largura, 200, `largura do ${rotulo}`);
+        }
+      }).toPass({ timeout: 10_000 });
     });
 
     test('P3 — Reagendar tem fundo claro, borda e texto em cinza', async ({ page }) => {

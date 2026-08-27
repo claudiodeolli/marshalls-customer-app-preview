@@ -14,6 +14,7 @@ import { useAuth } from '@/lib/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
+import { assetPath } from '@/lib/assetPath';
 
 const IS_MOCK = process.env.NEXT_PUBLIC_MOCK_MODE === '1';
 
@@ -156,9 +157,9 @@ function getCountdownStage(minutes) {
 // alt vazio de propósito: são decorativos, o texto ao lado já informa.
 const ICON_SIZE = 24;
 const ICONS = {
-  calendario: '/icons/fluent-emoji/calendar_3d.png',
-  relogio: '/icons/fluent-emoji/three_oclock_3d.png',
-  circuloVerde: '/icons/fluent-emoji/green_circle_3d.png',
+  calendario: assetPath('/icons/fluent-emoji/calendar_3d.png'),
+  relogio: assetPath('/icons/fluent-emoji/three_oclock_3d.png'),
+  circuloVerde: assetPath('/icons/fluent-emoji/green_circle_3d.png'),
 };
 
 function CountdownIcon({ minutes }) {

@@ -10,7 +10,20 @@ const CIRCULO_VERDE = '/icons/fluent-emoji/green_circle_3d.png';
 
 /** Lê os ícones visíveis do card do médico indicado. */
 async function lerIcones(page, medico) {
-  return page.locator(`.card:has-text('${medico}')`).first().evaluate(card =>
+  // A página monta os blocos de mobile e de desktop juntos e esconde um por
+  // CSS, então o filtro de visibilidade é obrigatório.
+  //
+  // Esperar `complete` — e não só o elemento aparecer — porque o <img> entra
+  // no layout com a caixa reservada bem antes de o PNG terminar de baixar, e
+  // `naturalWidth` fica em 0 até lá. `complete` também vira true quando o
+  // download falha, então um arquivo faltando continua reprovando o teste.
+  const cartao = page.locator(`.card:has-text('${medico}')`).first();
+  await expect.poll(async () => cartao.evaluate(card => {
+    const visiveis = [...card.querySelectorAll('img')].filter(img => img.getClientRects().length > 0);
+    return visiveis.length > 0 && visiveis.every(img => img.complete);
+  }), { timeout: 15000 }).toBe(true);
+
+  return cartao.evaluate(card =>
     [...card.querySelectorAll('img')]
       .filter(img => img.getClientRects().length > 0)
       .map(img => ({

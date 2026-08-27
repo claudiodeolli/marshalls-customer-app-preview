@@ -39,3 +39,4 @@ Thumbs.db
 /playwright-report/
 /blob-report/
 tests/e2e/.tmp-screenshots/
+.next-pages/

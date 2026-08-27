@@ -11,6 +11,10 @@ const PROD_API = 'https://prontoatendimento.marshallsmed.com.br';
 const nextConfig = {
   // Static export só para GitHub Pages; Vercel usa o servidor Next.js
   ...(isGitHubPages ? { output: 'export' } : {}),
+  // Permite subir um segundo servidor de dev em paralelo (os testes de
+  // basePath rodam um com GITHUB_PAGES=1); sem isso os dois disputariam
+  // o mesmo diretório .next.
+  ...(process.env.NEXT_DIST_DIR ? { distDir: process.env.NEXT_DIST_DIR } : {}),
   basePath: BASE,
   assetPrefix: BASE,
   trailingSlash: isGitHubPages,
