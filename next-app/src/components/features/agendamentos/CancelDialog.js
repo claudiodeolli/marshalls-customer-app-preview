@@ -12,7 +12,10 @@ function getMinutesUntil(dateStr, timeStr) {
     const [h, min] = (timeStr ?? '').split(':');
     const apptTime = new Date(`${y}-${m}-${d}T${h}:${min}:00-03:00`);
     if (isNaN(apptTime.getTime())) return -1;
-    return Math.floor((apptTime - Date.now()) / 60000);
+    // Mesmo arredondamento do card (agendamentos/page.js): divergir por um
+    // minuto faria o card ainda oferecer Reagendar enquanto este modal já
+    // tratasse a consulta como dentro das 48 horas.
+    return Math.ceil((apptTime - Date.now()) / 60000);
   } catch { return -1; }
 }
 

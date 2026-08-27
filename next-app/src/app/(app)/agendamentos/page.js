@@ -131,7 +131,11 @@ function getMinutesUntil(dateStr, timeStr) {
     const [h, min] = (timeStr ?? '').split(':');
     const apptTime = new Date(`${y}-${m}-${d}T${h}:${min}:00-03:00`);
     if (isNaN(apptTime.getTime())) return -1;
-    return Math.floor((apptTime - Date.now()) / 60000);
+    // Para cima, não para baixo: é assim que uma pessoa lê o relógio. Com
+    // 54min30s restantes ela diz "faltam 55 minutos", e a tabela do cliente
+    // iguala o "faltando X" ao texto exibido — arredondar para baixo mostrava
+    // sempre um minuto a menos do que ele especificou.
+    return Math.ceil((apptTime - Date.now()) / 60000);
   } catch { return -1; }
 }
 
@@ -269,14 +273,6 @@ function getCountdownText(minutes) {
   }
   if (stage === 'tomorrow') return 'Sua consulta é amanhã!';
   return `Sua consulta será em ${daysUntil(minutes)} dias!`;
-}
-
-function getCountdownTextMobile(minutes) {
-  const stage = getCountdownStage(minutes);
-  if (stage === 'unlocked' || stage === 'minutes') return `${Math.max(minutes, 0)} min`;
-  if (stage === 'hours') return `${Math.floor(minutes / 60)} h`;
-  if (stage === 'tomorrow') return 'É amanhã';
-  return `${daysUntil(minutes)} dias`;
 }
 
 // Regra do cliente: reagendar só é permitido até 48h antes do horário exato
@@ -779,8 +775,8 @@ export default function AgendamentosPage() {
                         {/* Mobile: cronômetro + botões */}
                         {apt.status === 'SCHEDULED' && (
                           <div className="d-xl-none" style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                            <span style={{ fontSize: COUNTDOWN_FONT_SIZE, color: '#5e5873', display: 'flex', alignItems: 'center', gap: '5px', alignSelf: 'flex-start' }}>
-                              <CountdownIcon minutes={mins} /> {getCountdownTextMobile(mins)}
+                            <span data-testid="countdown" style={{ fontSize: COUNTDOWN_FONT_SIZE, color: '#5e5873', display: 'flex', alignItems: 'center', gap: '5px', alignSelf: 'flex-start' }}>
+                              <CountdownIcon minutes={mins} /> {getCountdownText(mins)}
                             </span>
                             {canEnter && (
                               <div data-testid="ready-to-enter" style={{
@@ -846,7 +842,7 @@ export default function AgendamentosPage() {
                       {/* Desktop: cronômetro + botões */}
                       {apt.status === 'SCHEDULED' && (
                         <div className="d-none d-xl-flex flex-column _appt-card-actions" style={{ gap: '8px', marginLeft: '16px', flexShrink: 0, minWidth: ENTER_BUTTON_SIZE.width, alignItems: 'stretch' }}>
-                          <span style={{ fontSize: COUNTDOWN_FONT_SIZE, color: '#5e5873', display: 'flex', alignItems: 'center', gap: '5px', justifyContent: 'flex-end' }}>
+                          <span data-testid="countdown" style={{ fontSize: COUNTDOWN_FONT_SIZE, color: '#5e5873', display: 'flex', alignItems: 'center', gap: '5px', justifyContent: 'flex-end' }}>
                             <CountdownIcon minutes={mins} /> {getCountdownText(mins)}
                           </span>
                           {canEnter && (

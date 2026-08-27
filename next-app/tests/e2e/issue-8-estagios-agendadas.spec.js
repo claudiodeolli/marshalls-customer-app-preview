@@ -14,7 +14,9 @@ async function lerEstagios(page) {
     if (!/Consulta agendada/.test(texto)) return null;
     return {
       origem: /Origem:\s*Encaminhamento/.test(texto) ? 'Encaminhamento' : 'Consulta avulsa',
-      contador: (texto.match(/(\d+ dias|É amanhã|\d+ h|\d+ min)/) || [])[0] ?? '?',
+      // Depois da #12 os dois blocos dizem a frase inteira ('Sua consulta é
+      // amanhã!'), então o marcador de 'amanhã' vem em minúscula.
+      contador: (texto.match(/(\d+ dias|amanhã|\d+ h|\d+ min)/) || [])[0] ?? '?',
       temReagendar: /Reagendar/.test(texto),
       liberado: /Você já pode entrar!/.test(texto),
     };
@@ -113,7 +115,7 @@ test('Cada estágio traz o ícone que lhe corresponde', async ({ page }) => {
     const texto = card.innerText;
     if (!/Consulta agendada/.test(texto)) return null;
     const img = [...card.querySelectorAll('img')].find(i => i.getClientRects().length > 0);
-    return { emDias: /\d+ dias|É amanhã/.test(texto), src: img?.getAttribute('src') };
+    return { emDias: /\d+ dias|amanhã/.test(texto), src: img?.getAttribute('src') };
   }).filter(Boolean));
 
   expect(icones.length).toBeGreaterThan(0);
