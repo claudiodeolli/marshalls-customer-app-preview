@@ -3,21 +3,7 @@ import {
   MODAL_ACTIONS, MODAL_BUTTON,
 } from '@/components/ui/modalScale';
 import { withEmphasis } from '@/components/ui/emphasis';
-
-// Duplicado de agendamentos/page.js de propósito — é uma função pura de 4
-// linhas e criar um módulo compartilhado só pra isso não paga o esforço.
-function getMinutesUntil(dateStr, timeStr) {
-  try {
-    const [d, m, y] = (dateStr ?? '').split('/');
-    const [h, min] = (timeStr ?? '').split(':');
-    const apptTime = new Date(`${y}-${m}-${d}T${h}:${min}:00-03:00`);
-    if (isNaN(apptTime.getTime())) return -1;
-    // Mesmo arredondamento do card (agendamentos/page.js): divergir por um
-    // minuto faria o card ainda oferecer Reagendar enquanto este modal já
-    // tratasse a consulta como dentro das 48 horas.
-    return Math.ceil((apptTime - Date.now()) / 60000);
-  } catch { return -1; }
-}
+import { getMinutesUntilStart } from '@/lib/appointmentTime';
 
 // Regras do cliente (issue #2 no GitHub): o texto do modal depende da
 // origem da consulta — Encaminhamento sempre encerra o encaminhamento ao
@@ -36,7 +22,7 @@ function getCancelWarning(appointment) {
     ];
   }
 
-  const minutesUntil = getMinutesUntil(appointment.detail?.date, appointment.detail?.from);
+  const minutesUntil = getMinutesUntilStart(appointment);
   const within48h = minutesUntil >= 0 && minutesUntil < 48 * 60;
   if (within48h) {
     return [

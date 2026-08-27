@@ -15,6 +15,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { assetPath } from '@/lib/assetPath';
+import { getMinutesUntilStart } from '@/lib/appointmentTime';
 
 const IS_MOCK = process.env.NEXT_PUBLIC_MOCK_MODE === '1';
 
@@ -90,8 +91,7 @@ function sortForDisplay(appointments) {
 
     // Dentro da mesma origem, do prazo mais distante para o mais próximo —
     // é a sequência em que o PDF percorre os estágios da contagem (issue #8).
-    return getMinutesUntil(b.detail?.date, b.detail?.from)
-      - getMinutesUntil(a.detail?.date, a.detail?.from);
+    return getMinutesUntilStart(b) - getMinutesUntilStart(a);
   });
 }
 
@@ -125,19 +125,6 @@ function convertDateTime(date, time, tz) {
   } catch { return null; }
 }
 
-function getMinutesUntil(dateStr, timeStr) {
-  try {
-    const [d, m, y] = (dateStr ?? '').split('/');
-    const [h, min] = (timeStr ?? '').split(':');
-    const apptTime = new Date(`${y}-${m}-${d}T${h}:${min}:00-03:00`);
-    if (isNaN(apptTime.getTime())) return -1;
-    // Para cima, não para baixo: é assim que uma pessoa lê o relógio. Com
-    // 54min30s restantes ela diz "faltam 55 minutos", e a tabela do cliente
-    // iguala o "faltando X" ao texto exibido — arredondar para baixo mostrava
-    // sempre um minuto a menos do que ele especificou.
-    return Math.ceil((apptTime - Date.now()) / 60000);
-  } catch { return -1; }
-}
 
 // Estágios (cliente pediu granularidade específica, ver issue #2 no GitHub):
 // dias (>24h) -> "amanhã" (exatamente 24h) -> horas (23h-1h) -> minutos (<60min) -> liberado (<=15min).
@@ -285,7 +272,7 @@ function canReschedule(minutes) {
 // pago; Encaminhamento sempre perde o encaminhamento ao cancelar.
 function keepsPaidCredit(appointment) {
   if (appointment.beneficiaryMedicalReferral) return false;
-  return canReschedule(getMinutesUntil(appointment.detail?.date, appointment.detail?.from));
+  return canReschedule(getMinutesUntilStart(appointment));
 }
 
 function AgendFilterSelect({ value, onChange, minWidth = '200px' }) {
@@ -679,7 +666,7 @@ export default function AgendamentosPage() {
               const tz = timezone || getBrowserTz();
               const converted = !isSameAsBrazil(tz) ? convertDateTime(apt.detail?.date, apt.detail?.from, tz) : null;
               const dateChanged = converted && converted.date !== apt.detail?.date;
-              const mins = apt.status === 'SCHEDULED' ? getMinutesUntil(apt.detail?.date, apt.detail?.from) : -1;
+              const mins = apt.status === 'SCHEDULED' ? getMinutesUntilStart(apt) : -1;
               const canEnter = mins <= UNLOCK_MINUTES;
 
               return (

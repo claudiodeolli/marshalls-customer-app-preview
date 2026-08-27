@@ -457,6 +457,16 @@ export function generateMockAppointments() {
     };
   }
 
+  // O cliente pediu que os cards da vitrine mostrem exatamente os tempos da
+  // tabela dele — 59 minutos, 15 minutos, 23 horas — e não o que sobra
+  // depois de o preview ficar minutos aberto. `demoMinutes` congela a
+  // contagem nesse valor; a data e a hora do card continuam derivadas do
+  // mesmo número, para os dois não se contradizerem. Um agendamento sem
+  // esse campo conta o tempo real normalmente.
+  function stageDetail(minutes) {
+    return { ...offsetDetail(minutes), demoMinutes: minutes };
+  }
+
   const todayDate = offsetDetail(0).date;
 
   return [
@@ -464,8 +474,8 @@ export function generateMockAppointments() {
     // Encaminhamento e, em seguida, a mesma serie por Avulsa (issue #8).
     // O cliente revisa aqui cada estado que o PDF de regras descreve.
     //
-    // Os offsets ficam alguns minutos acima de cada limite para o card nao
-    // escorregar para o estagio de baixo enquanto o preview fica aberto.
+    // Cada card traz o tempo exato da tabela do cliente, congelado por
+    // stageDetail: e assim que ele confere a tela.
 
     // ---- Encaminhamento ----
     // faltando dias
@@ -474,7 +484,7 @@ export function generateMockAppointments() {
       status: 'SCHEDULED',
       professional: { name: 'Renata Alves', specialties: [{ name: 'Ortopedia' }] },
       specialty: { name: 'Ortopedia' },
-      detail: offsetDetail(17290),
+      detail: stageDetail(17280),
       beneficiaryMedicalReferral: { createdAt: '20/05/2026', uuid: 'ref-003' },
       cancel: true,
     },
@@ -484,7 +494,7 @@ export function generateMockAppointments() {
       status: 'SCHEDULED',
       professional: { name: 'Bruno Tavares', specialties: [{ name: 'Neurologia' }] },
       specialty: { name: 'Neurologia' },
-      detail: offsetDetail(2890),
+      detail: stageDetail(2880),
       beneficiaryMedicalReferral: { createdAt: '20/05/2026', uuid: 'ref-003' },
       cancel: true,
     },
@@ -494,7 +504,7 @@ export function generateMockAppointments() {
       status: 'SCHEDULED',
       professional: { name: 'Sofia Marques', specialties: [{ name: 'Clinica Geral' }] },
       specialty: { name: 'Clinica Geral' },
-      detail: offsetDetail(2879),
+      detail: stageDetail(2879),
       beneficiaryMedicalReferral: { createdAt: '20/05/2026', uuid: 'ref-003' },
       cancel: true,
     },
@@ -504,7 +514,7 @@ export function generateMockAppointments() {
       status: 'SCHEDULED',
       professional: { name: 'Otavio Lins', specialties: [{ name: 'Dermatologia' }] },
       specialty: { name: 'Dermatologia' },
-      detail: offsetDetail(1450),
+      detail: stageDetail(1440),
       beneficiaryMedicalReferral: { createdAt: '20/05/2026', uuid: 'ref-003' },
       cancel: true,
     },
@@ -514,27 +524,27 @@ export function generateMockAppointments() {
       status: 'SCHEDULED',
       professional: { name: 'Clara Bento', specialties: [{ name: 'Psicologia' }] },
       specialty: { name: 'Psicologia' },
-      detail: offsetDetail(1390),
+      detail: stageDetail(1380),
       beneficiaryMedicalReferral: { createdAt: '20/05/2026', uuid: 'ref-003' },
       cancel: true,
     },
     // menos de uma hora: passa a contar minutos
     {
-      uuid: 'apt-referral-55min',
+      uuid: 'apt-referral-59min',
       status: 'SCHEDULED',
       professional: { name: 'Ivan Moreira', specialties: [{ name: 'Cardiologia' }] },
       specialty: { name: 'Cardiologia' },
-      detail: offsetDetail(55),
+      detail: stageDetail(59),
       beneficiaryMedicalReferral: { createdAt: '20/05/2026', uuid: 'ref-003' },
       cancel: true,
     },
     // dentro dos 15 min: botao liberado
     {
-      uuid: 'apt-referral-10min',
+      uuid: 'apt-referral-15min',
       status: 'SCHEDULED',
       professional: { name: 'Lucia Ramos', specialties: [{ name: 'Ortopedia' }] },
       specialty: { name: 'Ortopedia' },
-      detail: offsetDetail(10),
+      detail: stageDetail(15),
       beneficiaryMedicalReferral: { createdAt: '20/05/2026', uuid: 'ref-003' },
       cancel: true,
     },
@@ -546,7 +556,7 @@ export function generateMockAppointments() {
       status: 'SCHEDULED',
       professional: { name: 'Gustavo Pinto', specialties: [{ name: 'Cardiologia' }] },
       specialty: { name: 'Cardiologia' },
-      detail: offsetDetail(17290),
+      detail: stageDetail(17280),
       beneficiaryMedicalReferral: null,
       createdAt: todayDate,
       cancel: true,
@@ -557,7 +567,7 @@ export function generateMockAppointments() {
       status: 'SCHEDULED',
       professional: { name: 'Helena Duarte', specialties: [{ name: 'Dermatologia' }] },
       specialty: { name: 'Dermatologia' },
-      detail: offsetDetail(2890),
+      detail: stageDetail(2880),
       beneficiaryMedicalReferral: null,
       createdAt: todayDate,
       cancel: true,
@@ -568,7 +578,7 @@ export function generateMockAppointments() {
       status: 'SCHEDULED',
       professional: { name: 'Rafael Antunes', specialties: [{ name: 'Clinica Geral' }] },
       specialty: { name: 'Clinica Geral' },
-      detail: offsetDetail(2879),
+      detail: stageDetail(2879),
       beneficiaryMedicalReferral: null,
       createdAt: todayDate,
       cancel: true,
@@ -579,7 +589,7 @@ export function generateMockAppointments() {
       status: 'SCHEDULED',
       professional: { name: 'Camila Ferraz', specialties: [{ name: 'Nutricao' }] },
       specialty: { name: 'Nutricao' },
-      detail: offsetDetail(1450),
+      detail: stageDetail(1440),
       beneficiaryMedicalReferral: null,
       createdAt: todayDate,
       cancel: true,
@@ -590,29 +600,29 @@ export function generateMockAppointments() {
       status: 'SCHEDULED',
       professional: { name: 'Diego Moraes', specialties: [{ name: 'Psicologia' }] },
       specialty: { name: 'Psicologia' },
-      detail: offsetDetail(1390),
+      detail: stageDetail(1380),
       beneficiaryMedicalReferral: null,
       createdAt: todayDate,
       cancel: true,
     },
     // menos de uma hora: passa a contar minutos
     {
-      uuid: 'apt-avulsa-55min',
+      uuid: 'apt-avulsa-59min',
       status: 'SCHEDULED',
       professional: { name: 'Beatriz Nunes', specialties: [{ name: 'Neurologia' }] },
       specialty: { name: 'Neurologia' },
-      detail: offsetDetail(55),
+      detail: stageDetail(59),
       beneficiaryMedicalReferral: null,
       createdAt: todayDate,
       cancel: true,
     },
     // dentro dos 15 min: botao liberado
     {
-      uuid: 'apt-avulsa-10min',
+      uuid: 'apt-avulsa-15min',
       status: 'SCHEDULED',
       professional: { name: 'Tiago Menezes', specialties: [{ name: 'Ortopedia' }] },
       specialty: { name: 'Ortopedia' },
-      detail: offsetDetail(10),
+      detail: stageDetail(15),
       beneficiaryMedicalReferral: null,
       createdAt: todayDate,
       cancel: true,
