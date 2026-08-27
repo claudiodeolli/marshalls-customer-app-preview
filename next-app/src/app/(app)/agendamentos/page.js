@@ -180,15 +180,17 @@ function daysUntil(minutes) {
 // pág. 8 do PDF. Antes os dois diziam a mesma coisa.
 function getCountdownText(minutes) {
   const stage = getCountdownStage(minutes);
+  // A exclamação faz parte do texto que o cliente especificou, em todos os
+  // estágios — ver o print anexado à issue #12.
   if (stage === 'unlocked' || stage === 'minutes') {
-    return `Sua consulta começa em ${Math.max(minutes, 0)} minutos`;
+    return `Sua consulta começa em ${Math.max(minutes, 0)} minutos!`;
   }
   if (stage === 'hours') {
     const hours = Math.floor(minutes / 60);
-    return `Sua consulta será daqui a ${hours} hora${hours > 1 ? 's' : ''}`;
+    return `Sua consulta será daqui a ${hours} hora${hours > 1 ? 's' : ''}!`;
   }
   if (stage === 'tomorrow') return 'Sua consulta é amanhã!';
-  return `Sua consulta será em ${daysUntil(minutes)} dias`;
+  return `Sua consulta será em ${daysUntil(minutes)} dias!`;
 }
 
 function getCountdownTextMobile(minutes) {
