@@ -1584,3 +1584,51 @@ input._search-input:not([type="checkbox"]):not([type="radio"]):not([type="submit
   text-decoration: underline;
   cursor: pointer;
 }
+/* ── Tooltip do "Entrar no atendimento" bloqueado (issue #14) ──────────
+   O `title` nativo até respondia ao hover, mas quem o desenha é o sistema
+   operacional: demora cerca de um segundo, usa a fonte do SO e não parece
+   parte da interface. Este aparece na hora e com a identidade do app.
+   O diálogo no clique continua existindo, para quem usa toque. */
+._blocked-enter {
+  position: relative;
+  display: block;
+}
+
+._blocked-enter ._blocked-tip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  right: 0;
+  z-index: 20;
+  width: max-content;
+  max-width: 280px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: #2f2f3a;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.5;
+  text-align: left;
+  white-space: normal;
+  box-shadow: 0 6px 20px rgba(34, 41, 47, 0.25);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.12s ease;
+  pointer-events: none;
+}
+
+._blocked-enter:hover ._blocked-tip,
+._blocked-enter:focus-within ._blocked-tip {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Setinha apontando para o botão. */
+._blocked-enter ._blocked-tip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  right: 24px;
+  border: 6px solid transparent;
+  border-top-color: #2f2f3a;
+}

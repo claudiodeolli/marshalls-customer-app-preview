@@ -47,8 +47,11 @@ test.describe('Agendamentos', () => {
     const enterButton = card.getByRole('button', { name: 'Entrar no atendimento' }).first();
     await expect(enterButton).toBeDisabled();
 
-    await card.getByText('Entrar no atendimento').first().locator('..').click();
-    await expect(page.getByText(BLOCKED_TOOLTIP, { exact: false })).toBeVisible();
+    await card.locator('._blocked-enter >> visible=true').first().click();
+    // O mesmo texto vive no tooltip do hover (oculto) e no diálogo do
+    // clique — mirar no diálogo, que é o que este teste cobre.
+    const dialogo = page.locator('.card', { has: page.getByRole('button', { name: 'Entendi' }) }).last();
+    await expect(dialogo).toContainText(BLOCKED_TOOLTIP);
   });
 
   test('R4/R6 — dentro dos 15min o botão libera e mostra "Você já pode entrar!"', async ({ page }) => {

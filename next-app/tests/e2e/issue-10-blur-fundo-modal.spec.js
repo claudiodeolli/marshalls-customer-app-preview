@@ -69,7 +69,7 @@ test('B3 — o desfoque vale para outras modais além da de cancelamento', async
 test('B3 — o diálogo do botão bloqueado também desfoca o fundo', async ({ page }) => {
   await page.goto('/agendamentos');
   await expect(page.locator('.card').first()).toBeVisible();
-  await page.locator('.card:has-text("Sofia Marques") span[title^="Este bot"] >> visible=true').first().click();
+  await page.locator('.card:has-text("Sofia Marques") ._blocked-enter >> visible=true').first().click();
 
   const modal = page.locator('.card', { has: page.getByRole('button', { name: 'Entendi' }) }).last();
   await expect(modal).toBeVisible();
