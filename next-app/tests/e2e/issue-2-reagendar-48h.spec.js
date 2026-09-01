@@ -143,7 +143,9 @@ test.describe('Telas de agendamento — banners de regra (R8/R9/R10)', () => {
     const alert = page.getByTestId('booking-rules-alert-avulsa');
     await expect(alert).toBeVisible();
     await expect(alert).toContainText('Lembre-se!');
-    await expect(alert).toContainText('sem perder o valor pago');
+    // Texto reescrito por ele na #21: o fecho deixou de ser "sem perder o
+    // valor pago" e passou a ser "sem perder a consulta adquirida".
+    await expect(alert).toContainText('sem perder a consulta adquirida');
     await expect(alert).toContainText('Recomendação:');
   });
 
@@ -152,7 +154,7 @@ test.describe('Telas de agendamento — banners de regra (R8/R9/R10)', () => {
     const alert = page.getByTestId('booking-rules-alert-referral');
     await expect(alert).toBeVisible();
     await expect(alert).toContainText('Importante!');
-    await expect(alert).toContainText('sem perder o encaminhamento');
+    await expect(alert).toContainText('sem perder o Encaminhamento');
     await expect(alert).toContainText('Plantão 24h');
   });
 });

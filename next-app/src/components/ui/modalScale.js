@@ -15,9 +15,17 @@
 // continua valendo sozinho e nada quebra.
 export const MODAL_BLUR = '3px';
 
+// As demais modais ficavam por cima só porque são renderizadas no fim da
+// árvore. A de regras da marcação (issue #24) nasce no meio da página, e sem
+// z-index os cards seguintes a cobriam — o clique no "Entendi" chegava a ser
+// interceptado por um card-body. O valor fica acima do 1040 do menu e abaixo
+// dos overlays de tela cheia do app.
+export const MODAL_Z_INDEX = 1050;
+
 export const MODAL_OVERLAY = {
   position: 'fixed',
   inset: 0,
+  zIndex: MODAL_Z_INDEX,
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',

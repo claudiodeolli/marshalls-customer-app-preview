@@ -13,8 +13,7 @@ import api from '@/lib/api';
 import { useAuth } from '@/lib/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-import Image from 'next/image';
-import { assetPath } from '@/lib/assetPath';
+import EmojiIcon from '@/components/ui/EmojiIcon';
 import { getMinutesUntilStart } from '@/lib/appointmentTime';
 
 const IS_MOCK = process.env.NEXT_PUBLIC_MOCK_MODE === '1';
@@ -147,22 +146,12 @@ function getCountdownStage(minutes) {
 //
 // alt vazio de propósito: são decorativos, o texto ao lado já informa.
 const ICON_SIZE = 24;
-const ICONS = {
-  calendario: assetPath('/icons/fluent-emoji/calendar_3d.png'),
-  relogio: assetPath('/icons/fluent-emoji/three_oclock_3d.png'),
-  circuloVerde: assetPath('/icons/fluent-emoji/green_circle_3d.png'),
-};
 
 function CountdownIcon({ minutes }) {
   const stage = getCountdownStage(minutes);
   const emDias = stage === 'days' || stage === 'tomorrow';
   return (
-    <Image
-      src={emDias ? ICONS.calendario : ICONS.relogio}
-      alt=""
-      width={ICON_SIZE}
-      height={ICON_SIZE}
-    />
+    <EmojiIcon name={emDias ? 'calendario' : 'relogio'} size={ICON_SIZE} />
   );
 }
 
@@ -781,7 +770,7 @@ export default function AgendamentosPage() {
                                 display: 'flex', alignItems: 'center', gap: '6px', width: ENTER_BUTTON_SIZE.width, maxWidth: '100%', justifyContent: 'center',
                                 marginTop: '8px', fontSize: COUNTDOWN_FONT_SIZE, color: '#28c76f', fontWeight: 600,
                               }}>
-                                <Image src={ICONS.circuloVerde} alt="" width={ICON_SIZE} height={ICON_SIZE} />
+                                <EmojiIcon name="circuloVerde" size={ICON_SIZE} />
                                 Você já pode entrar!
                               </div>
                             )}
@@ -848,7 +837,7 @@ export default function AgendamentosPage() {
                               display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
                               fontSize: COUNTDOWN_FONT_SIZE, color: '#28c76f', fontWeight: 600,
                             }}>
-                              <Image src={ICONS.circuloVerde} alt="" width={ICON_SIZE} height={ICON_SIZE} />
+                              <EmojiIcon name="circuloVerde" size={ICON_SIZE} />
                               Você já pode entrar!
                             </div>
                           )}

@@ -554,11 +554,11 @@ function ScheduleContent() {
       {/* Specialty list / selected specialty */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
         <h6 style={{ fontSize: 17, fontWeight: 700, margin: 0, color: '#5e5873' }}>
-          {selectedSpecialty && !specialtyLocked
-            ? 'Consulta avulsa'
-            : specialtyLocked
+          {!selectedSpecialty
+            ? 'Nossas especialidades'
+            : referralId
               ? 'Especialidade do Encaminhamento'
-              : 'Nossas especialidades'}
+              : 'Consulta Avulsa'}
         </h6>
       </div>
 
@@ -657,7 +657,7 @@ function ScheduleContent() {
 
       {/* Informational text — shown after specialty is selected and availability loaded */}
       {selectedSpecialty && !loadingAvailability && (
-        <div style={{
+        <div data-testid="aviso-origem" style={{
           display: 'flex', gap: 10, alignItems: 'flex-start',
           background: referralId ? '#f0f9ff' : '#f6f4ff',
           border: `1px solid ${referralId ? '#b3e0ea' : '#d0c8f8'}`,
@@ -690,6 +690,13 @@ function ScheduleContent() {
       {selectedSpecialty && !loadingAvailability && (
         <div ref={calendarRef}>
           <div className="card mb-2" data-testid="calendario">
+            {/* Mesmo tratamento do "Horários disponíveis" logo abaixo: dentro
+                da caixa, no cabeçalho — foi a referência que o cliente deu. */}
+            <div className="card-header" style={{ padding: '14px 20px 0' }}>
+              <h6 className="mb-0" data-testid="titulo-calendario" style={{ fontWeight: 700 }}>
+                Escolha uma data para sua consulta
+              </h6>
+            </div>
             <div
               className="card-header d-flex align-items-center justify-content-between"
               style={{ padding: '14px 20px' }}
