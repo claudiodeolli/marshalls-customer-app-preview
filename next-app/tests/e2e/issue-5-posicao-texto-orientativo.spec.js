@@ -15,7 +15,10 @@ const ROTA_AVULSA = '/schedule/calendar?avulsaSpec=spec-003';
 async function esperarBannerAcimaDoCalendario(page, alerta) {
   const acima = await alerta.evaluate(el => {
     const cards = [...document.querySelectorAll('.card')];
-    const calendario = cards.find(c => c.innerText.includes('Agosto'));
+    // Ancorar no data-testid, e não no nome do mês: o calendário abre no mês
+    // corrente, e procurar por "Agosto" fazia o teste quebrar sozinho na
+    // virada para setembro.
+    const calendario = cards.find(c => c.dataset.testid === 'calendario');
     if (!calendario) return null;
     const a = el.getBoundingClientRect();
     return a.bottom <= calendario.getBoundingClientRect().top + 1;
@@ -25,7 +28,7 @@ async function esperarBannerAcimaDoCalendario(page, alerta) {
 
 /** Espera o calendário da fase 2 aparecer. */
 async function esperarCalendario(page) {
-  await expect(page.locator('.card').filter({ hasText: 'Agosto' }).first()).toBeVisible({ timeout: 15000 });
+  await expect(page.getByTestId('calendario').first()).toBeVisible({ timeout: 15000 });
 }
 
 test('N1 — o primeiro passo do "Novo Agendamento" não exibe texto orientativo', async ({ page }) => {

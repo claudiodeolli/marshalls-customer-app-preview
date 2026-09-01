@@ -689,7 +689,7 @@ function ScheduleContent() {
       {/* Calendar — shown after specialty is selected and availability loaded */}
       {selectedSpecialty && !loadingAvailability && (
         <div ref={calendarRef}>
-          <div className="card mb-2">
+          <div className="card mb-2" data-testid="calendario">
             <div
               className="card-header d-flex align-items-center justify-content-between"
               style={{ padding: '14px 20px' }}

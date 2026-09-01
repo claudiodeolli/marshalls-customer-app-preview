@@ -177,8 +177,10 @@ const BLOCKED_ENTER_TOOLTIP =
 // Tamanhos definidos pelo cliente no PDF (altura x largura, em px). Valem
 // para Desktop e Mobile — antes o mobile esticava os botões na largura do
 // card (issue #13).
-const ENTER_BUTTON_SIZE = { height: '32px', width: '272.72px' };
-const SECONDARY_BUTTON_SIZE = { height: '32px', width: '200px' };
+// Alturas medidas por ele no print de 27/08: 37px no "Entrar no atendimento"
+// e 34px nos outros dois. As larguras seguem as da #13, que ele não mexeu.
+const ENTER_BUTTON_SIZE = { height: '37px', width: '272.72px' };
+const SECONDARY_BUTTON_SIZE = { height: '34px', width: '200px' };
 
 const ENTER_BUTTON = {
   height: ENTER_BUTTON_SIZE.height,
@@ -201,8 +203,13 @@ const SECONDARY_BUTTON_BASE = {
   alignItems: 'center',
   justifyContent: 'center',
 };
-const RESCHEDULE_BUTTON = { ...SECONDARY_BUTTON_BASE, border: '1px solid #d8d6de', color: '#6e6b7b' };
-const CANCEL_BUTTON = { ...SECONDARY_BUTTON_BASE, border: '1px solid #ea5455', color: '#ea5455' };
+// Borda na mesma cor do texto nos dois: o Cancelar já era assim, e ele pediu
+// que o Reagendar acompanhasse — antes a borda era um cinza mais claro que a
+// letra. O fundo leve do hover vive em globals.css (._card-btn-*).
+const RESCHEDULE_COLOR = '#6e6b7b';
+const CANCEL_COLOR = '#ea5455';
+const RESCHEDULE_BUTTON = { ...SECONDARY_BUTTON_BASE, border: `1px solid ${RESCHEDULE_COLOR}`, color: RESCHEDULE_COLOR };
+const CANCEL_BUTTON = { ...SECONDARY_BUTTON_BASE, border: `1px solid ${CANCEL_COLOR}`, color: CANCEL_COLOR };
 
 /**
  * Envolve o "Entrar no atendimento" para explicar por que ele está travado.
@@ -761,13 +768,17 @@ export default function AgendamentosPage() {
 
                         {/* Mobile: cronômetro + botões */}
                         {apt.status === 'SCHEDULED' && (
-                          <div className="d-xl-none" style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                            <span data-testid="countdown" style={{ fontSize: COUNTDOWN_FONT_SIZE, color: '#5e5873', display: 'flex', alignItems: 'center', gap: '5px', alignSelf: 'flex-start' }}>
+                          <div className="d-xl-none" style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                            {/* A coluna alinha à esquerda para o Reagendar e o Cancelar
+                                começarem na borda do "Entrar no atendimento"; o contador
+                                e o aviso verde se centralizam sozinhos, esticando na
+                                largura do Entrar (pedido de 27 e 29/08). */}
+                            <span data-testid="countdown" style={{ fontSize: COUNTDOWN_FONT_SIZE, color: '#5e5873', display: 'flex', alignItems: 'center', gap: '5px', width: ENTER_BUTTON_SIZE.width, maxWidth: '100%', justifyContent: 'center' }}>
                               <CountdownIcon minutes={mins} /> {getCountdownText(mins)}
                             </span>
                             {canEnter && (
                               <div data-testid="ready-to-enter" style={{
-                                display: 'flex', alignItems: 'center', gap: '6px', alignSelf: 'flex-start',
+                                display: 'flex', alignItems: 'center', gap: '6px', width: ENTER_BUTTON_SIZE.width, maxWidth: '100%', justifyContent: 'center',
                                 marginTop: '8px', fontSize: COUNTDOWN_FONT_SIZE, color: '#28c76f', fontWeight: 600,
                               }}>
                                 <Image src={ICONS.circuloVerde} alt="" width={ICON_SIZE} height={ICON_SIZE} />
@@ -794,7 +805,7 @@ export default function AgendamentosPage() {
                               </button>
                             </BlockedEnterWrapper>
                             {canReschedule(mins) ? (
-                              <button className="btn btn-sm" style={RESCHEDULE_BUTTON}>
+                              <button className="btn btn-sm _card-btn-reagendar" style={RESCHEDULE_BUTTON}>
                                 Reagendar
                               </button>
                             ) : (
@@ -803,7 +814,7 @@ export default function AgendamentosPage() {
                             )}
                             {apt.cancel && (
                               <button
-                                className="btn btn-sm"
+                                className="btn btn-sm _card-btn-cancelar"
                                 style={{ ...CANCEL_BUTTON, marginTop: '8px' }}
                                 onClick={() => setCancelTarget(apt)}
                               >
@@ -829,7 +840,7 @@ export default function AgendamentosPage() {
                       {/* Desktop: cronômetro + botões */}
                       {apt.status === 'SCHEDULED' && (
                         <div className="d-none d-xl-flex flex-column _appt-card-actions" style={{ gap: '8px', marginLeft: '16px', flexShrink: 0, minWidth: ENTER_BUTTON_SIZE.width, alignItems: 'stretch' }}>
-                          <span data-testid="countdown" style={{ fontSize: COUNTDOWN_FONT_SIZE, color: '#5e5873', display: 'flex', alignItems: 'center', gap: '5px', justifyContent: 'flex-end' }}>
+                          <span data-testid="countdown" style={{ fontSize: COUNTDOWN_FONT_SIZE, color: '#5e5873', display: 'flex', alignItems: 'center', gap: '5px', justifyContent: 'center' }}>
                             <CountdownIcon minutes={mins} /> {getCountdownText(mins)}
                           </span>
                           {canEnter && (
@@ -860,7 +871,7 @@ export default function AgendamentosPage() {
                             </button>
                           </BlockedEnterWrapper>
                           {canReschedule(mins) ? (
-                            <button className="btn" style={{ ...RESCHEDULE_BUTTON, alignSelf: 'center' }}>
+                            <button className="btn _card-btn-reagendar" style={{ ...RESCHEDULE_BUTTON, alignSelf: 'flex-start' }}>
                               Reagendar
                             </button>
                           ) : (
@@ -869,9 +880,9 @@ export default function AgendamentosPage() {
                           )}
                           {apt.cancel && (
                             <button
-                              className="btn"
+                              className="btn _card-btn-cancelar"
                               onClick={() => setCancelTarget(apt)}
-                              style={{ ...CANCEL_BUTTON, alignSelf: 'center' }}
+                              style={{ ...CANCEL_BUTTON, alignSelf: 'flex-start' }}
                             >
                               Cancelar
                             </button>

@@ -5,8 +5,10 @@
 // agendado, mais o tooltip do "Entrar no atendimento" bloqueado.
 const { test, expect } = require('@playwright/test');
 
-const CINZA_BORDA = 'rgb(216, 214, 222)';
+// A borda do Reagendar deixou de ser um cinza mais claro que a letra: ele
+// pediu em 27/08 que borda e texto ficassem na mesma cor (issue #17).
 const CINZA_TEXTO = 'rgb(110, 107, 123)';
+const CINZA_BORDA = CINZA_TEXTO;
 const VERMELHO = 'rgb(234, 84, 85)';
 
 // O layout arredonda no sub-pixel: uma altura de 32px sai como 31.9, e a
@@ -81,19 +83,21 @@ for (const [nome, viewport] of [
     // toPass: a coluna ainda pode estar se ajustando quando a primeira
     // medição sai. Reconsultar é o certo aqui; afrouxar a FOLGA_PX
     // esconderia um desvio real da especificação.
-    test('P1 — "Entrar no atendimento" mede 32 × 272.72', async ({ page }) => {
+    // As alturas mudaram na #17: ele mediu 37px no Entrar e 34px nos outros
+    // dois, sobre os 32px que ele mesmo tinha especificado na #13.
+    test('P1 — "Entrar no atendimento" mede 37 × 272.72', async ({ page }) => {
       await expect(async () => {
         const b = await medirBotao(page, BLOQUEADO, 'Entrar no atendimento');
-        esperarMedida(b.altura, 32, 'altura do Entrar');
+        esperarMedida(b.altura, 37, 'altura do Entrar');
         esperarMedida(b.largura, 272.72, 'largura do Entrar');
       }).toPass({ timeout: 10_000 });
     });
 
-    test('P2 — "Reagendar" e "Cancelar" medem 32 × 200', async ({ page }) => {
+    test('P2 — "Reagendar" e "Cancelar" medem 34 × 200', async ({ page }) => {
       await expect(async () => {
         for (const rotulo of ['Reagendar', 'Cancelar']) {
           const b = await medirBotao(page, BLOQUEADO, rotulo);
-          esperarMedida(b.altura, 32, `altura do ${rotulo}`);
+          esperarMedida(b.altura, 34, `altura do ${rotulo}`);
           esperarMedida(b.largura, 200, `largura do ${rotulo}`);
         }
       }).toPass({ timeout: 10_000 });

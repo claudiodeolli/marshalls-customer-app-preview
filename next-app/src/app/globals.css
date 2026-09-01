@@ -1632,3 +1632,20 @@ input._search-input:not([type="checkbox"]):not([type="radio"]):not([type="submit
   border: 6px solid transparent;
   border-top-color: #2f2f3a;
 }
+
+/* Fundo leve no hover do Reagendar e do Cancelar, pedido em 27/08: "ao passar
+   o cursor em cima dos botões, trazer aquela cor mais leve ao fundo". A cor é
+   a do próprio botão com opacidade baixa — assim o cinza continua cinza e o
+   vermelho continua vermelho, sem inventar um tom novo.
+
+   Dentro de `hover: hover` porque em tela de toque o navegador mantém o
+   estado depois do toque, e o botão ficaria tingido até o próximo clique. */
+@media (hover: hover) {
+  ._card-btn-reagendar:hover {
+    background: rgba(110, 107, 123, 0.08) !important;
+  }
+
+  ._card-btn-cancelar:hover {
+    background: rgba(234, 84, 85, 0.08) !important;
+  }
+}

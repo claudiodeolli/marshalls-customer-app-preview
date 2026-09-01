@@ -37,7 +37,9 @@ test.describe('Agendamentos', () => {
     // toPass: a medição pode cair no meio de um re-layout (fontes, hidratação).
     await expect(async () => {
       const box = await placeholder.boundingBox();
-      expect(Math.round(box.height)).toBe(32);
+      // 34px desde a #17; o que a regra exige é que o espaço continue de pé,
+      // não a medida em si.
+      expect(Math.round(box.height)).toBe(34);
     }).toPass({ timeout: 5000 });
   });
 
@@ -126,7 +128,7 @@ test.describe('Agendamentos', () => {
     const enterButton = card.getByRole('button', { name: 'Entrar no atendimento' }).first();
     await expect(async () => {
       const box = await enterButton.boundingBox();
-      expect(Math.round(box.height)).toBe(32);
+      expect(Math.round(box.height)).toBe(37);
     }).toPass({ timeout: 5000 });
   });
 });
