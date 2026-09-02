@@ -43,7 +43,8 @@ module.exports = defineConfig({
       // o fazia estourar o timeout enquanto o segundo servidor disputava CPU.
       url: `${APP_URL}/agendamentos`,
       reuseExistingServer: true,
-      timeout: 180_000,
+      // Esta máquina leva minutos para subir o next dev a frio.
+      timeout: 600_000,
       env: { NEXT_PUBLIC_MOCK_MODE: '1' },
     },
     {
@@ -54,7 +55,7 @@ module.exports = defineConfig({
       reuseExistingServer: true,
       // Compilação a frio com GITHUB_PAGES=1 num distDir próprio; cresce
       // junto com o app.
-      timeout: 300_000,
+      timeout: 600_000,
       // distDir separado: dois servidores de dev não podem dividir o .next.
       env: { GITHUB_PAGES: '1', NEXT_DIST_DIR: '.next-pages' },
     },

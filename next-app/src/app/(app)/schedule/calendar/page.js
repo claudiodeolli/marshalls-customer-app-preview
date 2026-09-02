@@ -15,6 +15,7 @@ import SlotChoiceModal from '@/components/features/schedule/SlotChoiceModal';
 import ReferralModal from '@/components/features/schedule/ReferralModal';
 import BookingRulesAlert from '@/components/features/schedule/BookingRulesAlert';
 import { useHistoricoDeEtapas } from '@/hooks/useHistoricoDeEtapas';
+import { registrarReagendamento } from '@/lib/reagendamentos';
 
 const IS_MOCK = process.env.NEXT_PUBLIC_MOCK_MODE === '1';
 
@@ -37,6 +38,10 @@ function ScheduleContent() {
   const params = useSearchParams();
   const urlReferral = params.get('referral') || '';
   const urlAvulsaSpec = params.get('avulsaSpec') || '';
+
+  // Quando a marcação é um reagendamento, este é o agendamento que sai de
+  // cena ao concluir (issue #25).
+  const reagendarDe = params.get('reagendarDe') || '';
 
   const [referralId, setReferralId] = useState(urlReferral);
 
@@ -378,6 +383,21 @@ function ScheduleContent() {
           const existing = JSON.parse(localStorage.getItem('MOCK_HISTORY') || '[]');
           localStorage.setItem('MOCK_HISTORY', JSON.stringify([...existing, record]));
         } catch {}
+        // O card antigo é substituído, não editado: nasce um novo "Consulta
+        // agendada" e o cronômetro recomeça pela data escolhida agora.
+        if (reagendarDe) {
+          registrarReagendamento(reagendarDe, {
+            uuid: `apt-reagendado-${now.getTime()}`,
+            status: 'SCHEDULED',
+            professional: { name: 'A confirmar', specialties: [{ name: selectedSpecialty.name }] },
+            specialty: { name: selectedSpecialty.name },
+            detail: { date: selectedSlot.date, from: selectedSlot.from },
+            beneficiaryMedicalReferral: referral
+              ? { uuid: referral.uuid, createdAt: referral.createdAt, referredByDoctor: referral.referredByDoctor }
+              : null,
+            cancel: true,
+          });
+        }
         setConfirmed(true);
         return;
       }

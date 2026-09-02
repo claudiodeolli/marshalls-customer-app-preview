@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { withEmphasis } from '@/components/ui/emphasis';
 import EmojiIcon from '@/components/ui/EmojiIcon';
 import {
@@ -44,6 +44,14 @@ const RECOMMENDATION =
 export default function BookingRulesAlert({ origin }) {
   const content = CONTENT[origin];
   const [aberto, setAberto] = useState(true);
+  const botaoEntendi = useRef(null);
+
+  // Foco no botão assim que a modal abre: é o que um diálogo deve fazer, e é
+  // também o que garante que o Esc chegue — sem foco dentro dela, a tecla vai
+  // para onde o navegador estiver apontando.
+  useEffect(() => {
+    if (aberto) botaoEntendi.current?.focus();
+  }, [aberto]);
 
   // Esc fecha, como nas outras modais da seção.
   useEffect(() => {
@@ -83,6 +91,7 @@ export default function BookingRulesAlert({ origin }) {
           <p style={{ ...MODAL_TEXT, color: '#7a5c00', marginBottom: 0 }}>{withEmphasis(RECOMMENDATION)}</p>
           <div style={MODAL_ACTIONS}>
             <button
+              ref={botaoEntendi}
               type="button"
               className="btn btn-primary"
               style={MODAL_BUTTON}

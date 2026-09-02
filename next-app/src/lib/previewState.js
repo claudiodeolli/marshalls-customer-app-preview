@@ -19,6 +19,7 @@ const VERSAO_DO_ESTADO_INICIAL = '2026-09-01';
 // limpá-las deslogaria quem está no meio de uma demonstração.
 const CHAVES_DE_NAVEGACAO = [
   'MOCK_HISTORY',
+  'MOCK_REAGENDAMENTOS',
   'APPOINTMENT',
   'APPOINTMENT_ATTACHMENTS',
   'pendingAvulsa',

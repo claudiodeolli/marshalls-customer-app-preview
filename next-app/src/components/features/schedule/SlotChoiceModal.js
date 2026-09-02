@@ -1,5 +1,24 @@
 import { MODAL_OVERLAY } from '@/components/ui/modalScale';
-export default function SlotChoiceModal({ show, onClose, onAgendarAgora, onAgendarDepois }) {
+
+// Texto e rótulos são parâmetros porque o reagendamento reaproveita esta
+// mesma modal — "usar os mesmos botões lá da modal dos agendamentos", como
+// ele anotou no PDF da issue #25. Os valores padrão são os da compra avulsa,
+// que já existia.
+const MENSAGEM_PADRAO = (
+  <>
+    Você não precisa escolher o dia e horário agora, pode fazer isso depois.
+    <br /><br />
+    Mas, se preferir, vá em frente e selecione agora mesmo o dia e horário da sua consulta avulsa.
+  </>
+);
+
+export default function SlotChoiceModal({
+  show, onClose, onAgendarAgora, onAgendarDepois,
+  mensagem = MENSAGEM_PADRAO,
+  rotuloPrimario = 'Escolher agora',
+  rotuloSecundario = 'Escolher depois, continuar para o pagamento',
+  testId,
+}) {
   if (!show) return null;
   return (
     <div
@@ -12,6 +31,7 @@ export default function SlotChoiceModal({ show, onClose, onAgendarAgora, onAgend
     >
       <div
         className="_modal-enter"
+        data-testid={testId}
         onClick={e => e.stopPropagation()}
         style={{
           background: '#fff', borderRadius: 12, width: '100%', maxWidth: 420,
@@ -20,9 +40,7 @@ export default function SlotChoiceModal({ show, onClose, onAgendarAgora, onAgend
         }}
       >
         <p style={{ fontSize: 15, color: '#5e5873', lineHeight: 1.6, marginBottom: 20 }}>
-          Você não precisa escolher o dia e horário agora, pode fazer isso depois.
-          <br /><br />
-          Mas, se preferir, vá em frente e selecione agora mesmo o dia e horário da sua consulta avulsa.
+          {mensagem}
         </p>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
           <button
@@ -30,7 +48,7 @@ export default function SlotChoiceModal({ show, onClose, onAgendarAgora, onAgend
             className="btn btn-primary"
             style={{ width: '100%', borderRadius: 24, fontWeight: 700, padding: '10px', lineHeight: 1.5, border: '1.5px solid transparent' }}
           >
-            Escolher agora
+            {rotuloPrimario}
           </button>
           <button
             onClick={onAgendarDepois}
@@ -40,7 +58,7 @@ export default function SlotChoiceModal({ show, onClose, onAgendarAgora, onAgend
               cursor: 'pointer', padding: '10px', lineHeight: 1.5,
             }}
           >
-            Escolher depois, continuar para o pagamento
+            {rotuloSecundario}
           </button>
         </div>
       </div>

@@ -14,6 +14,10 @@ import { useAuth } from '@/lib/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import EmojiIcon from '@/components/ui/EmojiIcon';
+import RescheduleDialog from '@/components/features/agendamentos/RescheduleDialog';
+import SlotChoiceModal from '@/components/features/schedule/SlotChoiceModal';
+import { aplicarReagendamentos } from '@/lib/reagendamentos';
+import { mockSpecialties } from '@/data/mockData';
 import { getMinutesUntilStart } from '@/lib/appointmentTime';
 
 const IS_MOCK = process.env.NEXT_PUBLIC_MOCK_MODE === '1';
@@ -330,6 +334,10 @@ export default function AgendamentosPage() {
 
   const [statusFilter, setStatusFilter]   = useState('SCHEDULED');
   const [appointments, setAppointments]   = useState([]);
+  // Duas etapas, como no PDF: primeiro confirmar a intenção, depois escolher
+  // quando (issue #25).
+  const [reagendarTarget, setReagendarTarget] = useState(null);
+  const [escolherNovaData, setEscolherNovaData] = useState(null);
   const [cancelTarget, setCancelTarget]   = useState(null);
   const [canceling, setCanceling]         = useState(false);
   const [loading, setLoading]             = useState(false);
@@ -357,11 +365,27 @@ export default function AgendamentosPage() {
     return () => clearInterval(timer);
   }, []);
 
+  /**
+   * Leva ao fluxo de marcação com a especialidade já definida, carregando o
+   * agendamento que será substituído ao concluir.
+   */
+  function irParaNovaData(apt) {
+    const referralUuid = apt.beneficiaryMedicalReferral?.uuid;
+    const especialidade = mockSpecialties.find(e => e.name === (apt.specialty?.name ?? apt.professional?.specialties?.[0]?.name));
+    const origem = referralUuid
+      ? `referral=${referralUuid}`
+      : `avulsaSpec=${especialidade?.uuid ?? ''}`;
+
+    router.push(`/schedule/calendar?${origem}&reagendarDe=${apt.uuid}`);
+  }
+
   async function fetchAppointments() {
     setLoading(true);
     try {
       if (IS_MOCK) {
-        const allMock = generateMockAppointments();
+        // Um reagendamento concluído substitui o card original: o antigo sai
+        // e o novo entra em seu lugar (issue #25).
+        const allMock = aplicarReagendamentos(generateMockAppointments());
         const filtered = statusFilter
           ? allMock.filter(a => a.status === statusFilter)
           : allMock;
@@ -794,7 +818,11 @@ export default function AgendamentosPage() {
                               </button>
                             </BlockedEnterWrapper>
                             {canReschedule(mins) ? (
-                              <button className="btn btn-sm _card-btn-reagendar" style={RESCHEDULE_BUTTON}>
+                              <button
+                                className="btn btn-sm _card-btn-reagendar"
+                                style={RESCHEDULE_BUTTON}
+                                onClick={() => setReagendarTarget(apt)}
+                              >
                                 Reagendar
                               </button>
                             ) : (
@@ -860,7 +888,11 @@ export default function AgendamentosPage() {
                             </button>
                           </BlockedEnterWrapper>
                           {canReschedule(mins) ? (
-                            <button className="btn _card-btn-reagendar" style={{ ...RESCHEDULE_BUTTON, alignSelf: 'flex-start' }}>
+                            <button
+                              className="btn _card-btn-reagendar"
+                              style={{ ...RESCHEDULE_BUTTON, alignSelf: 'flex-start' }}
+                              onClick={() => setReagendarTarget(apt)}
+                            >
                               Reagendar
                             </button>
                           ) : (
@@ -898,6 +930,25 @@ export default function AgendamentosPage() {
           </div>
         )}
       </div>
+
+      {/* Reagendar em dois passos (issue #25): confirmar a intenção e, só
+          então, escolher a nova data. */}
+      <RescheduleDialog
+        appointment={reagendarTarget}
+        onBack={() => setReagendarTarget(null)}
+        onConfirm={() => { setEscolherNovaData(reagendarTarget); setReagendarTarget(null); }}
+      />
+
+      <SlotChoiceModal
+        show={!!escolherNovaData}
+        testId="reagendar-nova-data"
+        mensagem="Escolha uma nova data e horário"
+        rotuloPrimario="Escolher agora"
+        rotuloSecundario="Cancelar"
+        onClose={() => setEscolherNovaData(null)}
+        onAgendarAgora={() => irParaNovaData(escolherNovaData)}
+        onAgendarDepois={() => setEscolherNovaData(null)}
+      />
 
       <CancelDialog
         open={!!cancelTarget}
