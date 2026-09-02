@@ -232,6 +232,19 @@ function BlockedEnterWrapper({ apt, canEnter, onBlockedClick, style, children })
 // Respiro entre o "Entrar no atendimento" e os outros dois botões. No
 // desktop é o que desce Reagendar e Cancelar até a linha da tag de status,
 // que o cliente usou como referência de alinhamento.
+// Reagendar e Cancelar moram numa caixa da largura do "Entrar", centralizada
+// junto com ele. É isso que os faz encostar na borda esquerda do botão em vez
+// da borda da coluna — que muda de largura conforme o texto do contador, e era
+// o que desalinhava seis dos catorze cards no desktop (issue #28).
+const SECONDARY_STACK = {
+  width: ENTER_BUTTON_SIZE.width,
+  maxWidth: '100%',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'flex-start',
+  gap: '8px',
+};
+
 const ENTER_GAP = '20px';
 
 // Padrão tipográfico do card, pedido para o texto do contador (issue #13).
@@ -781,11 +794,11 @@ export default function AgendamentosPage() {
 
                         {/* Mobile: cronômetro + botões */}
                         {apt.status === 'SCHEDULED' && (
-                          <div className="d-xl-none" style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-                            {/* A coluna alinha à esquerda para o Reagendar e o Cancelar
-                                começarem na borda do "Entrar no atendimento"; o contador
-                                e o aviso verde se centralizam sozinhos, esticando na
-                                largura do Entrar (pedido de 27 e 29/08). */}
+                          <div className="d-xl-none" style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                            {/* Coluna centralizada: o contador, o aviso verde e o
+                                "Entrar" têm a mesma largura e ficam centralizados
+                                juntos. Os secundários se alinham à esquerda dentro
+                                da caixa logo abaixo, que tem a largura do Entrar. */}
                             <span data-testid="countdown" style={{ fontSize: COUNTDOWN_FONT_SIZE, color: '#5e5873', display: 'flex', alignItems: 'center', gap: '5px', width: ENTER_BUTTON_SIZE.width, maxWidth: '100%', justifyContent: 'center' }}>
                               <CountdownIcon minutes={mins} /> {getCountdownText(mins)}
                             </span>
@@ -805,7 +818,7 @@ export default function AgendamentosPage() {
                               apt={apt}
                               canEnter={canEnter}
                               onBlockedClick={() => setBlockedEnterTooltip(true)}
-                              style={{ marginTop: ENTER_GAP, marginBottom: ENTER_GAP }}
+                              style={{ width: ENTER_BUTTON_SIZE.width, maxWidth: '100%', marginTop: ENTER_GAP, marginBottom: ENTER_GAP }}
                             >
                               <button
                                 className="btn btn-success btn-sm"
@@ -817,27 +830,29 @@ export default function AgendamentosPage() {
                                 Entrar no atendimento
                               </button>
                             </BlockedEnterWrapper>
-                            {canReschedule(mins) ? (
-                              <button
-                                className="btn btn-sm _card-btn-reagendar"
-                                style={RESCHEDULE_BUTTON}
-                                onClick={() => setReagendarTarget(apt)}
-                              >
-                                Reagendar
-                              </button>
-                            ) : (
-                              /* Espaço do "Reagendar" preservado mesmo quando ele some (regra do PDF) */
-                              <div aria-hidden="true" data-testid="reagendar-placeholder" style={{ height: SECONDARY_BUTTON_SIZE.height, width: SECONDARY_BUTTON_SIZE.width, maxWidth: '100%' }} />
-                            )}
-                            {apt.cancel && (
-                              <button
-                                className="btn btn-sm _card-btn-cancelar"
-                                style={{ ...CANCEL_BUTTON, marginTop: '8px' }}
-                                onClick={() => setCancelTarget(apt)}
-                              >
-                                Cancelar
-                              </button>
-                            )}
+                            <div style={SECONDARY_STACK}>
+                              {canReschedule(mins) ? (
+                                <button
+                                  className="btn btn-sm _card-btn-reagendar"
+                                  style={RESCHEDULE_BUTTON}
+                                  onClick={() => setReagendarTarget(apt)}
+                                >
+                                  Reagendar
+                                </button>
+                              ) : (
+                                /* Espaço do "Reagendar" preservado mesmo quando ele some (regra do PDF) */
+                                <div aria-hidden="true" data-testid="reagendar-placeholder" style={{ height: SECONDARY_BUTTON_SIZE.height, width: SECONDARY_BUTTON_SIZE.width, maxWidth: '100%' }} />
+                              )}
+                              {apt.cancel && (
+                                <button
+                                  className="btn btn-sm _card-btn-cancelar"
+                                  style={CANCEL_BUTTON}
+                                  onClick={() => setCancelTarget(apt)}
+                                >
+                                  Cancelar
+                                </button>
+                              )}
+                            </div>
                           </div>
                         )}
 
@@ -856,13 +871,14 @@ export default function AgendamentosPage() {
 
                       {/* Desktop: cronômetro + botões */}
                       {apt.status === 'SCHEDULED' && (
-                        <div className="d-none d-xl-flex flex-column _appt-card-actions" style={{ gap: '8px', marginLeft: '16px', flexShrink: 0, minWidth: ENTER_BUTTON_SIZE.width, alignItems: 'stretch' }}>
-                          <span data-testid="countdown" style={{ fontSize: COUNTDOWN_FONT_SIZE, color: '#5e5873', display: 'flex', alignItems: 'center', gap: '5px', justifyContent: 'center' }}>
+                        <div className="d-none d-xl-flex flex-column _appt-card-actions" style={{ gap: '8px', marginLeft: '16px', flexShrink: 0, minWidth: ENTER_BUTTON_SIZE.width, alignItems: 'center' }}>
+                          <span data-testid="countdown" style={{ fontSize: COUNTDOWN_FONT_SIZE, color: '#5e5873', display: 'flex', alignItems: 'center', gap: '5px', justifyContent: 'center', width: ENTER_BUTTON_SIZE.width, maxWidth: '100%' }}>
                             <CountdownIcon minutes={mins} /> {getCountdownText(mins)}
                           </span>
                           {canEnter && (
                             <div data-testid="ready-to-enter" style={{
                               display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
+                              width: ENTER_BUTTON_SIZE.width, maxWidth: '100%',
                               fontSize: COUNTDOWN_FONT_SIZE, color: '#28c76f', fontWeight: 600,
                             }}>
                               <EmojiIcon name="circuloVerde" size={ICON_SIZE} />
@@ -875,7 +891,7 @@ export default function AgendamentosPage() {
                             apt={apt}
                             canEnter={canEnter}
                             onBlockedClick={() => setBlockedEnterTooltip(true)}
-                            style={{ alignSelf: 'center', marginBottom: ENTER_GAP }}
+                            style={{ width: ENTER_BUTTON_SIZE.width, maxWidth: '100%', marginBottom: ENTER_GAP }}
                           >
                             <button
                               className="btn btn-success _contact-btn"
@@ -887,27 +903,29 @@ export default function AgendamentosPage() {
                               Entrar no atendimento
                             </button>
                           </BlockedEnterWrapper>
-                          {canReschedule(mins) ? (
-                            <button
-                              className="btn _card-btn-reagendar"
-                              style={{ ...RESCHEDULE_BUTTON, alignSelf: 'flex-start' }}
-                              onClick={() => setReagendarTarget(apt)}
-                            >
-                              Reagendar
-                            </button>
-                          ) : (
-                            /* Espaço do "Reagendar" preservado mesmo quando ele some (regra do PDF) */
-                            <div aria-hidden="true" data-testid="reagendar-placeholder" style={{ height: SECONDARY_BUTTON_SIZE.height, width: SECONDARY_BUTTON_SIZE.width, maxWidth: '100%' }} />
-                          )}
-                          {apt.cancel && (
-                            <button
-                              className="btn _card-btn-cancelar"
-                              onClick={() => setCancelTarget(apt)}
-                              style={{ ...CANCEL_BUTTON, alignSelf: 'flex-start' }}
-                            >
-                              Cancelar
-                            </button>
-                          )}
+                          <div style={SECONDARY_STACK}>
+                            {canReschedule(mins) ? (
+                              <button
+                                className="btn _card-btn-reagendar"
+                                style={RESCHEDULE_BUTTON}
+                                onClick={() => setReagendarTarget(apt)}
+                              >
+                                Reagendar
+                              </button>
+                            ) : (
+                              /* Espaço do "Reagendar" preservado mesmo quando ele some (regra do PDF) */
+                              <div aria-hidden="true" data-testid="reagendar-placeholder" style={{ height: SECONDARY_BUTTON_SIZE.height, width: SECONDARY_BUTTON_SIZE.width, maxWidth: '100%' }} />
+                            )}
+                            {apt.cancel && (
+                              <button
+                                className="btn _card-btn-cancelar"
+                                onClick={() => setCancelTarget(apt)}
+                                style={CANCEL_BUTTON}
+                              >
+                                Cancelar
+                              </button>
+                            )}
+                          </div>
                         </div>
                       )}
 
