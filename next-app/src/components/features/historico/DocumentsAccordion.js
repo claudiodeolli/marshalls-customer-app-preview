@@ -34,14 +34,19 @@ export default function DocumentsAccordion({ documents }) {
               const { emoji, label } = getDocConfig(doc.type);
               return (
                 <li key={idx} style={{ fontSize: '13px', color: '#5e5873' }}>
+                  {/* O sublinhado sai no hover e no toque, como no "Ver
+                      encaminhamento" e no "Detalhes da compra" ao lado — era o
+                      que faltava aqui (issue #27). Vai no rótulo, e não no
+                      link inteiro, para não riscar também o ícone. */}
                   <a
                     href={doc.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    style={{ color: '#4F68C7', fontWeight: 600, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px' }}
+                    className="_doc-link"
+                    style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
                   >
                     <span style={{ fontSize: '16px', lineHeight: 1 }}>{emoji}</span>
-                    {label}
+                    <span className="_doc-nome">{label}</span>
                   </a>
                 </li>
               );

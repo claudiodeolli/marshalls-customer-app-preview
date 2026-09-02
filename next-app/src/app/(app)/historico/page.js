@@ -15,6 +15,7 @@ import TypeSelect from '@/components/features/historico/TypeSelect';
 import Stars from '@/components/features/historico/Stars';
 import EvaluationModal from '@/components/features/historico/EvaluationModal';
 import DocumentsAccordion from '@/components/features/historico/DocumentsAccordion';
+import EmojiIcon from '@/components/ui/EmojiIcon';
 import SkeletonCard from '@/components/features/historico/SkeletonCard';
 import EmptyState from '@/components/features/historico/EmptyState';
 
@@ -138,6 +139,23 @@ function isoToBR(str) {
 }
 
 /* ── Main page ────────────────────────────────────────── */
+/**
+ * Dados do encaminhamento para a modal, vindos de um registro do histórico.
+ *
+ * As três aberturas montavam o objeto de jeitos diferentes — uma passava o
+ * encaminhamento cru, outra remontava com as datas do agendamento. Quando o
+ * registro não trazia o médico, os três blocos da modal caíam juntos e ela
+ * abria vazia, com título e botão Fechar e nada no meio (issue #26).
+ */
+function dadosDoEncaminhamento(registro) {
+  const encaminhamento = registro.beneficiaryMedicalReferral ?? {};
+  return {
+    referredByDoctor: encaminhamento.referredByDoctor,
+    createdAt: encaminhamento.createdAt ?? registro.createdAt,
+    updatedAt: encaminhamento.updatedAt ?? registro.updatedAt,
+  };
+}
+
 export default function HistoricoPage() {
   const today = todayStr();
   const sevenAgo = daysAgoStr(7);
@@ -491,7 +509,12 @@ export default function HistoricoPage() {
                     </div>
 
                     {/* Início + Término */}
-                    {r.status !== 'SCHEDULED' && r.status !== 'UNFINISHED' && (r.appointmentBegin || r.appointmentEnd) && (
+                    {/* UNFINISHED saiu da exclusão na issue #26: uma consulta a que o
+                        usuário não compareceu tinha, ainda assim, um horário
+                        marcado, e é ele que o cliente quer ver. SCHEDULED
+                        continua de fora porque a data já aparece logo acima,
+                        no bloco próprio desse status. */}
+                    {r.status !== 'SCHEDULED' && (r.appointmentBegin || r.appointmentEnd) && (
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', marginBottom: '6px' }}>
                         {r.appointmentBegin && (
                           <div className="_hist-datetime" style={{ color: '#777' }}>
@@ -533,11 +556,7 @@ export default function HistoricoPage() {
                               <>
                                 Encaminhamento<br />
                                 <button
-                                  onClick={() => setReferralModal({
-                                    referredByDoctor: r.beneficiaryMedicalReferral.referredByDoctor,
-                                    createdAt: r.createdAt,
-                                    updatedAt: r.updatedAt,
-                                  })}
+                                  onClick={() => setReferralModal(dadosDoEncaminhamento(r))}
                                   className="_hist-link" style={{ background: 'none', border: 'none', padding: 0, fontSize: 'inherit' }}
                                 >
                                   Ver encaminhamento
@@ -603,11 +622,7 @@ export default function HistoricoPage() {
                               <>
                                 Encaminhamento<br />
                                 <button
-                                  onClick={() => setReferralModal({
-                                    referredByDoctor: r.beneficiaryMedicalReferral.referredByDoctor,
-                                    createdAt: r.createdAt,
-                                    updatedAt: r.updatedAt,
-                                  })}
+                                  onClick={() => setReferralModal(dadosDoEncaminhamento(r))}
                                   className="_hist-link" style={{ background: 'none', border: 'none', padding: 0, fontSize: 'inherit' }}
                                 >
                                   Ver encaminhamento
@@ -655,16 +670,17 @@ export default function HistoricoPage() {
                             {r.beneficiaryMedicalReferral ? (
                               <span className="hist-value">
                                 Encaminhamento
-                                {(r.status === 'FINISHED' || r.status === 'CANCELED' || r.status === 'CANCELLED') && (
-                                  <><br />
-                                    <button
-                                      onClick={() => setReferralModal(r.beneficiaryMedicalReferral)}
-                                      className="_hist-link" style={{ background: 'none', border: 'none', padding: 0, fontSize: 'inherit' }}
-                                    >
-                                      Ver encaminhamento
-                                    </button>
-                                  </>
-                                )}
+                                {/* Sem condição de status: o card de "não realizada"
+                                    era o único sem o link, enquanto o equivalente
+                                    da avulsa mantinha o "Detalhes da compra"
+                                    (issue #26). */}
+                                <br />
+                                <button
+                                  onClick={() => setReferralModal(dadosDoEncaminhamento(r))}
+                                  className="_hist-link" style={{ background: 'none', border: 'none', padding: 0, fontSize: 'inherit' }}
+                                >
+                                  Ver encaminhamento
+                                </button>
                               </span>
                             ) : (
                               <span className="hist-value">
@@ -729,7 +745,7 @@ export default function HistoricoPage() {
           style={{ ...MODAL_OVERLAY, zIndex: 10000, background: 'rgba(34,41,47,0.55)', padding: '16px' }}
           onClick={e => { if (e.target === e.currentTarget) setReferralModal(null); }}
         >
-          <div style={{ background: '#fff', borderRadius: '12px', width: '100%', maxWidth: 420, boxShadow: '0 12px 40px rgba(34,41,47,0.25)' }}>
+          <div data-testid="modal-encaminhamento" style={{ background: '#fff', borderRadius: '12px', width: '100%', maxWidth: 420, boxShadow: '0 12px 40px rgba(34,41,47,0.25)' }}>
             <div style={{ padding: '18px 24px 16px', borderBottom: '1px solid #ebe9f1', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <h5 style={{ margin: 0, fontWeight: 700, color: '#5e5873', fontSize: '16px' }}>Encaminhamento</h5>
               <button onClick={() => setReferralModal(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#aaa', fontSize: '24px', lineHeight: 1, padding: '0 4px' }}>×</button>
@@ -753,6 +769,13 @@ export default function HistoricoPage() {
                   <p style={{ margin: '4px 0 0', fontSize: '14px', color: '#5e5873' }}>{referralModal.updatedAt}</p>
                 </div>
               )}
+              {/* Sem isso a modal abriria só com a moldura quando faltasse
+                  dado — foi o que o cliente viu em 30/08 (issue #26). */}
+              {!referralModal.referredByDoctor?.name && !referralModal.createdAt && !referralModal.updatedAt && (
+                <p data-testid="encaminhamento-sem-dados" style={{ margin: 0, fontSize: '14px', color: '#6e6b7b' }}>
+                  Não há informações do encaminhamento para esta consulta.
+                </p>
+              )}
             </div>
             <div style={{ padding: '14px 24px 20px', borderTop: '1px solid #ebe9f1', display: 'flex', justifyContent: 'flex-end' }}>
               <button className="btn btn-outline-secondary btn-sm" onClick={() => setReferralModal(null)}>Fechar</button>
@@ -766,10 +789,10 @@ export default function HistoricoPage() {
           style={{ ...MODAL_OVERLAY, zIndex: 10000, background: 'rgba(34,41,47,0.55)', padding: '16px' }}
           onClick={e => { if (e.target === e.currentTarget) setPurchaseModal(null); }}
         >
-          <div style={{ background: '#fff', borderRadius: '12px', width: '100%', maxWidth: 420, boxShadow: '0 12px 40px rgba(34,41,47,0.25)' }}>
+          <div data-testid="modal-compra" style={{ background: '#fff', borderRadius: '12px', width: '100%', maxWidth: 420, boxShadow: '0 12px 40px rgba(34,41,47,0.25)' }}>
             <div style={{ padding: '18px 24px 16px', borderBottom: '1px solid #ebe9f1', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ fontSize: '18px', lineHeight: 1 }}>🛒</span>
+                <EmojiIcon name="carrinho" size={20} />
                 <h5 style={{ margin: 0, fontWeight: 700, color: '#5e5873', fontSize: '16px' }}>Detalhes da compra</h5>
               </div>
               <button onClick={() => setPurchaseModal(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#aaa', padding: '0 4px', display: 'flex', alignItems: 'center' }}>
@@ -779,7 +802,7 @@ export default function HistoricoPage() {
             <div style={{ padding: '20px 24px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                  <span style={{ fontSize: '13px', lineHeight: 1 }}>🩺</span>
+                  <EmojiIcon name="estetoscopio" size={16} />
                   <small style={{ fontSize: '11px', color: '#6e6b7b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Consulta</small>
                 </div>
                 <p style={{ margin: '4px 0 0', fontSize: '14px', color: '#5e5873' }}>
@@ -788,7 +811,7 @@ export default function HistoricoPage() {
               </div>
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                  <span style={{ fontSize: '13px', lineHeight: 1 }}>👤</span>
+                  <EmojiIcon name="pessoa" size={16} />
                   <small style={{ fontSize: '11px', color: '#6e6b7b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Adquirida por</small>
                 </div>
                 <p style={{ margin: '4px 0 0', fontSize: '14px', color: '#5e5873' }}>{USER.name} {USER.lastName}</p>
@@ -796,7 +819,7 @@ export default function HistoricoPage() {
               {purchaseModal.purchasedAt && (
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                    <span style={{ fontSize: '13px', lineHeight: 1 }}>📅</span>
+                    <EmojiIcon name="calendario" size={16} />
                     <small style={{ fontSize: '11px', color: '#6e6b7b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Data da compra</small>
                   </div>
                   <p style={{ margin: '4px 0 0', fontSize: '14px', color: '#5e5873' }}>{purchaseModal.purchasedAt}</p>
@@ -805,7 +828,7 @@ export default function HistoricoPage() {
               {purchaseModal.purchaseDetails?.amount && (
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                    <span style={{ fontSize: '13px', lineHeight: 1 }}>💰</span>
+                    <EmojiIcon name="dinheiro" size={16} />
                     <small style={{ fontSize: '11px', color: '#6e6b7b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Valor pago</small>
                   </div>
                   <p style={{ margin: '4px 0 0', fontSize: '14px', color: '#5e5873' }}>{purchaseModal.purchaseDetails.amount}</p>
@@ -815,14 +838,14 @@ export default function HistoricoPage() {
                 <>
                   <div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                      <span style={{ fontSize: '13px', lineHeight: 1 }}>💳</span>
+                      <EmojiIcon name="cartao" size={16} />
                       <small style={{ fontSize: '11px', color: '#6e6b7b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Forma de pagamento</small>
                     </div>
                     <p style={{ margin: '4px 0 0', fontSize: '14px', color: '#5e5873' }}>Cartão de crédito</p>
                   </div>
                   <div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                      <span style={{ fontSize: '13px', lineHeight: 1 }}>💳</span>
+                      <EmojiIcon name="cartao" size={16} />
                       <small style={{ fontSize: '11px', color: '#6e6b7b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Cartão utilizado</small>
                     </div>
                     <p style={{ margin: '4px 0 0', fontSize: '14px', color: '#5e5873' }}>
@@ -831,7 +854,7 @@ export default function HistoricoPage() {
                   </div>
                   <div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                      <span style={{ fontSize: '13px', lineHeight: 1 }}>📋</span>
+                      <EmojiIcon name="documento" size={16} />
                       <small style={{ fontSize: '11px', color: '#6e6b7b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Parcelamento</small>
                     </div>
                     <p style={{ margin: '4px 0 0', fontSize: '14px', color: '#5e5873' }}>{purchaseModal.purchaseDetails.card.installments}</p>
@@ -840,7 +863,7 @@ export default function HistoricoPage() {
               ) : purchaseModal.purchaseDetails?.paymentMethod === 'pix' ? (
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                    <span style={{ fontSize: '13px', lineHeight: 1 }}>⚡</span>
+                    <EmojiIcon name="raio" size={16} />
                     <small style={{ fontSize: '11px', color: '#6e6b7b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Forma de pagamento</small>
                   </div>
                   <p style={{ margin: '4px 0 0', fontSize: '14px', color: '#5e5873' }}>Pix</p>
@@ -849,7 +872,7 @@ export default function HistoricoPage() {
               {purchaseModal.purchaseDetails?.status && (
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                    <span style={{ fontSize: '13px', lineHeight: 1 }}>✅</span>
+                    <EmojiIcon name="confirmado" size={16} />
                     <small style={{ fontSize: '11px', color: '#6e6b7b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Status do pagamento</small>
                   </div>
                   <p style={{ margin: '4px 0 0', fontSize: '14px', color: '#28c76f', fontWeight: 600 }}>{purchaseModal.purchaseDetails.status}</p>

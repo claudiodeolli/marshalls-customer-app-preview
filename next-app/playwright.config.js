@@ -48,9 +48,13 @@ module.exports = defineConfig({
     },
     {
       command: 'npm run dev -- -p 3200',
-      url: `${PAGES_URL}/marshalls-customer-app-preview/agendamentos`,
+      // Com a barra no fim: sob GITHUB_PAGES o trailingSlash está ligado, e
+      // sem ela a checagem de prontidão só recebia um 308.
+      url: `${PAGES_URL}/marshalls-customer-app-preview/agendamentos/`,
       reuseExistingServer: true,
-      timeout: 120_000,
+      // Compilação a frio com GITHUB_PAGES=1 num distDir próprio; cresce
+      // junto com o app.
+      timeout: 300_000,
       // distDir separado: dois servidores de dev não podem dividir o .next.
       env: { GITHUB_PAGES: '1', NEXT_DIST_DIR: '.next-pages' },
     },

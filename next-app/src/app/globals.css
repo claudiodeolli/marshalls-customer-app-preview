@@ -1649,3 +1649,25 @@ input._search-input:not([type="checkbox"]):not([type="radio"]):not([type="submit
     background: rgba(234, 84, 85, 0.08) !important;
   }
 }
+
+/* Nome de documento no Histórico: mesmo comportamento do "Ver encaminhamento"
+   e do "Detalhes da compra" (issue #27). O tamanho da fonte fica como estava
+   — ele pediu isso explicitamente; o que faltava era só o sublinhado.
+
+   `:active` cobre o mobile, onde não existe hover e o retorno precisa vir do
+   toque. */
+._doc-link {
+  color: #4F68C7;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+@media (hover: hover) {
+  ._doc-link:hover ._doc-nome {
+    text-decoration: underline;
+  }
+}
+
+._doc-link:active ._doc-nome {
+  text-decoration: underline;
+}

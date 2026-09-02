@@ -250,7 +250,7 @@ export const mockHistory = [
     uuid: 'hist-003',
     type: 'scheduled',
     status: 'UNFINISHED',
-    appointmentBegin: null,
+    appointmentBegin: '15/05/2026 08:30',
     appointmentEnd: null,
     professional: { name: 'Fernanda Rocha', specialties: [{ name: 'Dermatologia' }] },
     beneficiaryMedicalReferral: null,
@@ -265,7 +265,7 @@ export const mockHistory = [
     uuid: 'hist-006',
     type: 'scheduled',
     status: 'UNFINISHED',
-    appointmentBegin: null,
+    appointmentBegin: '10/05/2026 14:00',
     appointmentEnd: null,
     professional: { name: 'Fernanda Rocha', specialties: [{ name: 'Ortopedia' }] },
     beneficiaryMedicalReferral: {

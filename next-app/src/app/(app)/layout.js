@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import AppLayout from '@/components/layout/AppLayout';
 import { useAuth } from '@/lib/AuthContext';
+import { resetarEstadoInicialUmaVez } from '@/lib/previewState';
 
 export default function AppGroupLayout({ children }) {
   const { isAuthenticated, isLoading } = useAuth();
@@ -15,6 +16,12 @@ export default function AppGroupLayout({ children }) {
       router.push('/login');
     }
   }, [isLoading, isAuthenticated, router]);
+
+  // Antes de qualquer tela ler o que está guardado: o preview volta ao mesmo
+  // ponto de partida em todo navegador, uma vez só (issue #19).
+  useEffect(() => {
+    resetarEstadoInicialUmaVez();
+  }, []);
 
   useEffect(() => {
     history.scrollRestoration = 'manual';
