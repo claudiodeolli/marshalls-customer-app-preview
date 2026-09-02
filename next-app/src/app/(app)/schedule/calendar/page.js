@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef, Suspense } from 'react';
+import { useState, useEffect, useRef, useCallback, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import api from '@/lib/api';
 import { useAuth } from '@/lib/AuthContext';
@@ -14,6 +14,7 @@ import PaymentSuccessStep from '@/components/features/schedule/PaymentSuccessSte
 import SlotChoiceModal from '@/components/features/schedule/SlotChoiceModal';
 import ReferralModal from '@/components/features/schedule/ReferralModal';
 import BookingRulesAlert from '@/components/features/schedule/BookingRulesAlert';
+import { useHistoricoDeEtapas } from '@/hooks/useHistoricoDeEtapas';
 
 const IS_MOCK = process.env.NEXT_PUBLIC_MOCK_MODE === '1';
 
@@ -256,6 +257,39 @@ function ScheduleContent() {
     setShowSlotChoiceModal(false);
     setPaymentStep(null);
   }
+
+  // ── Voltar passo a passo (issue #23) ───────────────────────────────────
+  // O fluxo inteiro vive nesta rota e avança por estado, então o histórico
+  // do navegador só conhecia a página de origem. Cada etapa passa a deixar
+  // sua marca, e o "Voltar" — junto com o gesto do aparelho — recua uma de
+  // cada vez em vez de sair de tudo.
+  const etapa = confirmed ? 'confirmado'
+    : paymentStep ? `pagamento-${paymentStep}`
+      : selectedSpecialty ? 'calendario'
+        : showPrices ? 'precos'
+          : 'especialidades';
+
+  const retratoDaEtapa = {
+    referralId, specialtyLocked, lockedSpecialtyUuid,
+    selectedSpecialty, showPrices, paymentStep, selectedDate, selectedSlot,
+  };
+
+  const restaurarEtapa = useCallback(retrato => {
+    setReferralId(retrato.referralId);
+    setSpecialtyLocked(retrato.specialtyLocked);
+    setLockedSpecialtyUuid(retrato.lockedSpecialtyUuid);
+    setSelectedSpecialty(retrato.selectedSpecialty);
+    setShowPrices(retrato.showPrices);
+    setPaymentStep(retrato.paymentStep);
+    // Voltar do calendário para a lista precisa soltar data e horário, senão
+    // a próxima escolha começa suja.
+    setSelectedDate(retrato.selectedDate);
+    setSelectedSlot(retrato.selectedSlot);
+  }, []);
+
+  // A confirmação é ponto final: dali o caminho é "Ver meus agendamentos",
+  // e voltar para o pagamento de uma consulta já marcada não faz sentido.
+  useHistoricoDeEtapas(etapa === 'confirmado' ? 'confirmado' : etapa, retratoDaEtapa, restaurarEtapa);
 
   // Confirm modal: find referral's specialty, lock list, auto-select
   function handleReferralConfirm() {

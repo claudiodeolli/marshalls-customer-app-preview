@@ -17,6 +17,10 @@ const STATUS_CONFIG = {
   SCHEDULED: { label: 'Agendado', color: '#00cfe8', gradient: 'linear-gradient(90deg, #00cfe8, #84e0f0)' },
 };
 
+// No filtro "Todos" ele pediu a sequência completa: primeiro o bloco de
+// Pendentes inteiro, depois o de Agendados (issue #18).
+const ORDEM_DOS_STATUS = { PENDING: 0, SCHEDULED: 1 };
+
 const DEFAULT_STATUS = { color: '#82868b', gradient: 'linear-gradient(90deg, #757575, #bdbdbd)' };
 
 function getStatusConfig(status) {
@@ -46,7 +50,9 @@ export default function EncaminhamentosPage() {
   const router = useRouter();
   const { user } = useAuth();
 
-  const [filter, setFilter]         = useState('PENDING');
+  // Abre em "Todos": ele marcou com ❌ o fato de a tela abrir já filtrada em
+  // "Pendentes" (issue #18).
+  const [filter, setFilter]         = useState('');
   const [referrals, setReferrals]   = useState([]);
   const [pageLoading, setPageLoading] = useState(true);
   const [fetchError, setFetchError] = useState(null);
@@ -89,7 +95,11 @@ export default function EncaminhamentosPage() {
   const visible = (filter ? referrals.filter(r => r.status === filter) : referrals)
     .filter(r => STATUS_CONFIG[r.status])
     .slice()
-    .sort((a, b) => parseCreatedAt(a.createdAt) - parseCreatedAt(b.createdAt));
+    .sort((a, b) => {
+      const porStatus = (ORDEM_DOS_STATUS[a.status] ?? 9) - (ORDEM_DOS_STATUS[b.status] ?? 9);
+      if (porStatus !== 0) return porStatus;
+      return parseCreatedAt(a.createdAt) - parseCreatedAt(b.createdAt);
+    });
 
   return (
     <div>
