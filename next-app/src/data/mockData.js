@@ -207,7 +207,14 @@ export const mockHistory = [
     appointmentBegin: null,
     appointmentEnd: null,
     professional: { name: 'Paulo Salave', specialties: [{ name: 'Neurologia' }] },
-    beneficiaryMedicalReferral: { createdAt: '05/05/2026', referredByDoctor: 'Ana Lima' },
+    beneficiaryMedicalReferral: {
+      // referredByDoctor é objeto em todos os outros registros; aqui era uma
+      // string, e a modal, que lê `.name`, engolia o médico em silêncio
+      // (issue #31).
+      referredByDoctor: { name: 'Ana Lima' },
+      createdAt: '05/05/2026 08:00:00',
+      updatedAt: '07/05/2026 10:20:00',
+    },
     documents: [],
     evaluation: null,
   },

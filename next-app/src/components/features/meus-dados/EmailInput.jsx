@@ -26,7 +26,13 @@ export default function EmailInput({
   placeholder = 'seu@email.com',
   className = 'form-control',
 }) {
-  const [focused, setFocused] = useState(false);
+  // Duas ideias diferentes, e por isso dois estados. Elas viviam numa
+  // variável só, e escolher um domínio fechava a lista fingindo que o campo
+  // tinha perdido o foco — que ele nunca perdia. Como `onFocus` só dispara ao
+  // *receber* foco, nada reabria a lista, e a pessoa precisava sair do campo e
+  // voltar para o autocomplete funcionar de novo (issue #32).
+  const [temFoco, setTemFoco] = useState(false);
+  const [listaDispensada, setListaDispensada] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState(0);
   const ref = useRef(null);
 
@@ -35,12 +41,13 @@ export default function EmailInput({
   const suggestions = domainPart !== null
     ? DOMAINS.filter(d => d.startsWith(domainPart))
     : [];
-  const isOpen = focused && suggestions.length > 0;
+  const isOpen = temFoco && !listaDispensada && suggestions.length > 0;
 
   function selectDomain(domain) {
     const local = atIndex >= 0 ? value.slice(0, atIndex) : value;
     onChange?.(`${local}@${domain}`);
-    setFocused(false);
+    // Dispensa a lista sem mexer no foco: digitar de novo a traz de volta.
+    setListaDispensada(true);
   }
 
   function handleKeyDown(e) {
@@ -57,7 +64,7 @@ export default function EmailInput({
         selectDomain(suggestions[highlightedIndex]);
       }
     } else if (e.key === 'Escape') {
-      setFocused(false);
+      setListaDispensada(true);
     }
   }
 
@@ -70,10 +77,16 @@ export default function EmailInput({
         name={name}
         required={required}
         value={value}
-        onChange={e => { onChange?.(e.target.value); setHighlightedIndex(0); }}
+        onChange={e => {
+          onChange?.(e.target.value);
+          setHighlightedIndex(0);
+          // Qualquer edição desfaz a dispensa: é o que faltava para a lista
+          // voltar depois de apagar um e-mail escolhido por engano.
+          setListaDispensada(false);
+        }}
         onKeyDown={handleKeyDown}
-        onFocus={() => setFocused(true)}
-        onBlur={() => setFocused(false)}
+        onFocus={() => { setTemFoco(true); setListaDispensada(false); }}
+        onBlur={() => setTemFoco(false)}
         placeholder={placeholder}
         className={className}
         autoComplete="off"

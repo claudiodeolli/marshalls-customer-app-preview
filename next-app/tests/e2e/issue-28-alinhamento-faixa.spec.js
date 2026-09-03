@@ -15,9 +15,34 @@ const { test, expect } = require('@playwright/test');
 // os que ele apontou iam de 2 a 11,5.
 const FOLGA_PX = 1;
 
+/**
+ * Espera a geometria parar de mudar antes de medir.
+ *
+ * `document.fonts.ready` sozinho não basta: a lista de cards assenta em
+ * etapas, e uma medição tirada no meio lê uma largura que ainda vai mudar —
+ * 271,61 em vez de 272,72, por exemplo. Aqui esperamos dois quadros seguidos
+ * com a mesma medida.
+ */
+async function aguardarLayoutEstavel(page) {
+  await page.evaluate(async () => {
+    await document.fonts.ready;
+    const ler = () => [...document.querySelectorAll('button')]
+      .filter(b => b.textContent.trim() === 'Entrar no atendimento' && b.getClientRects().length > 0)
+      .map(b => Math.round(b.getBoundingClientRect().width * 100)).join();
+
+    let anterior = ler();
+    for (let tentativa = 0; tentativa < 30; tentativa++) {
+      await new Promise(requestAnimationFrame);
+      const atual = ler();
+      if (atual && atual === anterior) return;
+      anterior = atual;
+    }
+  });
+}
+
 /** Geometria da faixa de cada card agendado, num único retrato do layout. */
 async function medirFaixas(page) {
-  await page.evaluate(() => document.fonts.ready);
+  await aguardarLayoutEstavel(page);
   return page.locator('.card >> visible=true').evaluateAll(cards => cards.map(card => {
     const texto = card.innerText;
     if (!/Consulta agendada/.test(texto)) return null;
@@ -134,6 +159,7 @@ for (const [nome, viewport] of [
     });
 
     test('L6/L7 — larguras e alturas das issues anteriores continuam valendo', async ({ page }) => {
+      await aguardarLayoutEstavel(page);
       const medidas = await page.locator('.card >> visible=true').evaluateAll(cards => cards.flatMap(card => {
         if (!/Consulta agendada/.test(card.innerText)) return [];
         return [...card.querySelectorAll('button')]

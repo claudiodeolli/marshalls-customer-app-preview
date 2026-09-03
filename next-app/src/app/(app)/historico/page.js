@@ -7,6 +7,7 @@ import api from '@/lib/api';
 import { useAuth } from '@/lib/AuthContext';
 import { USER } from '@/data/user';
 import { mockHistory } from '@/data/mockData';
+import { VITRINE_TRAVADA, CARDS_POR_TAG, limitarPorChave } from '@/lib/vitrine';
 import { IconEvent, IconChevronDown } from '@/components/features/historico/icons';
 import { X } from 'lucide-react';
 import StatusBadge from '@/components/features/historico/StatusBadge';
@@ -150,10 +151,23 @@ function isoToBR(str) {
 function dadosDoEncaminhamento(registro) {
   const encaminhamento = registro.beneficiaryMedicalReferral ?? {};
   return {
-    referredByDoctor: encaminhamento.referredByDoctor,
+    medico: nomeDoMedico(encaminhamento.referredByDoctor),
     createdAt: encaminhamento.createdAt ?? registro.createdAt,
     updatedAt: encaminhamento.updatedAt ?? registro.updatedAt,
   };
+}
+
+/**
+ * Nome de quem encaminhou, venha como objeto ou como texto.
+ *
+ * A modal lia `referredByDoctor.name` direto, e um registro do mock trazia o
+ * campo como string — `.name` virava `undefined` e o bloco sumia sem qualquer
+ * sinal (issue #31). O dado foi corrigido; esta tolerância é para um formato
+ * torto não voltar a apagar informação em silêncio.
+ */
+function nomeDoMedico(referredByDoctor) {
+  if (!referredByDoctor) return null;
+  return typeof referredByDoctor === 'string' ? referredByDoctor : referredByDoctor.name ?? null;
 }
 
 export default function HistoricoPage() {
@@ -191,9 +205,29 @@ export default function HistoricoPage() {
     });
   }
 
+  /** Origem do card, que é o eixo do corte da vitrine no filtro de agendadas. */
+  function origemDoRegistro(registro) {
+    return registro.beneficiaryMedicalReferral ? 'encaminhamento' : 'avulsa';
+  }
+
   async function fetchHistory(params) {
     if (IS_MOCK) {
       const mocks = filterMocks(params);
+
+      // Vitrine travada: a tela mostra só os cards curados, dois na tag
+      // "Consulta agendada" — um de cada origem. A gravação continua
+      // acontecendo (issue #29); o que não acontece é a exibição.
+      if (VITRINE_TRAVADA) {
+        const agendadasEmExibicao = new Set(
+          limitarPorChave(
+            mocks.filter(r => r.status === 'SCHEDULED'),
+            origemDoRegistro,
+            CARDS_POR_TAG.historicoAgendadas,
+          ).map(r => r.uuid),
+        );
+        return mocks.filter(r => r.status !== 'SCHEDULED' || agendadasEmExibicao.has(r.uuid));
+      }
+
       const stored = [];
       try {
         const raw = localStorage.getItem('MOCK_HISTORY');
@@ -751,10 +785,10 @@ export default function HistoricoPage() {
               <button onClick={() => setReferralModal(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#aaa', fontSize: '24px', lineHeight: 1, padding: '0 4px' }}>×</button>
             </div>
             <div style={{ padding: '20px 24px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
-              {referralModal.referredByDoctor?.name && (
+              {referralModal.medico && (
                 <div>
                   <small style={{ fontSize: '11px', color: '#6e6b7b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Encaminhado por</small>
-                  <p style={{ margin: '4px 0 0', fontSize: '14px', color: '#5e5873' }}>Dr(a). {referralModal.referredByDoctor.name}</p>
+                  <p style={{ margin: '4px 0 0', fontSize: '14px', color: '#5e5873' }}>Dr(a). {referralModal.medico}</p>
                 </div>
               )}
               {referralModal.createdAt && (
@@ -771,7 +805,7 @@ export default function HistoricoPage() {
               )}
               {/* Sem isso a modal abriria só com a moldura quando faltasse
                   dado — foi o que o cliente viu em 30/08 (issue #26). */}
-              {!referralModal.referredByDoctor?.name && !referralModal.createdAt && !referralModal.updatedAt && (
+              {!referralModal.medico && !referralModal.createdAt && !referralModal.updatedAt && (
                 <p data-testid="encaminhamento-sem-dados" style={{ margin: 0, fontSize: '14px', color: '#6e6b7b' }}>
                   Não há informações do encaminhamento para esta consulta.
                 </p>

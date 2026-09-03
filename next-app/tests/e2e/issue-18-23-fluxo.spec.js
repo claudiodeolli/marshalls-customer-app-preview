@@ -5,56 +5,11 @@
 // #23 — o "Voltar" saía do fluxo inteiro em vez de recuar uma etapa
 const { test, expect } = require('@playwright/test');
 
-/** Status de cada card visível da tela de Encaminhamentos, na ordem da tela. */
-async function lerStatus(page) {
-  return page.locator('.card >> visible=true').evaluateAll(cards => cards
-    .map(card => {
-      const texto = card.innerText;
-      if (/Pendente/.test(texto)) return 'PENDING';
-      if (/Agendado/.test(texto)) return 'SCHEDULED';
-      return null;
-    })
-    .filter(Boolean));
-}
-
-test.describe('Encaminhamentos', () => {
-  test.beforeEach(async ({ page }) => {
-    await page.goto('/encaminhamentos');
-    await expect(page.locator('.card >> visible=true').first()).toBeVisible({ timeout: 20000 });
-  });
-
-  test('B1 — a tela abre no filtro "Todos"', async ({ page }) => {
-    // Ele marcou com ❌ o fato de ela abrir já em "Pendentes".
-    await expect(page.getByRole('button', { name: 'Todos' })).toBeVisible();
-
-    const status = await lerStatus(page);
-    expect(new Set(status).size, 'abrindo em Todos, os dois status aparecem').toBeGreaterThan(1);
-  });
-
-  test('B4/B6 — no "Todos", o bloco de Pendentes vem inteiro antes do de Agendados', async ({ page }) => {
-    const status = await lerStatus(page);
-
-    expect(status.length).toBeGreaterThan(1);
-    expect(status.lastIndexOf('PENDING')).toBeLessThan(status.indexOf('SCHEDULED'));
-    // Ordenado é o mesmo conjunto, só reagrupado: nada some no caminho.
-    expect([...status].sort()).toEqual(status.filter(s => s === 'PENDING').concat(status.filter(s => s === 'SCHEDULED')).sort());
-  });
-
-  test('B2/B3 — cada filtro mostra só o seu status', async ({ page }) => {
-    for (const [rotulo, esperado] of [['Pendentes', 'PENDING'], ['Agendados', 'SCHEDULED']]) {
-      await page.getByRole('button', { name: 'Todos' }).click();
-      await page.getByText(rotulo, { exact: true }).last().click();
-      await expect(page.locator('.card >> visible=true').first()).toBeVisible();
-
-      const status = await lerStatus(page);
-      expect(status.length, `o filtro ${rotulo} precisa mostrar algo`).toBeGreaterThan(0);
-      expect(new Set(status), `o filtro ${rotulo} trouxe status alheio`).toEqual(new Set([esperado]));
-
-      await page.reload();
-      await expect(page.locator('.card >> visible=true').first()).toBeVisible({ timeout: 20000 });
-    }
-  });
-});
+// A parte de Encaminhamentos desta issue foi substituída pela #30: ele voltou
+// a pedir o filtro "Pendentes" pré-selecionado e passou a querer 1 card por
+// tag, o oposto do que a #18 pediu. O que continua valendo — a ordem do
+// Pendente antes do Agendado — está coberto lá, em
+// issue-29-30-31-32.spec.js. Aqui fica só o "Voltar", da #23.
 
 test.describe('Voltar passo a passo', () => {
   // Entrar pelo primeiro passo é essencial: chegando por link direto ao

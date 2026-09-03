@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import api from '@/lib/api';
 import { useAuth } from '@/lib/AuthContext';
 import { mockReferrals } from '@/data/mockData';
+import { VITRINE_TRAVADA, CARDS_POR_TAG, limitarPorChave } from '@/lib/vitrine';
 import { IconPerson, IconMedical, IconCalendar, IconRefresh, IconSchedule, IconReferral } from '@/components/features/encaminhamentos/icons';
 import FilterSelect from '@/components/features/encaminhamentos/FilterSelect';
 import EmptyState from '@/components/features/encaminhamentos/EmptyState';
@@ -50,9 +51,9 @@ export default function EncaminhamentosPage() {
   const router = useRouter();
   const { user } = useAuth();
 
-  // Abre em "Todos": ele marcou com ❌ o fato de a tela abrir já filtrada em
-  // "Pendentes" (issue #18).
-  const [filter, setFilter]         = useState('');
+  // Volta a abrir em "Pendentes": ele pediu assim em 02/09 (issue #30),
+  // depois de ter reclamado do contrário na #18. Trocar de novo é uma linha.
+  const [filter, setFilter]         = useState('PENDING');
   const [referrals, setReferrals]   = useState([]);
   const [pageLoading, setPageLoading] = useState(true);
   const [fetchError, setFetchError] = useState(null);
@@ -101,6 +102,13 @@ export default function EncaminhamentosPage() {
       return parseCreatedAt(a.createdAt) - parseCreatedAt(b.createdAt);
     });
 
+  // Um card por tag enquanto a vitrine está travada. O corte é de exibição:
+  // os encaminhamentos continuam todos no mock, e uuids como ref-003 seguem
+  // servindo às rotas de marcação e aos registros do histórico (issue #30).
+  const emExibicao = VITRINE_TRAVADA
+    ? limitarPorChave(visible, r => r.status, CARDS_POR_TAG.encaminhamentos)
+    : visible;
+
   return (
     <div>
       <div style={{ marginBottom: '1.5rem' }}>
@@ -118,7 +126,7 @@ export default function EncaminhamentosPage() {
         <div className="row">
           {[0, 1, 2].map(i => <SkeletonCard key={i} />)}
         </div>
-      ) : visible.length === 0 ? (
+      ) : emExibicao.length === 0 ? (
         <div className="card">
           <div className="card-body p-0">
             <EmptyState />
@@ -126,7 +134,7 @@ export default function EncaminhamentosPage() {
         </div>
       ) : (
         <div className="row">
-          {visible.map(ref => {
+          {emExibicao.map(ref => {
             const cfg = getStatusConfig(ref.status);
             const isScheduled = ref.status === 'SCHEDULED';
             const isPending = ref.status === 'PENDING';
