@@ -26,7 +26,7 @@ function getCancelWarning(appointment) {
   const within48h = minutesUntil >= 0 && minutesUntil < 48 * 60;
   if (within48h) {
     return [
-      'Esta consulta está a menos de **48 horas do horário agendado**. Conforme informado antes da compra, se optar pelo cancelamento, **a consulta será considerada utilizada e o valor pago não será reembolsado**. Também não será possível escolher uma nova data e horário sem custo adicional.',
+      'Esta consulta está a menos de **48 horas do horário agendado**. Conforme informado antes da compra, se optar pelo cancelamento agora, **a consulta será considerada utilizada e o valor pago não será reembolsado**. Também não será possível escolher uma nova data e horário sem custo adicional.',
     ];
   }
   return [
