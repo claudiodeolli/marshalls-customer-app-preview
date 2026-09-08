@@ -2,18 +2,24 @@
 
 import { useState } from 'react';
 import { IconChevronDown } from './icons';
+import EmojiIcon from '@/components/ui/EmojiIcon';
 
+// Assets locais do Fluent Emoji 3D, como no resto do aplicativo: os
+// caracteres unicode que estavam aqui mudavam de desenho conforme o sistema
+// (issue #34). Os desenhos são os mais próximos dos que já apareciam.
 const DOC_CONFIG = {
-  notes:     { emoji: '📋', label: 'Atestado médico' },
-  medicines: { emoji: '💊', label: 'Receita médica' },
-  exam:      { emoji: '🔬', label: 'Solicitação de exames' },
-  referral:  { emoji: '📎', label: 'Encaminhamento' },
-  report:         { emoji: '📝', label: 'Laudo médico' },
-  medical_report: { emoji: '📄', label: 'Relatório médico' },
+  notes:          { icone: 'prancheta',   label: 'Atestado médico' },
+  medicines:      { icone: 'comprimido',  label: 'Receita médica' },
+  exam:           { icone: 'microscopio', label: 'Solicitação de exames' },
+  referral:       { icone: 'clipe',       label: 'Encaminhamento' },
+  report:         { icone: 'bloco',       label: 'Laudo médico' },
+  medical_report: { icone: 'documento',   label: 'Relatório médico' },
 };
 
+const DOC_PADRAO = { icone: 'documento', label: 'Documento' };
+
 function getDocConfig(type) {
-  return DOC_CONFIG[type] ?? { emoji: '📄', label: 'Documento' };
+  return DOC_CONFIG[type] ?? DOC_PADRAO;
 }
 
 export default function DocumentsAccordion({ documents }) {
@@ -31,7 +37,7 @@ export default function DocumentsAccordion({ documents }) {
         <div style={{ padding: '4px 14px 14px' }}>
           <ul style={{ margin: 0, paddingLeft: '18px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {documents.map((doc, idx) => {
-              const { emoji, label } = getDocConfig(doc.type);
+              const { icone, label } = getDocConfig(doc.type);
               return (
                 <li key={idx} style={{ fontSize: '13px', color: '#5e5873' }}>
                   {/* O sublinhado sai no hover e no toque, como no "Ver
@@ -45,7 +51,7 @@ export default function DocumentsAccordion({ documents }) {
                     className="_doc-link"
                     style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
                   >
-                    <span style={{ fontSize: '16px', lineHeight: 1 }}>{emoji}</span>
+                    <EmojiIcon name={icone} size={16} />
                     <span className="_doc-nome">{label}</span>
                   </a>
                 </li>

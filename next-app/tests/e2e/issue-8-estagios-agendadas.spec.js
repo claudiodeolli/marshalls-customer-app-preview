@@ -114,7 +114,9 @@ test('Cada estágio traz o ícone que lhe corresponde', async ({ page }) => {
   const icones = await page.locator('.card').evaluateAll(cards => cards.map(card => {
     const texto = card.innerText;
     if (!/Consulta agendada/.test(texto)) return null;
-    const img = [...card.querySelectorAll('img')].find(i => i.getClientRects().length > 0);
+    // Só o ícone da contagem: o card ganhou a bandeira do fuso na #34.
+    const img = [...card.querySelectorAll('[data-testid="countdown"] img')]
+      .find(i => i.getClientRects().length > 0);
     return { emDias: /\d+ dias|amanhã/.test(texto), src: img?.getAttribute('src') };
   }).filter(Boolean));
 

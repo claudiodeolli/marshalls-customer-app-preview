@@ -15,6 +15,8 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import EmojiIcon from '@/components/ui/EmojiIcon';
 import RescheduleDialog from '@/components/features/agendamentos/RescheduleDialog';
+import TimezoneSelect from '@/components/features/agendamentos/TimezoneSelect';
+import FlagIcon from '@/components/ui/FlagIcon';
 import SlotChoiceModal from '@/components/features/schedule/SlotChoiceModal';
 import { aplicarReagendamentos } from '@/lib/reagendamentos';
 import { mockSpecialties } from '@/data/mockData';
@@ -38,13 +40,16 @@ const AGEND_STATUS_OPTIONS = [
   { label: 'Não realizadas', value: 'UNFINISHED', color: '#82868b' },
 ];
 
+// A bandeira deixou de ser caractere no rótulo e virou asset (issue #34);
+// `pais` é a sigla ISO, e a ausência dela marca a opção automática, que usa o
+// globo.
 const TIMEZONE_OPTIONS = [
-  { label: '🌐 Automático (navegador)', value: ''                  },
-  { label: '🇧🇷 Brasil — GMT-3',        value: 'America/Sao_Paulo' },
-  { label: '🇦🇴 Angola — GMT+1',        value: 'Africa/Luanda'    },
-  { label: '🇵🇹 Portugal — GMT+0/+1',   value: 'Europe/Lisbon'    },
-  { label: '🇲🇿 Moçambique — GMT+2',    value: 'Africa/Maputo'    },
-  { label: '🇺🇸 Nova York — GMT-5/-4',  value: 'America/New_York' },
+  { label: 'Automático (navegador)', value: '',                   pais: null },
+  { label: 'Brasil — GMT-3',         value: 'America/Sao_Paulo',  pais: 'BR' },
+  { label: 'Angola — GMT+1',         value: 'Africa/Luanda',      pais: 'AO' },
+  { label: 'Portugal — GMT+0/+1',    value: 'Europe/Lisbon',      pais: 'PT' },
+  { label: 'Moçambique — GMT+2',     value: 'Africa/Maputo',      pais: 'MZ' },
+  { label: 'Nova York — GMT-5/-4',   value: 'America/New_York',   pais: 'US' },
 ];
 
 function translateStatus(s) {
@@ -533,16 +538,7 @@ export default function AgendamentosPage() {
                     }}
                   >?</button>
                 </div>
-                <select
-                  className="custom-select _agend-tz-select"
-                  style={{ minWidth: '220px', fontSize: '13px' }}
-                  value={timezone}
-                  onChange={e => setTimezone(e.target.value)}
-                >
-                  {TIMEZONE_OPTIONS.map(o => (
-                    <option key={o.value} value={o.value}>{o.label}</option>
-                  ))}
-                </select>
+                <TimezoneSelect options={TIMEZONE_OPTIONS} value={timezone} onChange={setTimezone} />
               </div>
               <button
                 className="btn btn-primary _agend-new-btn"
@@ -582,16 +578,7 @@ export default function AgendamentosPage() {
                 }}
               >?</button>
             </div>
-            <select
-              className="custom-select"
-              style={{ fontSize: '13px' }}
-              value={timezone}
-              onChange={e => setTimezone(e.target.value)}
-            >
-              {TIMEZONE_OPTIONS.map(o => (
-                <option key={o.value} value={o.value}>{o.label}</option>
-              ))}
-            </select>
+            <TimezoneSelect options={TIMEZONE_OPTIONS} value={timezone} onChange={setTimezone} />
           </div>
           <button
             className="btn btn-primary"
@@ -744,7 +731,7 @@ export default function AgendamentosPage() {
                               {apt.detail?.date ? (
                                 <>
                                   {apt.detail.date} às <strong>{apt.detail.from}</strong>
-                                  <span title="Horário de Brasília">🇧🇷</span>
+                                  <FlagIcon codigo="BR" height={12} style={{ margin: '0 2px' }} />
                                   <span style={{ color: '#9a9a9a', fontSize: '13px' }}>Sao Paulo (GMT-3)</span>
                                 </>
                               ) : (

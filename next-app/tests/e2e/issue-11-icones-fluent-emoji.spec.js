@@ -19,12 +19,16 @@ async function lerIcones(page, medico) {
   // download falha, então um arquivo faltando continua reprovando o teste.
   const cartao = page.locator(`.card:has-text('${medico}')`).first();
   await expect.poll(async () => cartao.evaluate(card => {
-    const visiveis = [...card.querySelectorAll('img')].filter(img => img.getClientRects().length > 0);
+    const visiveis = [...card.querySelectorAll('[data-testid="countdown"] img, [data-testid="ready-to-enter"] img')]
+      .filter(img => img.getClientRects().length > 0);
     return visiveis.length > 0 && visiveis.every(img => img.complete);
   }), { timeout: 15000 }).toBe(true);
 
+  // Escopado ao contador e ao aviso verde: desde a #34 o card também traz a
+  // bandeira do fuso, e "a primeira imagem do card" deixou de ser o ícone da
+  // contagem.
   return cartao.evaluate(card =>
-    [...card.querySelectorAll('img')]
+    [...card.querySelectorAll('[data-testid="countdown"] img, [data-testid="ready-to-enter"] img')]
       .filter(img => img.getClientRects().length > 0)
       .map(img => ({
         src: img.getAttribute('src'),

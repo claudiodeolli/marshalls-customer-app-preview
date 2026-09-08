@@ -25,6 +25,12 @@ const ARQUIVOS = {
   documento: 'page_facing_up_3d.png',
   confirmado: 'check_mark_button_3d.png',
   raio: 'high_voltage_3d.png',
+  globo: 'globe_with_meridians_3d.png',
+  prancheta: 'clipboard_3d.png',
+  comprimido: 'pill_3d.png',
+  microscopio: 'microscope_3d.png',
+  clipe: 'paperclip_3d.png',
+  bloco: 'memo_3d.png',
 };
 
 export function iconPath(nome) {

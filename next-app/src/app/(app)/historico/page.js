@@ -17,6 +17,7 @@ import Stars from '@/components/features/historico/Stars';
 import EvaluationModal from '@/components/features/historico/EvaluationModal';
 import DocumentsAccordion from '@/components/features/historico/DocumentsAccordion';
 import EmojiIcon from '@/components/ui/EmojiIcon';
+import FlagIcon from '@/components/ui/FlagIcon';
 import SkeletonCard from '@/components/features/historico/SkeletonCard';
 import EmptyState from '@/components/features/historico/EmptyState';
 
@@ -617,7 +618,7 @@ export default function HistoricoPage() {
                               <small className="hist-label"><b>Data e horário da consulta</b></small><br />
                               <span className="hist-value">
                                 <span style={{ whiteSpace: 'nowrap' }}>
-                                  {date} às {time} <span title="Horário de Brasília">🇧🇷</span>{' '}
+                                  {date} às {time} <FlagIcon codigo="BR" height={12} style={{ margin: '0 2px' }} />{' '}
                                   <span style={{ color: '#9a9a9a', fontSize: '12px' }}>Sao Paulo (GMT-3)</span>
                                 </span>
                                 {converted && (
