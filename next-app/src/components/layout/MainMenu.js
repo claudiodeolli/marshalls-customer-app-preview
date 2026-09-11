@@ -166,7 +166,7 @@ export default function MainMenu({ collapsed, onToggleCollapse, onOverlayClick, 
           <ul
             className={`${plantaoInactive ? 'plantao-inactive' : ''}`}
             data-plantao-shortcut="1"
-            style={{ listStyle: 'none', margin: '0', marginTop: '0.5rem', padding: '0', paddingTop: '1rem' }}
+            style={{ listStyle: 'none', margin: '0', marginTop: '7px', padding: '0', paddingTop: '14px' }}
           >
             <Link href={plantaoItem.href} onClick={(e) => { if (p === plantaoItem.href) e.preventDefault(); onOverlayClick(); }}>
               <span className="_sb-plantao-icon-wrap">
@@ -238,7 +238,7 @@ export default function MainMenu({ collapsed, onToggleCollapse, onOverlayClick, 
           color: '#fff',
           padding: '5px 13px',
           borderRadius: '7px',
-          fontSize: '.78rem',
+          fontSize: '10.92px',
           fontWeight: 600,
           letterSpacing: '.025em',
           whiteSpace: 'nowrap',

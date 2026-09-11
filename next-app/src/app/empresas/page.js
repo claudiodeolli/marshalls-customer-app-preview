@@ -23,7 +23,7 @@ export default function EmpresasPage() {
   return (
     <div
       className="d-flex align-items-center justify-content-center"
-      style={{ minHeight: '100vh', background: '#f8f8f8', padding: '2rem' }}
+      style={{ minHeight: '100vh', background: '#f8f8f8', padding: '28px' }}
     >
       <div style={{ width: '100%', maxWidth: '480px' }}>
         <div className="text-center mb-2">

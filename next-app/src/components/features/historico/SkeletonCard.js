@@ -15,7 +15,7 @@ export default function SkeletonCard() {
           </div>
           <hr style={{ margin: '8px 0', borderColor: 'rgba(0,0,0,0.1)' }} />
           <div className="sk" style={{ width: 72, height: 10, marginBottom: 5 }} />
-          <div className="sk" style={{ width: '78%', height: 15, marginBottom: '1rem' }} />
+          <div className="sk" style={{ width: '78%', height: 15, marginBottom: '14px' }} />
           <div className="sk" style={{ width: 72, height: 10, marginBottom: 5 }} />
           <div className="sk" style={{ width: '55%', height: 15 }} />
         </div>

@@ -60,8 +60,8 @@ export default function PlantaoPage() {
   }
 
   return (
-    <div className="_plantao-page" style={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - 16rem)' }}>
-      <h4 style={{ fontWeight: '600', fontSize: '1.25rem', color: '#5e5873', marginBottom: '1.5rem', lineHeight: '1.5' }}>
+    <div className="_plantao-page" style={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - 224px)' }}>
+      <h4 style={{ fontWeight: '600', fontSize: '17.5px', color: '#5e5873', marginBottom: '21px', lineHeight: '1.5' }}>
         <span className="_hidden-desktop"><span className="_plantao-name">{USER.firstName}</span>, inicie seu atendimento médico <br /> online de forma segura</span>
         <span className="_hidden-mobile">Inicie seu atendimento médico online de forma segura</span>
       </h4>
@@ -75,7 +75,7 @@ export default function PlantaoPage() {
 
       <div
         className="card"
-        style={{ flex: '1', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', padding: '2rem' }}
+        style={{ flex: '1', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', padding: '28px' }}
       >
         {consultaUrl ? (
           /* Sala de teleconsulta (mock) */
@@ -89,7 +89,7 @@ export default function PlantaoPage() {
               justifyContent: 'center',
               background: 'linear-gradient(135deg, #0d1b2a, #1b2a3b)',
               color: '#fff',
-              gap: '1.5rem',
+              gap: '21px',
             }}
           >
             <div style={{ opacity: 0.7 }}>
@@ -109,14 +109,14 @@ export default function PlantaoPage() {
             </div>
             <button
               className="btn btn-outline-secondary btn-sm"
-              style={{ color: '#fff', borderColor: 'rgba(255,255,255,0.4)', marginTop: '1rem' }}
+              style={{ color: '#fff', borderColor: 'rgba(255,255,255,0.4)', marginTop: '14px' }}
               onClick={() => { setConsultaUrl(null); setLoadingState(null); }}
             >
               Encerrar atendimento
             </button>
           </div>
         ) : loadingState === 'media' ? (
-          <div className="spinner-border text-primary" style={{ width: '3.5rem', height: '3.5rem' }} />
+          <div className="spinner-border text-primary" style={{ width: '49px', height: '49px' }} />
         ) : (
           <>
             <div className="_plantao-mobile-hint">

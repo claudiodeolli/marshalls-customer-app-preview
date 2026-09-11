@@ -2,8 +2,8 @@
 
 export default function PlantaoPage() {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - 16rem)' }}>
-      <h4 style={{ fontWeight: '600', fontSize: '1.25rem', color: '#5e5873', marginBottom: '1.5rem', lineHeight: '1.5' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - 224px)' }}>
+      <h4 style={{ fontWeight: '600', fontSize: '17.5px', color: '#5e5873', marginBottom: '21px', lineHeight: '1.5' }}>
         Inicie seu atendimento médico online de forma segura
       </h4>
       <div className="card" style={{ flex: '1', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>

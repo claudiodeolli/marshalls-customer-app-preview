@@ -35,9 +35,9 @@ export const MODAL_OVERLAY = {
 };
 
 export const MODAL_CARD = { width: '460px', maxWidth: '92vw', borderRadius: '12px' };
-export const MODAL_BODY = { padding: '1.75rem' };
+export const MODAL_BODY = { padding: '24.5px' };
 
-export const MODAL_TITLE = { fontSize: '20px', fontWeight: 700, marginBottom: '1rem' };
+export const MODAL_TITLE = { fontSize: '20px', fontWeight: 700, marginBottom: '14px' };
 export const MODAL_TEXT = { fontSize: '16px', lineHeight: 1.6, color: '#333' };
 export const MODAL_TEXT_MUTED = { fontSize: '16px', lineHeight: 1.6, color: '#5e5873' };
 
@@ -45,7 +45,7 @@ export const MODAL_TEXT_MUTED = { fontSize: '16px', lineHeight: 1.6, color: '#5e
 // em vez de espremer o rótulo.
 export const MODAL_ACTIONS = {
   display: 'flex', justifyContent: 'flex-end',
-  gap: '10px', flexWrap: 'wrap', marginTop: '1.5rem',
+  gap: '10px', flexWrap: 'wrap', marginTop: '21px',
 };
 export const MODAL_BUTTON = {
   minHeight: '44px', fontSize: '16px', padding: '0 20px',

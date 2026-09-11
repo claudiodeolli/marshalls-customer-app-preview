@@ -199,13 +199,13 @@ export default function MeusArquivosPage() {
   /* ── Render: form screen (clean) ───────────────────── */
   if (showForm) {
     return (
-      <div style={{ paddingBottom: '1.5rem' }}>
+      <div style={{ paddingBottom: '21px' }}>
         <div className="card mb-3">
           <div className="card-header" style={{ padding: '14px 20px' }}>
             <h5 className="card-title mb-0 _arquivo-card-title" style={{ fontWeight: 700 }}>Informações do Arquivo</h5>
           </div>
           <div className="card-body" style={{ padding: '24px 28px' }}>
-            <p style={{ fontSize: 13, color: '#6e6b7b', marginBottom: '1.25rem' }}>
+            <p style={{ fontSize: 13, color: '#6e6b7b', marginBottom: '17.5px' }}>
               Preencha os campos abaixo para enviar um novo arquivo.
             </p>
 
@@ -404,7 +404,7 @@ export default function MeusArquivosPage() {
 
   /* ── Render: main screen ────────────────────────────── */
   return (
-    <div style={{ paddingBottom: '1.5rem' }}>
+    <div style={{ paddingBottom: '21px' }}>
 
       {/* Intro */}
       <p className="text-muted mb-2" style={{ fontSize: 14 }}>
@@ -414,7 +414,7 @@ export default function MeusArquivosPage() {
       {/* Security banner — ícone junto do título, corpo sem recuo (issue #7) */}
       <div style={{
         background: '#fff8f0', border: '1px solid #ffe0b2', borderRadius: 10,
-        padding: '14px 16px', marginBottom: '1.25rem',
+        padding: '14px 16px', marginBottom: '17.5px',
         fontSize: 13, color: '#5e5873', lineHeight: 1.75,
       }}>
         {/* flex-start em vez de center: o título quebra em duas linhas no
@@ -431,7 +431,7 @@ export default function MeusArquivosPage() {
       <button
         onClick={openForm}
         className="btn btn-primary _upload-btn"
-        style={{ marginBottom: '1.25rem', borderRadius: 10, fontWeight: 700, padding: '0 12px', fontSize: 15 }}
+        style={{ marginBottom: '17.5px', borderRadius: 10, fontWeight: 700, padding: '0 12px', fontSize: 15 }}
       >
         Enviar novo arquivo
       </button>
@@ -583,9 +583,9 @@ export default function MeusArquivosPage() {
       )}
 
       {/* ── File list ────────────────────────────────── */}
-      <div style={{ marginTop: '1rem' }}>
+      <div style={{ marginTop: '14px' }}>
         {filteredFiles.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '2.5rem', color: '#b9b9c3', fontSize: 14 }}>
+          <div style={{ textAlign: 'center', padding: '35px', color: '#b9b9c3', fontSize: 14 }}>
             {filterApplied ? 'Nenhum resultado encontrado' : 'Resultados aqui'}
           </div>
         ) : (

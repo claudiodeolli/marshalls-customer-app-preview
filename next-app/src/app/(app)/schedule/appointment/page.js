@@ -43,7 +43,7 @@ export default function ScheduleAppointmentPage() {
   return (
     <div>
       {/* Page header */}
-      <div style={{ marginBottom: '1.5rem' }}>
+      <div style={{ marginBottom: '21px' }}>
         <h4 style={{ fontWeight: 600, marginBottom: '4px' }}>Atendimento Médico</h4>
         <p className="text-muted mb-0" style={{ fontSize: '14px' }}>
           Inicie seu atendimento médico online de forma segura
@@ -78,7 +78,7 @@ export default function ScheduleAppointmentPage() {
           alignItems: 'center',
           justifyContent: 'center',
           minHeight: '60vh',
-          padding: '1.5rem',
+          padding: '21px',
           position: 'relative',
         }}
       >
@@ -103,7 +103,7 @@ export default function ScheduleAppointmentPage() {
                 justifyContent: 'center',
                 background: 'linear-gradient(135deg, #0d1b2a, #1b2a3b)',
                 color: '#fff',
-                gap: '1.5rem',
+                gap: '21px',
               }}
             >
               <div style={{ opacity: 0.7 }}>
@@ -124,7 +124,7 @@ export default function ScheduleAppointmentPage() {
               </div>
               <button
                 className="btn btn-outline-secondary btn-sm"
-                style={{ color: '#fff', borderColor: 'rgba(255,255,255,0.4)', marginTop: '1rem' }}
+                style={{ color: '#fff', borderColor: 'rgba(255,255,255,0.4)', marginTop: '14px' }}
                 onClick={() => router.push('/agendamentos')}
               >
                 Encerrar atendimento
@@ -133,14 +133,14 @@ export default function ScheduleAppointmentPage() {
           </div>
         ) : (
           <div style={{ textAlign: 'center' }}>
-            <h6 style={{ fontWeight: 400, marginBottom: '2rem', color: '#5e5873' }}>
+            <h6 style={{ fontWeight: 400, marginBottom: '28px', color: '#5e5873' }}>
               {loadingState === 'media'
                 ? 'Acessando sua câmera e microfone...'
                 : 'Clique no botão abaixo para iniciar seu atendimento'}
             </h6>
 
             {loadingState === 'media' ? (
-              <div className="spinner-border text-primary" style={{ width: '3.5rem', height: '3.5rem' }} />
+              <div className="spinner-border text-primary" style={{ width: '49px', height: '49px' }} />
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', alignItems: 'center' }}>
                 <button
@@ -148,7 +148,7 @@ export default function ScheduleAppointmentPage() {
                   onClick={handleStart}
                   style={{
                     padding: '14px 40px',
-                    fontSize: '1.1rem',
+                    fontSize: '15.4px',
                     fontWeight: 700,
                     borderRadius: '50px',
                     letterSpacing: '0.5px',

@@ -8,13 +8,13 @@ body {
 
 /* Espaço para a faixa fixada no rodapé */
 .app-content {
-  padding-bottom: 2rem !important;
+  padding-bottom: 28px !important;
 }
 
-/* Gap entre o header sticky e o conteúdo: 7.75rem (original) − 1.3rem (padding-top do
-   app-content) − 4.45rem (min-height do header) = 2rem. */
+/* Gap entre o header sticky e o conteúdo: 108.5px (original) − 18.2px (padding-top do
+   app-content) − 62.3px (min-height do header) = 28px. */
 .content-wrapper {
-  padding-top: 2rem !important;
+  padding-top: 28px !important;
 }
 
 /* Remove o gradiente que o Vuexy renderiza atrás do navbar flutuante —
@@ -51,7 +51,7 @@ html::-webkit-scrollbar-thumb:hover {
 }
 
 /* Navbar sticky dentro do app-content — herda o padding horizontal do container
-   (2rem de cada lado via html[dir] .content.app-content). */
+   (28px de cada lado via html[dir] .content.app-content). */
 .header-navbar.floating-nav {
   position: sticky !important;
   top: 0 !important;
@@ -63,10 +63,10 @@ html::-webkit-scrollbar-thumb:hover {
   border-radius: 8px !important;
 }
 
-/* O padding-top do app-content empurrava o conteúdo abaixo do header fixo (7.75rem).
-   Com sticky, o header ocupa espaço no fluxo — basta o gap visual de 1.3rem no topo. */
+/* O padding-top do app-content empurrava o conteúdo abaixo do header fixo (108.5px).
+   Com sticky, o header ocupa espaço no fluxo — basta o gap visual de 18.2px no topo. */
 html[dir] .content.app-content {
-  padding-top: 1.3rem !important;
+  padding-top: 18.2px !important;
 }
 
 /* Mobile: remove o gap acima do navbar — com sticky ele fica no fluxo e o padding
@@ -88,8 +88,8 @@ html[dir] .content.app-content {
 
   /* Espaçamento lateral realocado do app-content para o content-wrapper */
   .content-wrapper {
-    padding-left: 1.95rem !important;
-    padding-right: 1.95rem !important;
+    padding-left: 27.3px !important;
+    padding-right: 27.3px !important;
   }
 
   /* Overlay deve cobrir navbar (1030) e bottom nav (1025).
@@ -213,16 +213,16 @@ html[dir] .content.app-content {
 [data-plantao-shortcut] {
   list-style: none;
   margin: 0;
-  margin-top: 0.5rem;
+  margin-top: 7px;
   padding: 0;
-  padding-top: 1rem;
+  padding-top: 14px;
 }
 
 [data-plantao-shortcut]>a {
   display: flex;
   align-items: center;
   color: #fff;
-  font-size: 1.1rem;
+  font-size: 15.4px;
   font-weight: 400;
   line-height: 1.45;
   text-decoration: none;
@@ -234,7 +234,7 @@ html[dir] .content.app-content {
   width: 20px;
   height: 20px;
   flex-shrink: 0;
-  margin-right: 1.1rem;
+  margin-right: 15.4px;
   position: relative;
   top: 1px;
 }
@@ -300,7 +300,7 @@ html[dir] .content.app-content {
   flex-shrink: 0;
   width: 20px;
   height: 20px;
-  margin-right: 1.1rem;
+  margin-right: 15.4px;
   top: 1px;
 }
 
@@ -391,7 +391,7 @@ html[dir] .content.app-content {
   display: flex !important;
   align-items: center;
   justify-content: flex-end;
-  margin-right: 1rem;
+  margin-right: 14px;
   min-height: 38px;
 }
 
@@ -399,14 +399,14 @@ html[dir] .content.app-content {
   font-size: 16px !important;
   color: #5e5873;
   font-weight: 600 !important;
-  margin-right: 0.75rem;
+  margin-right: 10.5px;
 }
 
 /* Nota: o item Plantão 24h foi movido para o header do sidebar,
    portanto as regras :first-child que eram destinadas a ele foram removidas. */
 
 /* ── Sidebar recolhida ── */
-/* Nav items: SVG (20px) é menor que o texto (1.1rem × line-height 1.45 ≈ 25.5px).
+/* Nav items: SVG (20px) é menor que o texto (15.4px × line-height 1.45 ≈ 22.3px).
    Compensa com padding-top/bottom de 13px para igualar a altura de ~46px do expandido. */
 .vertical-layout.vertical-menu-modern.menu-collapsed .main-menu:not(.expanded) .navigation>li.nav-item>a {
   padding-top: 13px !important;
@@ -506,8 +506,8 @@ img._logo-collapsed {
 /* ── Sidebar recolhida: Plantão 24h — só ícone, centralizado ── */
 .vertical-layout.vertical-menu-modern.menu-collapsed .main-menu:not(.expanded) [data-plantao-shortcut] {
   width: 100% !important;
-  padding-top: 1rem !important;
-  margin-top: 0.5rem !important;
+  padding-top: 14px !important;
+  margin-top: 7px !important;
 }
 
 .vertical-layout.vertical-menu-modern.menu-collapsed .main-menu:not(.expanded) [data-plantao-shortcut]>a {
@@ -529,7 +529,7 @@ img._logo-collapsed {
 
 /* ── Padding bottom do navigation — valor original do Vuexy ── */
 #main-menu-navigation {
-  padding-bottom: .75rem !important;
+  padding-bottom: 10.5px !important;
 }
 
 /* ── Sidebar: altura total e scroll ── */
@@ -573,7 +573,7 @@ img._logo-collapsed {
 ._sb-sq--fg {
   background: #fff;
   z-index: 5;
-  border-bottom-right-radius: .5rem;
+  border-bottom-right-radius: 7px;
 }
 
 .main-menu-content:hover~._sb-sq,
@@ -600,12 +600,12 @@ img._logo-collapsed {
 }
 
 ._encerrar-conta-section {
-  margin-top: 0.5rem;
+  margin-top: 7px;
 }
 
 @media (min-width: 1200px) {
   ._encerrar-conta-section {
-    margin-top: 3rem;
+    margin-top: 42px;
   }
 }
 
@@ -750,7 +750,7 @@ html[dir] .card .card-body._filter-card-body {
 /* Título do card de arquivos: fonte maior no mobile */
 @media (max-width: 767.98px) {
   .content-body h5._arquivo-card-title {
-    font-size: 1.15rem !important;
+    font-size: 16.1px !important;
   }
 }
 
@@ -788,7 +788,7 @@ input._search-input:not([type="checkbox"]):not([type="radio"]):not([type="submit
 
 /* Botão Sair do dropdown de usuário */
 ._sair-link {
-  font-size: 1.1rem;
+  font-size: 15.4px;
 }
 
 ._sair-link:hover {
@@ -797,7 +797,7 @@ input._search-input:not([type="checkbox"]):not([type="radio"]):not([type="submit
 
 @media (max-width: 1199.98px) {
   ._sair-link {
-    font-size: 1.2rem !important;
+    font-size: 16.8px !important;
   }
 }
 
@@ -806,18 +806,18 @@ input._search-input:not([type="checkbox"]):not([type="radio"]):not([type="submit
   display: flex !important;
 }
 
-/* Mobile: texto da sidemenu no mesmo tamanho do Sair (1.2rem no mobile) */
+/* Mobile: texto da sidemenu no mesmo tamanho do Sair (16.8px no mobile) */
 @media (max-width: 1199.98px) {
   .main-menu .navigation li a .menu-title,
   [data-plantao-shortcut]>a {
-    font-size: 1.2rem;
+    font-size: 16.8px;
   }
 }
 
 /* ── Hamburger e avatar maiores no mobile ── */
 @media (max-width: 1199.98px) {
   .header-navbar .navbar-container .bookmark-wrapper .nav-link {
-    padding: 0.6rem 0.9rem !important;
+    padding: 8.4px 12.6px !important;
   }
 
   .header-navbar .navbar-container .bookmark-wrapper .nav-link svg {
@@ -948,12 +948,12 @@ input._search-input:not([type="checkbox"]):not([type="radio"]):not([type="submit
 
   /* Espaçamento superior na área da logo */
   .main-menu .navbar-header {
-    padding-top: 2rem !important;
+    padding-top: 28px !important;
   }
 
   /* Espaçamento inferior no último item — sobrescreve o padding-bottom:0 global */
   #main-menu-navigation {
-    padding-bottom: 5rem !important;
+    padding-bottom: 70px !important;
   }
 
   /* Remove transições e animações dos itens do menu no mobile
@@ -976,25 +976,25 @@ input._search-input:not([type="checkbox"]):not([type="radio"]):not([type="submit
 
   /* Título do breadcrumb menor */
   .content-header-title {
-    font-size: 1.05rem !important;
+    font-size: 14.7px !important;
   }
 
   /* Breadcrumb header: menos margem inferior */
   .content-header-left {
-    margin-bottom: 0.5rem !important;
+    margin-bottom: 7px !important;
   }
 
   /* Cards: padding menor */
   .card .card-body {
-    padding: 1rem !important;
+    padding: 14px !important;
   }
 
   .card .card-header {
-    padding: 0.75rem 1rem !important;
+    padding: 10.5px 14px !important;
   }
 
   .card .card-footer {
-    padding: 0.75rem 1rem !important;
+    padding: 10.5px 14px !important;
   }
 
   /* Tabelas: scroll horizontal garantido */
@@ -1047,7 +1047,7 @@ input._search-input:not([type="checkbox"]):not([type="radio"]):not([type="submit
 
   ._appt-card-actions {
     margin-left: 0 !important;
-    margin-top: 0.75rem !important;
+    margin-top: 10.5px !important;
     flex-direction: row !important;
     flex-wrap: wrap !important;
     width: 100% !important;
@@ -1112,21 +1112,21 @@ input._search-input:not([type="checkbox"]):not([type="radio"]):not([type="submit
 
   /* Conteúdo: padding lateral — alinhado com a regra do bloco 1199.98px */
   [dir=ltr] .vertical-layout .app-content .content-wrapper {
-    padding-left: 1.95rem !important;
-    padding-right: 1.95rem !important;
+    padding-left: 27.3px !important;
+    padding-right: 27.3px !important;
   }
 
   /* Cards ainda menores */
   .card .card-body {
-    padding: 0.75rem !important;
+    padding: 10.5px !important;
   }
 
   .card .card-header {
-    padding: 0.6rem 0.75rem !important;
+    padding: 8.4px 10.5px !important;
   }
 
   .card .card-footer {
-    padding: 0.6rem 0.75rem !important;
+    padding: 8.4px 10.5px !important;
   }
 
   /* Título breadcrumb */
@@ -1158,7 +1158,7 @@ input._search-input:not([type="checkbox"]):not([type="radio"]):not([type="submit
 
   /* Assinaturas: título compacto */
   ._assn-title {
-    font-size: 0.9rem !important;
+    font-size: 12.6px !important;
     line-height: 1.3 !important;
   }
 
@@ -1186,16 +1186,16 @@ input._search-input:not([type="checkbox"]):not([type="radio"]):not([type="submit
 
   /* Confirmação de agendamento: padding menor */
   ._confirm-card {
-    padding: 1.5rem !important;
+    padding: 21px !important;
   }
 
   /* Page headings */
   .content-body h4 {
-    font-size: 1.05rem !important;
+    font-size: 14.7px !important;
   }
 
   .content-body h5 {
-    font-size: 1rem !important;
+    font-size: 14px !important;
   }
 
   input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]):not([type="range"]):not([type="file"]):not([type="color"]),
@@ -1272,7 +1272,7 @@ input._search-input:not([type="checkbox"]):not([type="radio"]):not([type="submit
   .app-content,
   .content-wrapper,
   .content-body {
-    padding-bottom: calc(64px + 0.5rem) !important;
+    padding-bottom: calc(64px + 7px) !important;
   }
 }
 
@@ -1309,7 +1309,7 @@ input._search-input:not([type="checkbox"]):not([type="radio"]):not([type="submit
     font-size: calc(1em + 2px);
   }
   ._plantao-page {
-    height: calc(100svh - 12rem - 74px) !important;
+    height: calc(100svh - 168px - 74px) !important;
   }
 
   .app-content:has(._plantao-page),
@@ -1343,14 +1343,14 @@ input._search-input:not([type="checkbox"]):not([type="radio"]):not([type="submit
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.75rem 1rem;
-  gap: 1rem;
+  padding: 10.5px 14px;
+  gap: 14px;
 }
 
 ._contact-info {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 10.5px;
   flex: 1;
   min-width: 0;
 }
@@ -1366,11 +1366,11 @@ input._search-input:not([type="checkbox"]):not([type="radio"]):not([type="submit
 }
 
 ._contact-title {
-  font-size: 0.9rem;
+  font-size: 12.6px;
 }
 
 ._contact-subtitle {
-  font-size: 0.8rem;
+  font-size: 11.2px;
 }
 
 @media (max-width: 767.98px) {
@@ -1385,17 +1385,17 @@ input._search-input:not([type="checkbox"]):not([type="radio"]):not([type="submit
   }
 
   ._contact-title {
-    font-size: 1.1rem;
+    font-size: 15.4px;
   }
 
   ._contact-subtitle {
-    font-size: 0.95rem;
+    font-size: 13.3px;
   }
 
   ._contact-btn {
-    padding-left: 1.1rem !important;
-    padding-right: 1.1rem !important;
-    font-size: 0.9rem !important;
+    padding-left: 15.4px !important;
+    padding-right: 15.4px !important;
+    font-size: 12.6px !important;
   }
 }
 
@@ -1491,13 +1491,13 @@ input._search-input:not([type="checkbox"]):not([type="radio"]):not([type="submit
   flex-direction: column;
   align-items: center;
   gap: 8px;
-  margin-bottom: 1.5rem;
+  margin-bottom: 21px;
   text-align: center;
 }
 
 ._plantao-mobile-hint p {
   margin: 0;
-  font-size: 1rem;
+  font-size: 14px;
   font-weight: 600;
   color: #5e5873;
   line-height: 1.5;
@@ -1554,7 +1554,7 @@ input._search-input:not([type="checkbox"]):not([type="radio"]):not([type="submit
 
 /* ── _hist-results: row-gap substitui mb-2; last row não tem espaço extra ── */
 ._hist-results .row {
-  row-gap: 1.5rem;
+  row-gap: 21px;
   margin-left: -10px;
   margin-right: -10px;
 }

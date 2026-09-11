@@ -485,10 +485,10 @@ function ScheduleContent() {
   if (loadingSpecialties || (urlAvulsaSpec && !selectedSpecialty)) {
     return (
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '60vh' }}>
-        <h6 style={{ fontWeight: 400, color: '#5e5873', marginBottom: '1.5rem' }}>
+        <h6 style={{ fontWeight: 400, color: '#5e5873', marginBottom: '21px' }}>
           Carregando especialidades...
         </h6>
-        <div className="spinner-border" style={{ color: '#4daab6', width: '3rem', height: '3rem' }} />
+        <div className="spinner-border" style={{ color: '#4daab6', width: '42px', height: '42px' }} />
       </div>
     );
   }
@@ -658,7 +658,7 @@ function ScheduleContent() {
         <div className="card mb-3">
           <div className="card-body p-0">
             {filteredSpecialties.length === 0 ? (
-              <div style={{ padding: '1.5rem', textAlign: 'center', color: '#6e6b7b', fontSize: 14 }}>
+              <div style={{ padding: '21px', textAlign: 'center', color: '#6e6b7b', fontSize: 14 }}>
                 Nenhuma especialidade encontrada para &ldquo;{specSearch}&rdquo;
               </div>
             ) : (
@@ -837,11 +837,11 @@ function ScheduleContent() {
               </div>
               <div className="card-body">
                 {loadingSlots ? (
-                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '2rem', gap: 12 }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '28px', gap: 12 }}>
                     <p className="text-muted mb-0" style={{ fontSize: 14 }}>
                       Carregando horários disponíveis...
                     </p>
-                    <div className="spinner-border" style={{ color: '#4daab6', width: '2.5rem', height: '2.5rem' }} />
+                    <div className="spinner-border" style={{ color: '#4daab6', width: '35px', height: '35px' }} />
                   </div>
                 ) : (
                   <>
@@ -968,8 +968,8 @@ export default function ScheduleCalendarPage() {
   return (
     <Suspense fallback={
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '60vh' }}>
-        <h6 style={{ fontWeight: 400, color: '#5e5873', marginBottom: '1.5rem' }}>Carregando especialidades...</h6>
-        <div className="spinner-border" style={{ color: '#4daab6', width: '3rem', height: '3rem' }} />
+        <h6 style={{ fontWeight: 400, color: '#5e5873', marginBottom: '21px' }}>Carregando especialidades...</h6>
+        <div className="spinner-border" style={{ color: '#4daab6', width: '42px', height: '42px' }} />
       </div>
     }>
       <ScheduleContent />

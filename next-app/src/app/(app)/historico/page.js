@@ -324,9 +324,9 @@ export default function HistoricoPage() {
   const isFilterModified = dateInitial !== sevenAgo || dateFinal !== today || typeFilter !== 'all' || statusFilter !== '';
 
   return (
-    <div style={{ paddingBottom: '1.5rem' }}>
+    <div style={{ paddingBottom: '21px' }}>
       {/* Page header */}
-      <div style={{ marginBottom: '1.5rem' }}>
+      <div style={{ marginBottom: '21px' }}>
         <p className="text-muted mb-0" style={{ fontSize: '14px' }}>
           Acompanhe seu histórico completo<br className="_br-mobile" /> e visualize consultas anteriores.
         </p>
@@ -429,7 +429,7 @@ export default function HistoricoPage() {
                       borderRadius: '8px',
                       border: 'none',
                       cursor: loading ? 'default' : 'pointer',
-                      fontSize: '1rem',
+                      fontSize: '14px',
                       fontWeight: 600,
                       color: '#fff',
                       background: loading

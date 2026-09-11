@@ -26,7 +26,7 @@ export default function SlotChoiceModal({
       style={{
         ...MODAL_OVERLAY, zIndex: 9999,
         background: 'rgba(0,0,0,0.45)',
-        padding: '1rem',
+        padding: '14px',
       }}
     >
       <div

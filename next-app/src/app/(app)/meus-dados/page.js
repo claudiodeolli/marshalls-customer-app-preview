@@ -187,7 +187,7 @@ export default function MeusDadosPage() {
 
               <div className="form-group">
                 <label className="form-label">Gênero <strong style={{ color: '#ea5455' }}>*</strong></label>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', marginTop: '6px' }}>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '14px', marginTop: '6px' }}>
                   {['Masculino', 'Feminino', 'Não-binário'].map(g => (
                     <label key={g} style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer', fontSize: '14px', color: '#5e5873' }}>
                       <input type="radio" name="gender" value={g} checked={gender === g} onChange={() => setGender(g)} />

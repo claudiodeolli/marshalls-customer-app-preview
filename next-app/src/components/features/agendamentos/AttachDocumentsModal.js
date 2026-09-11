@@ -30,7 +30,7 @@ export default function AttachDocumentsModal({ open, onClose, onContinue }) {
       <div className="card mb-0 _modal-enter" style={MODAL_CARD}>
         <div className="card-body" style={MODAL_BODY}>
           <h5 style={MODAL_TITLE}>Anexar documentos?</h5>
-          <p style={{ ...MODAL_TEXT_MUTED, marginBottom: '1.25rem' }}>
+          <p style={{ ...MODAL_TEXT_MUTED, marginBottom: '17.5px' }}>
             Deseja anexar algum arquivo para ser avaliado pelo médico durante o atendimento?
           </p>
 
@@ -50,7 +50,7 @@ export default function AttachDocumentsModal({ open, onClose, onContinue }) {
           </button>
 
           {files.length > 0 && (
-            <ul style={{ ...MODAL_TEXT_MUTED, listStyle: 'none', padding: 0, margin: '1rem 0 0' }}>
+            <ul style={{ ...MODAL_TEXT_MUTED, listStyle: 'none', padding: 0, margin: '14px 0 0' }}>
               {files.map((file, i) => <li key={i}>{file.name}</li>)}
             </ul>
           )}

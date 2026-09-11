@@ -3,7 +3,7 @@ import { MODAL_OVERLAY } from '@/components/ui/modalScale';
 export default function PaymentConfirmModal({ avulsaSpecialty, paymentMethodLabel, onClose, onConfirm }) {
   return (
     <div
-      style={{ ...MODAL_OVERLAY, zIndex: 9999, padding: '1rem' }}
+      style={{ ...MODAL_OVERLAY, zIndex: 9999, padding: '14px' }}
       onClick={onClose}
     >
       <div

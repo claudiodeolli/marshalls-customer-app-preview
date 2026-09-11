@@ -44,11 +44,11 @@ export default function CancelDialog({ open, appointment, loading, onClose, onCo
       <div className="card mb-0 _modal-enter" style={MODAL_CARD}>
         <div className="card-body" style={MODAL_BODY}>
           <h5 style={MODAL_TITLE}>Cancelar consulta?</h5>
-          <p style={{ ...MODAL_TEXT, marginBottom: '0.75rem' }}>
+          <p style={{ ...MODAL_TEXT, marginBottom: '10.5px' }}>
             Você está prestes a cancelar o agendamento de <strong>{specialtyName}</strong> com o(a) Dr(a). <strong>{doctorName}</strong>.
           </p>
           {warning.map((paragrafo, index) => (
-            <p key={index} style={{ ...MODAL_TEXT_MUTED, marginBottom: '1rem' }}>
+            <p key={index} style={{ ...MODAL_TEXT_MUTED, marginBottom: '14px' }}>
               {withEmphasis(paragrafo)}
             </p>
           ))}

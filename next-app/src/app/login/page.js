@@ -162,48 +162,48 @@ export default function LoginPage() {
           justifyContent: 'center',
           color: 'white',
           textAlign: 'center',
-          padding: '3rem',
+          padding: '42px',
         }}
       >
-        <h1 style={{ fontWeight: 'bold', marginBottom: '1.5rem', fontSize: '3.5rem', textShadow: '2px 2px 4px rgba(0,0,0,0.3)' }}>
+        <h1 style={{ fontWeight: 'bold', marginBottom: '21px', fontSize: '49px', textShadow: '2px 2px 4px rgba(0,0,0,0.3)' }}>
           Bem-vindo
         </h1>
-        <h2 style={{ marginBottom: '2rem', maxWidth: '85%', fontSize: '1.6rem', fontWeight: 300, lineHeight: 1.4, textShadow: '1px 1px 2px rgba(0,0,0,0.3)' }}>
+        <h2 style={{ marginBottom: '28px', maxWidth: '85%', fontSize: '22.4px', fontWeight: 300, lineHeight: 1.4, textShadow: '1px 1px 2px rgba(0,0,0,0.3)' }}>
           Sua saúde cuidada com tecnologia, humanização e excelência médica.
         </h2>
-        <p style={{ opacity: 0.95, maxWidth: '75%', fontSize: '1.1rem', lineHeight: 1.6, textShadow: '1px 1px 2px rgba(0,0,0,0.2)', margin: 0 }}>
+        <p style={{ opacity: 0.95, maxWidth: '75%', fontSize: '15.4px', lineHeight: 1.6, textShadow: '1px 1px 2px rgba(0,0,0,0.2)', margin: 0 }}>
           Acesse sua conta e tenha controle total sobre seus agendamentos, consultas e histórico médico.
         </p>
       </div>
 
       {/* Right panel — form */}
-      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff', padding: '2rem' }}>
+      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff', padding: '28px' }}>
         <div style={{ width: '100%', maxWidth: 400 }}>
 
           {/* Logo from config (chunk module 17637: renders config.logo as <img>) */}
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '2.5rem' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '35px' }}>
             {config?.logo ? (
               <img
                 src={config.logo.replace(/^﻿/, '').trim()}
                 alt="Logomarca"
-                style={{ width: 220, height: 'auto', maxHeight: 82, objectFit: 'contain', marginBottom: '1rem' }}
+                style={{ width: 220, height: 'auto', maxHeight: 82, objectFit: 'contain', marginBottom: '14px' }}
               />
             ) : (
-              <div style={{ width: 220, height: 82, backgroundColor: '#f5f5f5', borderRadius: 4, marginBottom: '1rem' }} />
+              <div style={{ width: 220, height: 82, backgroundColor: '#f5f5f5', borderRadius: 4, marginBottom: '14px' }} />
             )}
-            <p style={{ textAlign: 'center', fontSize: '0.95rem', color: '#666', lineHeight: 1.5, margin: 0, padding: '0 2rem' }}>
+            <p style={{ textAlign: 'center', fontSize: '13.3px', color: '#666', lineHeight: 1.5, margin: 0, padding: '0 28px' }}>
               Entre com suas credenciais para acessar sua conta
             </p>
           </div>
 
           <form onSubmit={handleSubmit}>
             {error && (
-              <div className="alert alert-danger" role="alert" style={{ fontSize: '0.9rem', borderRadius: 8, marginBottom: '1rem' }}>
+              <div className="alert alert-danger" role="alert" style={{ fontSize: '12.6px', borderRadius: 8, marginBottom: '14px' }}>
                 {error}
               </div>
             )}
             {/* Chunk: field name is "Registro", not email/CPF */}
-            <div className="form-group" style={{ marginBottom: '1rem' }}>
+            <div className="form-group" style={{ marginBottom: '14px' }}>
               <label htmlFor="registration-field">Registro</label>
               <input
                 id="registration-field"
@@ -219,7 +219,7 @@ export default function LoginPage() {
               />
             </div>
 
-            <div className="form-group" style={{ marginBottom: '1.5rem' }}>
+            <div className="form-group" style={{ marginBottom: '21px' }}>
               <label htmlFor="password-field">Senha</label>
               <input
                 id="password-field"
@@ -239,9 +239,9 @@ export default function LoginPage() {
               className="btn btn-block"
               disabled={submitting || configLoading}
               style={{
-                marginTop: '0.5rem',
-                padding: '0.9rem 0',
-                fontSize: '1.1rem',
+                marginTop: '7px',
+                padding: '12.6px 0',
+                fontSize: '15.4px',
                 fontWeight: 600,
                 color: textColorBtn,
                 backgroundColor: primaryColor,
@@ -253,7 +253,7 @@ export default function LoginPage() {
               }}
             >
               {configLoading ? (
-                <span style={{ fontSize: '0.9rem', opacity: 0.9 }}>Carregando...</span>
+                <span style={{ fontSize: '12.6px', opacity: 0.9 }}>Carregando...</span>
               ) : submitting ? (
                 <span className="spinner-border spinner-border-sm" role="status" style={{ width: 22, height: 22, borderWidth: 2 }} />
               ) : 'Entrar'}

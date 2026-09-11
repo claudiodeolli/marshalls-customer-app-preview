@@ -3,10 +3,10 @@ export default function PaymentSuccessStep({ avulsaSpecialty, avulsaBooked, sele
 
   if (avulsaBooked) {
     return (
-      <div style={{ maxWidth: 480, margin: '0 auto', textAlign: 'center', padding: '2.5rem 0' }}>
+      <div style={{ maxWidth: 480, margin: '0 auto', textAlign: 'center', padding: '35px 0' }}>
         <div style={{
           width: 72, height: 72, borderRadius: '50%', background: '#e6f9ee',
-          display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.25rem',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 17.5px',
         }}>
           <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none"
             stroke="#28c76f" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -41,10 +41,10 @@ export default function PaymentSuccessStep({ avulsaSpecialty, avulsaBooked, sele
   }
 
   return (
-    <div style={{ maxWidth: 480, margin: '0 auto', textAlign: 'center', padding: '2.5rem 0' }}>
+    <div style={{ maxWidth: 480, margin: '0 auto', textAlign: 'center', padding: '35px 0' }}>
       <div style={{
         width: 72, height: 72, borderRadius: '50%', background: '#e6f9ee',
-        display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.25rem',
+        display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 17.5px',
       }}>
         <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none"
           stroke="#28c76f" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">

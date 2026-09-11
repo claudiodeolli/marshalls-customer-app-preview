@@ -7,7 +7,7 @@ export default function PasswordField({ label, value, onChange, show, onToggle, 
       <div style={{
         display: 'flex',
         border: '1px solid #d8d6de',
-        borderRadius: '0.357rem',
+        borderRadius: '4.998px',
       }}>
         <input
           id={id}
@@ -18,7 +18,7 @@ export default function PasswordField({ label, value, onChange, show, onToggle, 
           placeholder="••••••••"
           style={{
             border: 'none',
-            borderRadius: '0.357rem 0 0 0.357rem',
+            borderRadius: '4.998px 0 0 4.998px',
             boxShadow: 'none',
             flex: 1,
           }}
@@ -30,7 +30,7 @@ export default function PasswordField({ label, value, onChange, show, onToggle, 
           style={{
             background: 'none',
             border: 'none',
-            borderRadius: '0 0.357rem 0.357rem 0',
+            borderRadius: '0 4.998px 4.998px 0',
             padding: '0 12px',
             cursor: 'pointer',
             color: '#6e6b7b',

@@ -33,7 +33,7 @@ export default function MudarSenhaPage() {
 
   return (
     <div>
-      <div style={{ marginBottom: '1.5rem' }}>
+      <div style={{ marginBottom: '21px' }}>
         <p className="text-muted mb-0" style={{ fontSize: '14px' }}>
           Informe a senha atual e defina uma nova<br className="_br-mobile" /> para acessar sua conta.
         </p>

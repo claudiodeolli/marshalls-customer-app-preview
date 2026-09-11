@@ -23,7 +23,7 @@ export default function EncerrarContaPage() {
 
   if (submitted) {
     return (
-      <div style={{ maxWidth: 560, margin: '2rem auto', textAlign: 'center', padding: '0 16px' }}>
+      <div style={{ maxWidth: 560, margin: '28px auto', textAlign: 'center', padding: '0 16px' }}>
         <div className="card" style={{ border: `1px solid ${BRAND_COLOR}33`, padding: '40px 24px' }}>
           <div style={{ marginBottom: '16px' }}>
             <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24"
@@ -45,7 +45,7 @@ export default function EncerrarContaPage() {
   }
 
   return (
-    <div style={{ paddingBottom: '3rem' }}>
+    <div style={{ paddingBottom: '42px' }}>
 
       {/* Parágrafo introdutório */}
       <p style={{ fontSize: '14px', color: '#5e5873', fontWeight: 600, lineHeight: 1.7, marginBottom: '20px' }}>

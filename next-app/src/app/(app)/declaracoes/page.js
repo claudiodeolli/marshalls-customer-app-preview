@@ -32,7 +32,7 @@ export default function MeusDadosPage() {
   }
 
   return (
-    <div style={{ padding: '1.5rem' }}>
+    <div style={{ padding: '21px' }}>
       <div className="row">
         <div className="col-md-6 mb-2">
           <div className="card h-100">

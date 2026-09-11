@@ -1,26 +1,26 @@
 export default function BookingSuccessScreen({ selectedSpecialty, selectedDate, selectedSlot, onViewAppointments }) {
   return (
-    <div className="card" style={{ maxWidth: '520px', margin: '2rem auto' }}>
-      <div className="card-body" style={{ padding: '2.5rem', textAlign: 'center' }}>
+    <div className="card" style={{ maxWidth: '520px', margin: '28px auto' }}>
+      <div className="card-body" style={{ padding: '35px', textAlign: 'center' }}>
         <div style={{
           width: 64, height: 64, borderRadius: '50%', background: '#e6f9ee',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          margin: '0 auto 1.25rem',
+          margin: '0 auto 17.5px',
         }}>
           <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
             stroke="#28c76f" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <polyline points="20 6 9 17 4 12" />
           </svg>
         </div>
-        <h5 style={{ fontWeight: 700, color: '#5e5873', marginBottom: '0.5rem' }}>
+        <h5 style={{ fontWeight: 700, color: '#5e5873', marginBottom: '7px' }}>
           Agendado com sucesso!
         </h5>
-        <p className="text-muted" style={{ marginBottom: '1.5rem' }}>
+        <p className="text-muted" style={{ marginBottom: '21px' }}>
           {selectedSpecialty?.name} — {selectedDate} às {selectedSlot?.from}
         </p>
         <div style={{
           textAlign: 'left', background: '#f8f8f8', borderRadius: 10,
-          padding: '14px 18px', marginBottom: '1.5rem',
+          padding: '14px 18px', marginBottom: '21px',
         }}>
           <p style={{ fontWeight: 700, fontSize: 14, color: '#5e5873', marginBottom: 10 }}>
             Orientações para sua consulta online

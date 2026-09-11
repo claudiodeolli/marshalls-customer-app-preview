@@ -179,14 +179,14 @@ const [showAlterarCartao, setShowAlterarCartao] = useState(false);
 
   return (
     <div>
-<div style={{ marginBottom: '1.5rem' }}>
+<div style={{ marginBottom: '21px' }}>
         <p className="text-muted mb-0" style={{ fontSize: '14px' }}>
           Consulte as informações do seu plano<br className="_br-mobile" /> e gerencie sua assinatura.
         </p>
       </div>
       {/* ── Cabeçalho da assinatura ── */}
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'center', marginBottom: '6px' }}>
-        <h4 style={{ margin: 0, fontWeight: 600, fontSize: '1.1rem', color: '#5e5873' }}>
+        <h4 style={{ margin: 0, fontWeight: 600, fontSize: '15.4px', color: '#5e5873' }}>
           Plano de assinatura: {planType === 'individual' ? 'Individual' : 'Familiar'}
         </h4>
         <span style={{ background: '#28c76f', color: '#fff', fontSize: '11px', fontWeight: 700, padding: '3px 10px', borderRadius: '4px', letterSpacing: '0.5px' }}>
@@ -196,12 +196,12 @@ const [showAlterarCartao, setShowAlterarCartao] = useState(false);
       <p style={{ color: '#6e6b7b', fontSize: '14px', margin: '0 0 4px' }}>
         Titular responsável: <strong style={{ color: '#5e5873' }}>{SUBSCRIPTION.titular}</strong>
       </p>
-      <p style={{ color: '#6e6b7b', fontSize: '14px', marginBottom: '1.5rem' }}>
+      <p style={{ color: '#6e6b7b', fontSize: '14px', marginBottom: '21px' }}>
         CPF: <strong style={{ color: '#5e5873' }}>{SUBSCRIPTION.cpf}</strong>
       </p>
       <div style={{
         display: 'inline-block', border: '1px solid rgb(232, 232, 232)', borderRadius: '12px',
-        padding: '8px 16px', marginTop: '8px', marginBottom: '1.5rem', background: '#fff',
+        padding: '8px 16px', marginTop: '8px', marginBottom: '21px', background: '#fff',
       }}>
         <small style={{ display: 'block', fontSize: '11px', color: '#aaa', marginBottom: '2px' }}>Número da Assinatura</small>
         <span style={{ fontWeight: 700, color: '#5e5873', fontSize: '14px' }}>{SUBSCRIPTION.contract}</span>
@@ -348,7 +348,7 @@ const [showAlterarCartao, setShowAlterarCartao] = useState(false);
                 </div>
                 <div className="form-group">
                   <label className="form-label">Gênero <strong style={{ color: '#ea5455' }}>*</strong></label>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', marginTop: '6px' }}>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '14px', marginTop: '6px' }}>
                     {['Masculino', 'Feminino', 'Não-binário'].map(g => (
                       <label key={g} style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer', fontSize: '14px', color: '#5e5873' }}>
                         <input type="radio" name="depGenero" value={g} checked={newDep.genero === g} onChange={() => setNewDep(d => ({ ...d, genero: g }))} />
@@ -455,7 +455,7 @@ const [showAlterarCartao, setShowAlterarCartao] = useState(false);
       )}
 
       {/* ── Abas ── */}
-      <div style={{ borderBottom: '2px solid #ebe9f1', display: 'flex', marginBottom: '1.5rem' }}>
+      <div style={{ borderBottom: '2px solid #ebe9f1', display: 'flex', marginBottom: '21px' }}>
         {[
           { key: 'historico', label: 'Histórico de pagamentos' },
           { key: 'gerenciar', label: 'Gerenciar Assinatura' },

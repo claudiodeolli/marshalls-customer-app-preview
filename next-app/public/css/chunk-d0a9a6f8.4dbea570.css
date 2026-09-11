@@ -29,11 +29,11 @@
 }
 
 [dir=ltr] .app-timeline[data-v-484a211f] {
-    margin-left: 1rem
+    margin-left: 14px
 }
 
 [dir=rtl] .app-timeline[data-v-484a211f] {
-    margin-right: 1rem
+    margin-right: 14px
 }
 
 [dir] .timeline-variant-white.timeline-item-fill-border-white[data-v-4bbac430] {
@@ -281,15 +281,15 @@
 }
 
 [dir=ltr] .timeline-item[data-v-4bbac430] {
-    padding-left: 2.5rem
+    padding-left: 35px
 }
 
 [dir=rtl] .timeline-item[data-v-4bbac430] {
-    padding-right: 2.5rem
+    padding-right: 35px
 }
 
 [dir] .timeline-item[data-v-4bbac430]:not(:last-of-type) {
-    padding-bottom: 2rem
+    padding-bottom: 28px
 }
 
 [dir=ltr] .timeline-item[data-v-4bbac430]:not(:last-of-type) {

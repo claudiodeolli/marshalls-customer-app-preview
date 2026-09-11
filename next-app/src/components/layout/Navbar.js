@@ -34,7 +34,7 @@ function LogoutIcon() {
       fill="none"
       stroke="currentColor"
       strokeWidth="2"
-      style={{ marginRight: '0.5rem', flexShrink: 0 }}
+      style={{ marginRight: '7px', flexShrink: 0 }}
     >
       <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
       <polyline points="16 17 21 12 16 7" />
@@ -96,7 +96,7 @@ export default function Navbar({ onHamburgerClick }) {
           {/* Hamburger mobile */}
           <ul className="nav navbar-nav">
             <li className="nav-item d-xl-none">
-              <a className="nav-link menu-toggle" href="#" onClick={e => { e.preventDefault(); onHamburgerClick(); }} style={{ padding: '0.5rem 0.75rem' }}>
+              <a className="nav-link menu-toggle" href="#" onClick={e => { e.preventDefault(); onHamburgerClick(); }} style={{ padding: '7px 10.5px' }}>
                 <MenuIcon />
               </a>
             </li>
@@ -165,7 +165,7 @@ export default function Navbar({ onHamburgerClick }) {
                     right: 0,
                     background: '#fff',
                     border: '1px solid #ebe9f1',
-                    borderRadius: '0.358rem',
+                    borderRadius: '5.012px',
                     boxShadow: '0 5px 25px rgba(34,41,47,0.1)',
                     minWidth: '180px',
                     zIndex: 9999,
@@ -177,7 +177,7 @@ export default function Navbar({ onHamburgerClick }) {
                     style={{
                       display: 'flex',
                       alignItems: 'center',
-                      padding: '0.75rem 1.28rem',
+                      padding: '10.5px 17.92px',
                       color: '#ea5455',
                       fontWeight: 500,
                       textDecoration: 'none',

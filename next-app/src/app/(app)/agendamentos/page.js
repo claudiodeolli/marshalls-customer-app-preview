@@ -503,7 +503,7 @@ export default function AgendamentosPage() {
 
 
   return (
-    <div style={{ paddingBottom: '1.5rem' }}>
+    <div style={{ paddingBottom: '21px' }}>
 
       {/* Texto descritivo — acima do banner */}
       <div className="mb-2">
@@ -672,7 +672,7 @@ export default function AgendamentosPage() {
       )}
 
       {/* Lista de agendamentos */}
-      <div style={{ marginTop: '1rem' }}>
+      <div style={{ marginTop: '14px' }}>
         {pageLoading ? (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             {[0, 1, 2].map(i => <SkeletonRow key={i} />)}

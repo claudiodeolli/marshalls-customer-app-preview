@@ -4,16 +4,16 @@ export default function AssinaturasPage() {
   return (
     <div>
       {/* Header: plan name left, Titular + ATIVA badge right */}
-      <div className="_assn-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.25rem' }}>
-        <h4 className="_assn-title" style={{ fontWeight: 600, fontSize: '1.1rem', color: '#5e5873', margin: 0 }}>
+      <div className="_assn-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '3.5px' }}>
+        <h4 className="_assn-title" style={{ fontWeight: 600, fontSize: '15.4px', color: '#5e5873', margin: 0 }}>
           Plano de Assinatura Individual
         </h4>
         <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <span style={{ color: '#6e6b7b', fontSize: '0.9rem' }}>Titular</span>
+          <span style={{ color: '#6e6b7b', fontSize: '12.6px' }}>Titular</span>
           <span style={{ background: '#28c76f', color: '#fff', fontSize: '11px', fontWeight: 700, padding: '3px 10px', borderRadius: '4px', letterSpacing: '0.5px' }}>ATIVA</span>
         </span>
       </div>
-      <p style={{ color: '#6e6b7b', marginBottom: '1.5rem' }}>
+      <p style={{ color: '#6e6b7b', marginBottom: '21px' }}>
         Titular Responsável: José da Silva – CPF 432.198.765-09
       </p>
 
@@ -59,7 +59,7 @@ export default function AssinaturasPage() {
         {/* Right column: alert + billing table */}
         <div className="col-md-8">
           {/* Pending payment alert */}
-          <div style={{ background: '#fff5f5', border: '1px solid #ffcccc', borderRadius: '8px', color: '#333', display: 'flex', alignItems: 'flex-start', gap: '10px', padding: '14px 16px', marginBottom: '1.5rem' }}>
+          <div style={{ background: '#fff5f5', border: '1px solid #ffcccc', borderRadius: '8px', color: '#333', display: 'flex', alignItems: 'flex-start', gap: '10px', padding: '14px 16px', marginBottom: '21px' }}>
             <span style={{ color: '#e55353', fontSize: '18px', flexShrink: 0, marginTop: '2px' }}>⊙</span>
             <p className="mb-0" style={{ fontSize: '13px', fontWeight: 500 }}>
               A sua mensalidade está pendente. Realize o pagamento da mensalidade para que sua empresa não fique irregular perante a receita federal. Enquanto você possuir mensalidades em atraso, a Marshalls se isenta 100% das responsabilidades contábeis da sua empresa.

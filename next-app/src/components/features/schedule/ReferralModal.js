@@ -4,7 +4,7 @@ export default function ReferralModal({ open, loadingReferrals, pendingReferrals
   if (!open) return null;
   return (
     <div
-      style={{ ...MODAL_OVERLAY, zIndex: 9999, padding: '1rem' }}
+      style={{ ...MODAL_OVERLAY, zIndex: 9999, padding: '14px' }}
       onClick={onClose}
     >
       <div
@@ -39,16 +39,16 @@ export default function ReferralModal({ open, loadingReferrals, pendingReferrals
           </p>
 
           {loadingReferrals ? (
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '2rem', gap: 12 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '28px', gap: 12 }}>
               <p style={{ margin: 0, color: '#666', fontSize: 14 }}>Carregando encaminhamentos...</p>
-              <div className="spinner-border" style={{ color: '#4daab6', width: '2.5rem', height: '2.5rem' }} />
+              <div className="spinner-border" style={{ color: '#4daab6', width: '35px', height: '35px' }} />
             </div>
           ) : pendingReferrals.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: '2rem 0' }}>
+            <div style={{ textAlign: 'center', padding: '28px 0' }}>
               <p style={{ color: '#666', marginBottom: 8, fontSize: 14 }}>
                 Você não possui encaminhamentos disponíveis.
               </p>
-              <p style={{ color: '#666', fontSize: 13, marginBottom: '1.5rem' }}>
+              <p style={{ color: '#666', fontSize: 13, marginBottom: '21px' }}>
                 Solicite um encaminhamento médico para agendar esta especialidade, ou:
               </p>
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
