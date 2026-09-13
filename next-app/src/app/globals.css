@@ -17,12 +17,25 @@ body {
   padding-top: 28px !important;
 }
 
-/* Remove o gradiente que o Vuexy renderiza atrás do navbar flutuante —
-   ele cobre a largura total do viewport (incluindo o scrollbar), criando
-   um fade visível no topo da barra de rolagem. O navbar já tem sombra
-   própria e não precisa desse elemento para parecer flutuante. */
-.header-navbar-shadow {
-  display: none !important;
+/* Película translúcida sobre o conteúdo que passa por trás do navbar.
+   O Vuexy posiciona este elemento com position: fixed e width: 100%, e nesta
+   aplicação quem rola é o body (o overflow-x: hidden acima o torna um container
+   de rolagem), então o fixed media o viewport inteiro e o gradiente cobria a
+   barra de rolagem. Em sticky o elemento continua no fluxo: a largura vem do
+   content box do .app-content, que já exclui o scrollbar do body.
+   A margem negativa anula o espaço que os 102px ocupariam, mantendo o navbar e
+   o conteúdo exatamente onde estavam. */
+.navbar-floating .header-navbar-shadow {
+  display: block !important;
+  position: sticky !important;
+  top: 0 !important;
+  left: auto !important;
+  right: auto !important;
+  width: 100% !important;
+  height: 102px !important;
+  margin-bottom: -102px !important;
+  z-index: 1029 !important;
+  pointer-events: none;
 }
 
 /* Scrollbar da página: fino e sem track visível, igual ao projeto de referência.
@@ -54,7 +67,7 @@ html::-webkit-scrollbar-thumb:hover {
    (28px de cada lado via html[dir] .content.app-content). */
 .header-navbar.floating-nav {
   position: sticky !important;
-  top: 0 !important;
+  top: 18.2px !important;
   left: auto !important;
   right: auto !important;
   width: 100% !important;
@@ -78,12 +91,14 @@ html[dir] .content.app-content {
     padding-right: 0 !important;
   }
 
-  /* Navbar full-bleed: padding horizontal do app-content é 0, margens negativas não são mais necessárias. */
+  /* Navbar full-bleed: padding horizontal do app-content é 0, margens negativas não são mais necessárias.
+     top: 0 acompanha o padding-top zerado — com 18.2px o navbar travaria abaixo da borda da tela. */
   html[dir] .header-navbar.floating-nav {
     margin-left: 0 !important;
     margin-right: 0 !important;
     width: 100% !important;
     border-radius: 0 !important;
+    top: 0 !important;
   }
 
   /* Espaçamento lateral realocado do app-content para o content-wrapper */
