@@ -1,6 +1,7 @@
 // Cobre as issues #41 e #42, pedidas em 15/09:
 //   #41 https://github.com/claudiodeolli/marshalls-customer-app-preview/issues/41
 //   #42 https://github.com/claudiodeolli/marshalls-customer-app-preview/issues/42
+//   #43 https://github.com/claudiodeolli/marshalls-customer-app-preview/issues/43
 const { test, expect } = require('@playwright/test');
 
 
@@ -142,7 +143,19 @@ for (const [nome, viewport] of [
         };
       }, { dados: buffer.toString('base64'), geo });
 
-      expect(achados.faixasMedidas, 'precisa haver faixa de película para medir').toBeGreaterThan(5);
+      // Desde a issue #43 a película termina no fim da barra. No mobile, onde a
+      // barra encosta no topo, isso zera a faixa exposta: não existe região
+      // coberta só pela película, e nada pode marcar ali. No desktop sobra a
+      // tira acima da barra, e é nela que a medição acontece.
+      if (achados.faixasMedidas === 0) {
+        expect(geo.navbar.top, 'faixa zerada só se justifica com a barra no topo').toBeLessThanOrEqual(0.5);
+        expect(
+          geo.pelicula.bottom,
+          'faixa zerada só se justifica com a película terminando no fim da barra'
+        ).toBeLessThanOrEqual(geo.navbar.bottom + 0.5);
+        return;
+      }
+
       expect(
         achados.bordaVisivelAbaixo,
         'controle: abaixo da película a borda roxa precisa aparecer, senão o teste não está medindo nada'
@@ -151,6 +164,39 @@ for (const [nome, viewport] of [
         achados.totalVazamentos,
         `borda roxa atravessando a faixa da barra: ${JSON.stringify(achados.vazamentos)}`
       ).toBe(0);
+    });
+
+    // A película opaca (#41) escondia também a faixa entre o fim da barra e o
+    // fim dela própria, e o conteúdo passava a ser cortado longe da barra.
+    test('#43 — a película termina onde a barra termina, sem faixa no meio', async ({ page }) => {
+      await page.goto('/agendamentos');
+      await expect(page.getByRole('heading', { name: 'Agendamentos' }).first()).toBeVisible({ timeout: 15000 });
+      await dispensarAvisoDeRegras(page);
+      await page.evaluate(() => { document.body.scrollTop = 300; });
+      await page.waitForTimeout(400);
+
+      const geo = await page.evaluate(() => {
+        const medir = seletor => {
+          const caixa = document.querySelector(seletor).getBoundingClientRect();
+          return { top: caixa.top, bottom: caixa.bottom };
+        };
+        return {
+          rolou: document.body.scrollTop > 100,
+          pelicula: medir('.header-navbar-shadow'),
+          navbar: medir('.header-navbar'),
+        };
+      });
+
+      expect(geo.rolou, 'a barra precisa estar travada para a medição valer').toBe(true);
+      const sobra = geo.pelicula.bottom - geo.navbar.bottom;
+      expect(
+        Math.abs(sobra),
+        `sobra de película abaixo da barra: ${sobra.toFixed(2)}px — é a faixa que ele viu como quebra`
+      ).toBeLessThanOrEqual(0.5);
+      expect(
+        geo.pelicula.bottom,
+        'a película não pode terminar antes da barra, senão o conteúdo reaparece por cima dela'
+      ).toBeGreaterThanOrEqual(geo.navbar.bottom - 0.5);
     });
 
     test('#42 — o Voltar da Avulsa é igual ao do Encaminhamento', async ({ page }) => {

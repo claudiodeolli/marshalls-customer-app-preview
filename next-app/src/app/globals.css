@@ -17,14 +17,23 @@ body {
   padding-top: 28px !important;
 }
 
-/* Película translúcida sobre o conteúdo que passa por trás do navbar.
+/* Película sobre o conteúdo que passa por trás do navbar.
    O Vuexy posiciona este elemento com position: fixed e width: 100%, e nesta
    aplicação quem rola é o body (o overflow-x: hidden acima o torna um container
    de rolagem), então o fixed media o viewport inteiro e o gradiente cobria a
    barra de rolagem. Em sticky o elemento continua no fluxo: a largura vem do
    content box do .app-content, que já exclui o scrollbar do body.
-   A margem negativa anula o espaço que os 102px ocupariam, mantendo o navbar e
-   o conteúdo exatamente onde estavam. */
+
+   A altura do tema é 102px porque lá a película é um gradiente que desvanece:
+   nos últimos pixels ela já é quase transparente, e sobrar um pedaço abaixo da
+   barra não aparecia. Opaca (issue #41), os mesmos 102px viravam um bloco
+   sólido, e o conteúdo passava a ser cortado 13px abaixo da barra em vez de
+   rente a ela — a quebra visual da issue #43.
+
+   Por isso a altura passa a ser o fim da barra: o top dela (18,2px) mais a sua
+   altura (70,38px). Se a altura da navbar mudar, este valor muda junto.
+   A margem negativa anula o espaço que essa altura ocuparia, mantendo o navbar
+   e o conteúdo exatamente onde estavam. */
 .navbar-floating .header-navbar-shadow {
   display: block !important;
   position: sticky !important;
@@ -32,8 +41,8 @@ body {
   left: auto !important;
   right: auto !important;
   width: 100% !important;
-  height: 102px !important;
-  margin-bottom: -102px !important;
+  height: 88.58px !important;
+  margin-bottom: -88.58px !important;
   z-index: 1029 !important;
   pointer-events: none;
 }
@@ -109,6 +118,13 @@ html[dir] .content.app-content {
     padding-top: 0 !important;
     padding-left: 0 !important;
     padding-right: 0 !important;
+  }
+
+  /* No mobile a barra encosta no topo (top: 0), então a película termina mais
+     cedo: só a altura da barra, sem os 18,2px de respiro do desktop. */
+  .navbar-floating .header-navbar-shadow {
+    height: 70.38px !important;
+    margin-bottom: -70.38px !important;
   }
 
   /* Navbar full-bleed: padding horizontal do app-content é 0, margens negativas não são mais necessárias.
