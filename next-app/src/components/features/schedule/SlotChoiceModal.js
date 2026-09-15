@@ -1,4 +1,5 @@
 import { MODAL_OVERLAY } from '@/components/ui/modalScale';
+import ModalPortal from '@/components/ui/ModalPortal';
 
 // Texto e rótulos são parâmetros porque o reagendamento reaproveita esta
 // mesma modal — "usar os mesmos botões lá da modal dos agendamentos", como
@@ -21,6 +22,7 @@ export default function SlotChoiceModal({
 }) {
   if (!show) return null;
   return (
+    <ModalPortal>
     <div
       onClick={onClose}
       style={{
@@ -63,5 +65,6 @@ export default function SlotChoiceModal({
         </div>
       </div>
     </div>
+    </ModalPortal>
   );
 }

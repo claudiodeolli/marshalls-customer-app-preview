@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useState } from 'react';
+import ModalPortal from '@/components/ui/ModalPortal';
 import {
   MODAL_OVERLAY, MODAL_CARD, MODAL_BODY, MODAL_TITLE, MODAL_TEXT_MUTED,
   MODAL_ACTIONS, MODAL_BUTTON,
@@ -26,6 +27,7 @@ export default function AttachDocumentsModal({ open, onClose, onContinue }) {
   }
 
   return (
+    <ModalPortal>
     <div style={{ ...MODAL_OVERLAY, zIndex: 9998 }}>
       <div className="card mb-0 _modal-enter" style={MODAL_CARD}>
         <div className="card-body" style={MODAL_BODY}>
@@ -64,5 +66,6 @@ export default function AttachDocumentsModal({ open, onClose, onContinue }) {
         </div>
       </div>
     </div>
+    </ModalPortal>
   );
 }

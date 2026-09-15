@@ -25,6 +25,10 @@ export default function FlagIcon({ codigo, height = 16, style }) {
       width={Math.round(height * PROPORCAO)}
       height={height}
       style={{ display: 'inline-block', verticalAlign: 'middle', ...style }}
+      // Mesmo motivo do EmojiIcon: desde a issue #45 o lazy do next/image usa o
+      // contêiner de rolagem como raiz, e a bandeira fora da área visível não
+      // era buscada.
+      loading="eager"
     />
   );
 }

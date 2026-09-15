@@ -21,6 +21,7 @@ import SlotChoiceModal from '@/components/features/schedule/SlotChoiceModal';
 import { aplicarReagendamentos } from '@/lib/reagendamentos';
 import { mockSpecialties } from '@/data/mockData';
 import { getMinutesUntilStart } from '@/lib/appointmentTime';
+import ModalPortal from '@/components/ui/ModalPortal';
 
 const IS_MOCK = process.env.NEXT_PUBLIC_MOCK_MODE === '1';
 
@@ -975,6 +976,7 @@ export default function AgendamentosPage() {
 
       {/* Explicação do botão bloqueado — em telas de toque não há hover pro title */}
       {blockedEnterTooltip && (
+        <ModalPortal>
         <div
           onClick={() => setBlockedEnterTooltip(false)}
           style={{
@@ -992,12 +994,14 @@ export default function AgendamentosPage() {
             </div>
           </div>
         </div>
+        </ModalPortal>
       )}
 
       <Toast {...toast} />
 
       {/* Tooltip modal mobile */}
       {tooltipOpen && (
+        <ModalPortal>
         <div
           onClick={() => setTooltipOpen(false)}
           style={{
@@ -1023,6 +1027,7 @@ export default function AgendamentosPage() {
             </div>
           </div>
         </div>
+        </ModalPortal>
       )}
     </div>
   );

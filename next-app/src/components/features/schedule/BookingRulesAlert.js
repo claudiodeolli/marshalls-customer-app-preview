@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { withEmphasis } from '@/components/ui/emphasis';
 import EmojiIcon from '@/components/ui/EmojiIcon';
+import ModalPortal from '@/components/ui/ModalPortal';
 import {
   MODAL_OVERLAY, MODAL_CARD, MODAL_BODY, MODAL_TITLE, MODAL_TEXT, MODAL_ACTIONS, MODAL_BUTTON,
 } from '@/components/ui/modalScale';
@@ -68,6 +69,7 @@ export default function BookingRulesAlert({ origin }) {
   if (!content || !aberto) return null;
 
   return (
+    <ModalPortal>
     <div
       style={MODAL_OVERLAY}
       role="dialog"
@@ -107,5 +109,6 @@ export default function BookingRulesAlert({ origin }) {
         </div>
       </div>
     </div>
+    </ModalPortal>
   );
 }

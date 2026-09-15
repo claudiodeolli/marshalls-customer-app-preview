@@ -20,6 +20,7 @@ import EmojiIcon from '@/components/ui/EmojiIcon';
 import FlagIcon from '@/components/ui/FlagIcon';
 import SkeletonCard from '@/components/features/historico/SkeletonCard';
 import EmptyState from '@/components/features/historico/EmptyState';
+import ModalPortal from '@/components/ui/ModalPortal';
 
 const IS_MOCK = process.env.NEXT_PUBLIC_MOCK_MODE === '1';
 
@@ -776,6 +777,7 @@ export default function HistoricoPage() {
       )}
 
       {referralModal && (
+        <ModalPortal>
         <div
           style={{ ...MODAL_OVERLAY, zIndex: 10000, background: 'rgba(34,41,47,0.55)', padding: '16px' }}
           onClick={e => { if (e.target === e.currentTarget) setReferralModal(null); }}
@@ -817,9 +819,11 @@ export default function HistoricoPage() {
             </div>
           </div>
         </div>
+        </ModalPortal>
       )}
 
       {purchaseModal && (
+        <ModalPortal>
         <div
           style={{ ...MODAL_OVERLAY, zIndex: 10000, background: 'rgba(34,41,47,0.55)', padding: '16px' }}
           onClick={e => { if (e.target === e.currentTarget) setPurchaseModal(null); }}
@@ -919,6 +923,7 @@ export default function HistoricoPage() {
             </div>
           </div>
         </div>
+        </ModalPortal>
       )}
     </div>
   );

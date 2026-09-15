@@ -41,5 +41,8 @@ export function iconPath(nome) {
 
 /** alt vazio de propósito: são decorativos, o texto ao lado já informa. */
 export default function EmojiIcon({ name, size = 24, style }) {
-  return <Image src={iconPath(name)} alt="" width={size} height={size} style={style} />;
+  // eager porque são decorativos de 24px e o lazy do next/image passou a usar
+  // o .content-wrapper como raiz desde a issue #45: fora da área visível eles
+  // não eram buscados, e apareciam pipocando conforme a rolagem.
+  return <Image src={iconPath(name)} alt="" width={size} height={size} style={style} loading="eager" />;
 }

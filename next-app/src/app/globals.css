@@ -1,8 +1,12 @@
 /* ── Estilos do loader (copiados do loader.css original) ── */
+/* Quem rola deixou de ser o body: o conteúdo tem o próprio contêiner, logo
+   abaixo da barra, e é ele que rola (issue #45). Sem isso a máscara que
+   dissolve o conteúdo não teria como ficar ancorada na viewport. */
 html,
 body {
   margin: 0;
-  overflow-x: hidden;
+  overflow: hidden;
+  height: 100dvh;
 }
 
 
@@ -11,61 +15,41 @@ body {
   padding-bottom: 28px !important;
 }
 
-/* Gap entre o header sticky e o conteúdo: 108.5px (original) − 18.2px (padding-top do
-   app-content) − 62.3px (min-height do header) = 28px. */
+/* O conteúdo rola aqui dentro, num contêiner que começa abaixo da barra:
+   18,2px de respiro do app-content + 70,38px de barra em cima, 28px de
+   respiro embaixo (issue #45).
+
+   A máscara dissolve o conteúdo ao chegar no topo. Cobrir com uma camada
+   tinge o que está atrás e deixa bordas em dois tons — foi o defeito da #41.
+   Apagar faz o conteúdo sumir por inteiro, sem meio-tom.
+
+   overflow-x explícito porque, quando um eixo deixa de ser visible, o outro
+   deixa também: sem isso as margens negativas do .row do Bootstrap abriam
+   14px de rolagem horizontal que não existia antes.
+
+   A margem negativa com padding equivalente alarga o scrollport para dentro
+   das calhas do app-content sem mover o conteúdo, dando espaço para a sombra
+   dos cards ser pintada em vez de recortada na borda. */
 .content-wrapper {
   padding-top: 28px !important;
+  height: calc(100dvh - 116.58px) !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  margin-left: -28px !important;
+  margin-right: -28px !important;
+  padding-left: 28px !important;
+  padding-right: 28px !important;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 14px);
+  mask-image: linear-gradient(180deg, transparent 0, #000 14px);
 }
 
-/* Película sobre o conteúdo que passa por trás do navbar.
-   O Vuexy posiciona este elemento com position: fixed e width: 100%, e nesta
-   aplicação quem rola é o body (o overflow-x: hidden acima o torna um container
-   de rolagem), então o fixed media o viewport inteiro e o gradiente cobria a
-   barra de rolagem. Em sticky o elemento continua no fluxo: a largura vem do
-   content box do .app-content, que já exclui o scrollbar do body.
-
-   A altura do tema é 102px porque lá a película é um gradiente que desvanece:
-   nos últimos pixels ela já é quase transparente, e sobrar um pedaço abaixo da
-   barra não aparecia. Opaca (issue #41), os mesmos 102px viravam um bloco
-   sólido, e o conteúdo passava a ser cortado 13px abaixo da barra em vez de
-   rente a ela — a quebra visual da issue #43.
-
-   Por isso a altura passa a ser o fim da barra: o top dela (18,2px) mais a sua
-   altura (70,38px). Se a altura da navbar mudar, este valor muda junto.
-   A margem negativa anula o espaço que essa altura ocuparia, mantendo o navbar
-   e o conteúdo exatamente onde estavam. */
+/* A película existia para esconder o conteúdo que passava por trás da barra.
+   Desde a issue #45 o conteúdo não passa mais: ele tem o próprio contêiner de
+   rolagem, que começa abaixo da barra. Sem função, ela sai de cena. */
 .navbar-floating .header-navbar-shadow {
-  display: block !important;
-  position: sticky !important;
-  top: 0 !important;
-  left: auto !important;
-  right: auto !important;
-  width: 100% !important;
-  height: 88.58px !important;
-  margin-bottom: -88.58px !important;
-  z-index: 1029 !important;
-  pointer-events: none;
+  display: none !important;
 }
 
-/* A película nasceu translúcida, como ele pediu em 12/09 — "o conteúdo passa
-   por trás da barra, e fica atrás de uma película transparente". Duas rodadas
-   de correção depois ele decidiu o contrário, respondendo à M1 da issue #41 em
-   15/09: não quer traços nas laterais, o conteúdo pode sumir se for preciso, e
-   o que importa é não haver visual sobreposto.
-
-   Qualquer transparência reacende o defeito. A 95% ainda passam 5% do que está
-   atrás, e na cauda do gradiente, perto de 40%, a borda de um elemento aparece
-   com força. Pior: a queda do gradiente cortava as bordas verticais em dois
-   tons na mesma altura, e era isso que ele lia como uma div marcando as
-   laterais.
-
-   Opaca na cor do fundo, ela some contra a página e não deixa nada atravessar.
-   O conteúdo desaparece ao entrar na faixa da barra e reaparece inteiro abaixo
-   dela, sem meio-tom. */
-[dir=ltr] .navbar-floating .header-navbar-shadow,
-[dir=rtl] .navbar-floating .header-navbar-shadow {
-  background: rgb(240, 244, 248) !important;
-}
 
 /* Scrollbar da página: fino e sem track visível, igual ao projeto de referência.
    ::-webkit-scrollbar com width definido força o comportamento "classic" no Chrome,
@@ -94,6 +78,14 @@ html::-webkit-scrollbar-thumb:hover {
 
 /* Navbar sticky dentro do app-content — herda o padding horizontal do container
    (28px de cada lado via html[dir] .content.app-content). */
+/* A barra vem do tema com a classe navbar-shadow, que já traz
+   box-shadow: 0 4px 24px 0 rgba(34,41,47,.1). Foi por isso que a issue #44 não
+   mudou nada: a sombra que eu "adicionei" já existia. O cliente pediu que ela
+   saísse — com o conteúdo desvanecendo (issue #45), ela virou uma quebra. */
+.header-navbar.floating-nav.navbar-shadow {
+  box-shadow: none !important;
+}
+
 .header-navbar.floating-nav {
   position: sticky !important;
   top: 18.2px !important;
@@ -103,12 +95,6 @@ html::-webkit-scrollbar-thumb:hover {
   margin: 0 !important;
   z-index: 1030 !important;
   border-radius: 8px !important;
-  /* O gradiente da barra termina em branco puro e o conteúdo começa logo
-     abaixo, sem nada entre os dois: a emenda seca lia como uma camada por
-     cima do conteúdo, e não como conteúdo passando por baixo da barra
-     (issue #44). A sombra é a do próprio tema, onde já existe para esta
-     finalidade em .header-navbar.navbar-shadow. */
-  box-shadow: 0 4px 24px 0 rgba(34, 41, 47, 0.1) !important;
 }
 
 /* O padding-top do app-content empurrava o conteúdo abaixo do header fixo (108.5px).
@@ -126,12 +112,6 @@ html[dir] .content.app-content {
     padding-right: 0 !important;
   }
 
-  /* No mobile a barra encosta no topo (top: 0), então a película termina mais
-     cedo: só a altura da barra, sem os 18,2px de respiro do desktop. */
-  .navbar-floating .header-navbar-shadow {
-    height: 70.38px !important;
-    margin-bottom: -70.38px !important;
-  }
 
   /* Navbar full-bleed: padding horizontal do app-content é 0, margens negativas não são mais necessárias.
      top: 0 acompanha o padding-top zerado — com 18.2px o navbar travaria abaixo da borda da tela. */
@@ -143,10 +123,16 @@ html[dir] .content.app-content {
     top: 0 !important;
   }
 
-  /* Espaçamento lateral realocado do app-content para o content-wrapper */
+  /* Espaçamento lateral realocado do app-content para o content-wrapper.
+     A altura desconta só a barra (que aqui encosta no topo) e o respiro de
+     baixo; as margens negativas do desktop não valem, o wrapper já ocupa a
+     largura toda. */
   .content-wrapper {
     padding-left: 27.3px !important;
     padding-right: 27.3px !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    height: calc(100dvh - 98.38px) !important;
   }
 
   /* Overlay deve cobrir navbar (1030) e bottom nav (1025).
@@ -1728,3 +1714,4 @@ input._search-input:not([type="checkbox"]):not([type="radio"]):not([type="submit
 ._doc-link:active ._doc-nome {
   text-decoration: underline;
 }
+

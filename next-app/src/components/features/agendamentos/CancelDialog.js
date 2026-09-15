@@ -4,6 +4,7 @@ import {
 } from '@/components/ui/modalScale';
 import { withEmphasis } from '@/components/ui/emphasis';
 import { getMinutesUntilStart } from '@/lib/appointmentTime';
+import ModalPortal from '@/components/ui/ModalPortal';
 
 // Regras do cliente (issue #2 no GitHub): o texto do modal depende da
 // origem da consulta — Encaminhamento sempre encerra o encaminhamento ao
@@ -40,6 +41,7 @@ export default function CancelDialog({ open, appointment, loading, onClose, onCo
   const doctorName = appointment.professional?.name || '';
   const warning = getCancelWarning(appointment);
   return (
+    <ModalPortal>
     <div style={{ ...MODAL_OVERLAY, zIndex: 9998 }}>
       <div className="card mb-0 _modal-enter" style={MODAL_CARD}>
         <div className="card-body" style={MODAL_BODY}>
@@ -64,5 +66,6 @@ export default function CancelDialog({ open, appointment, loading, onClose, onCo
         </div>
       </div>
     </div>
+    </ModalPortal>
   );
 }

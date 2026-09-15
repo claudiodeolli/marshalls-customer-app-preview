@@ -2,6 +2,7 @@
 import { MODAL_OVERLAY } from '@/components/ui/modalScale';
 
 import { useState } from 'react';
+import ModalPortal from '@/components/ui/ModalPortal';
 
 const BRAND_COLOR = '#4F68C7';
 
@@ -50,6 +51,7 @@ export default function LGPDSection() {
       </div>
 
       {modalOpen && (
+        <ModalPortal>
         <div style={{
           ...MODAL_OVERLAY,
           zIndex: 10000,
@@ -110,6 +112,7 @@ export default function LGPDSection() {
             </div>
           </div>
         </div>
+        </ModalPortal>
       )}
     </>
   );

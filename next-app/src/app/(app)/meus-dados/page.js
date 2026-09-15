@@ -12,6 +12,7 @@ import { useAuth } from '@/lib/AuthContext';
 import { fetchViaCEP } from '@/lib/viaCep';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
+import ModalPortal from '@/components/ui/ModalPortal';
 
 const BRAND_COLOR = '#4F68C7';
 
@@ -348,6 +349,7 @@ export default function MeusDadosPage() {
 
       {/* Modal de confirmação: remover foto */}
       {showConfirmRemove && (
+        <ModalPortal>
         <div style={{
           ...MODAL_OVERLAY, zIndex: 10000,
           // Escurecimento proprio desta modal, mais frio.
@@ -370,6 +372,7 @@ export default function MeusDadosPage() {
             </div>
           </div>
         </div>
+        </ModalPortal>
       )}
 
       <Snackbar snack={snack} />

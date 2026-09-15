@@ -1,6 +1,7 @@
 'use client';
 
 import { withEmphasis } from '@/components/ui/emphasis';
+import ModalPortal from '@/components/ui/ModalPortal';
 import {
   MODAL_OVERLAY, MODAL_CARD, MODAL_BODY, MODAL_TITLE, MODAL_TEXT, MODAL_ACTIONS, MODAL_BUTTON,
 } from '@/components/ui/modalScale';
@@ -42,6 +43,7 @@ export default function RescheduleDialog({ appointment, onBack, onConfirm }) {
   });
 
   return (
+    <ModalPortal>
     <div
       style={MODAL_OVERLAY}
       role="dialog"
@@ -67,5 +69,6 @@ export default function RescheduleDialog({ appointment, onBack, onConfirm }) {
         </div>
       </div>
     </div>
+    </ModalPortal>
   );
 }

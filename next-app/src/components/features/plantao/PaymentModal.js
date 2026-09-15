@@ -5,6 +5,7 @@ import { useState } from 'react';
 import EmailInput from '@/components/features/meus-dados/EmailInput';
 import { isValidCpf } from '@/lib/cpf';
 import { fetchViaCEP } from '@/lib/viaCep';
+import ModalPortal from '@/components/ui/ModalPortal';
 
 function maskCPF(v) {
   const d = v.replace(/\D/g, '').slice(0, 11);
@@ -98,6 +99,7 @@ export default function PaymentModal({ open, onClose, onSuccess, alertMessage, p
   const sectionTitleStyle = { fontSize: '18px', fontWeight: 600, color: '#2c3e50', marginBottom: '20px', paddingBottom: '8px', borderBottom: '2px solid #e9ecef' };
 
   return (
+    <ModalPortal>
     <div
       style={{ ...MODAL_OVERLAY, zIndex: 1050, padding: '16px' }}
       onClick={onClose}
@@ -245,5 +247,6 @@ export default function PaymentModal({ open, onClose, onSuccess, alertMessage, p
         </div>
       </div>
     </div>
+    </ModalPortal>
   );
 }

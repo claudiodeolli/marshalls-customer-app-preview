@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/AuthContext';
 import { mockAppointments } from '@/data/mockData';
 import { IconLock, IconUploadCloud, IconFile, IconTrash, IconChevron, IconLink, IconFilter } from '@/components/features/meus-arquivos/icons';
+import ModalPortal from '@/components/ui/ModalPortal';
 
 const IS_MOCK = process.env.NEXT_PUBLIC_MOCK_MODE === '1';
 const LS_KEY = 'meus_arquivos';
@@ -361,6 +362,7 @@ export default function MeusArquivosPage() {
         </div>
 
         {infoModalOpen && (
+          <ModalPortal>
           <div
             onClick={() => setInfoModalOpen(false)}
             style={{
@@ -397,6 +399,7 @@ export default function MeusArquivosPage() {
               </div>
             </div>
           </div>
+          </ModalPortal>
         )}
       </div>
     );

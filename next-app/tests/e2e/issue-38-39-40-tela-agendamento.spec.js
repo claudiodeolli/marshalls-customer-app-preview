@@ -47,15 +47,18 @@ async function abrirAvulsaAPagar(page) {
   await dispensarAvisoDeRegras(page);
 }
 
-// Quem rola nesta aplicação é o BODY, não o documentElement: o
-// `overflow-x: hidden` em `html, body` (globals.css) transforma o body em
-// contêiner de rolagem. Medir `window.scrollY` aqui devolve 0 sempre, e um
-// teste que olhasse para ele passaria mesmo com a tela aberta no meio.
+// Quem rola é o .content-wrapper, não o body nem o documentElement: desde a
+// issue #45 o conteúdo tem o próprio contêiner, logo abaixo da barra. Medir
+// window.scrollY aqui devolve 0 sempre, e um teste que olhasse para ele
+// passaria mesmo com a tela aberta no meio.
 function medirScroll(page) {
-  return page.evaluate(() => ({
-    scrollTop: document.body.scrollTop,
-    rolavel: document.body.scrollHeight > document.body.clientHeight + 1,
-  }));
+  return page.evaluate(() => {
+    const conteudo = document.querySelector('.content-wrapper');
+    return {
+      scrollTop: conteudo.scrollTop,
+      rolavel: conteudo.scrollHeight > conteudo.clientHeight + 1,
+    };
+  });
 }
 
 function medirEspacosDoAviso(page) {

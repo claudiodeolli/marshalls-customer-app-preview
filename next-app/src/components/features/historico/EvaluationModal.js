@@ -3,6 +3,7 @@ import { MODAL_OVERLAY } from '@/components/ui/modalScale';
 
 import { useState } from 'react';
 import Stars from './Stars';
+import ModalPortal from '@/components/ui/ModalPortal';
 
 export default function EvaluationModal({ record, onClose, onSave }) {
   const [rating,  setRating]  = useState(0);
@@ -20,6 +21,7 @@ export default function EvaluationModal({ record, onClose, onSave }) {
   }
 
   return (
+    <ModalPortal>
     <div
       style={{ ...MODAL_OVERLAY, zIndex: 1060, padding: '16px' }}
       onClick={onClose}
@@ -62,5 +64,6 @@ export default function EvaluationModal({ record, onClose, onSave }) {
         </div>
       </div>
     </div>
+    </ModalPortal>
   );
 }

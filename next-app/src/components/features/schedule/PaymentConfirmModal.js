@@ -1,7 +1,9 @@
 import { MODAL_OVERLAY } from '@/components/ui/modalScale';
+import ModalPortal from '@/components/ui/ModalPortal';
 
 export default function PaymentConfirmModal({ avulsaSpecialty, paymentMethodLabel, onClose, onConfirm }) {
   return (
+    <ModalPortal>
     <div
       style={{ ...MODAL_OVERLAY, zIndex: 9999, padding: '14px' }}
       onClick={onClose}
@@ -58,5 +60,6 @@ export default function PaymentConfirmModal({ avulsaSpecialty, paymentMethodLabe
         </div>
       </div>
     </div>
+    </ModalPortal>
   );
 }

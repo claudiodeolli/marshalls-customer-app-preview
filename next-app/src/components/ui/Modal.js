@@ -1,6 +1,8 @@
 import { MODAL_OVERLAY } from '@/components/ui/modalScale';
+import ModalPortal from '@/components/ui/ModalPortal';
 export default function Modal({ title, onClose, children, footer }) {
   return (
+    <ModalPortal>
     <div style={{
       ...MODAL_OVERLAY, zIndex: 10000,
       // Escurecimento proprio deste componente, mais frio.
@@ -33,5 +35,6 @@ export default function Modal({ title, onClose, children, footer }) {
         )}
       </div>
     </div>
+    </ModalPortal>
   );
 }
