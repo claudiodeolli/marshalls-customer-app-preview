@@ -103,6 +103,12 @@ html::-webkit-scrollbar-thumb:hover {
   margin: 0 !important;
   z-index: 1030 !important;
   border-radius: 8px !important;
+  /* O gradiente da barra termina em branco puro e o conteúdo começa logo
+     abaixo, sem nada entre os dois: a emenda seca lia como uma camada por
+     cima do conteúdo, e não como conteúdo passando por baixo da barra
+     (issue #44). A sombra é a do próprio tema, onde já existe para esta
+     finalidade em .header-navbar.navbar-shadow. */
+  box-shadow: 0 4px 24px 0 rgba(34, 41, 47, 0.1) !important;
 }
 
 /* O padding-top do app-content empurrava o conteúdo abaixo do header fixo (108.5px).

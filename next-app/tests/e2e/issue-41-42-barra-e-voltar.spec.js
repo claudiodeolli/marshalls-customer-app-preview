@@ -2,6 +2,7 @@
 //   #41 https://github.com/claudiodeolli/marshalls-customer-app-preview/issues/41
 //   #42 https://github.com/claudiodeolli/marshalls-customer-app-preview/issues/42
 //   #43 https://github.com/claudiodeolli/marshalls-customer-app-preview/issues/43
+//   #44 https://github.com/claudiodeolli/marshalls-customer-app-preview/issues/44
 const { test, expect } = require('@playwright/test');
 
 
@@ -197,6 +198,21 @@ for (const [nome, viewport] of [
         geo.pelicula.bottom,
         'a película não pode terminar antes da barra, senão o conteúdo reaparece por cima dela'
       ).toBeGreaterThanOrEqual(geo.navbar.bottom - 0.5);
+    });
+
+    // Só a propriedade, e de propósito: "parece sobreposto" é percepção, e logo
+    // abaixo da barra já há escurecimento do próprio card, o que contaminaria
+    // qualquer asserção de brilho. O julgamento visual está nas imagens da issue.
+    test('#44 — a barra carrega a sombra do tema, separando-a do conteúdo', async ({ page }) => {
+      await page.goto('/agendamentos');
+      await expect(page.getByRole('heading', { name: 'Agendamentos' }).first()).toBeVisible({ timeout: 15000 });
+      await dispensarAvisoDeRegras(page);
+
+      const sombra = await page.evaluate(() =>
+        getComputedStyle(document.querySelector('.header-navbar')).boxShadow);
+
+      expect(sombra).not.toBe('none');
+      expect(sombra, 'é a sombra do próprio tema, não um valor inventado').toContain('rgba(34, 41, 47, 0.1)');
     });
 
     test('#42 — o Voltar da Avulsa é igual ao do Encaminhamento', async ({ page }) => {
