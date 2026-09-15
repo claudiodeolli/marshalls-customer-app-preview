@@ -952,26 +952,16 @@ function ScheduleContent() {
         </div>
       )}
 
-      {showPrices ? (
-        <button
-          onClick={() => router.back()}
-          style={{
-            background: 'none', border: 'none', cursor: 'pointer',
-            color: '#6e6b7b', fontWeight: 600, fontSize: 14,
-            display: 'flex', alignItems: 'center', gap: 6,
-            padding: '4px 0', marginTop: 4,
-          }}
-        >
-          ← Voltar
-        </button>
-      ) : (
-        <button
-          className="btn btn-flat-secondary btn-sm mt-1"
-          onClick={() => router.back()}
-        >
-          ← Voltar
-        </button>
-      )}
+      {/* Um botão só, e não dois ramos: o cliente pediu a setinha, o texto e o
+          botão da tela de Avulsas iguais aos da tela de Encaminhamentos, e é o
+          do Encaminhamento que ele tomou como certo (issue #42). Unificado aqui
+          para os dois não voltarem a divergir. */}
+      <button
+        className="btn btn-flat-secondary btn-sm mt-1"
+        onClick={() => router.back()}
+      >
+        ← Voltar
+      </button>
 
       {/* ── Slot choice modal (avulsa) ───────────────────────────────────────── */}
       <SlotChoiceModal
