@@ -47,18 +47,14 @@ async function abrirAvulsaAPagar(page) {
   await dispensarAvisoDeRegras(page);
 }
 
-// Quem rola é o .content-wrapper, não o body nem o documentElement: desde a
-// issue #45 o conteúdo tem o próprio contêiner, logo abaixo da barra. Medir
-// window.scrollY aqui devolve 0 sempre, e um teste que olhasse para ele
-// passaria mesmo com a tela aberta no meio.
+// Quem rola é a viewport, como no projeto de referência (issue #47): o
+// overflow-x fica só no body, então ele propaga para a viewport em vez de
+// tornar o body um contêiner de rolagem.
 function medirScroll(page) {
-  return page.evaluate(() => {
-    const conteudo = document.querySelector('.content-wrapper');
-    return {
-      scrollTop: conteudo.scrollTop,
-      rolavel: conteudo.scrollHeight > conteudo.clientHeight + 1,
-    };
-  });
+  return page.evaluate(() => ({
+    scrollTop: window.scrollY,
+    rolavel: document.documentElement.scrollHeight > window.innerHeight + 1,
+  }));
 }
 
 function medirEspacosDoAviso(page) {

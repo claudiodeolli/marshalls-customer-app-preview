@@ -27,12 +27,10 @@ export default function AppGroupLayout({ children }) {
     history.scrollRestoration = 'manual';
   }, []);
 
-  // Desde a issue #45 quem rola é o .content-wrapper, e não o body: zerar o
-  // body aqui não teria efeito nenhum. O fallback continua porque a tela de
-  // login e a de carregamento vivem fora desse contêiner.
+  // Quem rola é a página, como no projeto de referência do cliente. As três
+  // formas cobrem os navegadores que divergem sobre qual elemento é o
+  // scroller do documento.
   useEffect(() => {
-    const conteudo = document.querySelector('.content-wrapper');
-    if (conteudo) conteudo.scrollTop = 0;
     window.scrollTo(0, 0);
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;

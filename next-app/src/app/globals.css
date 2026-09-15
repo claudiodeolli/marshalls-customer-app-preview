@@ -1,12 +1,23 @@
 /* ── Estilos do loader (copiados do loader.css original) ── */
-/* Quem rola deixou de ser o body: o conteúdo tem o próprio contêiner, logo
-   abaixo da barra, e é ele que rola (issue #45). Sem isso a máscara que
-   dissolve o conteúdo não teria como ficar ancorada na viewport. */
+/* O overflow-x fica só no body, e não no html — é o que o site publicado do
+   cliente faz, e a diferença é decisiva. Com o html em `visible`, o overflow
+   do body PROPAGA para a viewport e é ela quem rola. Com a regra também no
+   html a propagação não acontece, o body vira contêiner de rolagem, a altura
+   do documento fica presa em 100% e a barra de rolagem passa a ser interna —
+   foi daí que nasceram a película sticky e as emendas das issues #37 e #41. */
 html,
 body {
   margin: 0;
-  overflow: hidden;
-  height: 100dvh;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+/* A barra é fixa e cobre o topo, então scrollIntoView deixaria o alvo debaixo
+   dela. O recuo é o mesmo padding-top que o tema dá ao .app-content. */
+html {
+  scroll-padding-top: 108.5px;
 }
 
 
@@ -15,58 +26,11 @@ body {
   padding-bottom: 28px !important;
 }
 
-/* O conteúdo rola aqui dentro, num contêiner que começa abaixo da barra:
-   18,2px de respiro do app-content + 70,38px de barra em cima, 28px de
-   respiro embaixo (issue #45).
 
-   A máscara dissolve o conteúdo ao chegar no topo. Cobrir com uma camada
-   tinge o que está atrás e deixa bordas em dois tons — foi o defeito da #41.
-   Apagar faz o conteúdo sumir por inteiro, sem meio-tom.
-
-   overflow-x explícito porque, quando um eixo deixa de ser visible, o outro
-   deixa também: sem isso as margens negativas do .row do Bootstrap abriam
-   14px de rolagem horizontal que não existia antes.
-
-   A margem negativa com padding equivalente alarga o scrollport para dentro
-   das calhas do app-content sem mover o conteúdo, dando espaço para a sombra
-   dos cards ser pintada em vez de recortada na borda. */
-.content-wrapper {
-  padding-top: 28px !important;
-  height: calc(100dvh - 116.58px) !important;
-  overflow-y: auto !important;
-  overflow-x: hidden !important;
-  margin-left: -28px !important;
-  margin-right: -28px !important;
-  padding-left: 28px !important;
-  /* A barra de rolagem daqui é estilizada como a da página, fina. Não dá para
-     alinhar a borda do conteúdo com a da navbar nos dois modelos de barra
-     (sobreposta e clássica) só com CSS: com barra clássica o conteúdo fica
-     mais estreito que a navbar pela largura dela. Manter a barra em 6px
-     limita esse resíduo a 6px, em vez dos ~15px do padrão do sistema. */
-  padding-right: 28px !important;
-  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 14px);
-  mask-image: linear-gradient(180deg, transparent 0, #000 14px);
-}
-
-.content-wrapper::-webkit-scrollbar {
-  width: 6px;
-}
-
-.content-wrapper::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.content-wrapper::-webkit-scrollbar-thumb {
-  background: #aaa;
-  border-radius: 3px;
-}
-
-/* A película existia para esconder o conteúdo que passava por trás da barra.
-   Desde a issue #45 o conteúdo não passa mais: ele tem o próprio contêiner de
-   rolagem, que começa abaixo da barra. Sem função, ela sai de cena. */
-.navbar-floating .header-navbar-shadow {
-  display: none !important;
-}
+/* A película volta a ser a do tema: position: fixed, top 0, largura da janela
+   e o gradiente original. Cobrindo a janela inteira não há emenda vertical nas
+   bordas do conteúdo — era daí que vinha a "marca" das issues #37 e #41, e não
+   da cor. É assim que o projeto de referência do cliente se comporta. */
 
 
 /* Scrollbar da página: fino e sem track visível, igual ao projeto de referência.
@@ -94,71 +58,13 @@ html::-webkit-scrollbar-thumb:hover {
   background: #aaa;
 }
 
-/* Navbar sticky dentro do app-content — herda o padding horizontal do container
-   (28px de cada lado via html[dir] .content.app-content). */
-/* A barra vem do tema com a classe navbar-shadow, que já traz
-   box-shadow: 0 4px 24px 0 rgba(34,41,47,.1). Foi por isso que a issue #44 não
-   mudou nada: a sombra que eu "adicionei" já existia. O cliente pediu que ela
-   saísse — com o conteúdo desvanecendo (issue #45), ela virou uma quebra. */
-.header-navbar.floating-nav.navbar-shadow {
-  box-shadow: none !important;
-}
+/* A barra é a do tema: position: fixed, largura calc(100% - 4rem - 260px),
+   margem 1.3rem 2rem 0 e cantos de .428rem. Sem override nosso aqui. */
 
-.header-navbar.floating-nav {
-  position: sticky !important;
-  top: 18.2px !important;
-  left: auto !important;
-  right: auto !important;
-  width: 100% !important;
-  margin: 0 !important;
-  z-index: 1030 !important;
-  border-radius: 8px !important;
-}
-
-/* O padding-top do app-content empurrava o conteúdo abaixo do header fixo (108.5px).
-   Com sticky, o header ocupa espaço no fluxo — basta o gap visual de 18.2px no topo. */
-html[dir] .content.app-content {
-  padding-top: 18.2px !important;
-}
-
-/* Mobile: remove o gap acima do navbar — com sticky ele fica no fluxo e o padding
-   criaria espaço visível antes do header. No desktop o gap é intencional (efeito floating). */
+/* Abaixo de 1200px o tema já estreita a barra para calc(100% - 4rem) mantendo
+   a margem de 2rem, o que a alinha com o padding lateral do .app-content. É o
+   mesmo comportamento do projeto de referência, medido em 1100px e em 390px. */
 @media (max-width: 1199.98px) {
-  html[dir] .content.app-content {
-    padding-top: 0 !important;
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-  }
-
-
-  /* A barra acompanha a largura do conteúdo, e não a da janela (issue #46).
-     Ela era full-bleed aqui — requisito escrito da #37 —, mas com o conteúdo
-     recuado em 27,3px as duas bordas não batiam, e sem a película e a sombra
-     para disfarçar o descasamento ficou evidente. O recuo é o mesmo do
-     .content-wrapper logo abaixo: se um mudar, o outro muda junto.
-
-     top: 0 continua, porque o padding-top do app-content é zero aqui: com
-     18,2px a barra travaria abaixo da borda da tela. */
-  html[dir] .header-navbar.floating-nav {
-    margin-left: 27.3px !important;
-    margin-right: 27.3px !important;
-    width: calc(100% - 54.6px) !important;
-    border-radius: 0 !important;
-    top: 0 !important;
-  }
-
-  /* Espaçamento lateral realocado do app-content para o content-wrapper.
-     A altura desconta só a barra (que aqui encosta no topo) e o respiro de
-     baixo; as margens negativas do desktop não valem, o wrapper já ocupa a
-     largura toda. */
-  .content-wrapper {
-    padding-left: 27.3px !important;
-    padding-right: 27.3px !important;
-    margin-left: 0 !important;
-    margin-right: 0 !important;
-    height: calc(100dvh - 98.38px) !important;
-  }
-
   /* Overlay deve cobrir navbar (1030) e bottom nav (1025).
      Main-menu fica acima do overlay para permanecer visível. */
   .sidenav-overlay {

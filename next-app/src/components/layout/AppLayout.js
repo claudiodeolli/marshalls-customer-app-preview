@@ -211,12 +211,18 @@ export default function AppLayout({ children }) {
           mobileOpen={mobileOpen}
         />
 
+        {/* ── Barra de navegação superior ──
+            Irmã do .app-content, e não filha: o tema a posiciona com
+            position: fixed sem declarar top, então ela fica na posição
+            estática. Dentro do .app-content, os 108,5px de padding-top o
+            empurravam para baixo (medido: 126,7px em 1100 e 115,5px em 390).
+            É a mesma estrutura do projeto de referência do cliente. */}
+        <Navbar onHamburgerClick={handleHamburger} />
+
         {/* ── Área de conteúdo principal ── */}
         <div className="app-content content">
           <div className="content-overlay" />
           <div className="header-navbar-shadow" />
-          {/* ── Barra de navegação superior — sticky dentro do app-content ── */}
-          <Navbar onHamburgerClick={handleHamburger} />
           <div className="content-wrapper">
 
             {/* Cabeçalho da página com título e breadcrumb */}
