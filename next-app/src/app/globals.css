@@ -38,6 +38,26 @@ body {
   pointer-events: none;
 }
 
+/* O gradiente do tema é cinza neutro (#f8f8f8, do Vuexy original), mas o fundo
+   desta aplicação é #f0f4f8, azulado. Como a película cobre só o content box
+   do .app-content, e não a janela inteira, o descasamento não virava um véu
+   uniforme: virava duas linhas verticais nas bordas dela, medidas em 247,247,247
+   contra 238,242,246 do fundo. É a "linha marcada" da issue #37.
+
+   Repintando o gradiente na cor do próprio fundo, a faixa some contra a página
+   em qualquer largura e sobra só o que o cliente pediu: o conteúdo escurecendo
+   ao passar por trás da barra. O último ponto também deixa de ser branco
+   transparente, que clareava o meio do caminho. */
+[dir=ltr] .navbar-floating .header-navbar-shadow,
+[dir=rtl] .navbar-floating .header-navbar-shadow {
+  background: linear-gradient(
+    180deg,
+    rgba(240, 244, 248, 0.95) 44%,
+    rgba(240, 244, 248, 0.46) 73%,
+    rgba(240, 244, 248, 0)
+  ) !important;
+}
+
 /* Scrollbar da página: fino e sem track visível, igual ao projeto de referência.
    ::-webkit-scrollbar com width definido força o comportamento "classic" no Chrome,
    garantindo que --sw seja sempre mensurável via JS. */
