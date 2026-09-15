@@ -60,11 +60,20 @@ html::-webkit-scrollbar-thumb:hover {
 
 /* A barra é a do tema: position: fixed, largura calc(100% - 4rem - 260px),
    margem 1.3rem 2rem 0 e cantos de .428rem. Sem override nosso aqui. */
+/* Único valor do tema que não seguimos: o arredondamento. O tema dá
+   5.992px e antes da replicação da #47 a barra tinha 8px no desktop e 0
+   abaixo de 1200px. Mantido o nosso, a pedido — e só ele. */
+.header-navbar.floating-nav {
+  border-radius: 8px !important;
+}
 
 /* Abaixo de 1200px o tema já estreita a barra para calc(100% - 4rem) mantendo
    a margem de 2rem, o que a alinha com o padding lateral do .app-content. É o
    mesmo comportamento do projeto de referência, medido em 1100px e em 390px. */
 @media (max-width: 1199.98px) {
+  .header-navbar.floating-nav {
+    border-radius: 0 !important;
+  }
   /* Overlay deve cobrir navbar (1030) e bottom nav (1025).
      Main-menu fica acima do overlay para permanecer visível. */
   .sidenav-overlay {
