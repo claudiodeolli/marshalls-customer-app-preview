@@ -125,12 +125,12 @@ for (const [nome, viewport] of [
     // Viewport curta de propósito: com a lista colapsando num card só, a tela
     // inteira cabe em 844px e não sobra nada para rolar — a primeira versão
     // deste teste cobrava um efeito que o tamanho da tela tornava impossível.
+    // Este teste clicava em "Nutrição", que caía direto no calendário. Desde a
+    // issue #36 nenhuma especialidade faz isso: todas passam pela escolha entre
+    // Encaminhamento e Avulsa. O caminho por clique agora é o da avulsa.
     test('#39/T2 — escolher a especialidade na lista continua rolando até o calendário', async ({ page }) => {
       await page.setViewportSize({ width: viewport.width, height: 480 });
-      await page.goto('/schedule/calendar');
-      await page.getByText('Nutrição', { exact: true }).first().click();
-      await expect(page.getByTestId('calendario')).toBeVisible({ timeout: 15000 });
-      await dispensarAvisoDeRegras(page);
+      await abrirAvulsaAPagar(page);
       await page.waitForTimeout(1200);
 
       const scroll = await medirScroll(page);

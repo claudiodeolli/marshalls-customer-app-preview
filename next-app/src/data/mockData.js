@@ -415,7 +415,11 @@ export const mockAppointments = [
 
 export const mockSpecialties = [
   { uuid: 'spec-001', name: 'Cardiologia',   price: 95, referral: true  },
-  { uuid: 'spec-002', name: 'Nutrição',      price: 70, referral: false },
+  // Nutrição era a única com `referral: false`, e por isso pulava a escolha
+  // entre Encaminhamento e Avulsa e caía direto no calendário, onde o botão
+  // final marcava sem cobrar. O cliente pediu que ela ofereça a mesma escolha
+  // das outras (issue #36).
+  { uuid: 'spec-002', name: 'Nutrição',      price: 70, referral: true  },
   { uuid: 'spec-003', name: 'Ortopedia',     price: 95, referral: true  },
   { uuid: 'spec-004', name: 'Neurologia',    price: 95, referral: true  },
   { uuid: 'spec-005', name: 'Dermatologia',  price: 95, referral: true  },
