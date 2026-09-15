@@ -21,7 +21,16 @@ async function dispensarAvisoDeRegras(page) {
   await expect(entendi).toHaveCount(0);
 }
 
-function retratoDaEscolha(page) {
+// Desde a issue #45 a modal vai para o document.body por um portal, e o
+// componente renderiza nulo no primeiro passo para não divergir do SSR.
+// Tirar o retrato logo após o clique corria contra esse passo extra.
+async function retratoDaEscolha(page) {
+  await expect(page.getByRole('heading', { name: 'Selecionar Encaminhamento' }))
+    .toBeVisible({ timeout: 15000 });
+  return retratoCru(page);
+}
+
+function retratoCru(page) {
   return page.evaluate(() => {
     const titulo = [...document.querySelectorAll('h6')]
       .find(h => h.textContent.trim() === 'Selecionar Encaminhamento');

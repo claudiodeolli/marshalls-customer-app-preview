@@ -38,9 +38,27 @@ body {
   margin-left: -28px !important;
   margin-right: -28px !important;
   padding-left: 28px !important;
+  /* A barra de rolagem daqui é estilizada como a da página, fina. Não dá para
+     alinhar a borda do conteúdo com a da navbar nos dois modelos de barra
+     (sobreposta e clássica) só com CSS: com barra clássica o conteúdo fica
+     mais estreito que a navbar pela largura dela. Manter a barra em 6px
+     limita esse resíduo a 6px, em vez dos ~15px do padrão do sistema. */
   padding-right: 28px !important;
   -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 14px);
   mask-image: linear-gradient(180deg, transparent 0, #000 14px);
+}
+
+.content-wrapper::-webkit-scrollbar {
+  width: 6px;
+}
+
+.content-wrapper::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.content-wrapper::-webkit-scrollbar-thumb {
+  background: #aaa;
+  border-radius: 3px;
 }
 
 /* A película existia para esconder o conteúdo que passava por trás da barra.
@@ -113,12 +131,18 @@ html[dir] .content.app-content {
   }
 
 
-  /* Navbar full-bleed: padding horizontal do app-content é 0, margens negativas não são mais necessárias.
-     top: 0 acompanha o padding-top zerado — com 18.2px o navbar travaria abaixo da borda da tela. */
+  /* A barra acompanha a largura do conteúdo, e não a da janela (issue #46).
+     Ela era full-bleed aqui — requisito escrito da #37 —, mas com o conteúdo
+     recuado em 27,3px as duas bordas não batiam, e sem a película e a sombra
+     para disfarçar o descasamento ficou evidente. O recuo é o mesmo do
+     .content-wrapper logo abaixo: se um mudar, o outro muda junto.
+
+     top: 0 continua, porque o padding-top do app-content é zero aqui: com
+     18,2px a barra travaria abaixo da borda da tela. */
   html[dir] .header-navbar.floating-nav {
-    margin-left: 0 !important;
-    margin-right: 0 !important;
-    width: 100% !important;
+    margin-left: 27.3px !important;
+    margin-right: 27.3px !important;
+    width: calc(100% - 54.6px) !important;
     border-radius: 0 !important;
     top: 0 !important;
   }

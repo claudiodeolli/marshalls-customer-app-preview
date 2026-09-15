@@ -1,6 +1,7 @@
 // Cobre as issues #42 e #45:
 //   #42 https://github.com/claudiodeolli/marshalls-customer-app-preview/issues/42
 //   #45 https://github.com/claudiodeolli/marshalls-customer-app-preview/issues/45
+//   #46 https://github.com/claudiodeolli/marshalls-customer-app-preview/issues/46
 //
 // As issues #41, #43 e #44 mediam a película e a sombra da barra. A #45 aposentou
 // as duas: o conteúdo deixou de passar por trás da barra, então não há mais o que
@@ -114,6 +115,34 @@ for (const [nome, viewport] of [
       const r = await retratoDaRolagem(page);
 
       expect(r.sombraDaBarra, 'o cliente pediu a remoção: ela criava quebra visual').toBe('none');
+    });
+
+    test('#46 — a barra tem a mesma largura do conteúdo', async ({ page }) => {
+      await page.goto('/agendamentos');
+      await expect(page.getByRole('heading', { name: 'Agendamentos' }).first()).toBeVisible({ timeout: 15000 });
+      await dispensarAvisoDeRegras(page);
+
+      const bordas = await page.evaluate(() => {
+        const barra = document.querySelector('.header-navbar').getBoundingClientRect();
+        // A borda interna do contêiner, e não um card: qual card é "o primeiro"
+        // muda com o estado da página, e medir por ele deixava o teste instável.
+        // clientWidth já desconta a barra de rolagem, que é justamente o que
+        // pode roubar largura do conteúdo sem mexer na barra.
+        const w = document.querySelector('.content-wrapper');
+        const cs = getComputedStyle(w);
+        const cx = w.getBoundingClientRect();
+        const c = {
+          left: cx.left + parseFloat(cs.paddingLeft),
+          right: cx.left + w.clientWidth - parseFloat(cs.paddingRight),
+        };
+        return {
+          esquerda: +(barra.left - c.left).toFixed(2),
+          direita: +(barra.right - c.right).toFixed(2),
+        };
+      });
+
+      expect(Math.abs(bordas.esquerda), `borda esquerda fora por ${bordas.esquerda}px`).toBeLessThanOrEqual(1);
+      expect(Math.abs(bordas.direita), `borda direita fora por ${bordas.direita}px`).toBeLessThanOrEqual(1);
     });
 
     test('#42 — o Voltar da Avulsa é igual ao do Encaminhamento', async ({ page }) => {
