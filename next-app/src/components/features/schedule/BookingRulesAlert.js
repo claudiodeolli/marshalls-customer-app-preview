@@ -49,8 +49,12 @@ export default function BookingRulesAlert({ origin }) {
   // Foco no botão assim que a modal abre: é o que um diálogo deve fazer, e é
   // também o que garante que o Esc chegue — sem foco dentro dela, a tecla vai
   // para onde o navegador estiver apontando.
+  //
+  // `preventScroll` porque o overlay é fixo e já nasce na viewport: sem isso o
+  // foco arrastava a página até o botão, e a tela de marcação abria rolada no
+  // calendário em vez de no começo (issue #39).
   useEffect(() => {
-    if (aberto) botaoEntendi.current?.focus();
+    if (aberto) botaoEntendi.current?.focus({ preventScroll: true });
   }, [aberto]);
 
   // Esc fecha, como nas outras modais da seção.

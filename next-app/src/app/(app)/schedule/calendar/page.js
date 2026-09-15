@@ -22,6 +22,23 @@ const IS_MOCK = process.env.NEXT_PUBLIC_MOCK_MODE === '1';
 const DAYS = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
 const MONTHS = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
 
+// Mesmo respiro acima e abaixo do aviso de origem (issue #40): o `mb-3` do
+// tema vale 42px e abria um vão bem maior que o de baixo.
+const ESPACO_AO_REDOR_DO_AVISO = 16;
+
+// Duas linhas, como nos prints dele (issue #40): a frase que diz de que tipo
+// é a consulta, e a que instrui o que fazer.
+const LINHAS_DO_AVISO = {
+  encaminhamento: [
+    'Esta consulta é gratuita e está coberta pelo seu encaminhamento médico.',
+    'Selecione a data e o horário de sua preferência para confirmar o agendamento.',
+  ],
+  avulsa: [
+    'Você optou por uma consulta avulsa.',
+    'Selecione a data e o horário desejados. O pagamento será realizado na próxima etapa.',
+  ],
+};
+
 function buildCalendar(year, month) {
   const firstDay = new Date(year, month, 1).getDay();
   const daysInMonth = new Date(year, month + 1, 0).getDate();
@@ -133,7 +150,7 @@ function ScheduleContent() {
         if (match) {
           setSpecialtyLocked(true);
           setLockedSpecialtyUuid(match.uuid);
-          doSelectSpecialty(match);
+          doSelectSpecialty(match, { rolarAteOCalendario: false });
         }
       } catch { }
     })();
@@ -149,18 +166,22 @@ function ScheduleContent() {
     setAvulsaSpecialty(spec);
     setSpecialtyLocked(true);
     setLockedSpecialtyUuid(spec.uuid);
-    doSelectSpecialty(spec);
+    doSelectSpecialty(spec, { rolarAteOCalendario: false });
   }, [urlAvulsaSpec, loadingSpecialties, specialties]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  function doSelectSpecialty(spec) {
+  // Quando a tela já abre com a especialidade definida — encaminhamento ou
+  // avulsa vindos pela URL — o cliente pediu que ela apareça no começo, e não
+  // rolada até o calendário (issue #39). Nos outros casos a rolagem responde a
+  // um clique dele, e continua valendo.
+  function doSelectSpecialty(spec, { rolarAteOCalendario = true } = {}) {
     setSelectedSpecialty(spec);
     setSelectedDate(null);
     setSlots([]);
     setSelectedSlot(null);
-    fetchAvailability(spec);
+    fetchAvailability(spec, { rolarAteOCalendario });
   }
 
-  async function fetchAvailability(spec) {
+  async function fetchAvailability(spec, { rolarAteOCalendario = true } = {}) {
     setLoadingAvailability(true);
     setAvailabilities([]);
     setAvailableDates(new Set());
@@ -183,7 +204,9 @@ function ScheduleContent() {
       }
       setAvailabilities(data);
       setAvailableDates(new Set(data.map(a => a.date)));
-      setTimeout(() => calendarRef.current?.scrollIntoView({ behavior: 'smooth' }), 100);
+      if (rolarAteOCalendario) {
+        setTimeout(() => calendarRef.current?.scrollIntoView({ behavior: 'smooth' }), 100);
+      }
     } catch {
       setAvailabilities([]);
       setAvailableDates(new Set());
@@ -617,7 +640,7 @@ function ScheduleContent() {
       </div>
 
       {selectedSpecialty && !specialtyLocked ? (
-        <div className="card mb-3">
+        <div className="card" style={{ marginBottom: ESPACO_AO_REDOR_DO_AVISO }}>
           <div className="card-body p-0">
             <div style={{
               display: 'flex', justifyContent: 'space-between', alignItems: 'center',
@@ -655,7 +678,7 @@ function ScheduleContent() {
           </div>
         </div>
       ) : (
-        <div className="card mb-3">
+        <div className="card" style={{ marginBottom: ESPACO_AO_REDOR_DO_AVISO }}>
           <div className="card-body p-0">
             {filteredSpecialties.length === 0 ? (
               <div style={{ padding: '21px', textAlign: 'center', color: '#6e6b7b', fontSize: 14 }}>
@@ -715,17 +738,21 @@ function ScheduleContent() {
           display: 'flex', gap: 10, alignItems: 'flex-start',
           background: referralId ? '#f0f9ff' : '#f6f4ff',
           border: `1px solid ${referralId ? '#b3e0ea' : '#d0c8f8'}`,
-          borderRadius: 10, padding: '12px 14px', marginBottom: 16,
+          borderRadius: 10, padding: '12px 14px', marginBottom: ESPACO_AO_REDOR_DO_AVISO,
           fontSize: 13, color: '#5e5873', lineHeight: 1.6,
         }}>
+          {/* Ponto em cima e haste embaixo: é o ícone que ele mandou (issue
+              #40). O que estava aqui tinha os dois trocados — era o de alerta. */}
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
             fill="none" stroke={referralId ? '#4daab6' : '#7367f0'}
             strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: 2 }}>
-            <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+            <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
           </svg>
-          {referralId
-            ? 'Esta consulta é gratuita e está coberta pelo seu encaminhamento médico. Selecione a data e o horário de sua preferência para confirmar o agendamento.'
-            : 'Você optou por uma consulta avulsa. Selecione a data e o horário desejados. O pagamento será realizado na próxima etapa.'}
+          <div>
+            {(referralId ? LINHAS_DO_AVISO.encaminhamento : LINHAS_DO_AVISO.avulsa).map(linha => (
+              <div key={linha} data-testid="aviso-linha">{linha}</div>
+            ))}
+          </div>
         </div>
       )}
 
@@ -884,7 +911,12 @@ function ScheduleContent() {
               onClick={handleRealizarPagamento}
               disabled={!selectedSlot}
               style={{
-                width: '100%', marginTop: 8, padding: '14px',
+                // O `display: flex` não é enfeite: como inline-block, a margem
+                // deste botão não colapsava com a do calendário e sobravam 8px
+                // a mais de vão do que na tela por encaminhamento — a diferença
+                // que ele marcou no print da issue #38.
+                width: '100%', marginTop: 8, padding: '12px',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
                 borderRadius: 24, border: 'none',
                 cursor: selectedSlot ? 'pointer' : 'not-allowed',
                 background: selectedSlot
