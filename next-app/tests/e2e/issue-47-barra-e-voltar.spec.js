@@ -136,31 +136,6 @@ for (const [nome, viewport] of [
       expect(Math.abs(m.navbar.right - m.areaDeConteudo.right)).toBeLessThanOrEqual(1);
     });
 
-    test('#47 — scrollIntoView não deixa o alvo debaixo da barra', async ({ page }) => {
-      await page.goto('/schedule/calendar?referral=ref-003');
-      await expect(page.getByTestId('calendario')).toBeVisible({ timeout: 15000 });
-      await dispensarAvisoDeRegras(page);
-      await page.waitForTimeout(1500);
-
-      const posicao = await page.evaluate(() => {
-        const cal = document.querySelector('[data-testid="calendario"]').getBoundingClientRect();
-        const barra = document.querySelector('.header-navbar').getBoundingClientRect();
-        return {
-          topoDoCalendario: Number(cal.top.toFixed(1)),
-          fimDaBarra: Number(barra.bottom.toFixed(1)),
-          scrollY: window.scrollY,
-        };
-      });
-
-      // Só cobra se a rolagem realmente aconteceu: em tela alta não há o que rolar.
-      if (posicao.scrollY > 0) {
-        expect(
-          posicao.topoDoCalendario,
-          'o scroll-padding-top existe para o alvo não parar sob a barra fixa'
-        ).toBeGreaterThanOrEqual(posicao.fimDaBarra - 1);
-      }
-    });
-
     test('#42 — o Voltar da Avulsa é igual ao do Encaminhamento', async ({ page }) => {
       await page.goto('/schedule/calendar?referral=ref-003');
       await expect(page.getByTestId('calendario')).toBeVisible({ timeout: 15000 });

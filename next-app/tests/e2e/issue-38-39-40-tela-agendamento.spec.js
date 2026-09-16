@@ -121,24 +121,38 @@ for (const [nome, viewport] of [
       await expect(page.getByTestId('aviso-origem')).toBeInViewport();
     });
 
-    // Viewport curta de propósito: com a lista colapsando num card só, a tela
-    // inteira cabe em 844px e não sobra nada para rolar — a primeira versão
-    // deste teste cobrava um efeito que o tamanho da tela tornava impossível.
-    // Este teste clicava em "Nutrição", que caía direto no calendário. Desde a
-    // issue #36 nenhuma especialidade faz isso: todas passam pela escolha entre
-    // Encaminhamento e Avulsa. O caminho por clique agora é o da avulsa.
-    test('#39/T2 — escolher a especialidade na lista continua rolando até o calendário', async ({ page }) => {
+    // Janela baixa de propósito: é onde o defeito da #48 aparece. Com altura
+    // suficiente a tela cabe inteira e abre no topo de qualquer jeito, e o
+    // teste passaria sem provar nada.
+    test('#48 — pelo caminho de clique a tela também abre no topo', async ({ page }) => {
       await page.setViewportSize({ width: viewport.width, height: 480 });
       await abrirAvulsaAPagar(page);
       await page.waitForTimeout(1200);
 
       const scroll = await medirScroll(page);
 
-      expect(scroll.rolavel, 'a viewport curta precisa deixar a página rolável').toBe(true);
+      expect(scroll.rolavel, 'a janela baixa precisa deixar a página rolável').toBe(true);
+      expect(scroll.scrollTop, 'nenhuma rolagem automática ao abrir a tela').toBe(0);
+    });
+
+    test('#48 — escolher uma data continua rolando até os horários', async ({ page }) => {
+      await page.setViewportSize({ width: viewport.width, height: 480 });
+      await abrirAvulsaAPagar(page);
+      await page.getByTestId('dia-disponivel').first().click();
+      await expect(page.getByTestId('horarios')).toBeVisible({ timeout: 15000 });
+      await page.waitForTimeout(1500);
+
+      const r = await page.evaluate(() => ({
+        scrollY: window.scrollY,
+        topoHorarios: document.querySelector('[data-testid="horarios"]').getBoundingClientRect().top,
+        fimDaBarra: document.querySelector('.header-navbar').getBoundingClientRect().bottom,
+      }));
+
+      expect(r.scrollY, 'é a rolagem que ele pediu para manter').toBeGreaterThan(0);
       expect(
-        scroll.scrollTop,
-        'a rolagem que responde a um clique dele não foi pedida para sair'
-      ).toBeGreaterThan(0);
+        r.topoHorarios,
+        'os horários não podem parar debaixo da barra fixa'
+      ).toBeGreaterThanOrEqual(r.fimDaBarra - 1);
     });
 
     // ── #40 — espaçamento, duas linhas e ícone ───────────────────────────

@@ -110,7 +110,6 @@ function ScheduleContent() {
   const [avulsaBooked, setAvulsaBooked] = useState(false);   // selected slot before payment
   const [avulsaConfirmed, setAvulsaConfirmed] = useState(false); // came via avulsa path
 
-  const calendarRef = useRef(null);
   const slotsRef = useRef(null);
 
   // Load specialties on mount
@@ -150,7 +149,7 @@ function ScheduleContent() {
         if (match) {
           setSpecialtyLocked(true);
           setLockedSpecialtyUuid(match.uuid);
-          doSelectSpecialty(match, { rolarAteOCalendario: false });
+          doSelectSpecialty(match);
         }
       } catch { }
     })();
@@ -166,22 +165,24 @@ function ScheduleContent() {
     setAvulsaSpecialty(spec);
     setSpecialtyLocked(true);
     setLockedSpecialtyUuid(spec.uuid);
-    doSelectSpecialty(spec, { rolarAteOCalendario: false });
+    doSelectSpecialty(spec);
   }, [urlAvulsaSpec, loadingSpecialties, specialties]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Quando a tela já abre com a especialidade definida — encaminhamento ou
-  // avulsa vindos pela URL — o cliente pediu que ela apareça no começo, e não
-  // rolada até o calendário (issue #39). Nos outros casos a rolagem responde a
-  // um clique dele, e continua valendo.
-  function doSelectSpecialty(spec, { rolarAteOCalendario = true } = {}) {
+  // Todo o fluxo vive na mesma rota e avança por estado, então o reset de
+  // rolagem do layout (que depende do pathname) não dispara ao trocar de
+  // etapa. No mobile a lista de especialidades é longa: a pessoa rola até a
+  // que quer, toca, e o calendário herdava essa rolagem, abrindo no meio ou
+  // no fim da página (issue #48).
+  function doSelectSpecialty(spec) {
+    window.scrollTo(0, 0);
     setSelectedSpecialty(spec);
     setSelectedDate(null);
     setSlots([]);
     setSelectedSlot(null);
-    fetchAvailability(spec, { rolarAteOCalendario });
+    fetchAvailability(spec);
   }
 
-  async function fetchAvailability(spec, { rolarAteOCalendario = true } = {}) {
+  async function fetchAvailability(spec) {
     setLoadingAvailability(true);
     setAvailabilities([]);
     setAvailableDates(new Set());
@@ -204,9 +205,9 @@ function ScheduleContent() {
       }
       setAvailabilities(data);
       setAvailableDates(new Set(data.map(a => a.date)));
-      if (rolarAteOCalendario) {
-        setTimeout(() => calendarRef.current?.scrollIntoView({ behavior: 'smooth' }), 100);
-      }
+      // Sem rolagem aqui, em nenhum caminho: a tela abre no começo (issue #48).
+      // Rolar até o calendário já regrediu duas vezes — na #39 e, depois que a
+      // viewport voltou a rolar, na #48, levando a página inteira ao fim.
     } catch {
       setAvailabilities([]);
       setAvailableDates(new Set());
@@ -368,6 +369,7 @@ function ScheduleContent() {
     setTimeout(() => {
       setSlots(availabilities.filter(a => a.date === dateStr));
       setLoadingSlots(false);
+      // A única rolagem automática que o cliente quis manter (issue #48).
       setTimeout(() => slotsRef.current?.scrollIntoView({ behavior: 'smooth' }), 100);
     }, 800);
   }
@@ -769,7 +771,7 @@ function ScheduleContent() {
 
       {/* Calendar — shown after specialty is selected and availability loaded */}
       {selectedSpecialty && !loadingAvailability && (
-        <div ref={calendarRef}>
+        <div>
           <div className="card mb-2" data-testid="calendario">
             {/* Mesmo tratamento do "Horários disponíveis" logo abaixo: dentro
                 da caixa, no cabeçalho — foi a referência que o cliente deu. */}
@@ -820,6 +822,7 @@ function ScheduleContent() {
                   return (
                     <div
                       key={idx}
+                      data-testid={avail ? 'dia-disponivel' : undefined}
                       onClick={() => handleDayClick(day)}
                       style={{
                         textAlign: 'center',
@@ -856,7 +859,7 @@ function ScheduleContent() {
 
           {/* Time slots — shown after a date is selected */}
           {selectedDate && (
-            <div ref={slotsRef} className="card mb-2">
+            <div ref={slotsRef} className="card mb-2" data-testid="horarios">
               <div className="card-header" style={{ padding: '14px 20px' }}>
                 <h6 className="mb-0" style={{ fontWeight: 700 }}>
                   Horários disponíveis — {selectedDate}
