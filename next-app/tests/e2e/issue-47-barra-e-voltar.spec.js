@@ -1,6 +1,7 @@
 // Cobre as issues #42 e #47:
 //   #42 https://github.com/claudiodeolli/marshalls-customer-app-preview/issues/42
 //   #47 https://github.com/claudiodeolli/marshalls-customer-app-preview/issues/47
+//   #49 https://github.com/claudiodeolli/marshalls-customer-app-preview/issues/49
 //
 // A #47 replicou o modelo de rolagem do projeto de referência do cliente e, com
 // isso, aposentou o caminho das #41, #43, #44, #45 e #46. O que aquelas issues
@@ -128,14 +129,6 @@ for (const [nome, viewport] of [
       expect(m.pelicula.right, 'termina na borda da janela').toBeCloseTo(m.larguraJanela, 1);
     });
 
-    test('#47 — a barra tem a mesma largura da área de conteúdo', async ({ page }) => {
-      await abrirAgendamentos(page);
-      const m = await medir(page);
-
-      expect(Math.abs(m.navbar.left - m.areaDeConteudo.left)).toBeLessThanOrEqual(1);
-      expect(Math.abs(m.navbar.right - m.areaDeConteudo.right)).toBeLessThanOrEqual(1);
-    });
-
     test('#42 — o Voltar da Avulsa é igual ao do Encaminhamento', async ({ page }) => {
       await page.goto('/schedule/calendar?referral=ref-003');
       await expect(page.getByTestId('calendario')).toBeVisible({ timeout: 15000 });
@@ -151,3 +144,43 @@ for (const [nome, viewport] of [
     });
   });
 }
+
+// As três faixas de largura ficam no mesmo lugar de propósito: é o que impede
+// um pedido novo de desfazer um antigo sem ninguém perceber. Foi assim que a
+// #46, pedida para uma janela estreita de desktop, desconfigurou o celular.
+test.describe('largura da barra em cada faixa', () => {
+  test('#47 — em 1440 a barra acompanha a área de conteúdo', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 700 });
+    await abrirAgendamentos(page);
+    const m = await medir(page);
+
+    expect(Math.abs(m.navbar.left - m.areaDeConteudo.left)).toBeLessThanOrEqual(1);
+    expect(Math.abs(m.navbar.right - m.areaDeConteudo.right)).toBeLessThanOrEqual(1);
+  });
+
+  test('#46 — em 1100 a barra continua acompanhando o conteúdo', async ({ page }) => {
+    await page.setViewportSize({ width: 1100, height: 700 });
+    await abrirAgendamentos(page);
+    const m = await medir(page);
+
+    expect(
+      Math.abs(m.navbar.left - m.areaDeConteudo.left),
+      'a janela estreita de desktop foi o que originou a #46'
+    ).toBeLessThanOrEqual(1);
+    expect(Math.abs(m.navbar.right - m.areaDeConteudo.right)).toBeLessThanOrEqual(1);
+  });
+
+  test('#49 — no celular a barra encosta nas bordas', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 780 });
+    await abrirAgendamentos(page);
+    const m = await medir(page);
+
+    expect(m.navbar.top, 'sem respiro acima').toBeCloseTo(0, 1);
+    expect(m.navbar.left, 'encosta na borda esquerda').toBeCloseTo(0, 1);
+    expect(m.navbar.right, 'encosta na borda direita').toBeCloseTo(m.larguraJanela, 1);
+    expect(
+      m.navbar.bottom - m.navbar.top,
+      'só as margens mudaram: a altura vem do Navbar.js e continua a mesma'
+    ).toBeCloseTo(70.38, 1);
+  });
+});

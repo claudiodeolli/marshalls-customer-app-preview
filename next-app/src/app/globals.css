@@ -70,6 +70,25 @@ html::-webkit-scrollbar-thumb:hover {
 /* Abaixo de 1200px o tema já estreita a barra para calc(100% - 4rem) mantendo
    a margem de 2rem, o que a alinha com o padding lateral do .app-content. É o
    mesmo comportamento do projeto de referência, medido em 1100px e em 390px. */
+/* No celular a barra volta a encostar nas bordas, como estava até 16/09
+   (issue #49). Ela perdeu o full-bleed por efeito colateral de duas mudanças
+   pedidas para o desktop: a #46, cujo breakpoint (1199,98px) pega o celular
+   junto, e a #47, que devolveu o posicionamento ao tema.
+
+   O alinhamento com a largura do conteúdo, pedido na #46, continua valendo
+   de 768px a 1199,98px — a janela estreita de desktop que motivou aquele
+   pedido. Acima de 1200px nada muda.
+
+   Só as margens: a altura vem do Navbar.js e não se mexe nela. */
+@media (max-width: 767.98px) {
+  html[dir] .header-navbar.floating-nav {
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    margin: 0 !important;
+  }
+}
 @media (max-width: 1199.98px) {
   .header-navbar.floating-nav {
     border-radius: 0 !important;
