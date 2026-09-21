@@ -109,6 +109,26 @@ html::-webkit-scrollbar-thumb:hover {
     padding-right: 0 !important;
   }
 }
+
+/* O tema dá ao .vertical-layout — que é o body e o wrapper do layout —
+   `min-height: 100vh`. No celular, 100vh é a altura da tela com a barra de
+   endereço RECOLHIDA; com a barra à mostra a área visível é menor, e a
+   diferença virava rolagem em toda tela, mesmo nas que cabem (issue #53).
+
+   Até a #47 isso não aparecia porque html e body tinham `overflow: hidden`
+   e quem rolava era só o .content-wrapper. A #47 passou a rolagem para a
+   página, e o 100vh do tema passou a valer.
+
+   100svh é a altura com a barra à mostra: tela que cabe não rola, tela longa
+   rola como antes. O 100vh fica como reserva para navegador sem svh. No
+   desktop não há barra de endereço dinâmica e as duas unidades são iguais,
+   mas a regra fica restrita ao celular mesmo assim. */
+@media (max-width: 767.98px) {
+  html .vertical-layout {
+    min-height: 100vh !important;
+    min-height: 100svh !important;
+  }
+}
 @media (max-width: 1199.98px) {
   .header-navbar.floating-nav {
     border-radius: 0 !important;
