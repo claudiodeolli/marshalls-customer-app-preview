@@ -89,6 +89,26 @@ html::-webkit-scrollbar-thumb:hover {
     margin: 0 !important;
   }
 }
+
+/* Abaixo de 576px o tema aplica 27,3px de padding lateral ao .content-wrapper
+   e mantém os 16,8px do .app-content. Os dois se somam: 44,09px de recuo, o
+   dobro do aprovado.
+
+   Até a #47 havia no bloco mobile um zeramento do padding lateral do
+   .app-content, com o comentário "espaçamento lateral realocado do
+   app-content para o content-wrapper" — o recuo era só o do wrapper. A #47
+   removeu o bloco inteiro ao replicar o modelo de rolagem do projeto de
+   referência, e o padding do tema voltou a empilhar (issue #50).
+
+   O zeramento volta recortado em 575,98px, que é onde a soma acontece: de
+   576px para cima o .content-wrapper já tem padding zero, o card está a 28px
+   e alinhado à barra, e nada aqui o alcança — a #46 continua de pé. */
+@media (max-width: 575.98px) {
+  html[dir] .content.app-content {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+}
 @media (max-width: 1199.98px) {
   .header-navbar.floating-nav {
     border-radius: 0 !important;

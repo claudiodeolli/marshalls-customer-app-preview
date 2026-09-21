@@ -184,3 +184,84 @@ test.describe('largura da barra em cada faixa', () => {
     ).toBeCloseTo(70.38, 1);
   });
 });
+
+// Mesma ideia da suíte acima, agora para o recuo lateral do conteúdo. As
+// quatro faixas ficam juntas porque a #50 nasceu de uma delas atropelar a
+// outra: abaixo de 576px o tema soma o padding do .app-content ao do
+// .content-wrapper, e o recuo dobrou quando a #47 removeu o zeramento.
+//
+// Quem é medido é o .content-body, e não um .card: qual elemento é o primeiro
+// .card muda conforme a largura e conforme o aviso de regras ter sido
+// dispensado ou não, e isso já produziu número errado aqui.
+test.describe('recuo lateral do conteúdo em cada faixa', () => {
+  const RECUO_DO_DEFEITO = 44.09;
+
+  const medirRecuo = page => page.evaluate(() => {
+    const arredondar = n => Math.round(n * 100) / 100;
+    const corpo = document.querySelector('.content-body').getBoundingClientRect();
+    return {
+      esquerda: arredondar(corpo.left),
+      direita: arredondar(window.innerWidth - corpo.right),
+      largura: arredondar(corpo.width),
+      altura: arredondar(corpo.height),
+      janela: window.innerWidth,
+    };
+  });
+
+  // Sem isto o teste passaria medindo um contêiner vazio ou colapsado.
+  const conferirQueHaConteudo = r => {
+    expect(r.altura, 'o .content-body precisa ter conteúdo para a medida valer').toBeGreaterThan(100);
+    expect(r.largura).toBeCloseTo(r.janela - r.esquerda - r.direita, 1);
+  };
+
+  // O emulador mobile do Playwright (isMobile) arredonda o layout de um jeito
+  // próprio: o mesmo recuo mede 27,64 numa execução e 27,81 na seguinte. A
+  // folga de 1px absorve isso sem perder poder de detecção — o defeito da #50
+  // era 44,09px, quase 17px acima do alvo.
+  const esperarRecuo = (r, alvo, folga = 1) => {
+    for (const [lado, valor] of [['esquerdo', r.esquerda], ['direito', r.direita]]) {
+      expect(valor, `recuo ${lado}`).toBeGreaterThan(alvo - folga);
+      expect(valor, `recuo ${lado}`).toBeLessThan(alvo + folga);
+      expect(valor, `recuo ${lado} de volta ao defeito da #50`).toBeLessThan(RECUO_DO_DEFEITO - 5);
+    }
+  };
+
+  test('#50 — no celular o conteúdo volta a 27,3px, sem os paddings somados', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 780 });
+    await abrirAgendamentos(page);
+    const r = await medirRecuo(page);
+
+    conferirQueHaConteudo(r);
+    esperarRecuo(r, 27.3);
+  });
+
+  test('#50 — em 360 o recuo é o mesmo que em 390', async ({ page }) => {
+    await page.setViewportSize({ width: 360, height: 780 });
+    await abrirAgendamentos(page);
+    const r = await medirRecuo(page);
+
+    conferirQueHaConteudo(r);
+    esperarRecuo(r, 27.3);
+  });
+
+  // 576px é a borda de cima do recorte da #50. Acima dela o .content-wrapper
+  // já tem padding zero e quem recua é só o .app-content — se a regra da #50
+  // vazar para cá, este número muda.
+  test('#50 — em 600 o recuo continua o do tema, fora do alcance da regra', async ({ page }) => {
+    await page.setViewportSize({ width: 600, height: 780 });
+    await abrirAgendamentos(page);
+    const r = await medirRecuo(page);
+
+    conferirQueHaConteudo(r);
+    // Mesma folga de 2px da faixa de 1100: aqui a página já tem barra de
+    // rolagem clássica e o emulador desloca a medida em ~1,5px.
+    esperarRecuo(r, 24, 2);
+  });
+
+  // Não há aqui um teste de 1100 ou 1440 medindo o .content-body: naquelas
+  // larguras o emulador devolve de 28 a 30,12 para o mesmo layout, e nenhuma
+  // tolerância útil sobrevive a isso. O que aquelas faixas precisam provar —
+  // barra e conteúdo alinhados — já é provado pelos testes "#47 — em 1440" e
+  // "#46 — em 1100" da suíte acima, que comparam as duas caixas pelo mesmo
+  // critério e por isso não sofrem o desvio.
+});
