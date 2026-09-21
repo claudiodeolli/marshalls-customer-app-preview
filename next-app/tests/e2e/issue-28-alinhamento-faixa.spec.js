@@ -20,8 +20,10 @@ const FOLGA_PX = 1;
  *
  * `document.fonts.ready` sozinho não basta: a lista de cards assenta em
  * etapas, e uma medição tirada no meio lê uma largura que ainda vai mudar —
- * 271,61 em vez de 272,72, por exemplo. Aqui esperamos dois quadros seguidos
- * com a mesma medida.
+ * 271,61 em vez de 272,72, por exemplo. Dois quadros seguidos iguais também
+ * não bastavam: entre uma etapa e outra a medida fica parada por alguns
+ * quadros e o teste media cedo demais (issue #52). Aqui a medida precisa
+ * ficar igual por 400ms seguidos, com um teto de 5s.
  */
 async function aguardarLayoutEstavel(page) {
   await page.evaluate(async () => {
@@ -30,12 +32,16 @@ async function aguardarLayoutEstavel(page) {
       .filter(b => b.textContent.trim() === 'Entrar no atendimento' && b.getClientRects().length > 0)
       .map(b => Math.round(b.getBoundingClientRect().width * 100)).join();
 
+    const JANELA_ESTAVEL_MS = 400;
+    const TETO_MS = 5000;
+    const inicio = performance.now();
     let anterior = ler();
-    for (let tentativa = 0; tentativa < 30; tentativa++) {
+    let desde = performance.now();
+    while (performance.now() - inicio < TETO_MS) {
       await new Promise(requestAnimationFrame);
       const atual = ler();
-      if (atual && atual === anterior) return;
-      anterior = atual;
+      if (atual !== anterior) { anterior = atual; desde = performance.now(); continue; }
+      if (atual && performance.now() - desde >= JANELA_ESTAVEL_MS) return;
     }
   });
 }

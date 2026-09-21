@@ -15,10 +15,16 @@ async function abrirLista(page) {
   await expect(page.getByText(NUTRICAO, { exact: true }).first()).toBeVisible({ timeout: 15000 });
 }
 
+// O aviso pode montar um instante depois da tela, e um clique que chega antes
+// do handler não o fecha. Por isso: dá um tempo curto para ele aparecer e
+// repete o clique até ele sumir, em vez de clicar uma vez só (issue #52).
 async function dispensarAvisoDeRegras(page) {
   const entendi = page.getByRole('button', { name: 'Entendi' });
-  if (await entendi.count()) await entendi.first().click();
-  await expect(entendi).toHaveCount(0);
+  await entendi.first().waitFor({ state: 'visible', timeout: 1500 }).catch(() => {});
+  await expect(async () => {
+    if (await entendi.count()) await entendi.first().click({ timeout: 1000 });
+    await expect(entendi).toHaveCount(0, { timeout: 1000 });
+  }).toPass({ timeout: 10000 });
 }
 
 // Desde a issue #45 a modal vai para o document.body por um portal, e o

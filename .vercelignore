@@ -1,0 +1,6 @@
+# Saídas locais do next dev/build. A Vercel faz o build do zero, então elas
+# não servem para nada lá — e sem este arquivo o upload passava do limite de
+# 15.000 arquivos (21.914 em 20/09/2026), gerados pelos servidores de teste
+# do Playwright (issue #52).
+.next
+.next-pages
