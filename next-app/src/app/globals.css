@@ -1317,6 +1317,43 @@ input._search-input:not([type="checkbox"]):not([type="radio"]):not([type="submit
   }
 }
 
+/* No celular o espaço da barra inferior era reservado duas vezes — 71px no
+   .content-wrapper e outros 71px no .content-body — e ainda sobrava a margem
+   do último card. Somados, 170px de espaço vazio no fim de toda tela, o que
+   criava rolagem mesmo quando todo o conteúdo já estava visível: 71px em
+   Mudar senha, 60px em Canais de contato e 82px em Encaminhamentos numa
+   janela de 390x700 (issue #54).
+
+   A reserva passa a ser uma só, de 78,5px, que é o quanto a barra inferior
+   cobre: 73,5px de altura mais 5px de respiro até a borda. Menos que isso
+   esconderia o fim do conteúdo atrás dela; mais que isso volta a criar
+   rolagem vazia.
+
+   A margem do último bloco sai porque ela separa cards entre si e, no fim da
+   página, vira só espaço vazio antes da reserva. As margens entre os cards
+   do meio não são tocadas.
+
+   Com isso a rolagem passa a existir só quando algum item de fato não cabe,
+   que foi o critério que o cliente deu: "o scroll só aparece se tiver mais de
+   um Card ali ou se o único Card que tiver ultrapassar a tela". */
+@media (max-width: 767.98px) {
+  .content-wrapper {
+    padding-bottom: 78.5px !important;
+  }
+
+  .content-body {
+    padding-bottom: 0 !important;
+  }
+
+  /* O Plantão fica de fora: o card dele é dimensionado pela altura da página,
+     e sem a margem ele cresce 28px e passa a terminar atrás da barra
+     inferior. Aquela tela já não rolava e não foi pedida. */
+  .content-body:not(:has(._plantao-page)) .row > [class*="col-"]:last-child,
+  .content-body:not(:has(._plantao-page)) .card:last-child {
+    margin-bottom: 0 !important;
+  }
+}
+
 /* Quebra de linha visível apenas no mobile */
 ._br-mobile {
   display: none;
