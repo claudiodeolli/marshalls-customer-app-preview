@@ -1,6 +1,18 @@
-# Saídas locais do next dev/build. A Vercel faz o build do zero, então elas
-# não servem para nada lá — e sem este arquivo o upload passava do limite de
-# 15.000 arquivos (21.914 em 20/09/2026), gerados pelos servidores de teste
-# do Playwright (issue #52).
-.next
-.next-pages
+# Lista de permissão: só o next-app/ sobe para a Vercel.
+#
+# O projeto na Vercel tem rootDirectory "next-app/", mas o CLI, rodado da raiz,
+# empacota o repositório inteiro e NÃO respeita o .gitignore. Sem isto, iam
+# junto o whatsapp-triage/ — com a sessão do WhatsApp em .auth/ (21 mil
+# arquivos, credencial do aparelho) e o .env com o token do GitHub —, além
+# de client-requests/ e resolution-reports/ (issue #52).
+/*
+!/next-app
+!/.vercelignore
+
+# Dentro do next-app, as saídas locais de build e de teste: a Vercel faz o
+# build do zero.
+/next-app/.next
+/next-app/.next-pages
+/next-app/out
+/next-app/test-results
+/next-app/playwright-report
