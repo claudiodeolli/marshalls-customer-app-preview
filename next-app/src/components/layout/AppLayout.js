@@ -8,6 +8,7 @@ import Navbar from './Navbar';
 import MobileBottomNav from './MobileBottomNav';
 import { getRouteConfig } from '@/data/routeConfig';
 import { menuItems, plantaoItem } from '@/data/menuItems';
+import useEspacoInferiorMobile from '@/hooks/useEspacoInferiorMobile';
 
 /* Ícone feather para o breadcrumb */
 function BreadcrumbIcon({ activeHref }) {
@@ -47,6 +48,10 @@ function BreadcrumbIcon({ activeHref }) {
 
 export default function AppLayout({ children }) {
   const pathname = usePathname();
+
+  /* No celular, o espaço no fim da página só é reduzido quando isso deixa a
+     tela estática sem esconder nada (issue #55). */
+  useEspacoInferiorMobile(pathname);
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 

@@ -1336,20 +1336,29 @@ input._search-input:not([type="checkbox"]):not([type="radio"]):not([type="submit
    Com isso a rolagem passa a existir só quando algum item de fato não cabe,
    que foi o critério que o cliente deu: "o scroll só aparece se tiver mais de
    um Card ali ou se o único Card que tiver ultrapassar a tela". */
+/* Desde a issue #55 este espaço reduzido só vale quando ele deixa a tela
+   estática. Se a tela rola de qualquer jeito, o hook useEspacoInferiorMobile
+   liga html.tela-rolavel e o espaço anterior à #54 — as duas reservas de 71px
+   e a margem do último card — volta a valer. Sem o script fica o reduzido,
+   que nunca esconde nada atrás da barra.
+
+   --reserva-barra-inferior só é definida pelo hook quando a tela é estática
+   mas ainda sobraria um resto de rolagem feito só de card, sem nenhum
+   elemento: a reserva encolhe até a rolagem sumir. */
 @media (max-width: 767.98px) {
-  .content-wrapper {
-    padding-bottom: 78.5px !important;
+  html:not(.tela-rolavel) .content-wrapper:not(:has(._plantao-page)) {
+    padding-bottom: var(--reserva-barra-inferior, 78.5px) !important;
   }
 
-  .content-body {
+  html:not(.tela-rolavel) .content-body:not(:has(._plantao-page)) {
     padding-bottom: 0 !important;
   }
 
   /* O Plantão fica de fora: o card dele é dimensionado pela altura da página,
      e sem a margem ele cresce 28px e passa a terminar atrás da barra
      inferior. Aquela tela já não rolava e não foi pedida. */
-  .content-body:not(:has(._plantao-page)) .row > [class*="col-"]:last-child,
-  .content-body:not(:has(._plantao-page)) .card:last-child {
+  html:not(.tela-rolavel) .content-body:not(:has(._plantao-page)) .row > [class*="col-"]:last-child,
+  html:not(.tela-rolavel) .content-body:not(:has(._plantao-page)) .card:last-child {
     margin-bottom: 0 !important;
   }
 }
