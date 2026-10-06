@@ -7,6 +7,9 @@ export default function ReferralModal({ open, loadingReferrals, pendingReferrals
     <ModalPortal>
     <div
       style={{ ...MODAL_OVERLAY, zIndex: 9999, padding: '14px' }}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="referral-modal-title"
       onClick={onClose}
     >
       <div
@@ -19,7 +22,7 @@ export default function ReferralModal({ open, loadingReferrals, pendingReferrals
         onClick={e => e.stopPropagation()}
       >
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 20px', borderBottom: '1px solid #eee' }}>
-          <h6 style={{ margin: 0, fontWeight: 700, fontSize: 16, color: '#333' }}>
+          <h6 id="referral-modal-title" style={{ margin: 0, fontWeight: 700, fontSize: 16, color: '#333' }}>
             Selecionar Encaminhamento
           </h6>
           <button
@@ -46,7 +49,7 @@ export default function ReferralModal({ open, loadingReferrals, pendingReferrals
               <div className="spinner-border" style={{ color: '#4daab6', width: '35px', height: '35px' }} />
             </div>
           ) : pendingReferrals.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: '28px 0' }}>
+            <div className="_referral-empty-state" style={{ textAlign: 'center', padding: '28px 0' }}>
               <p style={{ color: '#666', marginBottom: 8, fontSize: 14 }}>
                 Você não possui encaminhamentos disponíveis.
               </p>
@@ -112,10 +115,10 @@ export default function ReferralModal({ open, loadingReferrals, pendingReferrals
             <button
               onClick={onConfirm}
               disabled={!referralId}
+              className="btn btn-primary btn-sm _referral-confirm-btn"
               style={{
                 borderRadius: 24, padding: '8px 24px', fontWeight: 600,
-                background: referralId ? '#4daab6' : '#ccc',
-                border: 'none', color: '#fff',
+                color: '#fff',
                 cursor: referralId ? 'pointer' : 'default', fontSize: 14,
               }}
             >

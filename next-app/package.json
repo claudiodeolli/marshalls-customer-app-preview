@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "test:e2e:portal": "node scripts/run-testcafe-portal.mjs"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -26,6 +27,7 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.60.0",
-    "playwright": "^1.60.0"
+    "playwright": "^1.60.0",
+    "testcafe": "^3.7.6"
   }
 }

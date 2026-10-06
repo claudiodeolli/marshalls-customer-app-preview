@@ -8,23 +8,22 @@ import {
   MODAL_OVERLAY, MODAL_CARD, MODAL_BODY, MODAL_TITLE, MODAL_TEXT, MODAL_ACTIONS, MODAL_BUTTON,
 } from '@/components/ui/modalScale';
 
-// Textos definidos pelo cliente, reescritos por ele em 27/08 às 23:12 (issue
-// #21). Os trechos entre ** são renderizados em negrito, e onde cada negrito
-// começa e termina faz parte do que ele especificou — não reescrever sem
-// conferir as imagens anexadas à issue.
+// Encaminhamento segue a revisão da #57 e consulta avulsa a redação da #58.
 const CONTENT = {
   referral: {
     title: 'Importante!',
     paragraphs: [
-      'Esta modalidade de consulta pode ser **reagendada até 48 horas antes do horário agendado, sem perder o Encaminhamento. Após esse prazo, não é possível reagendar.**',
-      'Se optar pelo **cancelamento**, o Encaminhamento será encerrado. Para agendar novamente uma consulta com essa especialidade **sem custo**, será necessário passar pelo **Plantão 24h** e obter um novo Encaminhamento, caso ainda haja indicação médica.',
+      'Nesta modalidade, as **consultas podem ser reagendadas ou canceladas até 48 horas antes do horário agendado, sem perder o Encaminhamento.**',
+      'Se optar por um horário dentro das próximas **48 horas, a consulta já estará fora do prazo de reagendamento e, por isso, não será possível reagendar.** Para escolher outra data ou horário sem custo, será necessário passar pelo Plantão 24h e **obter um novo Encaminhamento, caso ainda haja indicação médica.**',
+      'Se cancelar **fora do prazo** ou não comparecer ao atendimento, **a consulta será considerada utilizada.**',
     ],
   },
   avulsa: {
     title: 'Lembre-se!',
     paragraphs: [
-      'As **Consultas Avulsas** podem ser **reagendadas ou canceladas até 48 horas antes do horário agendado, sem perder a consulta adquirida**.',
-      'Se optar por um horário dentro das próximas **48 horas**, **não será possível reagendar sem perder a consulta**. Se cancelar ou não comparecer ao atendimento, **a consulta será considerada utilizada**.',
+      'As **Consultas Avulsas** podem ser **reagendadas ou canceladas até 48 horas antes do horário agendado, sem perder a consulta adquirida.**',
+      'Se optar por um horário dentro das próximas **48 horas, a consulta já estará fora do prazo de reagendamento e, por isso, não será possível reagendar.**',
+      'Se cancelar **fora do prazo** ou não comparecer ao atendimento, **a consulta será considerada utilizada.**',
     ],
   },
 };
@@ -77,7 +76,7 @@ export default function BookingRulesAlert({ origin }) {
       aria-labelledby={`booking-rules-title-${origin}`}
       onClick={event => { if (event.target === event.currentTarget) setAberto(false); }}
     >
-      <div className="card" style={{ ...MODAL_CARD, background: '#fff8e1', border: '1px solid #ffe082' }}>
+      <div className="card" style={{ ...MODAL_CARD, maxHeight: 'calc(100vh - 32px)', overflowY: 'auto', background: '#fff8e1', border: '1px solid #ffe082' }}>
         {/* O testid fica no corpo, e não no card: é este o elemento que
             carrega o padding contra o qual a issue #7 mede o recuo. */}
         <div data-testid={`booking-rules-alert-${origin}`} style={{ ...MODAL_BODY, color: '#7a5c00' }}>

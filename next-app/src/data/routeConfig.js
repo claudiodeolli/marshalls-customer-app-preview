@@ -76,8 +76,39 @@ export const routeConfig = {
   },
 };
 
-export function getRouteConfig(pathname) {
+export function getRouteConfig(pathname, searchParams) {
   const p = pathname === '/' ? '/' : pathname.replace(/\/$/, '');
+
+  if (p === '/schedule/calendar') {
+    const params = new URLSearchParams(searchParams?.toString?.() || searchParams || '');
+    const etapaAvulsa = params.get('avulsaEtapa') || (params.has('avulsaSpec') && !params.has('referral') ? 'agendar' : '');
+    const breadcrumbAvulsa = {
+      adquirir: [
+        { text: 'Consultas Avulsas', active: false },
+        { text: 'Adquirir', active: true },
+      ],
+      agendar: [
+        { text: 'Consulta Avulsa', active: false },
+        { text: 'Agendar', active: true },
+      ],
+      pagamento: [
+        { text: 'Consulta Avulsa', active: false },
+        { text: 'Pagamento', active: true },
+      ],
+      confirmacao: [
+        { text: 'Consulta Avulsa', active: false },
+        { text: 'Confirmação', active: true },
+      ],
+    };
+
+    if (breadcrumbAvulsa[etapaAvulsa]) {
+      return {
+        pageTitle: 'Agendar Consulta',
+        breadcrumb: breadcrumbAvulsa[etapaAvulsa],
+        breadcrumbIcon: 'calendar',
+      };
+    }
+  }
 
   if (routeConfig[p]) return routeConfig[p];
 

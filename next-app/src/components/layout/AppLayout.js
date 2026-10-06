@@ -11,11 +11,14 @@ import { menuItems, plantaoItem } from '@/data/menuItems';
 import useEspacoInferiorMobile from '@/hooks/useEspacoInferiorMobile';
 
 /* Ícone feather para o breadcrumb */
-function BreadcrumbIcon({ activeHref }) {
+function BreadcrumbIcon({ activeHref, iconType }) {
   const href = activeHref === '/' ? '/' : activeHref.replace(/\/$/, '');
-  let activeItem =
-    menuItems.find(item => !item.header && (href === item.href || href.startsWith(item.href + '/'))) ||
-    (href === plantaoItem.href ? plantaoItem : null);
+  let activeItem = iconType === 'calendar'
+    ? menuItems.find(item => item.href === '/agendamentos')
+    : (
+      menuItems.find(item => !item.header && (href === item.href || href.startsWith(item.href + '/'))) ||
+      (href === plantaoItem.href ? plantaoItem : null)
+    );
 
   if (!activeItem) {
     const cfg = getRouteConfig(href);
@@ -48,6 +51,18 @@ function BreadcrumbIcon({ activeHref }) {
 
 export default function AppLayout({ children }) {
   const pathname = usePathname();
+  const [breadcrumbSearch, setBreadcrumbSearch] = useState('');
+
+  useEffect(() => {
+    const syncBreadcrumbSearch = () => setBreadcrumbSearch(window.location.search);
+    syncBreadcrumbSearch();
+    window.addEventListener('popstate', syncBreadcrumbSearch);
+    window.addEventListener('avulsa-breadcrumb-change', syncBreadcrumbSearch);
+    return () => {
+      window.removeEventListener('popstate', syncBreadcrumbSearch);
+      window.removeEventListener('avulsa-breadcrumb-change', syncBreadcrumbSearch);
+    };
+  }, [pathname]);
 
   /* No celular, o espaço no fim da página só é reduzido quando isso deixa a
      tela estática sem esconder nada (issue #55). */
@@ -79,7 +94,7 @@ export default function AppLayout({ children }) {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const routeCfg = getRouteConfig(pathname);
+  const routeCfg = getRouteConfig(pathname, breadcrumbSearch);
 
   /* Transição zoom-fade via clone DOM (out-in) */
   useEffect(() => {
@@ -243,7 +258,7 @@ export default function AppLayout({ children }) {
                       <ol className="breadcrumb">
                         <li className="breadcrumb-item">
                           <span style={{ cursor: 'default', pointerEvents: 'none' }}>
-                            <BreadcrumbIcon activeHref={pathname} />
+                            <BreadcrumbIcon activeHref={pathname} iconType={routeCfg.breadcrumbIcon} />
                           </span>
                         </li>
                         {routeCfg.breadcrumb.map((crumb, i) => (

@@ -56,7 +56,7 @@ test('R1/R2 — banner de regras: corpo sem recuo, ícone junto do título', asy
   await expect(titulo).toContainText('Importante!');
   // O aviso deixou de ser caractere unicode e virou asset (issue #21), mas
   // segue na mesma linha do título.
-  await expect(titulo.locator('img')).toBeVisible();
+  await expect(titulo.locator('img[src*="warning_3d.png"]')).toBeVisible();
 });
 
 test('R1 — banner da avulsa também sem recuo', async ({ page }) => {

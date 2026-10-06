@@ -102,7 +102,7 @@ for (const [nome, viewport] of [
       // critério, para a tela não prometer pagamento e marcar de graça.
       await expect(page.getByRole('heading', { name: 'Consulta Avulsa', exact: true })).toBeVisible();
       await expect(page.getByTestId('aviso-linha').last()).toContainText('pagamento será realizado na próxima etapa');
-      await expect(page.getByRole('button', { name: 'Realizar Pagamento' })).toBeVisible();
+      await expect(page.getByRole('button', { name: 'Ir para o pagamento' })).toBeVisible();
       await expect(
         page.getByRole('button', { name: 'AGENDAR', exact: true }),
         'o caminho gratuito não pode continuar disponível depois de prometer cobrança'

@@ -1776,3 +1776,163 @@ input._search-input:not([type="checkbox"]):not([type="radio"]):not([type="submit
   text-decoration: underline;
 }
 
+/* Ajustes localizados da issue #59. */
+._referral-confirm-btn {
+  transition: box-shadow .18s ease, filter .18s ease;
+}
+
+._referral-confirm-btn:hover:not(:disabled),
+._referral-confirm-btn:active:not(:disabled) {
+  box-shadow: 0 0 0 3px rgba(77, 170, 182, .2), 0 4px 12px rgba(77, 170, 182, .3);
+  filter: brightness(1.08);
+  transform: none;
+}
+
+._referral-confirm-btn:focus-visible {
+  outline: 3px solid #246b75;
+  outline-offset: 3px;
+}
+
+._referral-confirm-btn:disabled {
+  background: #ccc !important;
+  border-color: #b3b3b3 !important;
+  color: #fff !important;
+  cursor: default !important;
+  opacity: 1 !important;
+  box-shadow: none !important;
+  filter: none !important;
+  transform: none !important;
+}
+
+._payment-select-step ._payment-summary-card,
+._payment-select-step ._payment-option-card {
+  background-color: #eef8ff !important;
+}
+
+@media (min-width: 1200px) {
+  ._payment-card-back {
+    font-size: 12.6px !important;
+    font-weight: 500 !important;
+  }
+
+  ._payment-select-step ._payment-summary-label {
+    font-size: 12px !important;
+  }
+
+  ._payment-select-step ._payment-summary-specialty {
+    font-size: 17px !important;
+    font-weight: 700 !important;
+  }
+
+  ._payment-select-step ._payment-summary-price {
+    font-size: 19.5px !important;
+    font-weight: 700 !important;
+  }
+
+  ._payment-select-step ._payment-method-title {
+    font-size: 14px !important;
+    font-weight: 700 !important;
+  }
+
+  ._payment-select-step ._payment-option-title {
+    font-size: 14.5px !important;
+    font-weight: 600 !important;
+  }
+
+  ._payment-select-step ._payment-option-subtitle {
+    font-size: 13px !important;
+  }
+
+  ._payment-select-step ._payment-option-icon {
+    width: 40px !important;
+    height: 40px !important;
+    background-color: #e3f2fc !important;
+  }
+
+  ._payment-select-step ._payment-option-icon svg,
+  ._payment-select-step ._payment-option-chevron {
+    width: 22px !important;
+    height: 22px !important;
+  }
+
+  ._payment-select-step ._payment-step-actions button {
+    font-size: 12.6px !important;
+    font-weight: 500 !important;
+  }
+}
+
+._avulsa-aviso-break-mobile {
+  display: none;
+}
+
+@media (max-width: 767.98px) {
+  ._avulsa-aviso-break-mobile {
+    display: block;
+  }
+}
+
+._payment-success-guidance {
+  line-height: 1.45;
+}
+
+._payment-success-guidance li + li {
+  margin-top: 4px;
+}
+
+@media (max-width: 767.98px) {
+  ._payment-success-booked {
+    max-width: 100% !important;
+    padding: 14px 8px !important;
+  }
+
+  ._payment-success-icon {
+    width: 48px !important;
+    height: 48px !important;
+    margin-bottom: 8px !important;
+  }
+
+  ._payment-success-icon svg {
+    width: 26px;
+    height: 26px;
+  }
+
+  ._payment-success-booked h5 {
+    font-size: 17px;
+  }
+
+  ._payment-success-booked > p {
+    font-size: 12.5px !important;
+    margin-bottom: 10px !important;
+  }
+
+  ._payment-success-summary {
+    padding: 10px 12px !important;
+  }
+
+  ._payment-success-summary p:first-child {
+    font-size: 14px !important;
+  }
+
+  ._payment-success-summary p:nth-child(2) {
+    font-size: 13px !important;
+    margin-bottom: 6px !important;
+  }
+
+  ._payment-success-summary p:last-child {
+    font-size: 16px !important;
+  }
+
+  ._payment-success-guidance {
+    padding: 9px 11px !important;
+    margin-bottom: 8px !important;
+    font-size: 12px !important;
+  }
+
+  ._payment-success-guidance strong {
+    margin-bottom: 6px !important;
+  }
+
+  ._payment-success-appointment-button {
+    font-size: 14px !important;
+  }
+}

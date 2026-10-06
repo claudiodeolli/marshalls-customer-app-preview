@@ -81,7 +81,7 @@ function medirBotaoDeAcao(page) {
   return page.evaluate(() => {
     const calendario = document.querySelector('[data-testid="calendario"]');
     const botao = [...document.querySelectorAll('button')]
-      .find(b => /^(Realizar Pagamento|AGENDAR)$/.test(b.textContent.trim()));
+      .find(b => /^(Ir para o pagamento|AGENDAR)$/.test(b.textContent.trim()));
     const arredondar = n => Math.round(n * 100) / 100;
     return {
       rotulo: botao.textContent.trim(),
@@ -206,7 +206,7 @@ for (const [nome, viewport] of [
       });
     }
 
-    // ── #38 — o botão da avulsa igual ao do encaminhamento ───────────────
+    // ── #38 — geometria mantida; a #58 altera o rótulo ────────────────────
     test('#38 — o botão da avulsa tem a mesma altura e o mesmo vão do calendário', async ({ page }) => {
       await abrirPorRota(page, ROTA_ENCAMINHAMENTO);
       const encaminhamento = await medirBotaoDeAcao(page);
@@ -218,7 +218,9 @@ for (const [nome, viewport] of [
       console.log(`[${nome}] avulsa:         ${JSON.stringify(avulsa)}`);
 
       expect(encaminhamento.rotulo).toBe('AGENDAR');
-      expect(avulsa.rotulo, 'o rótulo não foi pedido para mudar').toBe('Realizar Pagamento');
+      // Conflito direto: a #38 cobria o rótulo antigo; a #58 pede
+      // explicitamente "Ir para o pagamento", preservando a geometria medida.
+      expect(avulsa.rotulo).toBe('Ir para o pagamento');
       expect(avulsa.altura).toBeCloseTo(encaminhamento.altura, 1);
       expect(avulsa.vaoAteOCalendario).toBeCloseTo(encaminhamento.vaoAteOCalendario, 1);
     });

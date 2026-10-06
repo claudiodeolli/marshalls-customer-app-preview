@@ -1,8 +1,8 @@
 // Cobre as issues #21 e #24:
 //   https://github.com/claudiodeolli/marshalls-customer-app-preview/issues/21
 //   https://github.com/claudiodeolli/marshalls-customer-app-preview/issues/24
-// #21 são os textos que ele reescreveu em 27/08 às 23:12; #24 é o formato,
-// pedido em 29/08 — o aviso deixa o corpo da página e vira modal.
+// #58 substitui diretamente os textos avulsos de #21; os textos de
+// encaminhamento seguem a #57. #24 mantém o aviso em modal.
 const { test, expect } = require('@playwright/test');
 
 const ROTA_ENCAMINHAMENTO = '/schedule/calendar?referral=ref-003';
@@ -18,12 +18,15 @@ const TEXTOS = {
     rota: ROTA_ENCAMINHAMENTO,
     titulo: 'Importante!',
     paragrafos: [
-      'Esta modalidade de consulta pode ser reagendada até 48 horas antes do horário agendado, sem perder o Encaminhamento. Após esse prazo, não é possível reagendar.',
-      'Se optar pelo cancelamento, o Encaminhamento será encerrado. Para agendar novamente uma consulta com essa especialidade sem custo, será necessário passar pelo Plantão 24h e obter um novo Encaminhamento, caso ainda haja indicação médica.',
+      'Nesta modalidade, as consultas podem ser reagendadas ou canceladas até 48 horas antes do horário agendado, sem perder o Encaminhamento.',
+      'Se optar por um horário dentro das próximas 48 horas, a consulta já estará fora do prazo de reagendamento e, por isso, não será possível reagendar. Para escolher outra data ou horário sem custo, será necessário passar pelo Plantão 24h e obter um novo Encaminhamento, caso ainda haja indicação médica.',
+      'Se cancelar fora do prazo ou não comparecer ao atendimento, a consulta será considerada utilizada.',
     ],
     negritos: [
-      'reagendada até 48 horas antes do horário agendado, sem perder o Encaminhamento. Após esse prazo, não é possível reagendar.',
-      'cancelamento', 'sem custo', 'Plantão 24h',
+      'consultas podem ser reagendadas ou canceladas até 48 horas antes do horário agendado, sem perder o Encaminhamento.',
+      '48 horas, a consulta já estará fora do prazo de reagendamento e, por isso, não será possível reagendar.',
+      'obter um novo Encaminhamento, caso ainda haja indicação médica.',
+      'fora do prazo', 'a consulta será considerada utilizada.',
     ],
   },
   avulsa: {
@@ -32,12 +35,14 @@ const TEXTOS = {
     titulo: 'Lembre-se!',
     paragrafos: [
       'As Consultas Avulsas podem ser reagendadas ou canceladas até 48 horas antes do horário agendado, sem perder a consulta adquirida.',
-      'Se optar por um horário dentro das próximas 48 horas, não será possível reagendar sem perder a consulta. Se cancelar ou não comparecer ao atendimento, a consulta será considerada utilizada.',
+      'Se optar por um horário dentro das próximas 48 horas, a consulta já estará fora do prazo de reagendamento e, por isso, não será possível reagendar.',
+      'Se cancelar fora do prazo ou não comparecer ao atendimento, a consulta será considerada utilizada.',
     ],
     negritos: [
       'Consultas Avulsas',
-      'reagendadas ou canceladas até 48 horas antes do horário agendado, sem perder a consulta adquirida',
-      '48 horas', 'não será possível reagendar sem perder a consulta', 'a consulta será considerada utilizada',
+      'reagendadas ou canceladas até 48 horas antes do horário agendado, sem perder a consulta adquirida.',
+      '48 horas, a consulta já estará fora do prazo de reagendamento e, por isso, não será possível reagendar.',
+      'fora do prazo', 'a consulta será considerada utilizada.',
     ],
   },
 };
@@ -57,16 +62,17 @@ for (const [origem, dados] of Object.entries(TEXTOS)) {
     test('T1/T4 — os parágrafos batem palavra por palavra com o texto dele', async ({ page }) => {
       const paragrafos = await page.getByTestId(dados.testid).locator('p').allInnerTexts();
 
-      expect(paragrafos.length, 'dois parágrafos mais a recomendação').toBe(3);
-      expect(limpo(paragrafos[0])).toBe(dados.paragrafos[0]);
-      expect(limpo(paragrafos[1])).toBe(dados.paragrafos[1]);
+      expect(paragrafos.length, 'parágrafos e recomendação conforme a origem').toBe(dados.paragrafos.length + 1);
+      for (const [index, esperado] of dados.paragrafos.entries()) {
+        expect(limpo(paragrafos[index])).toBe(esperado);
+      }
     });
 
     test('T7 — a recomendação termina com "48 horas" em negrito', async ({ page }) => {
       const alerta = page.getByTestId(dados.testid);
       const paragrafos = await alerta.locator('p').allInnerTexts();
 
-      expect(limpo(paragrafos[2])).toBe(RECOMENDACAO);
+      expect(limpo(paragrafos.at(-1))).toBe(RECOMENDACAO);
       await expect(alerta.locator('p').last().locator('strong', { hasText: '48 horas' })).toBeVisible();
     });
 
@@ -114,10 +120,9 @@ for (const [origem, dados] of Object.entries(TEXTOS)) {
 
     test('T12 — o aviso usa o ícone colorido, não o caractere do sistema', async ({ page }) => {
       const alerta = page.getByTestId(dados.testid);
-      const icone = alerta.locator('img').first();
+      const icone = alerta.locator('img[src*="warning_3d.png"]');
 
       await expect(icone).toBeVisible();
-      expect(await icone.getAttribute('src')).toContain('warning_3d.png');
       expect(await alerta.innerText(), 'não pode sobrar o warning unicode').not.toContain('⚠');
     });
   });

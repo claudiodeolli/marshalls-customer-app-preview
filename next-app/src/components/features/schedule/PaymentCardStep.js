@@ -74,6 +74,7 @@ export default function PaymentCardStep({ cardForm, setCardForm, onConfirmPaymen
         </div>
         <button
           onClick={onBack}
+          className="_payment-card-back"
           style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#6e6b7b', fontWeight: 600, fontSize: 14, marginTop: 12, padding: '4px 0' }}
         >
           ← Voltar

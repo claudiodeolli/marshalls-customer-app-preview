@@ -52,3 +52,9 @@ whatsapp-triage/qr.png
 # do WhatsApp, nunca podem entrar no repositório.
 *session*.json
 !whatsapp-triage/.env.example
+
+# ── TestCafe (esteira Maestri) ──
+next-app/tests/testcafe/screenshots/
+
+# ── Estado local da Maestri (roles dos recrutas) ──
+.maestri/

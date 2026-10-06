@@ -112,6 +112,10 @@ function ScheduleContent() {
 
   const slotsRef = useRef(null);
 
+  useEffect(() => {
+    if (paymentStep === 'select') window.scrollTo(0, 0);
+  }, [paymentStep]);
+
   // Load specialties on mount
   useEffect(() => {
     (async () => {
@@ -285,7 +289,16 @@ function ScheduleContent() {
     setAvulsaConfirmed(false);
     setShowSlotChoiceModal(false);
     setPaymentStep(null);
+    setAvulsaBreadcrumbStep('adquirir');
   }
+
+  const setAvulsaBreadcrumbStep = useCallback(step => {
+    if (typeof window === 'undefined') return;
+    const params = new URLSearchParams(window.location.search);
+    params.set('avulsaEtapa', step);
+    window.history.replaceState(null, '', `${window.location.pathname}?${params.toString()}`);
+    window.dispatchEvent(new Event('avulsa-breadcrumb-change'));
+  }, []);
 
   // ── Voltar passo a passo (issue #23) ───────────────────────────────────
   // O fluxo inteiro vive nesta rota e avança por estado, então o histórico
@@ -320,6 +333,21 @@ function ScheduleContent() {
   // e voltar para o pagamento de uma consulta já marcada não faz sentido.
   useHistoricoDeEtapas(etapa === 'confirmado' ? 'confirmado' : etapa, retratoDaEtapa, restaurarEtapa);
 
+  // O histórico também pode restaurar uma etapa sem passar pelos handlers de
+  // navegação. Mantém o breadcrumb sincronizado nesse retorno, sem tocar nas
+  // rotas de encaminhamento ou reagendamento.
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (urlReferral || reagendarDe || urlAvulsaSpec || !params.has('avulsaEtapa')) return;
+    const breadcrumbStep = etapa === 'confirmado' || etapa === 'pagamento-success' ? 'confirmacao'
+      : etapa === 'precos' ? 'adquirir'
+        : etapa.startsWith('pagamento-') ? 'pagamento'
+          : 'agendar';
+    if (params.get('avulsaEtapa') !== breadcrumbStep) {
+      setAvulsaBreadcrumbStep(breadcrumbStep);
+    }
+  }, [etapa, reagendarDe, setAvulsaBreadcrumbStep, urlAvulsaSpec, urlReferral]);
+
   // Confirm modal: find referral's specialty, lock list, auto-select
   function handleReferralConfirm() {
     if (!referralId) return;
@@ -337,10 +365,12 @@ function ScheduleContent() {
 
   function handleRealizarPagamento() {
     setAvulsaBooked(!!selectedSlot);
+    setAvulsaBreadcrumbStep('pagamento');
     setPaymentStep('select');
   }
 
   function handleAgendarAgora() {
+    setAvulsaBreadcrumbStep('agendar');
     setAvulsaConfirmed(true);
     setPaymentStep(null);
     setShowPrices(false);
@@ -358,6 +388,11 @@ function ScheduleContent() {
       }));
     }
     router.push('/agendamentos');
+  }
+
+  function handlePagamentoConcluido() {
+    setAvulsaBreadcrumbStep('confirmacao');
+    setPaymentStep('success');
   }
 
   function handleDayClick(day) {
@@ -546,7 +581,7 @@ function ScheduleContent() {
       avulsaSpecialty={avulsaSpecialty}
       paymentMethodLabel={paymentMethodLabel}
       onClose={() => setShowPaymentConfirm(false)}
-      onConfirm={() => { setShowPaymentConfirm(false); setPaymentStep('success'); }}
+      onConfirm={() => { setShowPaymentConfirm(false); handlePagamentoConcluido(); }}
     />
   ) : null;
 
@@ -555,6 +590,7 @@ function ScheduleContent() {
     return (
       <PaymentSelectStep
         avulsaSpecialty={avulsaSpecialty}
+        title={avulsaBooked ? 'Escolha a forma de pagamento' : 'Escolha uma forma de pagamento'}
         onSelectPix={() => setPaymentStep('pix')}
         onSelectSaved={() => setShowPaymentConfirm(true)}
         onSelectNew={() => setPaymentStep('card-new')}
@@ -570,7 +606,7 @@ function ScheduleContent() {
     return (
       <PaymentPixStep
         avulsaSpecialty={avulsaSpecialty}
-        onConfirmPayment={() => setPaymentStep('success')}
+        onConfirmPayment={handlePagamentoConcluido}
         onBack={() => setPaymentStep('select')}
       />
     );
@@ -751,8 +787,15 @@ function ScheduleContent() {
             <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
           </svg>
           <div>
-            {(referralId ? LINHAS_DO_AVISO.encaminhamento : LINHAS_DO_AVISO.avulsa).map(linha => (
-              <div key={linha} data-testid="aviso-linha">{linha}</div>
+            {(referralId ? LINHAS_DO_AVISO.encaminhamento : LINHAS_DO_AVISO.avulsa).map((linha, index) => (
+              <div key={linha} data-testid="aviso-linha">
+                {!referralId && index === 1 ? (
+                  <>
+                    Selecione a data e o horário desejados.<br className="_avulsa-aviso-break-mobile" />{' '}
+                    O pagamento será realizado na próxima etapa.
+                  </>
+                ) : linha}
+              </div>
             ))}
           </div>
         </div>
@@ -929,7 +972,7 @@ function ScheduleContent() {
                 opacity: selectedSlot ? 1 : 0.7,
               }}
             >
-              Realizar Pagamento
+              Ir para o pagamento
             </button>
           ) : (
             <button
@@ -970,8 +1013,8 @@ function ScheduleContent() {
       <SlotChoiceModal
         show={showSlotChoiceModal}
         onClose={() => setShowSlotChoiceModal(false)}
-        onAgendarAgora={() => { setShowSlotChoiceModal(false); doSelectSpecialty(avulsaSpecialty); }}
-        onAgendarDepois={() => { setShowSlotChoiceModal(false); setAvulsaBooked(false); setPaymentStep('select'); }}
+        onAgendarAgora={() => { setShowSlotChoiceModal(false); setAvulsaBreadcrumbStep('agendar'); doSelectSpecialty(avulsaSpecialty); }}
+        onAgendarDepois={() => { setShowSlotChoiceModal(false); setAvulsaBooked(false); setAvulsaBreadcrumbStep('pagamento'); setPaymentStep('select'); }}
       />
 
       {/* ── Referral selection modal ────────────────────────────────────────── */}
