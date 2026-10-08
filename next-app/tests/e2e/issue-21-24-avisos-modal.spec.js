@@ -23,7 +23,8 @@ const TEXTOS = {
       'Se cancelar fora do prazo ou não comparecer ao atendimento, a consulta será considerada utilizada.',
     ],
     negritos: [
-      'consultas podem ser reagendadas ou canceladas até 48 horas antes do horário agendado, sem perder o Encaminhamento.',
+      'consultas',
+      'reagendadas ou canceladas até 48 horas antes do horário agendado, sem perder o Encaminhamento.',
       '48 horas, a consulta já estará fora do prazo de reagendamento e, por isso, não será possível reagendar.',
       'obter um novo Encaminhamento, caso ainda haja indicação médica.',
       'fora do prazo', 'a consulta será considerada utilizada.',
@@ -32,7 +33,7 @@ const TEXTOS = {
   avulsa: {
     testid: 'booking-rules-alert-avulsa',
     rota: ROTA_AVULSA,
-    titulo: 'Lembre-se!',
+    titulo: 'Importante!',
     paragrafos: [
       'As Consultas Avulsas podem ser reagendadas ou canceladas até 48 horas antes do horário agendado, sem perder a consulta adquirida.',
       'Se optar por um horário dentro das próximas 48 horas, a consulta já estará fora do prazo de reagendamento e, por isso, não será possível reagendar.',
@@ -85,9 +86,24 @@ for (const [origem, dados] of Object.entries(TEXTOS)) {
       }
     });
 
+    test('T2 — os negritos de Encaminhamento seguem os trechos exatos do PDF', async ({ page }) => {
+      test.skip(origem !== 'referral');
+      const paragrafos = await page.getByTestId(dados.testid).locator('p').evaluateAll(
+        elementos => elementos.map(paragrafo => [...paragrafo.querySelectorAll('strong')].map(trecho => trecho.textContent)),
+      );
+
+      expect(paragrafos).toEqual([
+        ['consultas', 'reagendadas ou canceladas até 48 horas antes do horário agendado, sem perder o Encaminhamento.'],
+        ['48 horas, a consulta já estará fora do prazo de reagendamento e, por isso, não será possível reagendar.', 'obter um novo Encaminhamento, caso ainda haja indicação médica.'],
+        ['fora do prazo', 'a consulta será considerada utilizada.'],
+        ['Recomendação:', 'realmente tenha disponibilidade', '48 horas'],
+      ]);
+    });
+
     test('M2/M4 — o aviso abre como modal, com o botão "Entendi"', async ({ page }) => {
       const alerta = page.getByTestId(dados.testid);
       await expect(alerta).toContainText(dados.titulo);
+      await expect(alerta.locator('p').first()).toHaveCSS('text-align', 'justify');
 
       // Overlay fixo por cima da página, não um bloco no meio do conteúdo.
       const posicao = await alerta.evaluate(el => {
@@ -127,6 +143,46 @@ for (const [origem, dados] of Object.entries(TEXTOS)) {
     });
   });
 }
+
+test('M2 — o aviso fica centralizado com recuo e scroll interno em alturas reduzidas', async ({ page }) => {
+  for (const viewport of [{ width: 1440, height: 900 }, { width: 390, height: 844 }, { width: 390, height: 320 }]) {
+    await page.setViewportSize(viewport);
+    await page.goto(ROTA_ENCAMINHAMENTO);
+    const alerta = page.getByTestId('booking-rules-alert-referral');
+    await expect(alerta).toBeVisible({ timeout: 15000 });
+
+    const medidas = await alerta.evaluate(element => {
+      const modal = element.closest('div[role="dialog"]');
+      const viewport = modal.getBoundingClientRect();
+      const card = element.parentElement;
+      const caixa = card.getBoundingClientRect();
+      return {
+        topo: caixa.top - viewport.top,
+        fundo: viewport.bottom - caixa.bottom,
+        centro: (caixa.top + caixa.bottom) / 2,
+        centroViewport: (viewport.top + viewport.bottom) / 2,
+        temScrollInterno: card.scrollHeight > card.clientHeight,
+      };
+    });
+
+    expect(medidas.topo).toBeGreaterThanOrEqual(32);
+    expect(medidas.fundo).toBeGreaterThanOrEqual(32);
+    expect(Math.abs(medidas.centro - medidas.centroViewport), JSON.stringify({ viewport, medidas })).toBeLessThanOrEqual(1);
+    expect(medidas.temScrollInterno, JSON.stringify({ viewport, medidas })).toBe(viewport.height < 900);
+
+    if (medidas.temScrollInterno) {
+      const botao = page.getByRole('button', { name: 'Entendi' });
+      await alerta.evaluate(element => { element.parentElement.scrollTop = element.parentElement.scrollHeight; });
+      const botaoDentroDoCard = await botao.evaluate(element => {
+        const card = element.closest('.card');
+        const botao = element.getBoundingClientRect();
+        const caixa = card.getBoundingClientRect();
+        return botao.top >= caixa.top && botao.bottom <= caixa.bottom;
+      });
+      expect(botaoDentroDoCard).toBe(true);
+    }
+  }
+});
 
 test('M10 — a modal reaparece a cada visita à tela', async ({ page }) => {
   // Ele pediu "quando abrir essa tela, a gente mostra antes esse aviso" — sem

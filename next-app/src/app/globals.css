@@ -142,12 +142,6 @@ html::-webkit-scrollbar-thumb:hover {
   .main-menu {
     z-index: 1040 !important;
   }
-
-  /* 100vh inclui a barra de URL do browser; 100dvh usa apenas a área visível,
-     evitando que o conteúdo do sidebar fique oculto atrás da UI do browser. */
-  .main-menu.menu-fixed {
-    height: 100dvh !important;
-  }
 }
 
 /* ── Faixa inferior: left dinâmico conforme estado do sidebar ── */
@@ -939,7 +933,6 @@ input._search-input:not([type="checkbox"]):not([type="radio"]):not([type="submit
      Usa top+bottom em vez de height para não depender de cálculo svh —
      robusto mesmo quando o bottom nav tem safe-area-inset no iOS. */
   .main-menu {
-    transition: transform 0.25s ease !important;
     width: min(92vw, 390px) !important;
     max-width: 300px !important;
     top: 0 !important;
@@ -1443,20 +1436,8 @@ input._search-input:not([type="checkbox"]):not([type="radio"]):not([type="submit
 }
 
 /* ── Canais de contato ── */
-._contact-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10.5px 14px;
-  gap: 14px;
-}
-
 ._contact-info {
-  display: flex;
-  align-items: center;
-  gap: 10.5px;
   flex: 1;
-  min-width: 0;
 }
 
 ._contact-icon-wrap {
@@ -1505,12 +1486,6 @@ input._search-input:not([type="checkbox"]):not([type="radio"]):not([type="submit
 
 .btn-agendar-referral {
   height: 32px !important;
-}
-
-@media (max-width: 767.98px) {
-  .btn-agendar-referral {
-    height: 32px !important;
-  }
 }
 
 ._status-select-btn,
@@ -1793,8 +1768,9 @@ input._search-input:not([type="checkbox"]):not([type="radio"]):not([type="submit
   outline-offset: 3px;
 }
 
-._referral-confirm-btn:disabled {
+.btn._referral-confirm-btn:disabled {
   background: #ccc !important;
+  background-image: none !important;
   border-color: #b3b3b3 !important;
   color: #fff !important;
   cursor: default !important;
@@ -1804,9 +1780,11 @@ input._search-input:not([type="checkbox"]):not([type="radio"]):not([type="submit
   transform: none !important;
 }
 
-._payment-select-step ._payment-summary-card,
-._payment-select-step ._payment-option-card {
-  background-color: #eef8ff !important;
+@media (pointer: coarse) {
+  ._referral-confirm-btn:not(:disabled) {
+    box-shadow: 0 0 0 3px rgba(77, 170, 182, .2), 0 4px 12px rgba(77, 170, 182, .3) !important;
+    filter: brightness(1.08);
+  }
 }
 
 @media (min-width: 1200px) {
@@ -1877,6 +1855,26 @@ input._search-input:not([type="checkbox"]):not([type="radio"]):not([type="submit
 
 ._payment-success-guidance li + li {
   margin-top: 4px;
+}
+
+@media (max-width: 767.98px) {
+  /* O espaço final dos demais cards só volta quando a medição aponta rolagem. */
+  html.tela-rolavel ._payment-select-step {
+    margin-bottom: 28px !important;
+  }
+}
+
+._schedule-calendar-step--scrollable {
+  padding-bottom: 28px;
+}
+
+@media (min-width: 768px) {
+  /* Remove a reserva estrutural apenas quando uma das etapas couber no viewport. */
+  html:root .content.app-content._issue-68-calendar-static,
+  html:root .content.app-content._issue-68-card-static {
+    padding-bottom: 0 !important;
+    transition-duration: 0s !important;
+  }
 }
 
 @media (max-width: 767.98px) {

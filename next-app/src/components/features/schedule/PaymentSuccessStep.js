@@ -3,53 +3,60 @@ export default function PaymentSuccessStep({ avulsaSpecialty, avulsaBooked, sele
 
   if (avulsaBooked) {
     return (
-      <div className="_payment-success-booked" style={{ maxWidth: 400, margin: '0 auto', textAlign: 'center', padding: '22px 0' }}>
-        <div className="_payment-success-icon" style={{
-          width: 56, height: 56, borderRadius: '50%', background: '#e6f9ee',
-          display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 10px',
-        }}>
-          <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none"
-            stroke="#28c76f" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <polyline points="20 6 9 17 4 12" />
-          </svg>
-        </div>
-        <h5 style={{ fontWeight: 700, color: '#5e5873', marginBottom: 2 }}>Pagamento confirmado!</h5>
-        <p style={{ color: '#6e6b7b', fontSize: 13, marginBottom: 12 }}>Sua consulta está agendada.</p>
-        <div className="_payment-success-summary" style={{
-          background: '#f8f8f8', borderRadius: '10px 10px 0 0', padding: '12px 18px',
-          marginBottom: 0, textAlign: 'center',
-        }}>
-          <p style={{ fontWeight: 700, fontSize: 16, color: '#5e5873', margin: '0 0 4px' }}>
-            {avulsaSpecialty?.name}
+      <div className="card" style={{ maxWidth: '520px', margin: '28px auto' }}>
+        <div className="card-body" style={{ padding: '35px', textAlign: 'center' }}>
+          <div style={{
+            width: 64, height: 64, borderRadius: '50%', background: '#e6f9ee',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            margin: '0 auto 17.5px',
+          }}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+              stroke="#28c76f" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="20 6 9 17 4 12" />
+            </svg>
+          </div>
+          <h5 style={{ fontWeight: 700, color: '#5e5873', marginBottom: '7px' }}>
+            Pagamento confirmado!
+          </h5>
+          <p className="text-muted" style={{ marginBottom: '21px' }}>
+            Sua consulta está agendada.
           </p>
-          <p style={{ fontWeight: 700, fontSize: 15, color: '#5e5873', margin: '0 0 10px' }}>
-            {selectedDate} às {selectedSlot?.from}
-          </p>
-          <p style={{ fontWeight: 700, fontSize: 18, color: '#28c76f', margin: 0 }}>
-            R$ {price.toFixed(2).replace('.', ',')}
-          </p>
+          <div style={{
+            textAlign: 'left', background: '#f8f8f8', borderRadius: 10,
+            padding: '14px 18px', marginBottom: '21px',
+          }}>
+            <p style={{ fontWeight: 700, fontSize: 14, color: '#5e5873', marginBottom: 10 }}>
+              {avulsaSpecialty?.name}
+            </p>
+            <p style={{ color: '#6e6b7b', fontSize: 13, marginBottom: 8 }}>
+              {selectedDate} às {selectedSlot?.from}
+            </p>
+            <p style={{ fontWeight: 700, fontSize: 14, color: '#28c76f', margin: 0 }}>
+              R$ {price.toFixed(2).replace('.', ',')}
+            </p>
+          </div>
+          <div data-testid="orientacoes-consulta-online" style={{
+            textAlign: 'left', background: '#f8f8f8', borderRadius: 10,
+            padding: '14px 18px', marginBottom: '21px',
+          }}>
+            <p style={{ fontWeight: 700, fontSize: 14, color: '#5e5873', marginBottom: 10 }}>
+              Orientações para sua consulta online
+            </p>
+            <ul style={{ margin: 0, paddingLeft: 18, fontSize: 13, color: '#6e6b7b', display: 'flex', flexDirection: 'column', gap: 8 }}>
+              <li>Acesse a sala da consulta com 5 minutos de antecedência.</li>
+              <li>Verifique se sua conexão com a internet, câmera e microfone estão funcionando corretamente.</li>
+              <li>Escolha um ambiente silencioso, privado e bem iluminado.</li>
+              <li>Tenha em mãos um documento de identificação, seus exames ou laudos médicos, se houver, e a relação dos medicamentos em uso.</li>
+            </ul>
+          </div>
+          <button
+            onClick={onViewAppointment}
+            className="btn btn-primary"
+            style={{ width: '100%', borderRadius: 24, fontWeight: 700 }}
+          >
+            Ver meu agendamento
+          </button>
         </div>
-        <div className="_payment-success-guidance" data-testid="orientacoes-consulta-online" style={{
-          background: '#f8f8f8', borderRadius: '0 0 10px 10px', padding: '10px 14px',
-          marginBottom: 10, textAlign: 'left', color: '#6e6b7b', fontSize: 13,
-        }}>
-          <strong style={{ display: 'block', color: '#5e5873', marginBottom: 8 }}>
-            Orientações para sua consulta online
-          </strong>
-          <ul style={{ margin: 0, paddingLeft: 18 }}>
-            <li>Acesse a sala da consulta com 5 minutos de antecedência.</li>
-            <li>Verifique se sua conexão com a internet, câmera e microfone estão funcionando corretamente.</li>
-            <li>Escolha um ambiente silencioso, privado e bem iluminado.</li>
-            <li>Tenha em mãos um documento de identificação, seus exames ou laudos médicos, se houver, e a relação dos medicamentos em uso.</li>
-          </ul>
-        </div>
-        <button
-          onClick={onViewAppointment}
-          className="btn btn-primary _payment-success-appointment-button"
-          style={{ width: '100%', borderRadius: 24, fontWeight: 700, fontSize: 15 }}
-        >
-          Ver meu agendamento
-        </button>
       </div>
     );
   }

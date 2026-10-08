@@ -102,6 +102,7 @@ export default function AppLayout({ children }) {
       if (e.ctrlKey || e.metaKey || e.shiftKey || e.altKey || e.button !== 0) return;
       const anchor = e.target.closest('a[href]');
       if (!anchor) return;
+      if (anchor.closest('.breadcrumb') && anchor.getAttribute('href').includes('avulsaEtapa=')) return;
       const href = anchor.getAttribute('href');
       if (!href || /^(https?:)?\/\/|^#|^mailto:|^tel:/.test(href)) return;
 
@@ -263,7 +264,19 @@ export default function AppLayout({ children }) {
                         </li>
                         {routeCfg.breadcrumb.map((crumb, i) => (
                           <li key={i} className={`breadcrumb-item${crumb.active ? ' active' : ''}`}>
-                            {crumb.href ? <Link href={crumb.href}>{crumb.text}</Link> : crumb.text}
+                            {crumb.href ? (
+                              <Link
+                                href={crumb.href}
+                                onClick={event => {
+                                  const target = crumb.href.match(/^\/schedule\/calendar\?avulsaEtapa=(.+)$/)?.[1];
+                                  if (!target) return;
+                                  event.preventDefault();
+                                  window.dispatchEvent(new CustomEvent('avulsa-breadcrumb-navigate', { detail: target }));
+                                }}
+                              >
+                                {crumb.text}
+                              </Link>
+                            ) : crumb.text}
                           </li>
                         ))}
                       </ol>

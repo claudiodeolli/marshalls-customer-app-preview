@@ -81,22 +81,43 @@ export function getRouteConfig(pathname, searchParams) {
 
   if (p === '/schedule/calendar') {
     const params = new URLSearchParams(searchParams?.toString?.() || searchParams || '');
-    const etapaAvulsa = params.get('avulsaEtapa') || (params.has('avulsaSpec') && !params.has('referral') ? 'agendar' : '');
+    if (params.has('referral')) {
+      if (params.get('referralEtapa') === 'confirmacao') {
+        return {
+          pageTitle: 'Agendar Consulta',
+          breadcrumb: [
+            { text: 'Encaminhamentos', href: '/encaminhamentos', active: false },
+            { text: 'Confirmação', active: true },
+          ],
+        };
+      }
+      return routeConfig[p];
+    }
+
+    const etapaAvulsa = params.get('avulsaEtapa') || (params.has('avulsaSpec') ? 'agendar' : '');
     const breadcrumbAvulsa = {
       adquirir: [
         { text: 'Consultas Avulsas', active: false },
         { text: 'Adquirir', active: true },
       ],
       agendar: [
-        { text: 'Consulta Avulsa', active: false },
+        {
+          text: 'Consulta Avulsa',
+          href: params.has('avulsaSpec') ? '/agendamentos' : '/schedule/calendar?avulsaEtapa=adquirir',
+          active: false,
+        },
         { text: 'Agendar', active: true },
       ],
       pagamento: [
-        { text: 'Consulta Avulsa', active: false },
+        { text: 'Consulta Avulsa', href: '/schedule/calendar?avulsaEtapa=agendar', active: false },
         { text: 'Pagamento', active: true },
       ],
       confirmacao: [
-        { text: 'Consulta Avulsa', active: false },
+        {
+          text: 'Consulta Avulsa',
+          href: `/schedule/calendar?avulsaEtapa=${params.get('avulsaRetorno') === 'agendar' ? 'agendar' : 'pagamento'}`,
+          active: false,
+        },
         { text: 'Confirmação', active: true },
       ],
     };

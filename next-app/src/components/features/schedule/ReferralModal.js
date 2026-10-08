@@ -50,10 +50,12 @@ export default function ReferralModal({ open, loadingReferrals, pendingReferrals
             </div>
           ) : pendingReferrals.length === 0 ? (
             <div className="_referral-empty-state" style={{ textAlign: 'center', padding: '28px 0' }}>
-              <p style={{ color: '#666', marginBottom: 8, fontSize: 14 }}>
-                Você não possui encaminhamentos disponíveis.
-              </p>
-              <p style={{ color: '#666', fontSize: 13, marginBottom: '21px' }}>
+              <div style={{ padding: '12px 14px', border: '1px solid #e0e0e0', borderRadius: 8, marginBottom: 8 }}>
+                <p style={{ color: '#666', fontSize: 14, margin: 0 }}>
+                  Você não possui encaminhamentos disponíveis.
+                </p>
+              </div>
+              <p style={{ color: '#666', fontSize: 14, marginBottom: 21 }}>
                 Solicite um encaminhamento médico para agendar esta especialidade, ou:
               </p>
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>

@@ -107,14 +107,88 @@ function ScheduleContent() {
   const [cardForm, setCardForm] = useState({ number: '', name: '', expiry: '', cvv: '' });
   const [showPaymentConfirm, setShowPaymentConfirm] = useState(false);
   const [showSlotChoiceModal, setShowSlotChoiceModal] = useState(false);
+  const [showPaymentRules, setShowPaymentRules] = useState(false);
   const [avulsaBooked, setAvulsaBooked] = useState(false);   // selected slot before payment
   const [avulsaConfirmed, setAvulsaConfirmed] = useState(false); // came via avulsa path
+  const [breadcrumbTarget, setBreadcrumbTarget] = useState('');
+  const [calendarNeedsBottomSpace, setCalendarNeedsBottomSpace] = useState(null);
 
   const slotsRef = useRef(null);
+  const calendarStepRef = useRef(null);
 
   useEffect(() => {
-    if (paymentStep === 'select') window.scrollTo(0, 0);
+    const step = calendarStepRef.current;
+    if (!step) {
+      setCalendarNeedsBottomSpace(null);
+      return undefined;
+    }
+
+    let frame = 0;
+    const measure = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        const scrollY = window.scrollY;
+        const previousPadding = step.style.paddingBottom;
+        const appContent = document.querySelector('.app-content');
+        const previousAppPadding = appContent?.style.getPropertyValue('padding-bottom') || '';
+        const previousAppPriority = appContent?.style.getPropertyPriority('padding-bottom') || '';
+        const previousTransition = appContent?.style.getPropertyValue('transition-duration') || '';
+        const previousTransitionPriority = appContent?.style.getPropertyPriority('transition-duration') || '';
+        const desktopLayout = window.innerWidth >= 768;
+        // Mobile keeps the bottom-nav reserve; account for it without toggling its layout.
+        const mobileStructuralPadding = desktopLayout ? 0 : parseFloat(getComputedStyle(appContent).paddingBottom) || 0;
+        step.style.paddingBottom = '0px';
+        if (desktopLayout) {
+          appContent?.style.setProperty('transition-duration', '0s', 'important');
+          appContent?.style.setProperty('padding-bottom', '0px', 'important');
+        }
+        const contentHeight = document.documentElement.scrollHeight - (desktopLayout ? 0 : mobileStructuralPadding);
+        const needsSpace = contentHeight > document.documentElement.clientHeight;
+        step.style.paddingBottom = previousPadding;
+        if (desktopLayout) {
+          if (previousAppPadding) appContent.style.setProperty('padding-bottom', previousAppPadding, previousAppPriority);
+          else appContent?.style.removeProperty('padding-bottom');
+          if (appContent) void getComputedStyle(appContent).paddingBottom;
+          if (previousTransition) appContent.style.setProperty('transition-duration', previousTransition, previousTransitionPriority);
+          else appContent?.style.removeProperty('transition-duration');
+        }
+        if (window.innerWidth >= 768 && !needsSpace) appContent?.classList.add('_issue-68-calendar-static');
+        else appContent?.classList.remove('_issue-68-calendar-static');
+        void document.documentElement.scrollHeight;
+        if (window.scrollY !== scrollY) window.scrollTo(window.scrollX, scrollY);
+        setCalendarNeedsBottomSpace(needsSpace);
+      });
+    };
+    const content = document.querySelector('.content-wrapper');
+    const observer = new ResizeObserver(measure);
+    observer.observe(step);
+    if (content) observer.observe(content);
+    window.addEventListener('resize', measure);
+    measure();
+
+    return () => {
+      cancelAnimationFrame(frame);
+      observer.disconnect();
+      window.removeEventListener('resize', measure);
+      const scrollY = window.scrollY;
+      document.querySelector('.app-content')?.classList.remove('_issue-68-calendar-static');
+      void document.documentElement.scrollHeight;
+      if (window.scrollY !== scrollY) window.scrollTo(window.scrollX, scrollY);
+    };
+  }, [paymentStep, selectedDate, selectedSpecialty, loadingAvailability, slots.length]);
+
+  useEffect(() => {
+    if (paymentStep !== 'select') return undefined;
+    window.scrollTo(0, 0);
+    const frame = requestAnimationFrame(() => window.scrollTo(0, 0));
+    return () => cancelAnimationFrame(frame);
   }, [paymentStep]);
+
+  useEffect(() => {
+    const navigateBreadcrumb = event => setBreadcrumbTarget(event.detail);
+    window.addEventListener('avulsa-breadcrumb-navigate', navigateBreadcrumb);
+    return () => window.removeEventListener('avulsa-breadcrumb-navigate', navigateBreadcrumb);
+  }, []);
 
   // Load specialties on mount
   useEffect(() => {
@@ -292,10 +366,21 @@ function ScheduleContent() {
     setAvulsaBreadcrumbStep('adquirir');
   }
 
-  const setAvulsaBreadcrumbStep = useCallback(step => {
+  const setAvulsaBreadcrumbStep = useCallback((step, previousStep) => {
     if (typeof window === 'undefined') return;
     const params = new URLSearchParams(window.location.search);
     params.set('avulsaEtapa', step);
+    if (step === 'confirmacao' && previousStep) params.set('avulsaRetorno', previousStep);
+    else params.delete('avulsaRetorno');
+    window.history.replaceState(null, '', `${window.location.pathname}?${params.toString()}`);
+    window.dispatchEvent(new Event('avulsa-breadcrumb-change'));
+  }, []);
+
+  const setReferralBreadcrumbStep = useCallback((step, id) => {
+    if (typeof window === 'undefined') return;
+    const params = new URLSearchParams(window.location.search);
+    if (id) params.set('referral', id);
+    params.set('referralEtapa', step);
     window.history.replaceState(null, '', `${window.location.pathname}?${params.toString()}`);
     window.dispatchEvent(new Event('avulsa-breadcrumb-change'));
   }, []);
@@ -334,11 +419,16 @@ function ScheduleContent() {
   useHistoricoDeEtapas(etapa === 'confirmado' ? 'confirmado' : etapa, retratoDaEtapa, restaurarEtapa);
 
   // O histórico também pode restaurar uma etapa sem passar pelos handlers de
-  // navegação. Mantém o breadcrumb sincronizado nesse retorno, sem tocar nas
-  // rotas de encaminhamento ou reagendamento.
+  // navegação. Sincroniza cada origem no parâmetro de breadcrumb correspondente.
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    if (urlReferral || reagendarDe || urlAvulsaSpec || !params.has('avulsaEtapa')) return;
+    if (referralId) {
+      if (confirmed && params.get('referralEtapa') !== 'confirmacao') {
+        setReferralBreadcrumbStep('confirmacao', referralId);
+      }
+      return;
+    }
+    if ((reagendarDe && !confirmed) || (urlAvulsaSpec && !confirmed) || !params.has('avulsaEtapa')) return;
     const breadcrumbStep = etapa === 'confirmado' || etapa === 'pagamento-success' ? 'confirmacao'
       : etapa === 'precos' ? 'adquirir'
         : etapa.startsWith('pagamento-') ? 'pagamento'
@@ -346,7 +436,24 @@ function ScheduleContent() {
     if (params.get('avulsaEtapa') !== breadcrumbStep) {
       setAvulsaBreadcrumbStep(breadcrumbStep);
     }
-  }, [etapa, reagendarDe, setAvulsaBreadcrumbStep, urlAvulsaSpec, urlReferral]);
+  }, [confirmed, etapa, referralId, reagendarDe, setAvulsaBreadcrumbStep, setReferralBreadcrumbStep, urlAvulsaSpec]);
+
+  useEffect(() => {
+    if (!breadcrumbTarget) return;
+    const reachedTarget = breadcrumbTarget === 'pagamento'
+      ? etapa.startsWith('pagamento-') && etapa !== 'pagamento-success'
+      : etapa === (breadcrumbTarget === 'adquirir' ? 'precos' : 'calendario');
+    if (reachedTarget) {
+      setBreadcrumbTarget('');
+      return;
+    }
+    const restorePreviousStage = () => {
+      if (breadcrumbTarget !== 'pagamento') setConfirmed(false);
+    };
+    window.addEventListener('popstate', restorePreviousStage, { once: true });
+    window.history.back();
+    return () => window.removeEventListener('popstate', restorePreviousStage);
+  }, [breadcrumbTarget, etapa]);
 
   // Confirm modal: find referral's specialty, lock list, auto-select
   function handleReferralConfirm() {
@@ -458,6 +565,8 @@ function ScheduleContent() {
             cancel: true,
           });
         }
+        if (referralId) setReferralBreadcrumbStep('confirmacao', referralId);
+        else if (avulsaConfirmed) setAvulsaBreadcrumbStep('confirmacao', 'agendar');
         setConfirmed(true);
         return;
       }
@@ -468,6 +577,8 @@ function ScheduleContent() {
         rdpayTransactionUuid: null,
         approveAdditionalPayment: true,
       });
+      if (referralId) setReferralBreadcrumbStep('confirmacao', referralId);
+      else if (avulsaConfirmed) setAvulsaBreadcrumbStep('confirmacao', 'agendar');
       setConfirmed(true);
       setTimeout(() => router.back(), 2000);
     } catch (e) {
@@ -642,7 +753,10 @@ function ScheduleContent() {
 
   // ── Main page ─────────────────────────────────────────────────────────────
   return (
-    <div>
+    <div
+      ref={calendarStepRef}
+      className={`_schedule-calendar-step${calendarNeedsBottomSpace === true ? ' _schedule-calendar-step--scrollable' : ''}${calendarNeedsBottomSpace === false ? ' _schedule-calendar-step--static' : ''}`}
+    >
       {/* Search field — hidden when specialty is locked from referral */}
       {!specialtyLocked && (
         <div style={{ marginBottom: 20 }}>
@@ -1014,8 +1128,21 @@ function ScheduleContent() {
         show={showSlotChoiceModal}
         onClose={() => setShowSlotChoiceModal(false)}
         onAgendarAgora={() => { setShowSlotChoiceModal(false); setAvulsaBreadcrumbStep('agendar'); doSelectSpecialty(avulsaSpecialty); }}
-        onAgendarDepois={() => { setShowSlotChoiceModal(false); setAvulsaBooked(false); setAvulsaBreadcrumbStep('pagamento'); setPaymentStep('select'); }}
+        onAgendarDepois={() => { setShowSlotChoiceModal(false); setShowPaymentRules(true); }}
       />
+
+      {showPaymentRules && (
+        <BookingRulesAlert
+          origin="avulsa"
+          requireAcknowledgement
+          onAcknowledge={() => {
+            setShowPaymentRules(false);
+            setAvulsaBooked(false);
+            setAvulsaBreadcrumbStep('pagamento');
+            setPaymentStep('select');
+          }}
+        />
+      )}
 
       {/* ── Referral selection modal ────────────────────────────────────────── */}
       <ReferralModal

@@ -138,11 +138,11 @@ test.describe('Agendamentos', () => {
 // horário. As rotas abaixo entram direto nesse passo; o posicionamento em si
 // é coberto por issue-5-posicao-texto-orientativo.spec.js.
 test.describe('Telas de agendamento — banners de regra (R8/R9/R10)', () => {
-  test('R9 — banner "Lembre-se!" na tela de consulta avulsa', async ({ page }) => {
+  test('R9 — banner "Importante!" na tela de consulta avulsa', async ({ page }) => {
     await page.goto('/schedule/calendar?avulsaSpec=spec-003');
     const alert = page.getByTestId('booking-rules-alert-avulsa');
     await expect(alert).toBeVisible();
-    await expect(alert).toContainText('Lembre-se!');
+    await expect(alert).toContainText('Importante!');
     // Texto reescrito por ele na #21: o fecho deixou de ser "sem perder o
     // valor pago" e passou a ser "sem perder a consulta adquirida".
     await expect(alert).toContainText('sem perder a consulta adquirida');

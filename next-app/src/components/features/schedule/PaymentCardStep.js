@@ -1,7 +1,74 @@
+import { useEffect, useRef, useState } from 'react';
+
 export default function PaymentCardStep({ cardForm, setCardForm, onConfirmPayment, onBack, confirmModal }) {
+  const [needsBottomSpace, setNeedsBottomSpace] = useState(null);
+  const stepRef = useRef(null);
+
+  useEffect(() => {
+    const step = stepRef.current;
+    if (!step) return undefined;
+
+    let frame = 0;
+    const measure = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        const scrollY = window.scrollY;
+        const previousMargin = step.style.marginBottom;
+        const appContent = document.querySelector('.app-content');
+        const previousPadding = appContent?.style.getPropertyValue('padding-bottom') || '';
+        const previousPriority = appContent?.style.getPropertyPriority('padding-bottom') || '';
+        const previousTransition = appContent?.style.getPropertyValue('transition-duration') || '';
+        const previousTransitionPriority = appContent?.style.getPropertyPriority('transition-duration') || '';
+        const desktopLayout = window.innerWidth >= 768;
+        // Mobile keeps the bottom-nav reserve; account for it without toggling its layout.
+        const mobileStructuralPadding = desktopLayout ? 0 : parseFloat(getComputedStyle(appContent).paddingBottom) || 0;
+        step.style.marginBottom = '0px';
+        if (desktopLayout) {
+          appContent?.style.setProperty('transition-duration', '0s', 'important');
+          appContent?.style.setProperty('padding-bottom', '0px', 'important');
+        }
+        const contentHeight = document.documentElement.scrollHeight - (desktopLayout ? 0 : mobileStructuralPadding);
+        const needsSpace = contentHeight > document.documentElement.clientHeight;
+        step.style.marginBottom = previousMargin;
+        if (desktopLayout) {
+          if (previousPadding) appContent.style.setProperty('padding-bottom', previousPadding, previousPriority);
+          else appContent?.style.removeProperty('padding-bottom');
+          if (appContent) void getComputedStyle(appContent).paddingBottom;
+          if (previousTransition) appContent.style.setProperty('transition-duration', previousTransition, previousTransitionPriority);
+          else appContent?.style.removeProperty('transition-duration');
+        }
+        if (window.innerWidth >= 768 && !needsSpace) appContent?.classList.add('_issue-68-card-static');
+        else appContent?.classList.remove('_issue-68-card-static');
+        void document.documentElement.scrollHeight;
+        if (window.scrollY !== scrollY) window.scrollTo(window.scrollX, scrollY);
+        setNeedsBottomSpace(needsSpace);
+      });
+    };
+    const content = document.querySelector('.content-wrapper');
+    const observer = new ResizeObserver(measure);
+    observer.observe(step);
+    if (content) observer.observe(content);
+    window.addEventListener('resize', measure);
+    measure();
+
+    return () => {
+      cancelAnimationFrame(frame);
+      observer.disconnect();
+      window.removeEventListener('resize', measure);
+      const scrollY = window.scrollY;
+      document.querySelector('.app-content')?.classList.remove('_issue-68-card-static');
+      void document.documentElement.scrollHeight;
+      if (window.scrollY !== scrollY) window.scrollTo(window.scrollX, scrollY);
+    };
+  }, []);
+
   return (
     <>
-      <div style={{ maxWidth: 480, margin: '0 auto' }}>
+      <div
+        ref={stepRef}
+        className={`_payment-card-step${needsBottomSpace === true ? ' _payment-card-step--scrollable' : ''}${needsBottomSpace === false ? ' _payment-card-step--static' : ''}`}
+        style={{ maxWidth: 480, margin: '0 auto', marginBottom: needsBottomSpace ? 28 : 0 }}
+      >
         <div className="card">
           <div className="card-header" style={{ padding: '16px 20px' }}>
             <h6 style={{ margin: 0, fontWeight: 700, color: '#5e5873' }}>Dados do Cartão</h6>

@@ -40,8 +40,19 @@ for (const viewport of [{ width: 390, height: 844 }, { width: 1440, height: 900 
         { fontSize: '14px', fontWeight: '600' },
       ],
     });
-    await modal.getByText('Cardiologia', { exact: true }).click();
     const confirm = modal.getByRole('button', { name: 'Confirmar' });
+    await expect(confirm).toBeDisabled();
+    const disabledConfirmStyle = await confirm.evaluate(element => {
+      const style = getComputedStyle(element);
+      return { backgroundColor: style.backgroundColor, backgroundImage: style.backgroundImage, filter: style.filter, shadow: style.boxShadow };
+    });
+    expect(disabledConfirmStyle).toEqual({
+      backgroundColor: 'rgb(204, 204, 204)',
+      backgroundImage: 'none',
+      filter: 'none',
+      shadow: 'none',
+    });
+    await modal.getByText('Cardiologia', { exact: true }).click();
     if (viewport.width >= 1200) {
       const confirmColor = await confirm.evaluate(element => getComputedStyle(element).backgroundColor);
       await confirm.hover();
@@ -54,6 +65,12 @@ for (const viewport of [{ width: 390, height: 844 }, { width: 1440, height: 900 
       expect(hoverStyle.color).toBe(confirmColor);
       await expect.poll(() => confirm.evaluate(element => getComputedStyle(element).filter)).toBe('brightness(1.08)');
       expect(hoverStyle.transform).toBe('none');
+      await expect.poll(() => confirm.evaluate(element => getComputedStyle(element).boxShadow)).not.toBe('none');
+    } else {
+      expect(await page.evaluate(() => matchMedia('(pointer: coarse)').matches)).toBe(true);
+      await page.mouse.move(0, 0);
+      expect(await confirm.evaluate(element => element.matches(':hover'))).toBe(false);
+      await expect(confirm).toHaveCSS('filter', 'brightness(1.08)');
       await expect.poll(() => confirm.evaluate(element => getComputedStyle(element).boxShadow)).not.toBe('none');
     }
     await page.mouse.move(0, 0);
@@ -71,14 +88,29 @@ for (const viewport of [{ width: 390, height: 844 }, { width: 1440, height: 900 
     await page.goto('/schedule/calendar');
     await page.getByText('Ortopedia', { exact: true }).first().click();
     const noReferralState = page.locator('._referral-empty-state');
-    await expect(noReferralState).toContainText('Você não possui encaminhamentos disponíveis.');
+    const noReferralMessage = noReferralState.getByText('Você não possui encaminhamentos disponíveis.', { exact: true });
+    const referralGuidance = noReferralState.getByText('Solicite um encaminhamento médico para agendar esta especialidade, ou:', { exact: true });
+    const noReferralMessageBox = noReferralMessage.locator('..');
+    await expect(noReferralMessageBox).toHaveText('Você não possui encaminhamentos disponíveis.');
+    await expect(noReferralMessageBox).toHaveCSS('border-style', 'solid');
+    await expect(noReferralMessageBox).toHaveCSS('border-radius', '8px');
+    await expect(noReferralMessageBox).toHaveCSS('padding', '12px 14px');
+    await expect(noReferralMessage).toHaveCSS('font-size', '14px');
+    await expect(referralGuidance).toHaveCSS('font-size', '14px');
+    expect(await referralGuidance.evaluate(element => element.parentElement === document.querySelector('._referral-empty-state'))).toBe(true);
     await expect(noReferralState).toHaveCSS('padding-top', '28px');
     await expect(noReferralState).toHaveCSS('padding-bottom', '28px');
     await noReferralState.getByRole('button', { name: 'Adquirir consulta avulsa' }).click();
     await page.getByText('Ortopedia', { exact: true }).first().click();
     await page.getByRole('button', { name: 'Escolher depois, continuar para o pagamento' }).click();
+    await page.getByRole('button', { name: 'Entendi' }).click();
     const payment = page.locator('._payment-select-step');
     await expect(payment).toBeVisible();
+    if (viewport.width < 768) {
+      await expect(page.locator('html')).not.toHaveClass(/tela-rolavel/);
+      const overflow = await page.evaluate(() => document.documentElement.scrollHeight - document.documentElement.clientHeight);
+      expect(overflow).toBeLessThanOrEqual(0);
+    }
     const paymentMeasurements = await payment.evaluate(element => {
       const css = selector => getComputedStyle(element.querySelector(selector));
       return {
@@ -89,12 +121,13 @@ for (const viewport of [{ width: 390, height: 844 }, { width: 1440, height: 900 
         option: [css('._payment-option-title').fontSize, css('._payment-option-title').fontWeight],
         subtitle: css('._payment-option-subtitle').fontSize,
         icon: [css('._payment-option-icon').width, css('._payment-option-icon').height],
+        iconBackgrounds: [...element.querySelectorAll('._payment-option-icon')].map(icon => getComputedStyle(icon).backgroundColor),
         svg: [css('._payment-option-icon svg').width, css('._payment-option-icon svg').height],
         actions: [...element.querySelectorAll('._payment-step-actions button')].map(button => {
           const style = getComputedStyle(button);
           return [style.fontSize, style.fontWeight];
         }),
-        cardBackground: css('._payment-option-card').backgroundColor,
+        cardBackgrounds: [...element.querySelectorAll('._payment-option-card')].map(card => getComputedStyle(card).backgroundColor),
         summaryBackground: css('._payment-summary-card').backgroundColor,
       };
     });
@@ -109,8 +142,9 @@ for (const viewport of [{ width: 390, height: 844 }, { width: 1440, height: 900 
         icon: ['40px', '40px'],
         svg: ['22px', '22px'],
         actions: [['12.6px', '500'], ['12.6px', '500']],
-        cardBackground: 'rgb(238, 248, 255)',
-        summaryBackground: 'rgb(238, 248, 255)',
+        iconBackgrounds: Array(3).fill('rgb(227, 242, 252)'),
+        cardBackgrounds: Array(3).fill('rgb(255, 255, 255)'),
+        summaryBackground: 'rgb(255, 255, 255)',
       });
     } else {
       expect(paymentMeasurements).toEqual({
@@ -123,11 +157,29 @@ for (const viewport of [{ width: 390, height: 844 }, { width: 1440, height: 900 
         icon: ['44px', '44px'],
         svg: ['22px', '22px'],
         actions: [['14px', '600'], ['14px', '600']],
-        cardBackground: 'rgb(238, 248, 255)',
-        summaryBackground: 'rgb(238, 248, 255)',
+        iconBackgrounds: Array(3).fill('rgb(227, 242, 252)'),
+        cardBackgrounds: Array(3).fill('rgb(255, 255, 255)'),
+        summaryBackground: 'rgb(255, 255, 255)',
       });
     }
     await page.screenshot({ path: path.join(output, `payment-select-${viewport.width}.png`), fullPage: true });
+
+    if (viewport.width < 768) {
+      await page.setViewportSize({ width: 390, height: 480 });
+      await expect(page.locator('html')).toHaveClass(/tela-rolavel/, { timeout: 5000 });
+      await expect(payment).toHaveCSS('margin-bottom', '28px');
+      await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+      await expect(payment.getByRole('button', { name: '← Voltar' })).toBeInViewport();
+      await expect(payment.getByRole('button', { name: 'Cancelar' })).toBeInViewport();
+      const noPaymentSpacing = await page.addStyleTag({ content: 'html.tela-rolavel ._payment-select-step { margin-bottom: 0 !important; }' });
+      await page.screenshot({ path: path.join(output, 'payment-select-short-before-390x480.png'), fullPage: true });
+      await noPaymentSpacing.evaluate(style => style.remove());
+      await page.screenshot({ path: path.join(output, 'payment-select-short-after-390x480.png'), fullPage: true });
+
+      await page.setViewportSize({ width: 390, height: 844 });
+      await expect(page.locator('html')).not.toHaveClass(/tela-rolavel/);
+      await expect(payment).toHaveCSS('margin-bottom', '0px');
+    }
 
     await page.getByText('Usar outro cartão', { exact: true }).click();
     const backButton = page.getByRole('button', { name: '← Voltar', exact: true });
@@ -145,6 +197,27 @@ for (const viewport of [{ width: 390, height: 844 }, { width: 1440, height: 900 
       clientHeight: document.documentElement.clientHeight,
       bodyScrollHeight: document.body.scrollHeight,
     }));
-    if (viewport.width >= 1200) expect(overflow.scrollHeight).toBeLessThanOrEqual(overflow.clientHeight);
+    if (viewport.width >= 1200) {
+      expect(overflow.scrollHeight).toBeLessThanOrEqual(overflow.clientHeight);
+    } else {
+      await expect(page.locator('html')).not.toHaveClass(/tela-rolavel/);
+      expect(overflow.scrollHeight).toBeLessThanOrEqual(overflow.clientHeight);
+
+      await page.setViewportSize({ width: 390, height: 480 });
+      await expect(page.locator('html')).toHaveClass(/tela-rolavel/, { timeout: 5000 });
+      await expect(page.locator('._payment-card-step')).toHaveCSS('margin-bottom', '28px');
+      await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+      await expect(page.getByRole('button', { name: 'Finalizar pagamento' })).toBeInViewport();
+      await expect(backButton).toBeInViewport();
+      const noCardSpacing = await page.addStyleTag({ content: 'html.tela-rolavel ._payment-card-step { margin-bottom: 0 !important; }' });
+      await page.screenshot({ path: path.join(output, 'new-card-short-before-390x480.png'), fullPage: true });
+      await noCardSpacing.evaluate(style => style.remove());
+      await page.screenshot({ path: path.join(output, 'new-card-short-after-390x480.png'), fullPage: true });
+      const reservedBottomSpace = await page.evaluate(() => {
+        const style = getComputedStyle(document.querySelector('._payment-card-step'));
+        return style.marginBottom;
+      });
+      expect(reservedBottomSpace).toBe('28px');
+    }
   });
 }

@@ -11,7 +11,7 @@ export default function PaymentSelectStep({ avulsaSpecialty, title = 'Forma de p
         onMouseLeave={e => { e.currentTarget.style.border = '1.5px solid #ebe9f1'; }}
       >
         <div className="card-body d-flex align-items-center" style={{ gap: 14, padding: '14px 18px' }}>
-          <div className="_payment-option-icon" style={{ width: 44, height: 44, borderRadius: 12, background: '#f3f2f7', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+          <div className="_payment-option-icon" style={{ width: 44, height: 44, borderRadius: 12, background: '#e3f2fc', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
             {icon}
           </div>
           <div>

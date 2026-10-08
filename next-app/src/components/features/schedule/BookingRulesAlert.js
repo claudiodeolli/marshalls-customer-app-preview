@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { withEmphasis } from '@/components/ui/emphasis';
 import EmojiIcon from '@/components/ui/EmojiIcon';
 import ModalPortal from '@/components/ui/ModalPortal';
@@ -13,13 +14,13 @@ const CONTENT = {
   referral: {
     title: 'Importante!',
     paragraphs: [
-      'Nesta modalidade, as **consultas podem ser reagendadas ou canceladas até 48 horas antes do horário agendado, sem perder o Encaminhamento.**',
+      'Nesta modalidade, as **consultas** podem ser **reagendadas ou canceladas até 48 horas antes do horário agendado, sem perder o Encaminhamento.**',
       'Se optar por um horário dentro das próximas **48 horas, a consulta já estará fora do prazo de reagendamento e, por isso, não será possível reagendar.** Para escolher outra data ou horário sem custo, será necessário passar pelo Plantão 24h e **obter um novo Encaminhamento, caso ainda haja indicação médica.**',
       'Se cancelar **fora do prazo** ou não comparecer ao atendimento, **a consulta será considerada utilizada.**',
     ],
   },
   avulsa: {
-    title: 'Lembre-se!',
+    title: 'Importante!',
     paragraphs: [
       'As **Consultas Avulsas** podem ser **reagendadas ou canceladas até 48 horas antes do horário agendado, sem perder a consulta adquirida.**',
       'Se optar por um horário dentro das próximas **48 horas, a consulta já estará fora do prazo de reagendamento e, por isso, não será possível reagendar.**',
@@ -41,8 +42,12 @@ const RECOMMENDATION =
  *
  * origin: 'referral' (Encaminhamento, grátis) | 'avulsa' (consulta paga).
  */
-export default function BookingRulesAlert({ origin }) {
+export default function BookingRulesAlert({ origin, requireAcknowledgement = false, onAcknowledge }) {
   const content = CONTENT[origin];
+  const searchParams = useSearchParams();
+  const title = origin === 'avulsa' && searchParams?.has('reagendarDe')
+    ? 'Lembre-se!'
+    : content?.title;
   const [aberto, setAberto] = useState(true);
   const botaoEntendi = useRef(null);
 
@@ -60,10 +65,12 @@ export default function BookingRulesAlert({ origin }) {
   // Esc fecha, como nas outras modais da seção.
   useEffect(() => {
     if (!aberto) return undefined;
-    const aoTeclar = evento => { if (evento.key === 'Escape') setAberto(false); };
+    const aoTeclar = evento => {
+      if (evento.key === 'Escape' && !requireAcknowledgement) setAberto(false);
+    };
     document.addEventListener('keydown', aoTeclar);
     return () => document.removeEventListener('keydown', aoTeclar);
-  }, [aberto]);
+  }, [aberto, requireAcknowledgement]);
 
   if (!content || !aberto) return null;
 
@@ -74,12 +81,14 @@ export default function BookingRulesAlert({ origin }) {
       role="dialog"
       aria-modal="true"
       aria-labelledby={`booking-rules-title-${origin}`}
-      onClick={event => { if (event.target === event.currentTarget) setAberto(false); }}
+      onClick={event => {
+        if (event.target === event.currentTarget && !requireAcknowledgement) setAberto(false);
+      }}
     >
-      <div className="card" style={{ ...MODAL_CARD, maxHeight: 'calc(100vh - 32px)', overflowY: 'auto', background: '#fff8e1', border: '1px solid #ffe082' }}>
+      <div className="card" style={{ ...MODAL_CARD, margin: 0, maxHeight: 'calc(100dvh - 64px)', overflowY: 'auto', background: '#fff8e1', border: '1px solid #ffe082' }}>
         {/* O testid fica no corpo, e não no card: é este o elemento que
             carrega o padding contra o qual a issue #7 mede o recuo. */}
-        <div data-testid={`booking-rules-alert-${origin}`} style={{ ...MODAL_BODY, color: '#7a5c00' }}>
+        <div data-testid={`booking-rules-alert-${origin}`} style={{ ...MODAL_BODY, color: '#7a5c00', textAlign: 'justify' }}>
           {/* O ícone acompanha o título na primeira linha e o corpo começa na
               borda do box: o cliente pediu o texto "sem recuo, como nas outras
               modais normais" (issue #7). */}
@@ -88,7 +97,7 @@ export default function BookingRulesAlert({ origin }) {
             style={{ ...MODAL_TITLE, display: 'flex', alignItems: 'center', gap: '8px', color: '#7a5c00' }}
           >
             <EmojiIcon name="aviso" size={22} />
-            {content.title}
+            {title}
           </strong>
           {content.paragraphs.map((text, index) => (
             <p key={index} style={{ ...MODAL_TEXT, color: '#7a5c00' }}>{withEmphasis(text)}</p>
@@ -100,7 +109,7 @@ export default function BookingRulesAlert({ origin }) {
               type="button"
               className="btn btn-primary"
               style={MODAL_BUTTON}
-              onClick={() => setAberto(false)}
+              onClick={() => { setAberto(false); onAcknowledge?.(); }}
             >
               Entendi
             </button>

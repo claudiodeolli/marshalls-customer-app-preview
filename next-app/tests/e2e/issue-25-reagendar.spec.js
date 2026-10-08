@@ -99,7 +99,9 @@ test('G4 — e na Avulsa entra pelo caminho da consulta paga', async ({ page }) 
   await page.getByTestId('reagendar-nova-data').getByRole('button', { name: 'Escolher agora' }).click();
 
   await expect(page).toHaveURL(/avulsaSpec=/);
-  await expect(page.getByTestId('booking-rules-alert-avulsa')).toBeVisible({ timeout: 20000 });
+  const regras = page.getByTestId('booking-rules-alert-avulsa');
+  await expect(regras).toBeVisible({ timeout: 20000 });
+  await expect(regras).toContainText('Lembre-se!');
 });
 
 test('G3 — "Cancelar" fecha a escolha e deixa tudo como estava', async ({ page }) => {

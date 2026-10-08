@@ -66,6 +66,9 @@ permissions:
   - action: shell
     resource: "gh issue create *"
     effect: allow
+  - action: shell
+    resource: "gh issue close *"
+    effect: allow
   - action: subagent
     resource: "*"
     effect: deny

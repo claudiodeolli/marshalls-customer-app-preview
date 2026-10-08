@@ -48,7 +48,7 @@ test('N3 — o aviso da avulsa aparece na marcação', async ({ page }) => {
 
   const alerta = page.getByTestId('booking-rules-alert-avulsa');
   await expect(alerta).toBeVisible();
-  await expect(alerta).toContainText('Lembre-se!');
+  await expect(alerta).toContainText('Importante!');
 });
 
 test('N2/N3 — o aviso roxo que fica na tela vem antes do calendário', async ({ page }) => {
