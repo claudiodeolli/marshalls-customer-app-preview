@@ -134,19 +134,9 @@ test('Escolher depois confirma sem orientações e cria o card pendente com aç�
   await page.getByRole('button', { name: 'Escolher depois, continuar para o pagamento' }).click();
 
   const regras = page.getByTestId('booking-rules-alert-avulsa');
-  await expect(regras).toBeVisible();
-  await expect(regras).toContainText('Importante!');
-  await expect(page.locator('._payment-select-step')).toHaveCount(0);
-  await expect(page.getByRole('heading', { name: 'Escolha uma forma de pagamento' })).toHaveCount(0);
-  await expect(page.locator('.breadcrumb')).not.toContainText('Pagamento');
-
-  await page.keyboard.press('Escape');
-  await expect(regras).toBeVisible();
-  await expect(page.locator('._payment-select-step')).toHaveCount(0);
-
-  await regras.getByRole('button', { name: 'Entendi' }).click();
   await expect(page.getByRole('heading', { name: 'Escolha uma forma de pagamento' })).toBeVisible();
   await expect(page.locator('._payment-select-step')).toBeVisible();
+  await expect(regras).toHaveCount(0);
   await expect(page.locator('.breadcrumb')).toContainText('Pagamento');
   await pagarComVisa(page);
   await expect(page.getByTestId('orientacoes-consulta-online')).toHaveCount(0);
@@ -162,7 +152,6 @@ test('Escolher depois confirma sem orientações e cria o card pendente com aç�
 test('A confirmação real do agendamento pago mostra o breadcrumb de confirmação', async ({ page }) => {
   await iniciarCompraAvulsa(page);
   await page.getByRole('button', { name: 'Escolher depois, continuar para o pagamento' }).click();
-  await page.getByRole('button', { name: 'Entendi' }).click();
   await pagarComVisa(page);
 
   await page.getByRole('button', { name: 'Agendar Agora' }).click();
@@ -185,7 +174,6 @@ test('A confirmação real do agendamento pago mostra o breadcrumb de confirmaç
 test('A confirmação do pagamento retorna ao pagamento pelo breadcrumb Consulta Avulsa', async ({ page }) => {
   await iniciarCompraAvulsa(page);
   await page.getByRole('button', { name: 'Escolher depois, continuar para o pagamento' }).click();
-  await page.getByRole('button', { name: 'Entendi' }).click();
   await pagarComVisa(page);
   await expect(page.locator('.breadcrumb')).toContainText('Confirmação');
 
@@ -197,7 +185,7 @@ test('A confirmação do pagamento retorna ao pagamento pelo breadcrumb Consulta
 test('Agendar Agora após pagar retorna ao calendário e abre as regras novamente', async ({ page }) => {
   await iniciarCompraAvulsa(page);
   await page.getByRole('button', { name: 'Escolher depois, continuar para o pagamento' }).click();
-  await page.getByRole('button', { name: 'Entendi' }).click();
+  await expect(page.getByTestId('booking-rules-alert-avulsa')).toHaveCount(0);
   await pagarComVisa(page);
 
   await page.getByRole('button', { name: 'Agendar Agora' }).click();
@@ -212,7 +200,6 @@ test('No mobile, Agendar Depois mantém as ações do card de consulta pendente'
   await page.setViewportSize({ width: 390, height: 844 });
   await iniciarCompraAvulsa(page);
   await page.getByRole('button', { name: 'Escolher depois, continuar para o pagamento' }).click();
-  await page.getByRole('button', { name: 'Entendi' }).click();
   await pagarComVisa(page);
   await page.getByRole('button', { name: 'Agendar depois' }).click();
 

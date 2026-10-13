@@ -1136,7 +1136,7 @@ function ScheduleContent() {
         show={showSlotChoiceModal}
         onClose={() => setShowSlotChoiceModal(false)}
         onAgendarAgora={() => { setShowSlotChoiceModal(false); setAvulsaBreadcrumbStep('agendar'); doSelectSpecialty(avulsaSpecialty); }}
-        onAgendarDepois={() => { setShowSlotChoiceModal(false); setShowPaymentRules(true); }}
+        onAgendarDepois={() => { setShowSlotChoiceModal(false); setAvulsaBooked(false); setShowPaymentRules(false); setAvulsaBreadcrumbStep('pagamento'); setPaymentStep('select'); }}
       />
 
       {showPaymentRules && (
