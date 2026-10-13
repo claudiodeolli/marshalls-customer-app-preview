@@ -243,7 +243,7 @@ test('A confirmação do Encaminhamento mostra Confirmação em vez de Agendar',
   await page.getByRole('button', { name: 'AGENDAR', exact: true }).click();
 
   await expect(page.getByText('Agendado com sucesso!')).toBeVisible();
-  await expect(page.locator('p.text-muted')).toContainText(`${selectedDate} às ${selectedTime}`);
+  await expect(page.locator('p.text-muted')).toHaveText(`Ortopedia — ${selectedDate} às ${selectedTime}`);
   await expect(page.locator('.breadcrumb')).toContainText('Confirmação');
   await expect(page.locator('.breadcrumb')).not.toContainText('Agendar');
   const encaminhamentos = page.locator('.breadcrumb').getByRole('link', { name: 'Encaminhamentos' });

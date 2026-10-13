@@ -91,6 +91,7 @@ function ScheduleContent() {
   const [booking, setBooking] = useState(false);
   const [bookingError, setBookingError] = useState('');
   const [confirmed, setConfirmed] = useState(false);
+  const [confirmedAppointment, setConfirmedAppointment] = useState(null);
 
   // Referral selection modal
   const [referralModal, setReferralModal] = useState(false);
@@ -518,6 +519,12 @@ function ScheduleContent() {
 
   async function handleBook() {
     if (!selectedSlot || booking) return;
+    const confirmedSlot = { ...selectedSlot };
+    setConfirmedAppointment({
+      date: selectedDate || confirmedSlot.date,
+      time: confirmedSlot.from || confirmedSlot.time || confirmedSlot.startTime,
+      slot: confirmedSlot,
+    });
     setBooking(true);
     setBookingError('');
     try {
@@ -669,8 +676,9 @@ function ScheduleContent() {
     return (
       <BookingSuccessScreen
         selectedSpecialty={selectedSpecialty}
-        selectedDate={selectedDate}
-        selectedSlot={selectedSlot}
+        selectedDate={confirmedAppointment?.date || selectedDate}
+        selectedSlot={confirmedAppointment?.slot || selectedSlot}
+        confirmedTime={confirmedAppointment?.time}
         avulsaConfirmed={avulsaConfirmed}
         onViewAppointments={() => {
           if (typeof window !== 'undefined') localStorage.removeItem('pendingAvulsa');

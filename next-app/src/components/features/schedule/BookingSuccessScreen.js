@@ -1,9 +1,6 @@
-export default function BookingSuccessScreen({ selectedSpecialty, selectedDate, selectedSlot, onViewAppointments }) {
-  const appointmentDate = selectedDate || selectedSlot?.date || selectedSlot?.appointmentDate || selectedSlot?.detail?.date;
-  const appointmentTime = selectedSlot?.from || selectedSlot?.time || selectedSlot?.startTime || selectedSlot?.detail?.from;
-  const appointmentDetails = appointmentDate && appointmentTime
-    ? `${appointmentDate} às ${appointmentTime}`
-    : appointmentDate || (appointmentTime ? `às ${appointmentTime}` : '');
+export default function BookingSuccessScreen({ selectedSpecialty, selectedDate, selectedSlot, confirmedTime, onViewAppointments }) {
+  const appointmentDate = selectedDate || selectedSlot?.date || selectedSlot?.appointmentDate || selectedSlot?.detail?.date || 'Data não disponível';
+  const appointmentTime = confirmedTime || selectedSlot?.from || selectedSlot?.time || selectedSlot?.startTime || selectedSlot?.detail?.from || 'Horário não disponível';
 
   return (
     <div className="card" style={{ maxWidth: '520px', margin: '28px auto' }}>
@@ -22,7 +19,7 @@ export default function BookingSuccessScreen({ selectedSpecialty, selectedDate, 
           Agendado com sucesso!
         </h5>
         <p className="text-muted" style={{ marginBottom: '21px' }}>
-          {selectedSpecialty?.name}{appointmentDetails && ` — ${appointmentDetails}`}
+          {selectedSpecialty?.name || 'Especialidade não informada'} — {appointmentDate} às {appointmentTime}
         </p>
         <div style={{
           textAlign: 'left', background: '#f8f8f8', borderRadius: 10,
