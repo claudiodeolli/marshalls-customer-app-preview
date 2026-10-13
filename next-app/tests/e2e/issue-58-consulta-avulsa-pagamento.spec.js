@@ -236,10 +236,14 @@ test('A confirmação do Encaminhamento mostra Confirmação em vez de Agendar',
   await page.getByRole('button', { name: 'Entendi' }).click();
   await page.getByTestId('dia-disponivel').first().click();
   await expect(page.getByTestId('horarios')).toBeVisible({ timeout: 15000 });
-  await page.getByTestId('horarios').locator('button').first().click();
+  const horarios = page.getByTestId('horarios');
+  const selectedDate = (await horarios.locator('.card-header').innerText()).replace('Horários disponíveis — ', '');
+  const selectedTime = await horarios.locator('button').first().innerText();
+  await horarios.locator('button').first().click();
   await page.getByRole('button', { name: 'AGENDAR', exact: true }).click();
 
   await expect(page.getByText('Agendado com sucesso!')).toBeVisible();
+  await expect(page.locator('p.text-muted')).toContainText(`${selectedDate} às ${selectedTime}`);
   await expect(page.locator('.breadcrumb')).toContainText('Confirmação');
   await expect(page.locator('.breadcrumb')).not.toContainText('Agendar');
   const encaminhamentos = page.locator('.breadcrumb').getByRole('link', { name: 'Encaminhamentos' });

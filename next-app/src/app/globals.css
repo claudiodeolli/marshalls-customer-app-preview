@@ -1824,7 +1824,7 @@ input._search-input:not([type="checkbox"]):not([type="radio"]):not([type="submit
   ._payment-select-step ._payment-option-icon {
     width: 40px !important;
     height: 40px !important;
-    background-color: #e3f2fc !important;
+    background-color: #f3f2f7 !important;
   }
 
   ._payment-select-step ._payment-option-icon svg,

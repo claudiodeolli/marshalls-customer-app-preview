@@ -11,7 +11,7 @@ export default function PaymentSelectStep({ avulsaSpecialty, title = 'Forma de p
         onMouseLeave={e => { e.currentTarget.style.border = '1.5px solid #ebe9f1'; }}
       >
         <div className="card-body d-flex align-items-center" style={{ gap: 14, padding: '14px 18px' }}>
-          <div className="_payment-option-icon" style={{ width: 44, height: 44, borderRadius: 12, background: '#e3f2fc', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+          <div className="_payment-option-icon" style={{ width: 44, height: 44, borderRadius: 12, background: '#f3f2f7', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
             {icon}
           </div>
           <div>
@@ -46,7 +46,7 @@ export default function PaymentSelectStep({ avulsaSpecialty, title = 'Forma de p
         <OptionCard
           onClick={onSelectPix}
           icon={
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#32BCAD" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4daab6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M11.5 2L2 11.5l10 10 9.5-9.5L11.5 2z" />
               <path d="M7 11.5l4.5 4.5 5.5-5.5" />
             </svg>
@@ -58,7 +58,7 @@ export default function PaymentSelectStep({ avulsaSpecialty, title = 'Forma de p
         <OptionCard
           onClick={onSelectSaved}
           icon={
-            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6e6b7b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4daab6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <rect x="1" y="4" width="22" height="16" rx="2" ry="2" />
               <line x1="1" y1="10" x2="23" y2="10" />
             </svg>
@@ -70,7 +70,7 @@ export default function PaymentSelectStep({ avulsaSpecialty, title = 'Forma de p
         <OptionCard
           onClick={onSelectNew}
           icon={
-            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6e6b7b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4daab6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <rect x="1" y="4" width="22" height="16" rx="2" ry="2" />
               <line x1="1" y1="10" x2="23" y2="10" />
               <line x1="7" y1="15" x2="7.01" y2="15" />
