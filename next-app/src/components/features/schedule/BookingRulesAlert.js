@@ -14,17 +14,15 @@ const CONTENT = {
   referral: {
     title: 'Importante!',
     paragraphs: [
-      'Nesta modalidade, as **consultas** podem ser **reagendadas ou canceladas até 48 horas antes do horário agendado, sem perder o Encaminhamento.**',
-      'Se optar por um horário dentro das próximas **48 horas, a consulta já estará fora do prazo de reagendamento e, por isso, não será possível reagendar.** Para escolher outra data ou horário sem custo, será necessário passar pelo Plantão 24h e **obter um novo Encaminhamento, caso ainda haja indicação médica.**',
-      'Se cancelar **fora do prazo** ou não comparecer ao atendimento, **a consulta será considerada utilizada.**',
+      'Nesta modalidade, as consultas podem ser reagendadas ou canceladas até 48 horas antes do horário agendado, sem perder o Encaminhamento.',
+      'Se cancelar fora do prazo ou não comparecer ao atendimento, a consulta será considerada utilizada.',
     ],
   },
   avulsa: {
     title: 'Importante!',
     paragraphs: [
-      'As **Consultas Avulsas** podem ser **reagendadas ou canceladas até 48 horas antes do horário agendado, sem perder a consulta adquirida.**',
-      'Se optar por um horário dentro das próximas **48 horas, a consulta já estará fora do prazo de reagendamento e, por isso, não será possível reagendar.**',
-      'Se cancelar **fora do prazo** ou não comparecer ao atendimento, **a consulta será considerada utilizada.**',
+      'As Consultas Avulsas podem ser reagendadas ou canceladas até 48 horas antes do horário agendado, sem perder a consulta adquirida.',
+      'Se cancelar fora do prazo ou não comparecer ao atendimento, a consulta será considerada utilizada.',
     ],
   },
 };
@@ -62,28 +60,23 @@ export default function BookingRulesAlert({ origin, requireAcknowledgement = fal
     if (aberto) botaoEntendi.current?.focus({ preventScroll: true });
   }, [aberto]);
 
-  // Esc fecha, como nas outras modais da seção.
+  // Esta modal só pode ser fechada pelo botão de confirmação.
   useEffect(() => {
     if (!aberto) return undefined;
-    const aoTeclar = evento => {
-      if (evento.key === 'Escape' && !requireAcknowledgement) setAberto(false);
-    };
+    const aoTeclar = evento => { if (evento.key === 'Escape') evento.preventDefault(); };
     document.addEventListener('keydown', aoTeclar);
     return () => document.removeEventListener('keydown', aoTeclar);
-  }, [aberto, requireAcknowledgement]);
+  }, [aberto]);
 
   if (!content || !aberto) return null;
 
   return (
     <ModalPortal>
     <div
-      style={MODAL_OVERLAY}
+      style={{ ...MODAL_OVERLAY, padding: '16px' }}
       role="dialog"
       aria-modal="true"
       aria-labelledby={`booking-rules-title-${origin}`}
-      onClick={event => {
-        if (event.target === event.currentTarget && !requireAcknowledgement) setAberto(false);
-      }}
     >
       <div className="card" style={{ ...MODAL_CARD, margin: 0, maxHeight: 'calc(100dvh - 64px)', overflowY: 'auto', background: '#fff8e1', border: '1px solid #ffe082' }}>
         {/* O testid fica no corpo, e não no card: é este o elemento que

@@ -103,9 +103,9 @@ for (const viewport of [{ width: 390, height: 844 }, { width: 1440, height: 900 
     await noReferralState.getByRole('button', { name: 'Adquirir consulta avulsa' }).click();
     await page.getByText('Ortopedia', { exact: true }).first().click();
     await page.getByRole('button', { name: 'Escolher depois, continuar para o pagamento' }).click();
-    await page.getByRole('button', { name: 'Entendi' }).click();
     const payment = page.locator('._payment-select-step');
     await expect(payment).toBeVisible();
+    await expect(payment.getByRole('heading', { name: 'Escolha a forma de pagamento', exact: true })).toBeVisible();
     if (viewport.width < 768) {
       await expect(page.locator('html')).not.toHaveClass(/tela-rolavel/);
       const overflow = await page.evaluate(() => document.documentElement.scrollHeight - document.documentElement.clientHeight);

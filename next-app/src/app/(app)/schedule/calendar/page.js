@@ -709,7 +709,7 @@ function ScheduleContent() {
     return (
       <PaymentSelectStep
         avulsaSpecialty={avulsaSpecialty}
-        title={avulsaBooked ? 'Escolha a forma de pagamento' : 'Escolha uma forma de pagamento'}
+        title="Escolha a forma de pagamento"
         onSelectPix={() => setPaymentStep('pix')}
         onSelectSaved={() => setShowPaymentConfirm(true)}
         onSelectNew={() => setPaymentStep('card-new')}

@@ -1,0 +1,81 @@
+.snakeCard {
+  position: relative;
+  overflow: hidden;
+}
+
+.snakeCard > :not(.snake) {
+  position: relative;
+  z-index: 1;
+}
+
+.snake {
+  position: absolute;
+  z-index: 0;
+  pointer-events: none;
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+.top {
+  height: 1.5px;
+  width: 350px;
+  top: 0;
+  left: -350px;
+  background: linear-gradient(to right, transparent, #007bff 50%, transparent);
+  animation: snakeTop 5s linear infinite;
+}
+
+.right {
+  width: 2px;
+  height: 80px;
+  top: -80px;
+  right: 0;
+  background: linear-gradient(to bottom, transparent 30%, #007bff);
+  animation: snakeRight 5s linear infinite;
+}
+
+.bottom {
+  height: 1.5px;
+  width: 350px;
+  bottom: 0;
+  right: -350px;
+  background: linear-gradient(to left, transparent, #007bff 50%, transparent);
+  animation: snakeBottom 5s linear infinite;
+}
+
+.left {
+  width: 2px;
+  height: 80px;
+  bottom: -80px;
+  left: 0;
+  background: linear-gradient(to top, transparent 30%, #007bff);
+  animation: snakeLeft 5s linear infinite;
+}
+
+@keyframes snakeTop {
+  0% { left: -350px; }
+  70% { left: 100%; }
+  70.01%, 100% { left: -350px; }
+}
+
+@keyframes snakeRight {
+  0%, 69.99% { top: -80px; }
+  70% { top: -80px; }
+  100% { top: 100%; }
+}
+
+@keyframes snakeBottom {
+  0% { right: -350px; }
+  70% { right: 100%; }
+  70.01%, 100% { right: -350px; }
+}
+
+@keyframes snakeLeft {
+  0%, 69.99% { bottom: -80px; }
+  70% { bottom: -80px; }
+  100% { bottom: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .snake { animation: none; display: none; }
+}

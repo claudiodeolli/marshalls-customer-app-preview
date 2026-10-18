@@ -1,4 +1,4 @@
-export default function PaymentSelectStep({ avulsaSpecialty, title = 'Forma de pagamento', onSelectPix, onSelectSaved, onSelectNew, onBack, onCancel, confirmModal }) {
+export default function PaymentSelectStep({ avulsaSpecialty, title = 'Escolha a forma de pagamento', onSelectPix, onSelectSaved, onSelectNew, onBack, onCancel, confirmModal }) {
   const price = avulsaSpecialty?.price ?? 0;
 
   function OptionCard({ onClick, icon, title, subtitle }) {

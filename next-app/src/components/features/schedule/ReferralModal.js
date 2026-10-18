@@ -1,3 +1,6 @@
+'use client';
+
+import styles from './ReferralModal.module.css';
 import { MODAL_OVERLAY } from '@/components/ui/modalScale';
 import ModalPortal from '@/components/ui/ModalPortal';
 
@@ -10,7 +13,6 @@ export default function ReferralModal({ open, loadingReferrals, pendingReferrals
       role="dialog"
       aria-modal="true"
       aria-labelledby="referral-modal-title"
-      onClick={onClose}
     >
       <div
         className="_modal-enter"
@@ -26,6 +28,9 @@ export default function ReferralModal({ open, loadingReferrals, pendingReferrals
             Selecionar Encaminhamento
           </h6>
           <button
+            type="button"
+            autoFocus
+            aria-label="Fechar seleção de encaminhamento"
             onClick={onClose}
             style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px', lineHeight: 1, color: '#5e5873' }}
           >
@@ -75,10 +80,22 @@ export default function ReferralModal({ open, loadingReferrals, pendingReferrals
             <div style={{ maxHeight: 300, overflowY: 'auto', marginBottom: 16 }}>
               {pendingReferrals.map(ref => {
                 const isSelected = referralId === ref.uuid;
+                // Com um único encaminhamento, ele é o match automático; com vários, usa-se o selecionado.
+                const shouldAnimateSnake = pendingReferrals.length === 1 || isSelected;
                 return (
                   <div
                     key={ref.uuid}
+                    role="button"
+                    tabIndex={0}
+                    aria-pressed={isSelected}
                     onClick={() => onSelectReferral(ref)}
+                    onKeyDown={event => {
+                      if (event.key === 'Enter' || event.key === ' ') {
+                        event.preventDefault();
+                        onSelectReferral(ref);
+                      }
+                    }}
+                    className={shouldAnimateSnake ? styles.snakeCard : undefined}
                     style={{
                       padding: '12px 14px',
                       border: `1px solid ${isSelected ? '#4daab6' : '#e0e0e0'}`,
@@ -89,6 +106,14 @@ export default function ReferralModal({ open, loadingReferrals, pendingReferrals
                     onMouseEnter={e => { if (!isSelected) e.currentTarget.style.background = '#f8f9fa'; }}
                     onMouseLeave={e => { if (!isSelected) e.currentTarget.style.background = 'transparent'; }}
                   >
+                    {shouldAnimateSnake && (
+                      <>
+                        <span aria-hidden="true" className={`${styles.snake} ${styles.top}`} />
+                        <span aria-hidden="true" className={`${styles.snake} ${styles.right}`} />
+                        <span aria-hidden="true" className={`${styles.snake} ${styles.bottom}`} />
+                        <span aria-hidden="true" className={`${styles.snake} ${styles.left}`} />
+                      </>
+                    )}
                     <p style={{ margin: '0 0 4px', fontWeight: 700, fontSize: 15, color: '#333' }}>
                       {ref.specialty?.name || 'Especialidade não informada'}
                     </p>

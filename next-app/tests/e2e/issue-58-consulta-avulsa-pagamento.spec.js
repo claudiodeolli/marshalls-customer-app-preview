@@ -106,7 +106,7 @@ test('Voltar do pagamento restaura o breadcrumb da etapa de agendamento', async 
   await expect(page.locator('.breadcrumb')).not.toContainText('Pagamento');
 });
 
-test('Os breadcrumbs da Avulsa retornam à etapa anterior sem deixar o fluxo inconsistente', async ({ page }) => {
+test('O breadcrumb da Avulsa não é clicável nem altera o fluxo atual', async ({ page }) => {
   await iniciarCompraAvulsa(page);
   await page.getByRole('button', { name: 'Escolher agora' }).click();
   await page.getByRole('button', { name: 'Entendi' }).click();
@@ -115,18 +115,12 @@ test('Os breadcrumbs da Avulsa retornam à etapa anterior sem deixar o fluxo inc
   await page.getByTestId('horarios').locator('button').first().click();
   await page.getByRole('button', { name: 'Ir para o pagamento' }).click();
 
-  const consultaAvulsa = page.locator('.breadcrumb').getByRole('link', { name: 'Consulta Avulsa' });
-  await expect(consultaAvulsa).toBeVisible();
-  await consultaAvulsa.click();
-  await expect(page.getByTestId('calendario')).toBeVisible({ timeout: 15000 });
-  await expect(page.locator('.breadcrumb')).toContainText('Agendar');
-  await expect(page.locator('.breadcrumb')).not.toContainText('Pagamento');
-
-  await page.getByRole('button', { name: 'Entendi' }).click();
-  await page.locator('.breadcrumb').getByRole('link', { name: 'Consulta Avulsa' }).click();
-  await page.getByText('Ortopedia', { exact: true }).first().click();
-  await expect(page.getByRole('button', { name: 'Escolher agora' })).toBeVisible();
-  await expect(page.locator('.breadcrumb')).toContainText('Adquirir');
+  const breadcrumb = page.locator('.breadcrumb');
+  await expect(breadcrumb.getByText('Consulta Avulsa')).toBeVisible();
+  await expect(breadcrumb.locator('a')).toHaveCount(0);
+  await breadcrumb.getByText('Consulta Avulsa').click();
+  await expect(page.getByRole('heading', { name: 'Escolha a forma de pagamento' })).toBeVisible();
+  await expect(breadcrumb).toContainText('Pagamento');
 });
 
 test('Escolher depois confirma sem orientações e cria o card pendente com ações', async ({ page }) => {
@@ -134,7 +128,7 @@ test('Escolher depois confirma sem orientações e cria o card pendente com aç�
   await page.getByRole('button', { name: 'Escolher depois, continuar para o pagamento' }).click();
 
   const regras = page.getByTestId('booking-rules-alert-avulsa');
-  await expect(page.getByRole('heading', { name: 'Escolha uma forma de pagamento' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Escolha a forma de pagamento', exact: true })).toBeVisible();
   await expect(page.locator('._payment-select-step')).toBeVisible();
   await expect(regras).toHaveCount(0);
   await expect(page.locator('.breadcrumb')).toContainText('Pagamento');
@@ -149,7 +143,7 @@ test('Escolher depois confirma sem orientações e cria o card pendente com aç�
   await expect(page.getByRole('button', { name: 'Agendar agora' })).toBeVisible();
 });
 
-test('A confirmação real do agendamento pago mostra o breadcrumb de confirmação', async ({ page }) => {
+test('A confirmação real do agendamento pago mostra breadcrumbs sem links', async ({ page }) => {
   await iniciarCompraAvulsa(page);
   await page.getByRole('button', { name: 'Escolher depois, continuar para o pagamento' }).click();
   await pagarComVisa(page);
@@ -166,20 +160,22 @@ test('A confirmação real do agendamento pago mostra o breadcrumb de confirmaç
   await expect(page.locator('.breadcrumb')).toContainText('Confirmação');
   await expect(page.locator('.breadcrumb')).not.toContainText('Agendar');
 
-  await page.locator('.breadcrumb').getByRole('link', { name: 'Consulta Avulsa' }).click();
-  await expect(page.getByTestId('calendario')).toBeVisible({ timeout: 15000 });
-  await expect(page.locator('.breadcrumb')).toContainText('Agendar');
+  await expect(page.locator('.breadcrumb a')).toHaveCount(0);
+  await page.locator('.breadcrumb').getByText('Consulta Avulsa').click();
+  await expect(page.getByText('Agendado com sucesso!')).toBeVisible();
+  await expect(page.locator('.breadcrumb')).toContainText('Confirmação');
 });
 
-test('A confirmação do pagamento retorna ao pagamento pelo breadcrumb Consulta Avulsa', async ({ page }) => {
+test('O breadcrumb da confirmação do pagamento não navega ao ser clicado', async ({ page }) => {
   await iniciarCompraAvulsa(page);
   await page.getByRole('button', { name: 'Escolher depois, continuar para o pagamento' }).click();
   await pagarComVisa(page);
   await expect(page.locator('.breadcrumb')).toContainText('Confirmação');
 
-  await page.locator('.breadcrumb').getByRole('link', { name: 'Consulta Avulsa' }).click();
-  await expect(page.getByRole('heading', { name: 'Escolha uma forma de pagamento' })).toBeVisible();
-  await expect(page.locator('.breadcrumb')).toContainText('Pagamento');
+  await expect(page.locator('.breadcrumb a')).toHaveCount(0);
+  await page.locator('.breadcrumb').getByText('Consulta Avulsa').click();
+  await expect(page.getByText('Recebemos seu pagamento!')).toBeVisible();
+  await expect(page.locator('.breadcrumb')).toContainText('Confirmação');
 });
 
 test('Agendar Agora após pagar retorna ao calendário e abre as regras novamente', async ({ page }) => {
@@ -233,7 +229,7 @@ test('A confirmação do Encaminhamento mostra Confirmação em vez de Agendar',
   await expect(page.locator('p.text-muted')).toHaveText(`Ortopedia — ${selectedDate} às ${selectedTime}`);
   await expect(page.locator('.breadcrumb')).toContainText('Confirmação');
   await expect(page.locator('.breadcrumb')).not.toContainText('Agendar');
-  const encaminhamentos = page.locator('.breadcrumb').getByRole('link', { name: 'Encaminhamentos' });
-  await expect(encaminhamentos).toHaveAttribute('href', '/encaminhamentos');
+  await expect(page.locator('.breadcrumb a')).toHaveCount(0);
+  await expect(page.locator('.breadcrumb').getByText('Encaminhamentos')).toHaveCSS('color', 'rgb(115, 103, 240)');
   await expect(page.locator('.breadcrumb svg')).toHaveAttribute('viewBox', '0 0 21 21');
 });

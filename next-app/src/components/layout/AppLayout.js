@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
-import Link from 'next/link';
 import MainMenu from './MainMenu';
 import Navbar from './Navbar';
 import MobileBottomNav from './MobileBottomNav';
@@ -264,19 +263,9 @@ export default function AppLayout({ children }) {
                         </li>
                         {routeCfg.breadcrumb.map((crumb, i) => (
                           <li key={i} className={`breadcrumb-item${crumb.active ? ' active' : ''}`}>
-                            {crumb.href ? (
-                              <Link
-                                href={crumb.href}
-                                onClick={event => {
-                                  const target = crumb.href.match(/^\/schedule\/calendar\?avulsaEtapa=(.+)$/)?.[1];
-                                  if (!target) return;
-                                  event.preventDefault();
-                                  window.dispatchEvent(new CustomEvent('avulsa-breadcrumb-navigate', { detail: target }));
-                                }}
-                              >
-                                {crumb.text}
-                              </Link>
-                            ) : crumb.text}
+                            <span style={crumb.href ? { color: 'var(--bs-link-color, #7367f0)' } : undefined}>
+                              {crumb.text}
+                            </span>
                           </li>
                         ))}
                       </ol>

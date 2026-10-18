@@ -13,7 +13,21 @@ test('Novo Agendamento mostra especialidades e só abre encaminhamentos após a 
   await expect(modal).toContainText('Selecionar Encaminhamento');
   await expect(modal).toContainText('Neurologia');
 
+  await page.mouse.click(1, 1);
+  await expect(modal).toBeVisible();
   await modal.getByText('Neurologia', { exact: true }).click();
+  const selectedReferral = modal.getByRole('button', { name: /Neurologia/ });
+  await expect(selectedReferral).toHaveClass(/snakeCard/);
+  await expect(selectedReferral.locator('[class*="snake_"]')).toHaveCount(4);
+  expect(await selectedReferral.evaluate(element => ({
+    overflow: getComputedStyle(element).overflow,
+    duration: getComputedStyle(element.querySelector('[class*="snake_"]')).animationDuration,
+    pointerEvents: getComputedStyle(element.querySelector('[class*="snake_"]')).pointerEvents,
+  }))).toEqual({ overflow: 'hidden', duration: '5s', pointerEvents: 'none' });
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await expect(selectedReferral.locator('[class*="snake_"]').first()).toHaveCSS('display', 'none');
+  await expect(selectedReferral.locator('[class*="snake_"]').first()).toHaveCSS('animation-name', 'none');
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
   await modal.getByRole('button', { name: 'Confirmar' }).click();
 
   await expect(page.getByTestId('calendario')).toBeVisible({ timeout: 15000 });
@@ -40,6 +54,19 @@ test('Sem encaminhamento para a especialidade, a modal oferece consulta avulsa',
 
   const modal = page.getByRole('dialog');
   await expect(modal).toContainText('Você não possui encaminhamentos disponíveis.');
+  const textOrder = await modal.evaluate(dialog => {
+    const paragraphs = [...dialog.querySelectorAll('p')];
+    const message = paragraphs.find(element => element.textContent.trim() === 'Você não possui encaminhamentos disponíveis.');
+    const guidance = paragraphs.find(element => element.textContent.trim() === 'Solicite um encaminhamento médico para agendar esta especialidade, ou:');
+    return Boolean(
+      paragraphs[0].textContent.includes('A especialidade do encaminhamento será encontrada automaticamente:') &&
+      (paragraphs[0].compareDocumentPosition(message) & Node.DOCUMENT_POSITION_FOLLOWING) &&
+      (message.compareDocumentPosition(guidance) & Node.DOCUMENT_POSITION_FOLLOWING)
+    );
+  });
+  expect(textOrder).toBe(true);
+  await page.mouse.click(1, 1);
+  await expect(modal).toBeVisible();
   await modal.getByRole('button', { name: 'Adquirir consulta avulsa' }).click();
 
   await expect(page.getByText('Nossas especialidades', { exact: true })).toBeVisible();

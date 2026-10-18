@@ -19,15 +19,7 @@ const TEXTOS = {
     titulo: 'Importante!',
     paragrafos: [
       'Nesta modalidade, as consultas podem ser reagendadas ou canceladas até 48 horas antes do horário agendado, sem perder o Encaminhamento.',
-      'Se optar por um horário dentro das próximas 48 horas, a consulta já estará fora do prazo de reagendamento e, por isso, não será possível reagendar. Para escolher outra data ou horário sem custo, será necessário passar pelo Plantão 24h e obter um novo Encaminhamento, caso ainda haja indicação médica.',
       'Se cancelar fora do prazo ou não comparecer ao atendimento, a consulta será considerada utilizada.',
-    ],
-    negritos: [
-      'consultas',
-      'reagendadas ou canceladas até 48 horas antes do horário agendado, sem perder o Encaminhamento.',
-      '48 horas, a consulta já estará fora do prazo de reagendamento e, por isso, não será possível reagendar.',
-      'obter um novo Encaminhamento, caso ainda haja indicação médica.',
-      'fora do prazo', 'a consulta será considerada utilizada.',
     ],
   },
   avulsa: {
@@ -36,14 +28,7 @@ const TEXTOS = {
     titulo: 'Importante!',
     paragrafos: [
       'As Consultas Avulsas podem ser reagendadas ou canceladas até 48 horas antes do horário agendado, sem perder a consulta adquirida.',
-      'Se optar por um horário dentro das próximas 48 horas, a consulta já estará fora do prazo de reagendamento e, por isso, não será possível reagendar.',
       'Se cancelar fora do prazo ou não comparecer ao atendimento, a consulta será considerada utilizada.',
-    ],
-    negritos: [
-      'Consultas Avulsas',
-      'reagendadas ou canceladas até 48 horas antes do horário agendado, sem perder a consulta adquirida.',
-      '48 horas, a consulta já estará fora do prazo de reagendamento e, por isso, não será possível reagendar.',
-      'fora do prazo', 'a consulta será considerada utilizada.',
     ],
   },
 };
@@ -81,7 +66,7 @@ for (const [origem, dados] of Object.entries(TEXTOS)) {
       const emNegrito = await page.getByTestId(dados.testid).locator('strong').allInnerTexts();
       const normalizado = emNegrito.map(limpo);
 
-      for (const trecho of dados.negritos) {
+      for (const trecho of dados.negritos || []) {
         expect(normalizado, 'negrito ausente ou partido: ' + trecho).toContain(trecho);
       }
     });
@@ -93,9 +78,8 @@ for (const [origem, dados] of Object.entries(TEXTOS)) {
       );
 
       expect(paragrafos).toEqual([
-        ['consultas', 'reagendadas ou canceladas até 48 horas antes do horário agendado, sem perder o Encaminhamento.'],
-        ['48 horas, a consulta já estará fora do prazo de reagendamento e, por isso, não será possível reagendar.', 'obter um novo Encaminhamento, caso ainda haja indicação médica.'],
-        ['fora do prazo', 'a consulta será considerada utilizada.'],
+        [],
+        [],
         ['Recomendação:', 'realmente tenha disponibilidade', '48 horas'],
       ]);
     });
@@ -120,9 +104,11 @@ for (const [origem, dados] of Object.entries(TEXTOS)) {
       await expect(page.getByTestId(dados.testid)).toHaveCount(0);
     });
 
-    test('M8 — Esc também fecha', async ({ page }) => {
+    test('M8 — somente "Entendi" fecha, inclusive sem clique fora ou Escape', async ({ page }) => {
+      await page.mouse.click(1, 1);
+      await expect(page.getByTestId(dados.testid)).toBeVisible();
       await page.keyboard.press('Escape');
-      await expect(page.getByTestId(dados.testid)).toHaveCount(0);
+      await expect(page.getByTestId(dados.testid)).toBeVisible();
     });
 
     test('M6 — o fundo fica desfocado, como nas outras modais', async ({ page }) => {
@@ -168,7 +154,7 @@ test('M2 — o aviso fica centralizado com recuo e scroll interno em alturas red
     expect(medidas.topo).toBeGreaterThanOrEqual(32);
     expect(medidas.fundo).toBeGreaterThanOrEqual(32);
     expect(Math.abs(medidas.centro - medidas.centroViewport), JSON.stringify({ viewport, medidas })).toBeLessThanOrEqual(1);
-    expect(medidas.temScrollInterno, JSON.stringify({ viewport, medidas })).toBe(viewport.height < 900);
+    expect(medidas.temScrollInterno, JSON.stringify({ viewport, medidas })).toBe(viewport.height < 400);
 
     if (medidas.temScrollInterno) {
       const botao = page.getByRole('button', { name: 'Entendi' });
