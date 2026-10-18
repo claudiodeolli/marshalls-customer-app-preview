@@ -55,7 +55,7 @@ export default function ReferralModal({ open, loadingReferrals, pendingReferrals
             </div>
           ) : pendingReferrals.length === 0 ? (
             <div className="_referral-empty-state" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, textAlign: 'center' }}>
-              <div style={{ padding: '12px 14px', border: '1px solid #e0e0e0', borderRadius: 8 }}>
+              <div style={{ padding: '12px 14px', border: '1px solid #e0e0e0', borderRadius: 8, width: '100%', boxSizing: 'border-box' }}>
                 <p style={{ color: '#666', fontSize: 14, margin: 0 }}>
                   Você não possui encaminhamentos disponíveis.
                 </p>
