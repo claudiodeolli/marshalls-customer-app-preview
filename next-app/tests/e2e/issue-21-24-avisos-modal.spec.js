@@ -71,17 +71,22 @@ for (const [origem, dados] of Object.entries(TEXTOS)) {
       }
     });
 
-    test('T2 — os negritos de Encaminhamento seguem os trechos exatos do PDF', async ({ page }) => {
-      test.skip(origem !== 'referral');
+    test('T2 — os negritos seguem os trechos exatos do PDF', async ({ page }) => {
       const paragrafos = await page.getByTestId(dados.testid).locator('p').evaluateAll(
         elementos => elementos.map(paragrafo => [...paragrafo.querySelectorAll('strong')].map(trecho => trecho.textContent)),
       );
 
-      expect(paragrafos).toEqual([
-        [],
-        [],
-        ['Recomendação:', 'realmente tenha disponibilidade', '48 horas'],
-      ]);
+      expect(paragrafos).toEqual(origem === 'referral'
+        ? [
+          ['consultas', 'reagendadas ou', 'canceladas até 48 horas', 'antes do horário agendado, sem perder o Encaminhamento.'],
+          ['fora do prazo', 'a consulta será considerada utilizada.'],
+          ['Recomendação:', 'realmente tenha disponibilidade', '48 horas'],
+        ]
+        : [
+          ['Consultas Avulsas', 'reagendadas ou canceladas até 48 horas antes do', 'horário agendado, sem perder a consulta adquirida.'],
+          ['fora do prazo', 'a consulta será considerada utilizada.'],
+          ['Recomendação:', 'realmente tenha disponibilidade', '48 horas'],
+        ]);
     });
 
     test('M2/M4 — o aviso abre como modal, com o botão "Entendi"', async ({ page }) => {

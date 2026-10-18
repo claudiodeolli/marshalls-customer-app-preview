@@ -42,7 +42,7 @@ export default function ReferralModal({ open, loadingReferrals, pendingReferrals
         </div>
 
         <div style={{ padding: '16px 20px', overflowY: 'auto', flex: 1 }}>
-          <p style={{ fontSize: 14, color: '#666', marginBottom: 16 }}>
+          <p style={{ fontSize: 14, color: '#666', marginBottom: 12 }}>
             Selecione um encaminhamento médico.
             <br /><br />
             A especialidade do encaminhamento será encontrada automaticamente:
@@ -54,13 +54,13 @@ export default function ReferralModal({ open, loadingReferrals, pendingReferrals
               <div className="spinner-border" style={{ color: '#4daab6', width: '35px', height: '35px' }} />
             </div>
           ) : pendingReferrals.length === 0 ? (
-            <div className="_referral-empty-state" style={{ textAlign: 'center', padding: '28px 0' }}>
-              <div style={{ padding: '12px 14px', border: '1px solid #e0e0e0', borderRadius: 8, marginBottom: 8 }}>
+            <div className="_referral-empty-state" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, textAlign: 'center' }}>
+              <div style={{ padding: '12px 14px', border: '1px solid #e0e0e0', borderRadius: 8 }}>
                 <p style={{ color: '#666', fontSize: 14, margin: 0 }}>
                   Você não possui encaminhamentos disponíveis.
                 </p>
               </div>
-              <p style={{ color: '#666', fontSize: 14, marginBottom: 21 }}>
+              <p style={{ color: '#666', fontSize: 14, margin: 0 }}>
                 Solicite um encaminhamento médico para agendar esta especialidade, ou:
               </p>
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>

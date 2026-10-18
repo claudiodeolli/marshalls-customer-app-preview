@@ -14,15 +14,15 @@ const CONTENT = {
   referral: {
     title: 'Importante!',
     paragraphs: [
-      'Nesta modalidade, as consultas podem ser reagendadas ou canceladas até 48 horas antes do horário agendado, sem perder o Encaminhamento.',
-      'Se cancelar fora do prazo ou não comparecer ao atendimento, a consulta será considerada utilizada.',
+      'Nesta modalidade, as **consultas** podem ser **reagendadas ou** **canceladas até 48 horas** **antes do horário agendado, sem perder o Encaminhamento.**',
+      'Se cancelar **fora do prazo** ou não comparecer ao atendimento, **a consulta será considerada utilizada.**',
     ],
   },
   avulsa: {
     title: 'Importante!',
     paragraphs: [
-      'As Consultas Avulsas podem ser reagendadas ou canceladas até 48 horas antes do horário agendado, sem perder a consulta adquirida.',
-      'Se cancelar fora do prazo ou não comparecer ao atendimento, a consulta será considerada utilizada.',
+      'As **Consultas Avulsas** podem ser **reagendadas ou canceladas até 48 horas antes do** **horário agendado, sem perder a consulta adquirida.**',
+      'Se cancelar **fora do prazo** ou não comparecer ao atendimento, **a consulta será considerada utilizada.**',
     ],
   },
 };
