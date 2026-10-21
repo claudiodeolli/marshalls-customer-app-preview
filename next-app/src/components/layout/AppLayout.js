@@ -263,7 +263,7 @@ export default function AppLayout({ children }) {
                         </li>
                         {routeCfg.breadcrumb.map((crumb, i) => (
                           <li key={i} className={`breadcrumb-item${crumb.active ? ' active' : ''}`}>
-                            <span style={crumb.href ? { color: 'var(--bs-link-color, #7367f0)' } : undefined}>
+                            <span style={crumb.href ? { color: '#0052ff' } : undefined}>
                               {crumb.text}
                             </span>
                           </li>

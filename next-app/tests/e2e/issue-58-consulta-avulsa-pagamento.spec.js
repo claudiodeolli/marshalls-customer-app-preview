@@ -230,6 +230,6 @@ test('A confirmação do Encaminhamento mostra Confirmação em vez de Agendar',
   await expect(page.locator('.breadcrumb')).toContainText('Confirmação');
   await expect(page.locator('.breadcrumb')).not.toContainText('Agendar');
   await expect(page.locator('.breadcrumb a')).toHaveCount(0);
-  await expect(page.locator('.breadcrumb').getByText('Encaminhamentos')).toHaveCSS('color', 'rgb(115, 103, 240)');
+  await expect(page.locator('.breadcrumb').getByText('Encaminhamentos')).toHaveCSS('color', 'rgb(0, 82, 255)');
   await expect(page.locator('.breadcrumb svg')).toHaveAttribute('viewBox', '0 0 21 21');
 });

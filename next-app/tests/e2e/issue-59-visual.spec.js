@@ -98,8 +98,8 @@ for (const viewport of [{ width: 390, height: 844 }, { width: 1440, height: 900 
     await expect(noReferralMessage).toHaveCSS('font-size', '14px');
     await expect(referralGuidance).toHaveCSS('font-size', '14px');
     expect(await referralGuidance.evaluate(element => element.parentElement === document.querySelector('._referral-empty-state'))).toBe(true);
-    await expect(noReferralState).toHaveCSS('padding-top', '28px');
-    await expect(noReferralState).toHaveCSS('padding-bottom', '28px');
+    await expect(noReferralState).toHaveCSS('padding-top', '0px');
+    await expect(noReferralState).toHaveCSS('padding-bottom', '0px');
     await noReferralState.getByRole('button', { name: 'Adquirir consulta avulsa' }).click();
     await page.getByText('Ortopedia', { exact: true }).first().click();
     await page.getByRole('button', { name: 'Escolher depois, continuar para o pagamento' }).click();
@@ -142,7 +142,7 @@ for (const viewport of [{ width: 390, height: 844 }, { width: 1440, height: 900 
         icon: ['40px', '40px'],
         svg: ['22px', '22px'],
         actions: [['12.6px', '500'], ['12.6px', '500']],
-        iconBackgrounds: Array(3).fill('rgb(227, 242, 252)'),
+        iconBackgrounds: Array(3).fill('rgb(243, 242, 247)'),
         cardBackgrounds: Array(3).fill('rgb(255, 255, 255)'),
         summaryBackground: 'rgb(255, 255, 255)',
       });
@@ -157,7 +157,7 @@ for (const viewport of [{ width: 390, height: 844 }, { width: 1440, height: 900 
         icon: ['44px', '44px'],
         svg: ['22px', '22px'],
         actions: [['14px', '600'], ['14px', '600']],
-        iconBackgrounds: Array(3).fill('rgb(227, 242, 252)'),
+        iconBackgrounds: Array(3).fill('rgb(243, 242, 247)'),
         cardBackgrounds: Array(3).fill('rgb(255, 255, 255)'),
         summaryBackground: 'rgb(255, 255, 255)',
       });

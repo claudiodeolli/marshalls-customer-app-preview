@@ -19,6 +19,13 @@ test('Novo Agendamento mostra especialidades e só abre encaminhamentos após a 
   const selectedReferral = modal.getByRole('button', { name: /Neurologia/ });
   await expect(selectedReferral).toHaveClass(/snakeCard/);
   await expect(selectedReferral.locator('[class*="snake_"]')).toHaveCount(4);
+  await expect(selectedReferral.locator('[class*="top_"]')).toHaveCSS('height', '2.5px');
+  await expect(selectedReferral.locator('[class*="right_"]')).toHaveCSS('width', '3px');
+  await expect(selectedReferral.locator('[class*="bottom_"]')).toHaveCSS('height', '2.5px');
+  await expect(selectedReferral.locator('[class*="left_"]')).toHaveCSS('width', '3px');
+  const referralList = modal.locator('div[style*="max-height: 300px"]');
+  await expect(referralList).toHaveCSS('padding-top', '10px');
+  await expect(referralList).toHaveCSS('padding-bottom', '10px');
   expect(await selectedReferral.evaluate(element => ({
     overflow: getComputedStyle(element).overflow,
     duration: getComputedStyle(element.querySelector('[class*="snake_"]')).animationDuration,

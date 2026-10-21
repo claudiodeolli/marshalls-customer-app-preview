@@ -17,7 +17,7 @@
 }
 
 .top {
-  height: 1.5px;
+  height: 2.5px;
   width: 350px;
   top: 0;
   left: -350px;
@@ -26,7 +26,7 @@
 }
 
 .right {
-  width: 2px;
+  width: 3px;
   height: 80px;
   top: -80px;
   right: 0;
@@ -35,7 +35,7 @@
 }
 
 .bottom {
-  height: 1.5px;
+  height: 2.5px;
   width: 350px;
   bottom: 0;
   right: -350px;
@@ -44,7 +44,7 @@
 }
 
 .left {
-  width: 2px;
+  width: 3px;
   height: 80px;
   bottom: -80px;
   left: 0;

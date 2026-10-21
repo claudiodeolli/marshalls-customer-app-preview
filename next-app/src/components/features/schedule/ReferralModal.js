@@ -41,7 +41,7 @@ export default function ReferralModal({ open, loadingReferrals, pendingReferrals
           </button>
         </div>
 
-        <div style={{ padding: '16px 20px', overflowY: 'auto', flex: 1 }}>
+        <div style={{ padding: '16px 20px', overflowY: 'auto', flex: 1, display: 'flex', flexDirection: 'column' }}>
           <p style={{ fontSize: 14, color: '#666', marginBottom: 12 }}>
             Selecione um encaminhamento médico.
             <br /><br />
@@ -77,7 +77,7 @@ export default function ReferralModal({ open, loadingReferrals, pendingReferrals
               </div>
             </div>
           ) : (
-            <div style={{ maxHeight: 300, overflowY: 'auto', marginBottom: 16 }}>
+            <div style={{ maxHeight: 300, overflowY: 'auto', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '10px 0' }}>
               {pendingReferrals.map(ref => {
                 const isSelected = referralId === ref.uuid;
                 // Com um único encaminhamento, ele é o match automático; com vários, usa-se o selecionado.

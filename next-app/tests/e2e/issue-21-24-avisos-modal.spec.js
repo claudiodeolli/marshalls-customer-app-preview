@@ -92,7 +92,7 @@ for (const [origem, dados] of Object.entries(TEXTOS)) {
     test('M2/M4 — o aviso abre como modal, com o botão "Entendi"', async ({ page }) => {
       const alerta = page.getByTestId(dados.testid);
       await expect(alerta).toContainText(dados.titulo);
-      await expect(alerta.locator('p').first()).toHaveCSS('text-align', 'justify');
+      await expect(alerta.locator('p').first()).toHaveCSS('text-align', 'left');
 
       // Overlay fixo por cima da página, não um bloco no meio do conteúdo.
       const posicao = await alerta.evaluate(el => {
