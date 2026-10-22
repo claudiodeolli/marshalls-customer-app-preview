@@ -24,8 +24,8 @@ test('Novo Agendamento mostra especialidades e só abre encaminhamentos após a 
   await expect(selectedReferral.locator('[class*="bottom_"]')).toHaveCSS('height', '2.5px');
   await expect(selectedReferral.locator('[class*="left_"]')).toHaveCSS('width', '3px');
   const referralList = modal.locator('div[style*="max-height: 300px"]');
-  await expect(referralList).toHaveCSS('padding-top', '10px');
-  await expect(referralList).toHaveCSS('padding-bottom', '10px');
+  await expect(referralList).toHaveCSS('padding-top', '18px');
+  await expect(referralList).toHaveCSS('padding-bottom', '18px');
   expect(await selectedReferral.evaluate(element => ({
     overflow: getComputedStyle(element).overflow,
     duration: getComputedStyle(element.querySelector('[class*="snake_"]')).animationDuration,

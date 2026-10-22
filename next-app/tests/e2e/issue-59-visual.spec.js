@@ -98,8 +98,8 @@ for (const viewport of [{ width: 390, height: 844 }, { width: 1440, height: 900 
     await expect(noReferralMessage).toHaveCSS('font-size', '14px');
     await expect(referralGuidance).toHaveCSS('font-size', '14px');
     expect(await referralGuidance.evaluate(element => element.parentElement === document.querySelector('._referral-empty-state'))).toBe(true);
-    await expect(noReferralState).toHaveCSS('padding-top', '0px');
-    await expect(noReferralState).toHaveCSS('padding-bottom', '0px');
+    await expect(noReferralState).toHaveCSS('padding-top', '18px');
+    await expect(noReferralState).toHaveCSS('padding-bottom', '18px');
     await noReferralState.getByRole('button', { name: 'Adquirir consulta avulsa' }).click();
     await page.getByText('Ortopedia', { exact: true }).first().click();
     await page.getByRole('button', { name: 'Escolher depois, continuar para o pagamento' }).click();

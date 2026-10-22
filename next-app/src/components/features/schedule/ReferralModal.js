@@ -23,7 +23,7 @@ export default function ReferralModal({ open, loadingReferrals, pendingReferrals
         }}
         onClick={e => e.stopPropagation()}
       >
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 20px', borderBottom: '1px solid #eee' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '22px 20px', borderBottom: '1px solid #eee' }}>
           <h6 id="referral-modal-title" style={{ margin: 0, fontWeight: 700, fontSize: 16, color: '#333' }}>
             Selecionar Encaminhamento
           </h6>
@@ -54,7 +54,7 @@ export default function ReferralModal({ open, loadingReferrals, pendingReferrals
               <div className="spinner-border" style={{ color: '#4daab6', width: '35px', height: '35px' }} />
             </div>
           ) : pendingReferrals.length === 0 ? (
-            <div className="_referral-empty-state" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, textAlign: 'center' }}>
+            <div className="_referral-empty-state" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, padding: '18px 0', textAlign: 'center' }}>
               <div style={{ padding: '12px 14px', border: '1px solid #e0e0e0', borderRadius: 8, width: '100%', boxSizing: 'border-box' }}>
                 <p style={{ color: '#666', fontSize: 14, margin: 0 }}>
                   Você não possui encaminhamentos disponíveis.
@@ -77,7 +77,7 @@ export default function ReferralModal({ open, loadingReferrals, pendingReferrals
               </div>
             </div>
           ) : (
-            <div style={{ maxHeight: 300, overflowY: 'auto', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '10px 0' }}>
+            <div style={{ maxHeight: 300, overflowY: 'auto', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '18px 0' }}>
               {pendingReferrals.map(ref => {
                 const isSelected = referralId === ref.uuid;
                 // Com um único encaminhamento, ele é o match automático; com vários, usa-se o selecionado.
@@ -128,7 +128,7 @@ export default function ReferralModal({ open, loadingReferrals, pendingReferrals
         </div>
 
         {!loadingReferrals && pendingReferrals.length > 0 && (
-          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 12, padding: '12px 20px', borderTop: '1px solid #eee' }}>
+          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 12, padding: '20px 20px', borderTop: '1px solid #eee' }}>
             <button
               onClick={onClose}
               style={{
