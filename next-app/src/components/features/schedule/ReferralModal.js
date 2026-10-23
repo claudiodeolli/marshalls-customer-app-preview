@@ -17,8 +17,9 @@ export default function ReferralModal({ open, loadingReferrals, pendingReferrals
       <div
         className="_modal-enter"
         style={{
-          background: '#fff', borderRadius: 8, width: '100%', maxWidth: 500,
-          maxHeight: '80vh', display: 'flex', flexDirection: 'column',
+          background: '#fff', borderRadius: 24, width: '100%', maxWidth: 500,
+          height: 'min(80dvh, 520px)', maxHeight: 'calc(100dvh - 32px)',
+          display: 'flex', flexDirection: 'column',
           boxShadow: '0 8px 32px rgba(0,0,0,0.18)', overflow: 'hidden',
         }}
         onClick={e => e.stopPropagation()}
@@ -32,16 +33,16 @@ export default function ReferralModal({ open, loadingReferrals, pendingReferrals
             autoFocus
             aria-label="Fechar seleção de encaminhamento"
             onClick={onClose}
-            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px', lineHeight: 1, color: '#5e5873' }}
+            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '10px', lineHeight: 1, color: '#5e5873' }}
           >
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
               <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
             </svg>
           </button>
         </div>
 
-        <div style={{ padding: '16px 20px', overflowY: 'auto', flex: 1, display: 'flex', flexDirection: 'column' }}>
+        <div style={{ padding: '16px 20px', overflowY: 'auto', flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column' }}>
           <p style={{ fontSize: 14, color: '#666', marginBottom: 12 }}>
             Selecione um encaminhamento médico.
             <br /><br />
@@ -54,7 +55,7 @@ export default function ReferralModal({ open, loadingReferrals, pendingReferrals
               <div className="spinner-border" style={{ color: '#4daab6', width: '35px', height: '35px' }} />
             </div>
           ) : pendingReferrals.length === 0 ? (
-            <div className="_referral-empty-state" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, padding: '18px 0', textAlign: 'center' }}>
+            <div className="_referral-empty-state" style={{ display: 'flex', flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 12, padding: '18px 0', textAlign: 'center' }}>
               <div style={{ padding: '12px 14px', border: '1px solid #e0e0e0', borderRadius: 8, width: '100%', boxSizing: 'border-box' }}>
                 <p style={{ color: '#666', fontSize: 14, margin: 0 }}>
                   Você não possui encaminhamentos disponíveis.

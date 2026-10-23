@@ -78,7 +78,11 @@ export default function BookingRulesAlert({ origin, requireAcknowledgement = fal
       aria-modal="true"
       aria-labelledby={`booking-rules-title-${origin}`}
     >
-      <div className="card" style={{ ...MODAL_CARD, margin: 0, maxHeight: 'calc(100dvh - 64px)', overflowY: 'auto', background: '#fff8e1', border: '1px solid #ffe082' }}>
+      <div
+        ref={card => card?.style.setProperty('border-radius', '24px', 'important')}
+        className="card"
+        style={{ ...MODAL_CARD, margin: 0, borderRadius: '24px', maxHeight: 'calc(100dvh - 64px)', overflowY: 'auto', background: '#fff8e1', border: '1px solid #ffe082' }}
+      >
         {/* O testid fica no corpo, e não no card: é este o elemento que
             carrega o padding contra o qual a issue #7 mede o recuo. */}
         <div data-testid={`booking-rules-alert-${origin}`} style={{ ...MODAL_BODY, color: '#7a5c00', textAlign: 'left' }}>
