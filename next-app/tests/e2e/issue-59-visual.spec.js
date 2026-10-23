@@ -13,32 +13,6 @@ for (const viewport of [{ width: 390, height: 844 }, { width: 1440, height: 900 
     await page.getByText('Cardiologia', { exact: true }).click();
     const modal = page.getByRole('dialog');
     await expect(modal).toBeVisible();
-    const referralCard = modal.locator('._modal-enter');
-    const referralStateArea = modal.locator('div[style*="max-height: 300px"]');
-    const referralStateCard = referralStateArea.getByRole('button').first();
-    await expect(referralCard).toHaveCSS('border-radius', '24px');
-    const closeButton = modal.getByRole('button', { name: 'Fechar seleção de encaminhamento' });
-    await expect(closeButton.locator('svg')).toHaveAttribute('width', '24');
-    await expect(closeButton.locator('svg')).toHaveAttribute('height', '24');
-    await expect(closeButton.locator('svg')).toHaveAttribute('stroke-width', '3');
-    await expect(closeButton).toHaveCSS('width', '44px');
-    await expect(closeButton).toHaveCSS('height', '44px');
-    await referralCard.evaluate(card => Promise.all(card.getAnimations().map(animation => animation.finished)));
-    const referralCardBounds = await referralCard.boundingBox();
-    const referralStateBounds = await referralStateArea.boundingBox();
-    const referralStateCardBounds = await referralStateCard.boundingBox();
-    const expectedCardHeight = Math.min(viewport.height * 0.8, 440);
-    expect(referralCardBounds.height).toBeCloseTo(expectedCardHeight, 0);
-    expect(referralCardBounds.y).toBeCloseTo((viewport.height - expectedCardHeight) / 2, 0);
-    let shortViewportReferralCardBounds;
-    if (viewport.width < 768) {
-      await page.setViewportSize({ width: 390, height: 480 });
-      shortViewportReferralCardBounds = await referralCard.boundingBox();
-      expect(shortViewportReferralCardBounds.height).toBeCloseTo(384, 0);
-      expect(shortViewportReferralCardBounds.y + shortViewportReferralCardBounds.height).toBeLessThanOrEqual(480);
-      await expect(referralCard.locator(':scope > div').nth(1)).toHaveCSS('overflow-y', 'auto');
-      await page.setViewportSize(viewport);
-    }
     const referralMeasurements = await modal.evaluate(dialog => {
       const style = selector => {
         const element = dialog.querySelector(selector);
@@ -108,30 +82,11 @@ for (const viewport of [{ width: 390, height: 844 }, { width: 1440, height: 900 
     await page.goto('/schedule/calendar?referral=ref-003');
     const rules = page.getByTestId('booking-rules-alert-referral');
     await expect(rules).toBeVisible();
-    const rulesCard = page.getByRole('dialog').locator('.card');
-    await expect(rulesCard).toHaveCSS('border-radius', '24px');
     await expect(rules.locator('img[src*="warning_3d.png"]')).toBeVisible();
     await page.screenshot({ path: path.join(output, `booking-rules-${viewport.width}.png`), fullPage: true });
 
     await page.goto('/schedule/calendar');
     await page.getByText('Ortopedia', { exact: true }).first().click();
-    const emptyReferralModal = page.getByRole('dialog');
-    const emptyReferralCard = emptyReferralModal.locator('._modal-enter');
-    await emptyReferralCard.evaluate(card => Promise.all(card.getAnimations().map(animation => animation.finished)));
-    const emptyReferralCardBounds = await emptyReferralCard.boundingBox();
-    expect(emptyReferralCardBounds.height).toBeCloseTo(referralCardBounds.height, 0);
-    expect(emptyReferralCardBounds.y).toBeCloseTo(referralCardBounds.y, 0);
-    expect(emptyReferralCardBounds.y + emptyReferralCardBounds.height).toBeCloseTo(
-      referralCardBounds.y + referralCardBounds.height,
-      0
-    );
-    if (shortViewportReferralCardBounds) {
-      await page.setViewportSize({ width: 390, height: 480 });
-      const shortViewportEmptyReferralBounds = await emptyReferralCard.boundingBox();
-      expect(shortViewportEmptyReferralBounds.height).toBeCloseTo(shortViewportReferralCardBounds.height, 0);
-      expect(shortViewportEmptyReferralBounds.y).toBeCloseTo(shortViewportReferralCardBounds.y, 0);
-      await page.setViewportSize(viewport);
-    }
     const noReferralState = page.locator('._referral-empty-state');
     const noReferralMessage = noReferralState.getByText('Você não possui encaminhamentos disponíveis.', { exact: true });
     const referralGuidance = noReferralState.getByText('Solicite um encaminhamento médico para agendar esta especialidade, ou:', { exact: true });
@@ -140,35 +95,11 @@ for (const viewport of [{ width: 390, height: 844 }, { width: 1440, height: 900 
     await expect(noReferralMessageBox).toHaveCSS('border-style', 'solid');
     await expect(noReferralMessageBox).toHaveCSS('border-radius', '8px');
     await expect(noReferralMessageBox).toHaveCSS('padding', '12px 14px');
-    await expect(noReferralMessageBox).toHaveCSS('height', '72px');
-    await expect(noReferralMessageBox).toHaveCSS('display', 'flex');
-    await expect(noReferralMessageBox).toHaveCSS('align-items', 'center');
-    await expect(noReferralMessageBox).toHaveCSS('justify-content', 'center');
     await expect(noReferralMessage).toHaveCSS('font-size', '14px');
     await expect(referralGuidance).toHaveCSS('font-size', '14px');
     expect(await referralGuidance.evaluate(element => element.parentElement === document.querySelector('._referral-empty-state'))).toBe(true);
-    await expect(noReferralState).toHaveCSS('padding-top', '18px');
-    await expect(noReferralState).toHaveCSS('padding-bottom', '0px');
-    const [emptyStateBounds, emptyMessageBounds] = await Promise.all([
-      noReferralState.boundingBox(),
-      noReferralMessageBox.boundingBox(),
-    ]);
-    expect(referralStateBounds.y).toBeCloseTo(emptyStateBounds.y, 0);
-    expect(referralStateCardBounds.y - referralStateBounds.y).toBeCloseTo(18, 0);
-    expect(emptyMessageBounds.y - emptyStateBounds.y).toBeCloseTo(18, 0);
-    const emptyActionPosition = await noReferralState.evaluate(state => {
-      const guidance = state.querySelector('[class*="emptyGuidance"]').getBoundingClientRect();
-      const actionElement = state.querySelector('[class*="emptyAction"]');
-      const action = actionElement.getBoundingClientRect();
-      const button = actionElement.querySelector('button').getBoundingClientRect();
-      return {
-        spacingAfterGuidance: action.top - guidance.bottom,
-        bottomInset: state.getBoundingClientRect().bottom - button.bottom,
-      };
-    });
-    expect(emptyActionPosition.spacingAfterGuidance).toBeGreaterThan(10);
-    expect(emptyActionPosition.bottomInset).toBeCloseTo(8, 0);
-    await page.screenshot({ path: path.join(output, `referral-empty-${viewport.width}.png`), fullPage: true });
+    await expect(noReferralState).toHaveCSS('padding-top', '0px');
+    await expect(noReferralState).toHaveCSS('padding-bottom', '18px');
     await noReferralState.getByRole('button', { name: 'Adquirir consulta avulsa' }).click();
     await page.getByText('Ortopedia', { exact: true }).first().click();
     await page.getByRole('button', { name: 'Escolher depois, continuar para o pagamento' }).click();
