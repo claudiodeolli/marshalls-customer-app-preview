@@ -18,19 +18,20 @@ export default function ReferralModal({ open, loadingReferrals, pendingReferrals
         className="_modal-enter"
         style={{
           background: '#fff', borderRadius: 24, width: '100%', maxWidth: 500,
-          height: 'min(80dvh, 520px)', maxHeight: 'calc(100dvh - 32px)',
+          height: 'min(80dvh, 440px)', maxHeight: 'calc(100dvh - 32px)',
           display: 'flex', flexDirection: 'column',
           boxShadow: '0 8px 32px rgba(0,0,0,0.18)', overflow: 'hidden',
         }}
         onClick={e => e.stopPropagation()}
       >
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '22px 20px', borderBottom: '1px solid #eee' }}>
+        <div className={styles.header}>
           <h6 id="referral-modal-title" style={{ margin: 0, fontWeight: 700, fontSize: 16, color: '#333' }}>
             Selecionar Encaminhamento
           </h6>
           <button
             type="button"
             autoFocus
+            className={styles.closeButton}
             aria-label="Fechar seleção de encaminhamento"
             onClick={onClose}
             style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '10px', lineHeight: 1, color: '#5e5873' }}
@@ -42,8 +43,8 @@ export default function ReferralModal({ open, loadingReferrals, pendingReferrals
           </button>
         </div>
 
-        <div style={{ padding: '16px 20px', overflowY: 'auto', flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column' }}>
-          <p style={{ fontSize: 14, color: '#666', marginBottom: 12 }}>
+        <div className={styles.body}>
+          <p style={{ fontSize: 14, lineHeight: 1.5, color: '#666', margin: '0 0 12px' }}>
             Selecione um encaminhamento médico.
             <br /><br />
             A especialidade do encaminhamento será encontrada automaticamente:
@@ -55,16 +56,16 @@ export default function ReferralModal({ open, loadingReferrals, pendingReferrals
               <div className="spinner-border" style={{ color: '#4daab6', width: '35px', height: '35px' }} />
             </div>
           ) : pendingReferrals.length === 0 ? (
-            <div className="_referral-empty-state" style={{ display: 'flex', flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 12, padding: '18px 0', textAlign: 'center' }}>
-              <div style={{ padding: '12px 14px', border: '1px solid #e0e0e0', borderRadius: 8, width: '100%', boxSizing: 'border-box' }}>
+            <div className={`_referral-empty-state ${styles.stateArea} ${styles.emptyState}`}>
+              <div className={styles.emptyMessage}>
                 <p style={{ color: '#666', fontSize: 14, margin: 0 }}>
                   Você não possui encaminhamentos disponíveis.
                 </p>
               </div>
-              <p style={{ color: '#666', fontSize: 14, margin: 0 }}>
+              <p className={styles.emptyGuidance} style={{ color: '#666', fontSize: 14, margin: 0 }}>
                 Solicite um encaminhamento médico para agendar esta especialidade, ou:
               </p>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
+              <div className={styles.emptyAction}>
                 <button
                   onClick={onAvulsa}
                   style={{
@@ -78,7 +79,7 @@ export default function ReferralModal({ open, loadingReferrals, pendingReferrals
               </div>
             </div>
           ) : (
-            <div style={{ maxHeight: 300, overflowY: 'auto', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '18px 0' }}>
+            <div className={styles.stateArea} style={{ maxHeight: 300 }}>
               {pendingReferrals.map(ref => {
                 const isSelected = referralId === ref.uuid;
                 // Com um único encaminhamento, ele é o match automático; com vários, usa-se o selecionado.
@@ -102,7 +103,7 @@ export default function ReferralModal({ open, loadingReferrals, pendingReferrals
                       border: `1px solid ${isSelected ? '#4daab6' : '#e0e0e0'}`,
                       borderRadius: 8, marginBottom: 8, cursor: 'pointer',
                       background: isSelected ? '#f0f9ff' : 'transparent',
-                      transition: 'all 0.15s',
+                      transition: 'all 0.15s', flexShrink: 0,
                     }}
                     onMouseEnter={e => { if (!isSelected) e.currentTarget.style.background = '#f8f9fa'; }}
                     onMouseLeave={e => { if (!isSelected) e.currentTarget.style.background = 'transparent'; }}
@@ -129,7 +130,7 @@ export default function ReferralModal({ open, loadingReferrals, pendingReferrals
         </div>
 
         {!loadingReferrals && pendingReferrals.length > 0 && (
-          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 12, padding: '20px 20px', borderTop: '1px solid #eee' }}>
+          <div className={styles.footer}>
             <button
               onClick={onClose}
               style={{
