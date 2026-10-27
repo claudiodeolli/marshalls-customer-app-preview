@@ -85,7 +85,7 @@ export default function BookingRulesAlert({ origin, requireAcknowledgement = fal
       >
         {/* O testid fica no corpo, e não no card: é este o elemento que
             carrega o padding contra o qual a issue #7 mede o recuo. */}
-        <div lang="pt-BR" data-testid={`booking-rules-alert-${origin}`} style={{ ...MODAL_BODY, color: '#7a5c00', textAlign: 'justify', textJustify: 'inter-word', hyphens: 'auto', WebkitHyphens: 'auto', textAlignLast: 'left', wordSpacing: '-0.02em' }}>
+        <div lang="pt-BR" data-testid={`booking-rules-alert-${origin}`} style={{ ...MODAL_BODY, color: '#7a5c00', textAlign: 'left' }}>
           {/* O ícone acompanha o título na primeira linha e o corpo começa na
               borda do box: o cliente pediu o texto "sem recuo, como nas outras
               modais normais" (issue #7). */}
