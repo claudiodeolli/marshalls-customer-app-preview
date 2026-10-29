@@ -1,13 +1,19 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
-import { withEmphasis } from '@/components/ui/emphasis';
 import EmojiIcon from '@/components/ui/EmojiIcon';
+import { withEmphasis } from '@/components/ui/emphasis';
 import ModalPortal from '@/components/ui/ModalPortal';
 import {
-  MODAL_OVERLAY, MODAL_CARD, MODAL_BODY, MODAL_TITLE, MODAL_TEXT, MODAL_ACTIONS, MODAL_BUTTON,
+  MODAL_ACTIONS,
+  MODAL_BODY,
+  MODAL_BUTTON,
+  MODAL_CARD,
+  MODAL_OVERLAY,
+  MODAL_TEXT,
+  MODAL_TITLE,
 } from '@/components/ui/modalScale';
+import { useSearchParams } from 'next/navigation';
+import { useEffect, useRef, useState } from 'react';
 
 // Encaminhamento segue a revisão da #57 e consulta avulsa a redação da #58.
 const CONTENT = {
@@ -81,7 +87,7 @@ export default function BookingRulesAlert({ origin, requireAcknowledgement = fal
       <div
         ref={card => card?.style.setProperty('border-radius', '24px', 'important')}
         className="card"
-        style={{ ...MODAL_CARD, width: '540px', maxWidth: '92vw', margin: 0, borderRadius: '24px', maxHeight: 'calc(100dvh - 64px)', overflowY: 'auto', background: '#fff8e1', border: '1px solid #ffe082' }}
+        style={{ ...MODAL_CARD, margin: 0, borderRadius: '24px', maxHeight: 'calc(100dvh - 64px)', overflowY: 'auto', background: '#fff8e1', border: '1px solid #ffe082' }}
       >
         {/* O testid fica no corpo, e não no card: é este o elemento que
             carrega o padding contra o qual a issue #7 mede o recuo. */}
