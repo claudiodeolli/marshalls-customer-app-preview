@@ -1,10 +1,12 @@
+import styles from './PaymentSelectStep.module.css';
+
 export default function PaymentSelectStep({ avulsaSpecialty, title = 'Escolha a forma de pagamento', onSelectPix, onSelectSaved, onSelectNew, onBack, onCancel, confirmModal }) {
   const price = avulsaSpecialty?.price ?? 0;
 
   function OptionCard({ onClick, icon, title, subtitle }) {
     return (
       <div
-        className="card mb-2 _payment-option-card"
+        className={`card mb-2 _payment-option-card ${styles.optionCard}`}
         onClick={onClick}
         style={{ cursor: 'pointer', border: '1.5px solid #ebe9f1' }}
         onMouseEnter={e => { e.currentTarget.style.border = '1.5px solid #4daab6'; }}
@@ -29,7 +31,7 @@ export default function PaymentSelectStep({ avulsaSpecialty, title = 'Escolha a 
   return (
     <>
       <div className="_payment-select-step" style={{ maxWidth: 480, margin: '0 auto' }}>
-        <div className="card mb-3 _payment-summary-card">
+        <div className={`card mb-3 _payment-summary-card ${styles.summaryCard}`}>
           <div className="card-body" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 20px' }}>
             <div>
               <div className="_payment-summary-label" style={{ fontSize: 12, color: '#6e6b7b', marginBottom: 2 }}>Consulta avulsa</div>
@@ -52,7 +54,7 @@ export default function PaymentSelectStep({ avulsaSpecialty, title = 'Escolha a 
             </svg>
           }
           title="PIX"
-          subtitle="Gera chave ou QR Code"
+          subtitle="Gerar código ou QR Code"
         />
 
         <OptionCard
@@ -78,7 +80,7 @@ export default function PaymentSelectStep({ avulsaSpecialty, title = 'Escolha a 
             </svg>
           }
           title="Usar outro cartão"
-          subtitle="Pagar com novo cartão de crédito"
+          subtitle="Cartão de crédito"
         />
 
         <div className="_payment-step-actions" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 4 }}>
