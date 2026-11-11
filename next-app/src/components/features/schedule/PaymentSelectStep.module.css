@@ -9,4 +9,11 @@
     height: 70px !important;
     min-height: 70px !important;
   }
+
+  .optionCard > :global(.card-body) {
+    box-sizing: border-box;
+    min-height: 0;
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+  }
 }
