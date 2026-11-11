@@ -6,6 +6,7 @@
 
   .optionCard {
     box-sizing: border-box;
-    height: 70px;
+    height: 70px !important;
+    min-height: 70px !important;
   }
 }
