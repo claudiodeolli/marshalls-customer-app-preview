@@ -54,7 +54,8 @@ export default function ReferralModal({ open, loadingReferrals, pendingReferrals
               <div className="spinner-border" style={{ color: '#4daab6', width: '35px', height: '35px' }} />
             </div>
           ) : pendingReferrals.length === 0 ? (
-            <div className="_referral-empty-state" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, padding: '0 0 18px', textAlign: 'center' }}>
+            <div className="_referral-empty-state" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 20, marginTop: 8, padding: '0 0 18px', textAlign: 'center' }}>
+              {/* Vãos iguais de 20px: 12px do parágrafo acima + 8px aqui. */}
               <div style={{ padding: '12px 14px', border: '1px solid #e0e0e0', borderRadius: 8, width: '100%', boxSizing: 'border-box' }}>
                 <p style={{ color: '#666', fontSize: 14, margin: 0 }}>
                   Você não possui encaminhamentos disponíveis.

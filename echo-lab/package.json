@@ -1,0 +1,16 @@
+{
+  "name": "echo-lab",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Dictation and shadowing practice with exact YouTube segments",
+  "scripts": {
+    "start": "node server.mjs --open",
+    "dev": "node server.mjs",
+    "test": "node --test",
+    "check": "node scripts/check-live.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

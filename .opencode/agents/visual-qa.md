@@ -1,49 +1,10 @@
 ---
 description: Valida visualmente telas reais e screenshots sem editar produto
 mode: subagent
-model: opencode-go/space-bunny-free#low
+model: opencode-go/deepseek-v4.1-flash
 permissions:
   - action: "*"
     resource: "*"
-    effect: deny
-  - action: read
-    resource: "*"
-    effect: allow
-  - action: read
-    resource: "*.env"
-    effect: deny
-  - action: read
-    resource: "*.env.*"
-    effect: deny
-  - action: glob
-    resource: "*"
-    effect: allow
-  - action: grep
-    resource: "*"
-    effect: allow
-  - action: edit
-    resource: "*"
-    effect: deny
-  - action: shell
-    resource: "git status *"
-    effect: allow
-  - action: shell
-    resource: "git diff *"
-    effect: allow
-  - action: shell
-    resource: "cd next-app *"
-    effect: allow
-  - action: shell
-    resource: "npm run test:e2e *"
-    effect: allow
-  - action: shell
-    resource: "npx playwright test *"
-    effect: allow
-  - action: shell
-    resource: "npm run build *"
-    effect: allow
-  - action: shell
-    resource: "npm run dev *"
     effect: allow
 ---
 

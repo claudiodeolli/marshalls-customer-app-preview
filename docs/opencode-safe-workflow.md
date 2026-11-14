@@ -6,18 +6,18 @@ em `.claude/` foram preservados.
 
 ## Agentes e modelos
 
-- `orchestrator`: coordena e verifica; `opencode-go/gpt-6-luna`.
+- `orchestrator`: coordena e verifica; `opencode-go/deepseek-v4.1-flash`.
 - `explorer`: somente leitura; `opencode-go/space-bunny-free#low`.
-- `implementer`: menor alteração autorizada; `opencode-go/gpt-6-luna`.
+- `implementer`: menor alteração autorizada; `opencode-go/deepseek-v4.1-flash`.
 - `e2e`: Playwright e QA controlado, sem edição; `opencode-go/space-bunny-free#low`.
-- `visual-qa`: screenshots e análise visual, sem edição; `opencode-go/space-bunny-free#low`.
+- `visual-qa`: screenshots e análise visual, sem edição; `opencode-go/deepseek-v4.1-flash`.
 - `reviewer`: revisão somente leitura; `opencode-go/space-bunny-free#low`.
 
-O catálogo Go consultado não continha `opencode-go/gpt-5.6-luna`; a configuração
-usa o modelo Luna disponível `opencode-go/gpt-6-luna` para as funções principais.
-O modelo econômico foi escolhido entre as opções gratuitas disponíveis. A
-capacidade de visão não é exposta pelo catálogo consultado; `visual-qa` deve
-reportar a limitação se a execução não aceitar imagens.
+O teto de custo é `opencode-go/deepseek-v4.1-flash` para coordenação,
+implementação e inspeção visual; o tier gratuito
+`opencode-go/space-bunny-free#low` fica para leitura e QA. A capacidade de visão
+não é exposta pelo catálogo consultado; `visual-qa` deve reportar a limitação se
+não conseguir ler imagens.
 
 ## Comandos
 

@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Echo Lab — ditado e shadowing com YouTube</title>
+    <meta
+      name="description"
+      content="Pratique english dictation e shadowing com trechos exatos de vídeos do YouTube. O vídeo pausa sozinho, você escreve e recebe a correção palavra por palavra."
+    />
+    <meta name="theme-color" content="#0a0d10" />
+    <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="ambient" aria-hidden="true"></div>
+
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="Echo Lab, início">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none">
+            <path d="M6 18v-4M11 23V9M16 27V5M21 22V10M26 18v-4" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" />
+          </svg>
+        </span>
+        <span class="brand-text"><strong>Echo</strong><span>lab</span></span>
+      </a>
+      <div class="topbar-actions">
+        <span class="local-pill" title="Tudo roda no seu computador">
+          <span class="dot" aria-hidden="true"></span> local
+        </span>
+        <button class="ghost-btn" type="button" data-action="help">
+          Como funciona
+        </button>
+      </div>
+    </header>
+
+    <main id="main">
+      <section id="setup-view" class="view setup-view">
+        <div class="hero">
+          <p class="eyebrow">Ditado + shadowing</p>
+          <h1>Ouça o trecho.<br /><em>Escreva</em> o que ouviu.</h1>
+          <p class="lede">
+            O vídeo pausa sozinho no intervalo que você escolher. A correção usa
+            a transcrição do corte exato — palavra por palavra, com porcentagem
+            e tempo para repetir.
+          </p>
+          <ol class="steps">
+            <li>
+              <span class="step-num">01</span>
+              <div><strong>Cole o link</strong><p>Um vídeo do YouTube com legendas em inglês.</p></div>
+            </li>
+            <li>
+              <span class="step-num">02</span>
+              <div><strong>Escolha o ritmo</strong><p>Pausas de 4 a 60 segundos e início de onde quiser.</p></div>
+            </li>
+            <li>
+              <span class="step-num">03</span>
+              <div><strong>Ouça e escreva</strong><p>Enter corrige. O diff mostra o que faltou e o que sobrou.</p></div>
+            </li>
+          </ol>
+          <div class="precision-note">
+            <span class="precision-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M6.4 6.4l2.1 2.1M15.5 15.5l2.1 2.1M17.6 6.4l-2.1 2.1M8.5 15.5l-2.1 2.1" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><circle cx="12" cy="12" r="3.2" stroke="currentColor" stroke-width="1.7"/></svg>
+            </span>
+            <p>
+              <strong>Corte exato.</strong> O app registra o tempo real em que o
+              player parou e fatia a transcrição com marcas de tempo por palavra.
+              Cortes no meio de palavras são evitados por padrão.
+            </p>
+          </div>
+        </div>
+
+        <div class="setup-column">
+          <div id="resume-card" class="resume-card" hidden></div>
+
+          <form id="setup-form" class="panel-card setup-form" novalidate>
+            <div class="card-heading">
+              <p class="eyebrow">Começar</p>
+              <h2>Qual vídeo vamos estudar?</h2>
+            </div>
+
+            <label class="field field-url">
+              <span>Link do YouTube</span>
+              <input
+                id="video-url"
+                name="video-url"
+                type="url"
+                inputmode="url"
+                autocomplete="off"
+                spellcheck="false"
+                placeholder="https://www.youtube.com/watch?v=..."
+                aria-describedby="url-hint url-error"
+              />
+              <small id="url-hint" class="hint">Aceita link completo, youtu.be, shorts ou o ID do vídeo.</small>
+              <small id="url-error" class="error" role="alert" hidden></small>
+            </label>
+
+            <fieldset class="field">
+              <legend>Modo de prática</legend>
+              <div class="segmented" role="radiogroup" aria-label="Modo de prática">
+                <label class="segment">
+                  <input type="radio" name="mode" value="dictation" checked />
+                  <span>
+                    <strong>Ditado</strong>
+                    <small>Ouça e escreva. A nota mede o que você entendeu.</small>
+                  </span>
+                </label>
+                <label class="segment">
+                  <input type="radio" name="mode" value="shadowing" />
+                  <span>
+                    <strong>Shadowing</strong>
+                    <small>Repita junto, sem pausa. Texto e karaokê para apoiar.</small>
+                  </span>
+                </label>
+              </div>
+            </fieldset>
+
+            <div class="field-row">
+              <label class="field">
+                <span>Pausa automática <output id="interval-output" for="interval">12 s</output></span>
+                <input id="interval" name="interval" type="range" min="4" max="60" step="1" value="12" />
+                <small class="hint">O vídeo para a cada <span id="interval-inline">12</span> segundos.</small>
+              </label>
+
+              <label class="field">
+                <span>Começar em <em>opcional</em></span>
+                <input id="start-time" name="start-time" type="text" inputmode="numeric" placeholder="auto" autocomplete="off" />
+                <small class="hint">mm:ss. Em branco = primeira fala.</small>
+              </label>
+            </div>
+
+            <div class="toggles">
+              <label class="toggle">
+                <input id="opt-snap" type="checkbox" checked />
+                <span class="toggle-track" aria-hidden="true"></span>
+                <span>Cortar em pausas naturais</span>
+              </label>
+              <label class="toggle">
+                <input id="opt-sound" type="checkbox" checked />
+                <span class="toggle-track" aria-hidden="true"></span>
+                <span>Aviso sonoro ao pausar</span>
+              </label>
+            </div>
+
+            <button id="load-btn" class="btn btn-primary btn-wide" type="submit">
+              <span class="btn-label">Buscar vídeo</span>
+              <span class="spinner" aria-hidden="true"></span>
+            </button>
+            <p class="privacy-line">Nenhum áudio é enviado. A prática fica no seu navegador.</p>
+          </form>
+
+          <div id="ready-card" class="panel-card ready-card" hidden></div>
+
+          <div id="recent-block" class="recent-block" hidden>
+            <p class="eyebrow">Recentes</p>
+            <ul id="recent-list" class="recent-list"></ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="session-view" class="view session-view" hidden aria-live="polite">
+        <div class="session-head">
+          <div class="session-title">
+            <p class="eyebrow"><span id="mode-label">Ditado</span> · sessão local</p>
+            <h1 id="video-title">Vídeo</h1>
+            <p id="video-subtitle" class="muted"></p>
+          </div>
+          <div class="session-metrics">
+            <div class="metric"><span>Média</span><strong id="metric-average">—</strong></div>
+            <div class="metric"><span>Trechos</span><strong id="metric-count">0</strong></div>
+            <div class="metric"><span>Sequência</span><strong id="metric-streak">0</strong></div>
+          </div>
+          <div class="session-actions">
+            <button class="icon-btn" type="button" data-action="settings" aria-label="Configurações da sessão" title="Configurações">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M4 7h10M18 7h2M4 17h2M10 17h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="16" cy="7" r="2.2" stroke="currentColor" stroke-width="1.8"/><circle cx="8" cy="17" r="2.2" stroke="currentColor" stroke-width="1.8"/></svg>
+            </button>
+            <button class="ghost-btn" type="button" data-action="exit">Sair</button>
+          </div>
+        </div>
+
+        <div class="workspace">
+          <section class="stage" aria-label="Vídeo e controles">
+            <div class="player-frame">
+              <div class="player-mount" id="player-mount"></div>
+              <div id="player-status" class="player-status" hidden></div>
+            </div>
+
+            <div class="transport">
+              <button id="play-toggle" class="transport-btn" type="button" data-action="toggle-play" aria-label="Reproduzir">
+                <svg class="icon-play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5-11-6.5Z"/></svg>
+                <svg class="icon-pause" viewBox="0 0 24 24" fill="currentColor" hidden><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg>
+              </button>
+              <div class="transport-time"><span id="time-current">0:00</span><span class="dim">/</span><span id="time-total">0:00</span></div>
+              <div class="progress" role="presentation">
+                <div class="progress-fill" id="progress-fill"></div>
+                <div class="progress-segment" id="progress-segment"></div>
+              </div>
+              <div class="transport-segment"><span id="segment-range">—</span></div>
+              <button class="transport-btn" type="button" data-action="mute" id="mute-btn" aria-label="Silenciar">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M4 9.5v5h3l4 3v-11l-4 3H4Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18 6a8.5 8.5 0 0 1 0 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+              </button>
+            </div>
+
+            <div class="stage-foot">
+              <div class="now-playing"><span class="pulse-dot" aria-hidden="true"></span><span id="now-label">Pronto para começar</span></div>
+              <div class="stage-links">
+                <button class="text-btn" type="button" data-action="replay">Repetir trecho</button>
+                <button class="text-btn" type="button" data-action="skip">Pular trecho</button>
+              </div>
+            </div>
+          </section>
+
+          <section class="practice-panel" id="practice-panel" aria-live="polite">
+            <div id="panel-content" class="panel-content"></div>
+          </section>
+        </div>
+
+        <section class="history-section" id="history-section" hidden>
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Seu percurso</p>
+              <h2>Trechos desta sessão</h2>
+            </div>
+            <div class="history-actions">
+              <button class="ghost-btn" type="button" data-action="export">Exportar JSON</button>
+            </div>
+          </div>
+          <div id="history-list" class="history-list"></div>
+        </section>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>Echo Lab</span>
+      <span class="dim">·</span>
+      <span>Projeto local, sem conta e sem servidor de áudio.</span>
+      <span class="dim">·</span>
+      <button class="text-btn" type="button" data-action="help">Limites e atalhos</button>
+    </footer>
+
+    <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+    <dialog id="help-dialog" class="dialog">
+      <form method="dialog" class="dialog-inner">
+        <div class="dialog-head">
+          <div>
+            <p class="eyebrow">Echo Lab</p>
+            <h2>Como a precisão funciona</h2>
+          </div>
+          <button class="icon-btn" type="submit" aria-label="Fechar">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+        <div class="dialog-body">
+          <h3>O corte</h3>
+          <p>
+            O player é controlado pelo app. Quando o tempo alvo chega, ele pausa
+            e registra o tempo real do vídeo naquele instante. A transcrição do
+            trecho é montada a partir desse tempo — não de um contador aproximado.
+          </p>
+          <h3>A transcrição</h3>
+          <p>
+            O app pega as legendas oficiais e a faixa automática do YouTube. A
+            faixa automática tem marcas de tempo por palavra; quando existe, os
+            tempos são transferidos para o texto oficial (alinhamento palavra a
+            palavra). Sem ela, os tempos são distribuídos dentro de cada frase.
+          </p>
+          <h3>O corte entre palavras</h3>
+          <p>
+            Por padrão, o alvo é ajustado para o início da próxima palavra, com
+            até 0,65 s de antecedência. Assim o corte cai num intervalo natural,
+            não no meio de uma palavra. O tempo real continua sendo o que vale.
+          </p>
+          <h3>O que é ignorado na correção</h3>
+          <p>
+            Maiúsculas, pontuação, apóstrofos e hífens não contam. Cada palavra
+            trocada, faltante ou sobrando aparece no diff e entra na porcentagem.
+          </p>
+          <h3>Limites honestos</h3>
+          <ul>
+            <li>Só vídeos com legendas em inglês. Sem legenda, não há referência.</li>
+            <li>Vídeos com embed bloqueado não tocam dentro do app.</li>
+            <li>Anúncios e buffering podem atrasar o corte; o tempo registrado continua exato.</li>
+            <li>Se você trocar de aba, a sessão pausa para não cortar enquanto você não está ouvindo.</li>
+          </ul>
+          <h3>Atalhos</h3>
+          <ul class="shortcut-list">
+            <li><kbd>Enter</kbd> corrige a resposta</li>
+            <li><kbd>Shift</kbd> + <kbd>Enter</kbd> quebra linha</li>
+            <li><kbd>Espaço</kbd> reproduz/pausa (fora do campo de texto)</li>
+            <li><kbd>R</kbd> repete o trecho</li>
+            <li><kbd>N</kbd> vai para o próximo trecho</li>
+          </ul>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog id="settings-dialog" class="dialog">
+      <form method="dialog" class="dialog-inner">
+        <div class="dialog-head">
+          <div>
+            <p class="eyebrow">Sessão</p>
+            <h2>Configurações</h2>
+          </div>
+          <button class="icon-btn" type="submit" aria-label="Fechar">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+        <div class="dialog-body settings-body">
+          <label class="field">
+            <span>Pausa automática <output id="settings-interval-out">12 s</output></span>
+            <input id="settings-interval" type="range" min="4" max="60" step="1" value="12" />
+            <small class="hint">Vale a partir do próximo trecho.</small>
+          </label>
+          <fieldset class="field">
+            <legend>Modo</legend>
+            <div class="segmented compact">
+              <label class="segment">
+                <input type="radio" name="settings-mode" value="dictation" checked />
+                <span><strong>Ditado</strong></span>
+              </label>
+              <label class="segment">
+                <input type="radio" name="settings-mode" value="shadowing" />
+                <span><strong>Shadowing</strong></span>
+              </label>
+            </div>
+          </fieldset>
+          <label class="toggle">
+            <input id="settings-snap" type="checkbox" checked />
+            <span class="toggle-track" aria-hidden="true"></span>
+            <span>Cortar em pausas naturais</span>
+          </label>
+          <label class="toggle">
+            <input id="settings-sound" type="checkbox" checked />
+            <span class="toggle-track" aria-hidden="true"></span>
+            <span>Aviso sonoro ao pausar</span>
+          </label>
+          <div class="dialog-actions">
+            <button class="btn btn-secondary" type="button" data-action="exit">Encerrar sessão</button>
+            <button class="btn btn-primary" type="submit">Pronto</button>
+          </div>
+        </div>
+      </form>
+    </dialog>
+
+    <noscript>
+      <div class="noscript">Echo Lab precisa de JavaScript para controlar o player e corrigir o ditado.</div>
+    </noscript>
+
+    <script type="module" src="/js/app.js"></script>
+  </body>
+</html>
